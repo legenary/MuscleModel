@@ -1,9 +1,3 @@
-
-
-<p align="center">
-	<img src="docs/whiskit_active_peg.gif">
-</p>
-
 For more information or feedback contact yifuluo@u.northwestern.edu
 
 ## Build using CMake (Windows OS):
