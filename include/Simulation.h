@@ -21,9 +21,9 @@ class Simulation : public CommonRigidBodyBase {
 private:
 	btScalar m_time_step = 1. / 60.;
 
-	btScalar m_time_elapsed;
-	btScalar m_time;
-	int m_step;
+	btScalar m_time_elapsed = 0.;
+	btScalar m_time = 0.;
+	int m_step = 0;
 
 
 public:

@@ -5,8 +5,11 @@ void Simulation::stepSimulation() {
 	m_time += m_time_step; 								// increase time
 	m_step += 1;													// increase step
 
-	
-	if (m_time < 10.) {
+	if (m_time < 5./60) {
+		std::cout << "step." << std::endl;
+	}
+
+	if (m_time < 100.) {
 
 		
 		// step simulation
@@ -30,6 +33,7 @@ void Simulation::stepSimulation() {
 
 void Simulation::initPhysics()
 {
+	std::cout << "Physics engine initiating...." << std::endl;
 	// set visual axis
 	m_guiHelper->setUpAxis(2);
 
@@ -72,9 +76,6 @@ void Simulation::initPhysics()
 	resetCamera();
 
 	// initialize time/step tracker
-	m_time_elapsed = 0;
-	m_time = 0;
-	m_step = 0;
 
 	std::cout << "\n\nStart simulation..." << std::endl;
 	std::cout << "\n====================================================\n" << std::endl;
