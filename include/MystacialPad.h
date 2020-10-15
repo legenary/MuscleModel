@@ -2,7 +2,7 @@
 #define MYSTACIAL_PAD_H
 
 #include "Follicle.h"
-#include "Parameter.h"
+#include "Utility.h"
 
 #include "btBulletDynamicsCommon.h"
 #include "LinearMath/btVector3.h"
@@ -11,13 +11,14 @@
 class MystacialPad {
 private:
 	btAlignedObjectArray<Follicle*> m_follicleArray;
-	Parameter* param;
+	int nFollicle;
 
 
 public:
-	MystacialPad(){}
+	MystacialPad(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, 
+				 btVector3 pos, btVector3 orient, btScalar height, btScalar radius);
 	virtual ~MystacialPad() {}
-	int nFollicle;
+	
 
 
 

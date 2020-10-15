@@ -8,7 +8,7 @@ void Simulation::stepSimulation() {
 	m_step += 1;													// increase step
 
 	if (m_time < param->m_time_stop) {
-		std::cout << body1->getCenterOfMassPosition()[1] << std::endl;
+		/*std::cout << body1->getCenterOfMassPosition()[1] << std::endl;*/
 	}
 
 	if (m_time < param->m_time_stop) {
@@ -71,21 +71,18 @@ void Simulation::initPhysics() {
 	//m_guiHelper->createPhysicsDebugDrawer(m_dynamicsWorld);
 	//m_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_NoDebug);
 
-	// test
-	btTransform trans;
-	trans = btTransform::getIdentity();
-	trans.setOrigin(btVector3(1, 0, 0));
-	trans.getBasis().setEulerZYX(0, 0, 0);
-	btCollisionShape* boxShape = new btBoxShape(btVector3(2, 2, 2));
-	m_collisionShapes.push_back(boxShape);
+	// Initializing physics world
+	////////////////////////////////////////////////////////////////////////////////
+	btVector3 pos = btVector3(0., 0., 0.);
+	btVector3 orient = btVector3(0., 0., 0.);
+	btScalar height = 1;
+	btScalar radius = 1;
+	MystacialPad* m_pad = new MystacialPad(m_dynamicsWorld, &m_collisionShapes, pos, orient, height, radius);
 
-	btDefaultMotionState* myMotionState1 = new btDefaultMotionState(trans);
-	btRigidBody::btRigidBodyConstructionInfo cInfo1(btScalar(1), myMotionState1, boxShape, btVector3(0, 0, 0));
-	body1 = new btRigidBody(cInfo1);
-	body1->setUserIndex(-1);
 
-	m_dynamicsWorld->addRigidBody(body1, BIT(2), BIT(0));
-	body1->setActivationState(DISABLE_DEACTIVATION);
+
+
+	////////////////////////////////////////////////////////////////////////////////
 
 	// generate graphics
 	m_guiHelper->autogenerateGraphicsObjects(m_dynamicsWorld);

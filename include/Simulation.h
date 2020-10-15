@@ -40,7 +40,7 @@ public:
 
 	bool exitSim;
 
-	btRigidBody* body1;
+	MystacialPad* m_pad;
 
 };
 

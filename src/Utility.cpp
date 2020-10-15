@@ -1,20 +1,6 @@
 #include "Utility.h"
 
-#define BIT(x) (1<<(x))
-
-enum collisiontypes {
-	COL_NOTHING = 0, //Collide with nothing
-	COL_FOLLICLE = BIT(0), //Collide with head
-	COL_INT_MUS = BIT(1), //Collide with follicles
-	COL_EXT_MUS = BIT(2),		// Collide with base
-};
-
-static int follicleCollideWith = COL_FOLLICLE;
-static int intMusCollideWith = COL_FOLLICLE | COL_EXT_MUS;
-static int extMusCollideWith = COL_FOLLICLE | COL_INT_MUS;
-
-
-btRigidBody* createDynamicBody(float mass, const btTransform& startTransform, btCollisionShape* shape, GUIHelperInterface* m_guiHelper) {
+btRigidBody* createDynamicBody(float mass, const btTransform& startTransform, btCollisionShape* shape) {
 	// rigidbody is dynamic if and only if mass is non zero, otherwise static
 	bool isDynamic = (mass != 0.f);
 
