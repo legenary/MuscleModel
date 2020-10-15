@@ -13,6 +13,7 @@
 #include <iostream>
 #include <sstream>
 
+#define PI 3.14159265358979323846
 #define BIT(x) (1<<(x))
 
 enum collisiontypes {

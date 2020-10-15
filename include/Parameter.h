@@ -20,8 +20,11 @@ public:
 	btScalar camPitch;
 	btScalar camYaw;
 
+	// follicle parameter
 	std::string dir_follicle_loc_orient;
 	std::vector<std::vector<float>> FOLLICLE_LOC_ORIENT;
+	btScalar fol_height;
+	btScalar fol_radius;
 
 };
 

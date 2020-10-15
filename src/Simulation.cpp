@@ -73,14 +73,10 @@ void Simulation::initPhysics() {
 
 	// Initializing physics world
 	////////////////////////////////////////////////////////////////////////////////
-	btVector3 pos = btVector3(0., 0., 0.);
-	btVector3 orient = btVector3(0., 0., 0.);
-	btScalar height = 1;
-	btScalar radius = 1;
-	MystacialPad* m_pad = new MystacialPad(m_dynamicsWorld, &m_collisionShapes, pos, orient, height, radius);
-
 	read_csv_float(param->dir_follicle_loc_orient, param->FOLLICLE_LOC_ORIENT);
+	MystacialPad* m_pad = new MystacialPad(m_dynamicsWorld, &m_collisionShapes, param);
 
+	
 
 
 	////////////////////////////////////////////////////////////////////////////////
