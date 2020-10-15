@@ -4,7 +4,6 @@ For more information or feedback contact yifuluo@u.northwestern.edu
 1.1. Install CMake-gui [here](https://cmake.org/download/).
 
 1.2. Download Boost library [here](https://www.boost.org/users/download/).
-
     
    Unzip to C:/Program Files/Boost/boost_1_74_0
 
