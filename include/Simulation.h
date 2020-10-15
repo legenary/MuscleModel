@@ -1,6 +1,9 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
+#include "Parameter.h"
+#include "MystacialPad.h"
+
 #include <iostream>
 #include <chrono> 
 #include <iomanip>      // std::setprecision
@@ -19,8 +22,7 @@ class Simulation* SimulationCreateFunc(struct CommonExampleOptions& options);
 class Simulation : public CommonRigidBodyBase {
 
 private:
-	btScalar m_time_step = 1. / 60.;
-
+	Parameter *param;
 	btScalar m_time_elapsed = 0.;
 	btScalar m_time = 0.;
 	int m_step = 0;
@@ -29,17 +31,17 @@ private:
 public:
 	Simulation(struct GUIHelperInterface* helper) :CommonRigidBodyBase(helper) {}
 	virtual ~Simulation() {}
+	void initParameter(Parameter* parameter);
 	virtual void initPhysics();
 	virtual void renderScene();
 	virtual void stepSimulation();
-
-	btScalar camPos[3];
-	btScalar camDist;
-	btScalar camPitch;
-	btScalar camYaw;
+	
 	void resetCamera();
 
 	bool exitSim;
+
+	btRigidBody* body1;
+
 };
 
 

@@ -190,11 +190,19 @@ LINK_DIRECTORIES(${BULLETLIB_DIR})
 SET(SOURCE
   	src/main.cpp
 	src/Simulation.cpp
+	src/Parameter.cpp
+	src/Utility.cpp
+	src/MystacialPad.cpp
+	src/Follicle.cpp
 	bullet3-master/build3/bullet.rc
 )
 
 SET(HEADERS
  	include/Simulation.h
+ 	include/Parameter.h
+ 	include/Utility.h
+ 	include/MystacialPad.h
+ 	include/Follicle.h
 )
 
 ADD_EXECUTABLE(MuscleModel
