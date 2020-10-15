@@ -3,10 +3,15 @@
 
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
-
 #include "CommonInterfaces/CommonGUIHelperInterface.h"
 
 #include "LinearMath/btVector3.h"
+
+#include <vector>
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 #define BIT(x) (1<<(x))
 
@@ -25,6 +30,9 @@ static int extMusCollideWith = COL_FOLLICLE | COL_INT_MUS;
 btRigidBody* createDynamicBody(float mass, const btTransform& startTransform, btCollisionShape* shape);
 
 btTransform createTransform(btVector3 origin = btVector3(0., 0., 0.), btVector3 rotation = btVector3(0., 0., 0.));
+
+
+void read_csv_float(std::string fileName, std::vector<std::vector<float> > &dataList);
 
 
 #endif

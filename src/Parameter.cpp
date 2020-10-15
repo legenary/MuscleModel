@@ -14,4 +14,6 @@ Parameter::Parameter() {
 	camPitch = -50;
 	camYaw = 0;
 
+	dir_follicle_loc_orient = "../resources/follicle_position_orientation.csv";
+
 }

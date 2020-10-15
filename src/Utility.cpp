@@ -30,3 +30,20 @@ btTransform createTransform(btVector3 origin, btVector3 rotation) {
 	return trans;
 }
 
+void read_csv_float(std::string fileName, std::vector<std::vector<float>> &dataList){
+
+	std::fstream data(fileName);
+	std::string line;
+	while (std::getline(data, line)) {
+		std::stringstream linestream(line);
+		std::string cell;
+		std::vector<float> parsedRow;
+		while (std::getline(linestream, cell, ','))
+		{
+			float cellFloat = stof(cell);
+			parsedRow.push_back(cellFloat);
+		}
+		dataList.push_back(parsedRow);
+	}
+	
+}

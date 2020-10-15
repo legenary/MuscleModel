@@ -8,7 +8,7 @@ void Simulation::stepSimulation() {
 	m_step += 1;													// increase step
 
 	if (m_time < param->m_time_stop) {
-		/*std::cout << body1->getCenterOfMassPosition()[1] << std::endl;*/
+		// std::cout << param->FOLLICLE_LOC_ORIENT[2][2] << std::endl;
 	}
 
 	if (m_time < param->m_time_stop) {
@@ -79,6 +79,7 @@ void Simulation::initPhysics() {
 	btScalar radius = 1;
 	MystacialPad* m_pad = new MystacialPad(m_dynamicsWorld, &m_collisionShapes, pos, orient, height, radius);
 
+	read_csv_float(param->dir_follicle_loc_orient, param->FOLLICLE_LOC_ORIENT);
 
 
 

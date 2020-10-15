@@ -2,6 +2,8 @@
 #define PARAMETER_H
 
 #include "LinearMath/btVector3.h"
+#include <vector>
+#include <string>
 
 class Parameter {
 
@@ -17,6 +19,9 @@ public:
 	btScalar camDist;
 	btScalar camPitch;
 	btScalar camYaw;
+
+	std::string dir_follicle_loc_orient;
+	std::vector<std::vector<float>> FOLLICLE_LOC_ORIENT;
 
 };
 
