@@ -20,13 +20,13 @@ btRigidBody* createDynamicBody(float mass, const btTransform& startTransform, bt
 	return body;
 }
 
-btTransform createTransform(btVector3 origin, btVector3 rotation) {
+btTransform createTransform(btVector3 origin, btVector3 YPR) {
 	// rotation: EuelrZYX rotation orders
 
 	btTransform trans;
 	trans = btTransform::getIdentity();
 	trans.setOrigin(origin);
-	trans.getBasis().setEulerZYX(rotation[0], rotation[1], rotation[2]);
+	trans.getBasis().setEulerYPR(YPR[0], YPR[1], YPR[2]);
 	return trans;
 }
 
