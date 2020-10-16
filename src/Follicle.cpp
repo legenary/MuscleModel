@@ -6,11 +6,12 @@ Follicle::Follicle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArra
 	btTransform trans = createTransform(pos, orient);
 	btCollisionShape* shape = new btCylinderShapeX(btVector3(height, radius, radius));
 	m_collisionShapes->push_back(shape);
-	btRigidBody* this_follicle_body = createDynamicBody(1., trans, shape);
-	m_dynamicsWorld->addRigidBody(this_follicle_body, COL_FOLLICLE, follicleCollideWith);
-	this_follicle_body->setActivationState(DISABLE_DEACTIVATION);
+	body = createDynamicBody(1., trans, shape);
+	m_dynamicsWorld->addRigidBody(body, COL_FOLLICLE, follicleCollideWith);
+	body->setActivationState(DISABLE_DEACTIVATION);
 
 }
 
-
-
+btRigidBody* Follicle::getBody() {
+	return body;
+}

@@ -19,4 +19,8 @@ Parameter::Parameter() {
 	fol_height = 0.5;
 	fol_radius = 0.1;
 
+	// layer/spring parameter
+	dir_spring_hex_mesh_index = "../resources/spring_hex_mesh_idx.csv";
+	k_layer1 = 100.;
+	k_layer2 = 100.;
 }

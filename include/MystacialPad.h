@@ -12,12 +12,17 @@
 class MystacialPad {
 private:
 	btAlignedObjectArray<Follicle*> m_follicleArray;
+	btAlignedObjectArray<btGeneric6DofSpringConstraint*> m_layer1;
+	btAlignedObjectArray<btGeneric6DofSpringConstraint*> m_layer2;
+	btAlignedObjectArray<btGeneric6DofSpringConstraint*> m_layer3;
 	int nFollicle;
 
 
 public:
 	MystacialPad(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
 	virtual ~MystacialPad() {}
+
+	void createLayer1(btDiscreteDynamicsWorld* world, Parameter* param);
 	
 	int getNumFollicles();
 	Follicle* getFollicleByIndex(int idx);

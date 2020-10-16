@@ -34,6 +34,7 @@ btTransform createTransform(btVector3 origin = btVector3(0., 0., 0.), btVector3 
 
 
 void read_csv_float(std::string fileName, std::vector<std::vector<float> > &dataList);
+void read_csv_int(std::string fileName, std::vector<std::vector<int>> &dataList);
 
 
 #endif

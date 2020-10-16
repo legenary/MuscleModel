@@ -40,10 +40,26 @@ void read_csv_float(std::string fileName, std::vector<std::vector<float>> &dataL
 		std::vector<float> parsedRow;
 		while (std::getline(linestream, cell, ','))
 		{
-			float cellFloat = stof(cell);
-			parsedRow.push_back(cellFloat);
+			parsedRow.push_back(stof(cell));
 		}
 		dataList.push_back(parsedRow);
 	}
 	
+}
+
+void read_csv_int(std::string fileName, std::vector<std::vector<int>> &dataList) {
+
+	std::fstream data(fileName);
+	std::string line;
+	while (std::getline(data, line)) {
+		std::stringstream linestream(line);
+		std::string cell;
+		std::vector<int> parsedRow;
+		while (std::getline(linestream, cell, ','))
+		{
+			parsedRow.push_back(stoi(cell));
+		}
+		dataList.push_back(parsedRow);
+	}
+
 }
