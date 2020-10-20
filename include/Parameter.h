@@ -1,6 +1,8 @@
 #ifndef PARAMETER_H
 #define PARAMETER_H
 
+#include "Utility.h"
+
 #include "LinearMath/btVector3.h"
 #include <vector>
 #include <string>

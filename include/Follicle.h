@@ -14,11 +14,10 @@ private:
 
 public:
 	Follicle(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, 
-		     btVector3 pos, btVector3 orient, btScalar radius, btScalar height);
+		     btTransform trans, btScalar radius, btScalar height);
 	virtual ~Follicle(){}
 
 	btRigidBody* getBody();
-	
 	
 
 

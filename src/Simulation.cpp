@@ -9,7 +9,7 @@ void Simulation::stepSimulation() {
 
 	if (m_time > (param->m_time_stop/20.)) {
 		// std::cout << param->SPRING_HEX_MESH_INDEX[3][1] << std::endl;
-		m_pad->getFollicleByIndex(0)->getBody()->setLinearVelocity(btVector3(1, 0, 0));
+		//m_pad->getFollicleByIndex(0)->getBody()->setLinearVelocity(btVector3(1, 0, 0));
 	}
 
 	if (m_time < param->m_time_stop) {
@@ -22,7 +22,7 @@ void Simulation::stepSimulation() {
 		exitSim = 0;
 	}
 	else {
-		// timeout -> set exit flg
+		// timeout -> set exit flag
 		exitSim = 1;
 	}
 
@@ -78,7 +78,9 @@ void Simulation::initPhysics() {
 	MystacialPad* m_pad = new MystacialPad(m_dynamicsWorld, &m_collisionShapes, param);
 
 	read_csv_int(param->dir_spring_hex_mesh_index, param->SPRING_HEX_MESH_INDEX);
-	m_pad->createLayer1(m_dynamicsWorld, param);
+	m_pad->createLayer1(m_dynamicsWorld, &m_collisionShapes, param);
+	m_pad->createLayer2(m_dynamicsWorld, &m_collisionShapes, param);
+	//m_pad->test(m_dynamicsWorld, &m_collisionShapes, param);
 
 	////////////////////////////////////////////////////////////////////////////////
 
