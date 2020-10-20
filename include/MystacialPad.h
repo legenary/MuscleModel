@@ -25,13 +25,12 @@ public:
 
 	void test(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param);
 	void createLayer1(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param);
-	void updateLayer1();
 	void createLayer2(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param);
-	void updateLayer2();
+	void update();
 	
-	int getNumFollicles();
+	int getNumFollicles() const;
 	Follicle* getFollicleByIndex(int idx);
-
+	
 };
 
 

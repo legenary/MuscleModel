@@ -22,7 +22,8 @@ class Simulation* SimulationCreateFunc(struct CommonExampleOptions& options);
 class Simulation : public CommonRigidBodyBase {
 
 private:
-	Parameter *param;
+	Parameter *param; 
+	MystacialPad* m_mystacialPad;
 	btScalar m_time_elapsed = 0.;
 	btScalar m_time = 0.;
 	int m_step = 0;
@@ -40,7 +41,7 @@ public:
 
 	bool exitSim;
 
-	MystacialPad* m_pad;
+	
 
 };
 

@@ -7,14 +7,19 @@ void Simulation::stepSimulation() {
 	m_time += param->m_time_step; 								// increase time
 	m_step += 1;													// increase step
 
-	if (m_time > (param->m_time_stop/20.)) {
-		// std::cout << param->SPRING_HEX_MESH_INDEX[3][1] << std::endl;
-		//m_pad->getFollicleByIndex(0)->getBody()->setLinearVelocity(btVector3(1, 0, 0));
+	if (m_time > (param->m_time_stop/2.)) {
+		//std::cout << m_mystacialPad->getNumFollicles();
+		//std::cout << param->SPRING_HEX_MESH_INDEX[3][1] << std::endl;
+		//m_mystacialPad->getFollicleByIndex(0)->getBody()->setLinearVelocity(btVector3(1, 0, 0));
 	}
 
-	if (m_time < param->m_time_stop) {
-		
-		// step simulation
+	if (param->m_time_stop == 0 ||m_time < param->m_time_stop) {
+		// update physics
+		// std::cout << m_time;
+		// std::cout << m_mystacialPad->getNumFollicles();
+		//m_mystacialPad->update();
+
+		// last step: step simulation
 		m_dynamicsWorld->stepSimulation(param->m_time_step, param->m_num_internal_step, 
 										param->m_time_step / param->m_num_internal_step);
 
@@ -75,12 +80,13 @@ void Simulation::initPhysics() {
 	// Initializing physics world
 	////////////////////////////////////////////////////////////////////////////////
 	read_csv_float(param->dir_follicle_loc_orient, param->FOLLICLE_LOC_ORIENT);
-	MystacialPad* m_pad = new MystacialPad(m_dynamicsWorld, &m_collisionShapes, param);
+	MystacialPad* m_mystacialPad = new MystacialPad(m_dynamicsWorld, &m_collisionShapes, param);
 
 	read_csv_int(param->dir_spring_hex_mesh_index, param->SPRING_HEX_MESH_INDEX);
-	m_pad->createLayer1(m_dynamicsWorld, &m_collisionShapes, param);
-	m_pad->createLayer2(m_dynamicsWorld, &m_collisionShapes, param);
+	m_mystacialPad->createLayer1(m_dynamicsWorld, &m_collisionShapes, param);
+	m_mystacialPad->createLayer2(m_dynamicsWorld, &m_collisionShapes, param);
 	//m_pad->test(m_dynamicsWorld, &m_collisionShapes, param);
+	//std::cout << m_mystacialPad->getNumFollicles();
 
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -100,10 +106,10 @@ void Simulation::resetCamera() {
 							 param->camPos[0], param->camPos[1], param->camPos[2]);
 }
 
-Simulation* SimulationCreateFunc(CommonExampleOptions& options)
-{
-	return new Simulation(options.m_guiHelper);
-}
+//Simulation* SimulationCreateFunc(CommonExampleOptions& options)
+//{
+//	return new Simulation(options.m_guiHelper);
+//}
 
 void Simulation::renderScene()
 {

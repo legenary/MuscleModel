@@ -16,7 +16,7 @@ private:
 public:
 	Spring(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k);
 	virtual ~Spring(){}
-
+	
 	void update();
 	btGeneric6DofSpringConstraint* getConstraint();
 };

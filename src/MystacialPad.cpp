@@ -91,19 +91,18 @@ void MystacialPad::test(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjec
 
 }
 
-void MystacialPad::updateLayer1() {
-	for (int i = 1; i < nSpringLayer1; i++) {
+void MystacialPad::update() {
+	//std::cout << m_layer1.size();
+	//Spring* this_spring = m_layer1[0];
+	/*for (int i = 0; i < nSpringLayer1; i++) {
 		m_layer1[i]->update();
 	}
-}
-
-void MystacialPad::updateLayer2() {
-	for (int i = 1; i < nSpringLayer2; i++) {
+	for (int i = 0; i < nSpringLayer2; i++) {
 		m_layer2[i]->update();
-	}
+	}*/
 }
 
-int MystacialPad::getNumFollicles() {
+int MystacialPad::getNumFollicles() const {
 	return nFollicle;
 }
 

@@ -1,9 +1,9 @@
 #include "Parameter.h"
 
 Parameter::Parameter() {
-	m_time_step = 1. / 60.;
+	m_time_step = 1./60.;
 	m_num_internal_step = 10;
-	m_time_stop = 150;
+	m_time_stop = 15.;
 
 
 	//camera position
