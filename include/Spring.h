@@ -19,7 +19,7 @@ protected:
 	btScalar length;
 
 public:
-	Spring(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k);
+	Spring(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping = 0.01);
 	virtual ~Spring(){}
 	
 	void update();

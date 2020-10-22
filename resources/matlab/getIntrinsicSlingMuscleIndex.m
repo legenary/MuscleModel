@@ -5,4 +5,4 @@ intrinsicSlingMuscleIdx = [0, 1; 1, 2; 2, 3; 3, 4;
                            10, 19; 18, 19; 19, 20; 20, 21; 21, 22; 22, 23; 23, 24; 24, 25; 25, 26;
                            18, 27; 27, 28; 28, 29; 29, 30; 30, 31; 31, 32; 32, 33; 33, 34];
               
-writematrix(intrinsicSlingMuscleIdx, '../resources/intrinsic_sling_muscle_idx.csv')
+writematrix(intrinsicSlingMuscleIdx, '../intrinsic_sling_muscle_idx.csv')

@@ -34,6 +34,7 @@ public:
 	std::vector<std::vector<int>> SPRING_HEX_MESH_INDEX;
 	btScalar k_layer1;
 	btScalar k_layer2;
+	btScalar damping;
 
 	// instrinsic sling muscle parameter
 	std::string dir_intrinsic_sling_muscle_index;

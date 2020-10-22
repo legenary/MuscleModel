@@ -61,7 +61,7 @@ for i = 1:35
     follicle_pos_ypr(i, 4:6) = [th, pi, 0];
 end
 
-writematrix(follicle_pos_ypr, '../resources/follicle_pos_ypr.csv')
+writematrix(follicle_pos_ypr, '../follicle_pos_ypr.csv')
 
 
     

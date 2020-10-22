@@ -13,4 +13,4 @@ springHexMeshIdx = [0, 1;  1, 2;  2, 3;  3, 4;   % A row
                   % between D and E row
                   27, 28;  28, 29;  29, 30;  30, 31;  31, 32;  32, 33;  33, 34];
               
-writematrix(springHexMeshIdx, '../resources/spring_hex_mesh_idx.csv')
+writematrix(springHexMeshIdx, '../spring_hex_mesh_idx.csv')

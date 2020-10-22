@@ -12,8 +12,7 @@ private:
 	void init();
 
 public:
-	IntrinsicSlingMuscle(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k);
-		
+	IntrinsicSlingMuscle(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping=0.01);
 	virtual ~IntrinsicSlingMuscle(){}
 
 	void contract();
@@ -29,8 +28,7 @@ private:
 	void init();
 
 public:
-	IntrinsicObliqueMuscle(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k);
-
+	IntrinsicObliqueMuscle(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping=0.01);
 	virtual ~IntrinsicObliqueMuscle() {}
 
 	void contract();

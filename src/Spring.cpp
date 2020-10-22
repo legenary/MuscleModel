@@ -1,6 +1,6 @@
 #include "Spring.h"
 
-Spring::Spring(Follicle* fol1, Follicle* fol2, btTransform frame1, btTransform frame2, btScalar k) {
+Spring::Spring(Follicle* fol1, Follicle* fol2, btTransform frame1, btTransform frame2, btScalar k, btScalar damping) {
 
 	follicle1 = fol1;
 	follicle2 = fol2;
@@ -17,7 +17,7 @@ Spring::Spring(Follicle* fol1, Follicle* fol2, btTransform frame1, btTransform f
 	for (int i = 0; i < 3; i++) {
 		constraint->enableSpring(i, true);
 		constraint->setStiffness(i, k);
-		constraint->setDamping(i, 0.01);	// guess: damping [0, 1] like restitution coefficient?
+		constraint->setDamping(i, damping);	// guess: damping [0, 1] like restitution coefficient?
 		constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
 	}
 	restLength = btVector3(constraint->getEquilibriumPoint(0),

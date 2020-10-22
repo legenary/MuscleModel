@@ -20,13 +20,14 @@ Parameter::Parameter() {
 
 	// foillicle parameter
 	dir_follicle_loc_orient = "../resources/follicle_pos_ypr.csv";
-	fol_height = 0.5;
+	fol_height = 0.7;
 	fol_radius = 0.1;
 
 	// layer/spring parameter
 	dir_spring_hex_mesh_index = "../resources/spring_hex_mesh_idx.csv";
 	k_layer1 = 100;
 	k_layer2 = 100;
+	damping = 0.002; // still need some work to find what critical damping ratio is
 
 	// // instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_index = "../resources/intrinsic_sling_muscle_idx.csv";

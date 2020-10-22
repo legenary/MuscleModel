@@ -103,6 +103,8 @@ void Simulation::initPhysics() {
 	read_csv_int(param->dir_spring_hex_mesh_index, param->SPRING_HEX_MESH_INDEX);
 	m_mystacialPad->createLayer1(m_dynamicsWorld, param);
 	m_mystacialPad->createLayer2(m_dynamicsWorld, param);
+	read_csv_int(param->dir_intrinsic_sling_muscle_index, param->INTRINSIC_SLING_MUSCLE_INDEX);
+	m_mystacialPad->createIntrinsicSlingMuscle(m_dynamicsWorld, param);
 
 	//m_mystacialPad->getFollicleByIndex(0)->getBody()->setLinearVelocity(btVector3(0, 0, 5));
 

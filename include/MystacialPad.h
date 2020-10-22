@@ -5,6 +5,7 @@
 #include "Utility.h"
 #include "Parameter.h"
 #include "Spring.h"
+#include "IntrinsicMuscle.h"
 
 #include "LinearMath/btAlignedObjectArray.h"
 
@@ -14,6 +15,7 @@ private:
 	btAlignedObjectArray<Spring*> m_layer1;
 	btAlignedObjectArray<Spring*> m_layer2;
 	btAlignedObjectArray<Spring*> m_layer3;
+	btAlignedObjectArray<IntrinsicSlingMuscle*> m_intrinsicSlingMuscleArray;
 	int nFollicle;
 	int nSpringLayer1;
 	int nSpringLayer2;
