@@ -23,7 +23,6 @@ public:
 	MystacialPad(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
 	virtual ~MystacialPad() {}
 
-	void test(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param);
 	void createLayer1(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param);
 	void createLayer2(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param);
 	void update();
@@ -31,7 +30,7 @@ public:
 	int getNumFollicles() const;
 	Follicle* getFollicleByIndex(int idx);
 
-	void test();
+	void update_test(btDiscreteDynamicsWorld* world, int DEBUG);
 	
 };
 

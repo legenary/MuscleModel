@@ -12,6 +12,7 @@ private:
 	btTransform frameInBody1;
 	btTransform frameInBody2;
 	btScalar restLength;
+	btScalar length;
 
 public:
 	Spring(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k);
@@ -19,8 +20,10 @@ public:
 	
 	void update();
 	btGeneric6DofSpringConstraint* getConstraint();
+	btScalar getRestLength();
+	btScalar getLength();
 
-	void test();
+	void test(btDiscreteDynamicsWorld* world);
 };
 
 

@@ -17,10 +17,15 @@ void Simulation::stepSimulation() {
 		// update physics
 		// m_mystacialPad->test();
 		m_mystacialPad->update();
+		m_mystacialPad->update_test(m_dynamicsWorld, param->DEBUG);
 
 		// last step: step simulation
 		m_dynamicsWorld->stepSimulation(param->m_time_step, param->m_num_internal_step,
 			param->m_time_step / param->m_num_internal_step);
+
+		if (param->DEBUG) {
+			m_dynamicsWorld->debugDrawWorld();
+		}
 
 		// set exit flag to zero
 		exitSim = 0;
@@ -73,6 +78,17 @@ void Simulation::initPhysics() {
 	// set gravity
 	m_dynamicsWorld->setGravity(btVector3(0, 0, 0));
 
+	// set debug drawer
+	m_guiHelper->createPhysicsDebugDrawer(m_dynamicsWorld);
+	if (m_dynamicsWorld->getDebugDrawer()) {
+		if (param->DEBUG == 1) { // 
+			m_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+		}
+		else if (param->DEBUG == 2) { // Axis aligned bound box
+			m_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawAabb);
+		}
+	}
+
 	//m_guiHelper->createPhysicsDebugDrawer(m_dynamicsWorld);
 	//m_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_NoDebug);
 
@@ -85,9 +101,7 @@ void Simulation::initPhysics() {
 	m_mystacialPad->createLayer1(m_dynamicsWorld, &m_collisionShapes, param);
 	m_mystacialPad->createLayer2(m_dynamicsWorld, &m_collisionShapes, param);
 
-	//m_mystacialPad->getFollicleByIndex(0)->getBody()->setLinearVelocity(btVector3(0, 0, 1));
-
-	m_mystacialPad->test();
+	//m_mystacialPad->getFollicleByIndex(0)->getBody()->setLinearVelocity(btVector3(0, 0, 5));
 
 	////////////////////////////////////////////////////////////////////////////////
 

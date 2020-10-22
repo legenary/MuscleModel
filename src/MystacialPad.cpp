@@ -39,7 +39,7 @@ void MystacialPad::createLayer2(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlig
 	nSpringLayer2 = param->SPRING_HEX_MESH_INDEX.size();
 	btTransform frameLayer2 = createTransform(btVector3(-param->fol_height, 0., 0.));
 
-	for (int f = 0; f < nSpringLayer1; f++) {
+	for (int f = 0; f < nSpringLayer2; f++) {
 		Follicle* fol1 = m_follicleArray[param->SPRING_HEX_MESH_INDEX[f][0]];
 		Follicle* fol2 = m_follicleArray[param->SPRING_HEX_MESH_INDEX[f][1]];
 		Spring* springLayer2 = new Spring(fol1, fol2, frameLayer2, frameLayer2, param->k_layer2);
@@ -48,47 +48,6 @@ void MystacialPad::createLayer2(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlig
 
 	}
 	std::cout << "Done." << std::endl;
-
-}
-
-void MystacialPad::test(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
-	// test
-	btTransform T1 = createTransform(btVector3(0., 0., 0.), btVector3(0., PI/4, 0.));
-	btTransform T2 = createTransform(btVector3(0., 0., 1.), btVector3(0., 0, 0.));
-
-	Follicle* follicle1 = new Follicle(m_dynamicsWorld, m_collisionShapes, T1, param->fol_radius, param->fol_height);
-	Follicle* follicle2 = new Follicle(m_dynamicsWorld, m_collisionShapes, T2, param->fol_radius, param->fol_height);
-	m_follicleArray.push_back(follicle1);
-	m_follicleArray.push_back(follicle2);
-	btRigidBody* body1 = m_follicleArray[0]->getBody();
-	btRigidBody* body2 = m_follicleArray[1]->getBody();
-
-	btTransform frameInPrev = createTransform(btVector3(param->fol_height, 0., 0.));
-	btTransform frameInCurr = createTransform(btVector3(param->fol_height, 0., 0.));
-
-	btGeneric6DofSpringConstraint* constraint1 = new btGeneric6DofSpringConstraint(*body1, *body2, frameInPrev, frameInCurr, true);
-	constraint1->setLinearLowerLimit(btVector3(1, 1, 1));
-	constraint1->setLinearUpperLimit(btVector3(0, 0, 0));
-
-	for (int i = 0; i < 3; i++) {
-		constraint1->enableSpring(i, true);
-		constraint1->setStiffness(i, 1);
-		constraint1->setDamping(i, 1);	// guess: damping [0, 1] like restitution coefficient?
-		constraint1->setEquilibriumPoint(i);	// rest length initialization
-	}
-
-	
-	//std::cout << constraint->getStiffness(1) << std::endl;
-	m_dynamicsWorld->addConstraint(constraint1, true); //true = no collision; false = collision
-
-
-	//body2->setCenterOfMassTransform(createTransform(btVector3(0., 0., 1.), btVector3(0, PI/6, 0.)));
-	std::cout << constraint1->getEquilibriumPoint(0) << "  "
-		<< constraint1->getEquilibriumPoint(1) << "  "
-		<< constraint1->getEquilibriumPoint(2) << "  " << std::endl;
-
-
-
 }
 
 void MystacialPad::update() {
@@ -100,6 +59,21 @@ void MystacialPad::update() {
 	}
 }
 
+void MystacialPad::update_test(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG) {
+	if (DEBUG) {
+		for (int i = 0; i < nSpringLayer1; i++) {
+			m_layer1[i]->test(m_dynamicsWorld);
+			m_layer2[i]->test(m_dynamicsWorld);
+
+			printf("%.2f ", m_layer1[i]->getLength() / m_layer1[i]->getRestLength());
+			printf("%.2f ", m_layer2[i]->getLength() / m_layer2[i]->getRestLength());
+
+		}
+		std::cout << std::endl;
+		
+	}
+}
+
 int MystacialPad::getNumFollicles() const {
 	return nFollicle;
 }
@@ -108,7 +82,5 @@ Follicle* MystacialPad::getFollicleByIndex(int idx) {
 	return m_follicleArray[idx];
 }
 
-void MystacialPad::test() {
-	m_layer1[0]->test();
-}
+
 

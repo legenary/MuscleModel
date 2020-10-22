@@ -3,8 +3,9 @@
 Parameter::Parameter() {
 	m_time_step = 1./60.;
 	m_num_internal_step = 10;
-	m_time_stop = 15.;
+	m_time_stop = 0;
 
+	DEBUG = 1;
 
 	//camera position
 	camPos[0] = 0;
@@ -21,6 +22,6 @@ Parameter::Parameter() {
 
 	// layer/spring parameter
 	dir_spring_hex_mesh_index = "../resources/spring_hex_mesh_idx.csv";
-	k_layer1 = 10;
-	k_layer2 = 10;
+	k_layer1 = 100;
+	k_layer2 = 100;
 }
