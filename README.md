@@ -1,25 +1,7 @@
 For more information or feedback contact yifuluo@u.northwestern.edu
 
 ## Build using CMake (Windows OS):
-1.1. Install CMake-gui [here](https://cmake.org/download/).
-
-1.2. Download Boost library [here](https://www.boost.org/users/download/).
-    
-   Unzip to C:/Program Files/Boost/boost_1_74_0
-
-   Run **Developer Command Prompt for VS 2017** as administrators.
-    
-   Command line run: 
-    
-```
-    	.\bootstrap.bat
-```
-
-   and 
-
-```
-    	.\b2 install --prefix=PREFIX
-```
+1. Install CMake-gui [here](https://cmake.org/download/).
 
 2. Clone this repository:
 
