@@ -19,6 +19,8 @@ public:
 	
 	void update();
 	btGeneric6DofSpringConstraint* getConstraint();
+
+	void test();
 };
 
 

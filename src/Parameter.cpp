@@ -11,7 +11,7 @@ Parameter::Parameter() {
 	camPos[1] = 0;
 	camPos[2] = 3;
 	camDist = 4;
-	camPitch = -50;
+	camPitch = -89;
 	camYaw = 0;
 
 	// foillicle parameter
@@ -21,6 +21,6 @@ Parameter::Parameter() {
 
 	// layer/spring parameter
 	dir_spring_hex_mesh_index = "../resources/spring_hex_mesh_idx.csv";
-	k_layer1 = 0.1;
-	k_layer2 = 0.1;
+	k_layer1 = 10;
+	k_layer2 = 10;
 }

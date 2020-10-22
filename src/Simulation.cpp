@@ -7,21 +7,20 @@ void Simulation::stepSimulation() {
 	m_time += param->m_time_step; 								// increase time
 	m_step += 1;													// increase step
 
-	if (m_time > (param->m_time_stop/2.)) {
+	if (m_time > (param->m_time_stop / 2.)) {
 		//std::cout << m_mystacialPad->getNumFollicles();
 		//std::cout << param->SPRING_HEX_MESH_INDEX[3][1] << std::endl;
 		//m_mystacialPad->getFollicleByIndex(0)->getBody()->setLinearVelocity(btVector3(1, 0, 0));
 	}
 
-	if (param->m_time_stop == 0 ||m_time < param->m_time_stop) {
+	if (param->m_time_stop == 0 || m_time < param->m_time_stop) {
 		// update physics
-		// std::cout << m_time;
-		// std::cout << m_mystacialPad->getNumFollicles();
-		//m_mystacialPad->update();
+		// m_mystacialPad->test();
+		m_mystacialPad->update();
 
 		// last step: step simulation
-		m_dynamicsWorld->stepSimulation(param->m_time_step, param->m_num_internal_step, 
-										param->m_time_step / param->m_num_internal_step);
+		m_dynamicsWorld->stepSimulation(param->m_time_step, param->m_num_internal_step,
+			param->m_time_step / param->m_num_internal_step);
 
 		// set exit flag to zero
 		exitSim = 0;
@@ -36,7 +35,7 @@ void Simulation::stepSimulation() {
 	m_time_elapsed += duration.count() / 1000.f;
 	auto factor = m_time_elapsed / m_time;
 	auto time_remaining = (int)((param->m_time_stop - m_time) * (factor));
-	
+
 }
 
 void Simulation::initParameter(Parameter *parameter) {
@@ -80,13 +79,15 @@ void Simulation::initPhysics() {
 	// Initializing physics world
 	////////////////////////////////////////////////////////////////////////////////
 	read_csv_float(param->dir_follicle_loc_orient, param->FOLLICLE_LOC_ORIENT);
-	MystacialPad* m_mystacialPad = new MystacialPad(m_dynamicsWorld, &m_collisionShapes, param);
+	m_mystacialPad = new MystacialPad(m_dynamicsWorld, &m_collisionShapes, param);
 
 	read_csv_int(param->dir_spring_hex_mesh_index, param->SPRING_HEX_MESH_INDEX);
 	m_mystacialPad->createLayer1(m_dynamicsWorld, &m_collisionShapes, param);
 	m_mystacialPad->createLayer2(m_dynamicsWorld, &m_collisionShapes, param);
-	//m_pad->test(m_dynamicsWorld, &m_collisionShapes, param);
-	//std::cout << m_mystacialPad->getNumFollicles();
+
+	//m_mystacialPad->getFollicleByIndex(0)->getBody()->setLinearVelocity(btVector3(0, 0, 1));
+
+	m_mystacialPad->test();
 
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -100,6 +101,7 @@ void Simulation::initPhysics() {
 	std::cout << "\n\nStart simulation..." << std::endl;
 	std::cout << "\n====================================================\n" << std::endl;
 }
+
 
 void Simulation::resetCamera() {
 	m_guiHelper->resetCamera(param->camDist, param->camYaw, param->camPitch, 

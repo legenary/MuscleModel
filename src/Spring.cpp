@@ -25,10 +25,10 @@ Spring::Spring(Follicle* fol1, Follicle* fol2, btTransform frame1, btTransform f
 						   constraint->getEquilibriumPoint(2)).length();
 }
 
+// NEED DEBUG
 void Spring::update() {
 	//// update equilibrium point location in frame 1
 	//// First, get two attachment points location in world reference frame
-	//std::cout << "Test\n";
 	//btTransform P = follicle1->getBody()->getCenterOfMassTransform();
 	//P *= frameInBody1;
 	//btVector3 p = P.getOrigin();
@@ -43,6 +43,13 @@ void Spring::update() {
 	//for (int i = 0; i < 3; i++) {
 	//	constraint->setEquilibriumPoint(i, eq1[i]);
 	//}
+}
+
+void Spring::test() {
+	btTransform P = follicle1->getBody()->getCenterOfMassTransform();
+	std::cout << P.getOrigin()[0];
+
+	std::cout << frameInBody1.getOrigin()[0] << " " << frameInBody1.getOrigin()[1] << " " << frameInBody1.getOrigin()[2];
 }
 
 btGeneric6DofSpringConstraint* Spring::getConstraint() {

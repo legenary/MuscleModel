@@ -30,6 +30,8 @@ public:
 	
 	int getNumFollicles() const;
 	Follicle* getFollicleByIndex(int idx);
+
+	void test();
 	
 };
 
