@@ -30,33 +30,25 @@ Spring::Spring(Follicle* fol1, Follicle* fol2, btTransform frame1, btTransform f
 void Spring::update() {
 	// update equilibrium point location in frame 1
 	// First, get two attachment points location in world reference frame
-	btTransform P = follicle1->getBody()->getCenterOfMassTransform();
-	P *= frameInBody1;
-	btVector3 p = P.getOrigin();
-	btTransform Q = follicle2->getBody()->getCenterOfMassTransform();
-	Q *= frameInBody2;
-	btVector3 q = Q.getOrigin();
+	frameInWorld1 = follicle1->getBody()->getCenterOfMassTransform();
+	frameInWorld1 *= frameInBody1;
+	frameInWorld2 = follicle2->getBody()->getCenterOfMassTransform();
+	frameInWorld2 *= frameInBody2;
+	btVector3 p = frameInWorld1.getOrigin();
+	btVector3 q = frameInWorld2.getOrigin();
 	// Second, get the equilibrium point location in world reference frame
 	length = (q - p).length();
-	btVector3 eq_from_p = p + (q - p)*restLength/length;
+	eq = p + (q - p)*restLength/length;
 	// Third, get the equilibruim point location in body1 reference frame
-	btVector3 eq_in_p = P.inverse()*eq_from_p;
+	btVector3 eq_in_p = frameInWorld1.inverse()*eq;
 
 	for (int i = 0; i < 3; i++) {
 		constraint->setEquilibriumPoint(i, eq_in_p[i]);
 	}
 }
 
-void Spring::test(btDiscreteDynamicsWorld* m_dynamicsWorld) {
-	btTransform P = follicle1->getBody()->getCenterOfMassTransform();
-	P *= frameInBody1;
-	btTransform Q = follicle2->getBody()->getCenterOfMassTransform();
-	Q *= frameInBody2;
-	btVector3 p = P.getOrigin();
-	btVector3 q = Q.getOrigin();
-	btVector3 eq_from_p = p + (q - p)*restLength / (q - p).length();
-	m_dynamicsWorld->getDebugDrawer()->drawLine(p, eq_from_p, btVector3(0., 0., 0.));
-	
+void Spring::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, btVector3 clr) {
+	m_dynamicsWorld->getDebugDrawer()->drawLine(frameInWorld1.getOrigin(), eq, clr);
 }
 
 btScalar Spring::getRestLength() {

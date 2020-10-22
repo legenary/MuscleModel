@@ -35,6 +35,11 @@ public:
 	btScalar k_layer1;
 	btScalar k_layer2;
 
+	// instrinsic sling muscle parameter
+	std::string dir_intrinsic_sling_muscle_index;
+	std::vector<std::vector<int>>INTRINSIC_SLING_MUSCLE_INDEX;
+	btScalar k_intrinsicSlingMuscle;
+
 };
 
 

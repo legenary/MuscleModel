@@ -17,7 +17,7 @@ void Simulation::stepSimulation() {
 		// update physics
 		// m_mystacialPad->test();
 		m_mystacialPad->update();
-		m_mystacialPad->update_test(m_dynamicsWorld, param->DEBUG);
+		m_mystacialPad->debugDraw(m_dynamicsWorld, param->DEBUG);
 
 		// last step: step simulation
 		m_dynamicsWorld->stepSimulation(param->m_time_step, param->m_num_internal_step,
@@ -81,10 +81,13 @@ void Simulation::initPhysics() {
 	// set debug drawer
 	m_guiHelper->createPhysicsDebugDrawer(m_dynamicsWorld);
 	if (m_dynamicsWorld->getDebugDrawer()) {
-		if (param->DEBUG == 1) { // 
+		if (param->DEBUG == 0 || param->DEBUG == 1) { // 
+			m_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_NoDebug);
+		}
+		else if (param->DEBUG == 2) { // wire frame (collision bounds)
 			m_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 		}
-		else if (param->DEBUG == 2) { // Axis aligned bound box
+		else if (param->DEBUG == 3) { // Axis aligned bound box
 			m_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawAabb);
 		}
 	}
@@ -98,8 +101,8 @@ void Simulation::initPhysics() {
 	m_mystacialPad = new MystacialPad(m_dynamicsWorld, &m_collisionShapes, param);
 
 	read_csv_int(param->dir_spring_hex_mesh_index, param->SPRING_HEX_MESH_INDEX);
-	m_mystacialPad->createLayer1(m_dynamicsWorld, &m_collisionShapes, param);
-	m_mystacialPad->createLayer2(m_dynamicsWorld, &m_collisionShapes, param);
+	m_mystacialPad->createLayer1(m_dynamicsWorld, param);
+	m_mystacialPad->createLayer2(m_dynamicsWorld, param);
 
 	//m_mystacialPad->getFollicleByIndex(0)->getBody()->setLinearVelocity(btVector3(0, 0, 5));
 

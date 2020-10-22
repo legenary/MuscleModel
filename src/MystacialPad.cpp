@@ -19,7 +19,7 @@ MystacialPad::MystacialPad(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedOb
 	std::cout << "Done." << std::endl;
 }
 
-void MystacialPad::createLayer1(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
+void MystacialPad::createLayer1(btDiscreteDynamicsWorld* m_dynamicsWorld, Parameter* param) {
 	std::cout << "Creating Layer1...";
 	nSpringLayer1 = param->SPRING_HEX_MESH_INDEX.size();
 	btTransform frameLayer1 = createTransform(btVector3(param->fol_height, 0., 0.));
@@ -34,7 +34,7 @@ void MystacialPad::createLayer1(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlig
 	std::cout << "Done." << std::endl;
 }
 
-void MystacialPad::createLayer2(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
+void MystacialPad::createLayer2(btDiscreteDynamicsWorld* m_dynamicsWorld, Parameter* param) {
 	std::cout << "Creating Layer2...";
 	nSpringLayer2 = param->SPRING_HEX_MESH_INDEX.size();
 	btTransform frameLayer2 = createTransform(btVector3(-param->fol_height, 0., 0.));
@@ -50,6 +50,12 @@ void MystacialPad::createLayer2(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlig
 	std::cout << "Done." << std::endl;
 }
 
+void MystacialPad::createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* world, Parameter* param) {
+	std::cout << "Creating intrinsic sling muscles...";
+	nSpringIntrinscisSlingMuscle = param->INTRINSIC_SLING_MUSCLE_INDEX.size();
+
+}
+
 void MystacialPad::update() {
 	for (int i = 0; i < nSpringLayer1; i++) {
 		m_layer1[i]->update();
@@ -59,18 +65,12 @@ void MystacialPad::update() {
 	}
 }
 
-void MystacialPad::update_test(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG) {
-	if (DEBUG) {
+void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG) {
+	if (DEBUG) { // debug draw springs
 		for (int i = 0; i < nSpringLayer1; i++) {
-			m_layer1[i]->test(m_dynamicsWorld);
-			m_layer2[i]->test(m_dynamicsWorld);
-
-			printf("%.2f ", m_layer1[i]->getLength() / m_layer1[i]->getRestLength());
-			printf("%.2f ", m_layer2[i]->getLength() / m_layer2[i]->getRestLength());
-
+			m_layer1[i]->debugDraw(m_dynamicsWorld);
+			m_layer2[i]->debugDraw(m_dynamicsWorld);
 		}
-		std::cout << std::endl;
-		
 	}
 }
 

@@ -5,7 +5,10 @@ Parameter::Parameter() {
 	m_num_internal_step = 10;
 	m_time_stop = 0;
 
-	DEBUG = 1;
+	DEBUG = 1;	// 0: no debug
+				// 1: specified inline debug drawing only
+				// 2: wire frame added
+				// 3: axis aligned bound box added
 
 	//camera position
 	camPos[0] = 0;
@@ -24,4 +27,8 @@ Parameter::Parameter() {
 	dir_spring_hex_mesh_index = "../resources/spring_hex_mesh_idx.csv";
 	k_layer1 = 100;
 	k_layer2 = 100;
+
+	// // instrinsic sling muscle parameter
+	dir_intrinsic_sling_muscle_index = "../resources/intrinsic_sling_muscle_idx.csv";
+	k_intrinsicSlingMuscle = 100;
 }

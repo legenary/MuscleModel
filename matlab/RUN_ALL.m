@@ -1,0 +1,4 @@
+clear;
+getEmergenceVectors
+getSpringHexMeshIndex
+getIntrinsicSlingMuscleIndex

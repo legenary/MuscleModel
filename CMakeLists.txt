@@ -204,6 +204,7 @@ SET(SOURCE
 	src/MystacialPad.cpp
 	src/Follicle.cpp
 	src/Spring.cpp
+	src/IntrinsicMuscle.cpp
 	bullet3-master/build3/bullet.rc
 )
 
@@ -214,6 +215,7 @@ SET(HEADERS
  	include/MystacialPad.h
  	include/Follicle.h
  	include/Spring.h
+ 	include/IntrinsicMuscle.h
 )
 
 ADD_EXECUTABLE(MuscleModel
