@@ -3,7 +3,7 @@
 Parameter::Parameter() {
 	m_time_step = 1./60.;
 	m_num_internal_step = 10;
-	m_time_stop = 0;
+	m_time_stop = 10;
 
 	DEBUG = 1;	// 0: no debug
 				// 1: specified inline debug drawing only
@@ -13,9 +13,9 @@ Parameter::Parameter() {
 	//camera position
 	camPos[0] = 0;
 	camPos[1] = 0;
-	camPos[2] = 3;
+	camPos[2] = 0;
 	camDist = 4;
-	camPitch = -89;
+	camPitch = -50;
 	camYaw = 0;
 
 	// foillicle parameter
@@ -31,5 +31,10 @@ Parameter::Parameter() {
 
 	// // instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_index = "../resources/intrinsic_sling_muscle_idx.csv";
-	k_intrinsicSlingMuscle = 100;
+	k_ISM = 1000;
+
+	// Muscle contraction
+	contractISM = true;
+	dir_intrinsic_sling_muscle_contraction_trajectory = "../resources/intrinsic_sling_muscle_contraction_trajectory.csv";
+
 }

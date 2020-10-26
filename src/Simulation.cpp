@@ -4,8 +4,8 @@
 
 void Simulation::stepSimulation() {
 	auto start = std::chrono::high_resolution_clock::now();
-	m_time += param->m_time_step; 								// increase time
-	m_step += 1;													// increase step
+	m_time += param->m_time_step; 						// increase time
+	m_step += 1;										// increase step
 
 	if (m_time > (param->m_time_stop / 2.)) {
 		//std::cout << m_mystacialPad->getNumFollicles();
@@ -15,7 +15,7 @@ void Simulation::stepSimulation() {
 
 	if (param->m_time_stop == 0 || m_time < param->m_time_stop) {
 		// update physics
-		// m_mystacialPad->test();
+		m_mystacialPad->contract(m_step, param);
 		m_mystacialPad->update();
 		m_mystacialPad->debugDraw(m_dynamicsWorld, param->DEBUG);
 
@@ -40,6 +40,7 @@ void Simulation::stepSimulation() {
 	m_time_elapsed += duration.count() / 1000.f;
 	auto factor = m_time_elapsed / m_time;
 	auto time_remaining = (int)((param->m_time_stop - m_time) * (factor));
+
 
 }
 
@@ -105,6 +106,8 @@ void Simulation::initPhysics() {
 	m_mystacialPad->createLayer2(m_dynamicsWorld, param);
 	read_csv_int(param->dir_intrinsic_sling_muscle_index, param->INTRINSIC_SLING_MUSCLE_INDEX);
 	m_mystacialPad->createIntrinsicSlingMuscle(m_dynamicsWorld, param);
+	read_csv_float(param->dir_intrinsic_sling_muscle_contraction_trajectory, param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY);
+
 
 	//m_mystacialPad->getFollicleByIndex(0)->getBody()->setLinearVelocity(btVector3(0, 0, 5));
 

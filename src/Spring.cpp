@@ -4,12 +4,12 @@ Spring::Spring(Follicle* fol1, Follicle* fol2, btTransform frame1, btTransform f
 
 	follicle1 = fol1;
 	follicle2 = fol2;
-	frameInBody1 = frame1;
-	frameInBody2 = frame2;
+	T1P = frame1;
+	T2Q = frame2;
 
 	btRigidBody* body1 = fol1->getBody();
 	btRigidBody* body2 = fol2->getBody();
-	constraint = new btGeneric6DofSpringConstraint(*body1, *body2, frameInBody1, frameInBody2, true);
+	constraint = new btGeneric6DofSpringConstraint(*body1, *body2, T1P, T2Q, true);
 	
 	constraint->setLinearLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
 	constraint->setLinearUpperLimit(btVector3(0, 0, 0));
@@ -24,23 +24,24 @@ Spring::Spring(Follicle* fol1, Follicle* fol2, btTransform frame1, btTransform f
 						   constraint->getEquilibriumPoint(1),
 						   constraint->getEquilibriumPoint(2)).length();
 	length = restLength;
+	restLengthDefault = restLength;
 }
 
 // NEED DEBUG
 void Spring::update() {
 	// update equilibrium point location in frame 1
 	// First, get two attachment points location in world reference frame
-	frameInWorld1 = follicle1->getBody()->getCenterOfMassTransform();
-	frameInWorld1 *= frameInBody1;
-	frameInWorld2 = follicle2->getBody()->getCenterOfMassTransform();
-	frameInWorld2 *= frameInBody2;
-	btVector3 p = frameInWorld1.getOrigin();
-	btVector3 q = frameInWorld2.getOrigin();
+	TsP = follicle1->getBody()->getCenterOfMassTransform();
+	TsP *= T1P;
+	TsQ = follicle2->getBody()->getCenterOfMassTransform();
+	TsQ *= T2Q;
+	btVector3 p = TsP.getOrigin();
+	btVector3 q = TsQ.getOrigin();
 	// Second, get the equilibrium point location in world reference frame
 	length = (q - p).length();
 	eq = p + (q - p)*restLength/length;
 	// Third, get the equilibruim point location in body1 reference frame
-	btVector3 eq_in_p = frameInWorld1.inverse()*eq;
+	btVector3 eq_in_p = TsP.inverse()*eq;
 
 	for (int i = 0; i < 3; i++) {
 		constraint->setEquilibriumPoint(i, eq_in_p[i]);
@@ -48,11 +49,15 @@ void Spring::update() {
 }
 
 void Spring::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, btVector3 clr) {
-	m_dynamicsWorld->getDebugDrawer()->drawLine(frameInWorld1.getOrigin(), eq, clr);
+	m_dynamicsWorld->getDebugDrawer()->drawLine(TsP.getOrigin(), eq, clr);
 }
 
 btScalar Spring::getRestLength() {
 	return restLength;
+}
+
+void Spring::setRestLength(btScalar ratio) {
+	restLength = ratio * restLengthDefault;
 }
 
 btScalar Spring::getLength() {

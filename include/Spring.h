@@ -9,13 +9,14 @@ protected:
 	btGeneric6DofSpringConstraint* constraint;
 	Follicle* follicle1;
 	Follicle* follicle2;
-	btTransform frameInBody1;
-	btTransform frameInBody2;
-	btTransform frameInWorld1;
-	btTransform frameInWorld2;
+	btTransform T1P;
+	btTransform T2Q;
+	btTransform TsP;
+	btTransform TsQ;
 	btVector3 eq;	// equilibrium point that is restLength from body 1 frame
 					// equilibrium point is represented in world frame
 	btScalar restLength;
+	btScalar restLengthDefault;
 	btScalar length;
 
 public:
@@ -25,6 +26,7 @@ public:
 	void update();
 	btGeneric6DofSpringConstraint* getConstraint();
 	btScalar getRestLength();
+	void setRestLength(btScalar ratio);
 	btScalar getLength();
 
 	void debugDraw(btDiscreteDynamicsWorld* world, btVector3 clr = btVector3(0., 0., 0.));

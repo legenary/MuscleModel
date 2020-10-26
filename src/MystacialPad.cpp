@@ -52,19 +52,30 @@ void MystacialPad::createLayer2(btDiscreteDynamicsWorld* m_dynamicsWorld, Parame
 
 void MystacialPad::createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, Parameter* param) {
 	std::cout << "Creating intrinsic sling muscles...";
-	nSpringIntrinscisSlingMuscle = param->INTRINSIC_SLING_MUSCLE_INDEX.size();
+	nSpringISM = param->INTRINSIC_SLING_MUSCLE_INDEX.size();
 	btTransform frameC = createTransform(btVector3(param->fol_height, 0., 0.));
 	btTransform frameR = createTransform(btVector3(-param->fol_height, 0., 0.));
 
-	for (int m = 0; m < nSpringIntrinscisSlingMuscle; m++) {
+	for (int m = 0; m < nSpringISM; m++) {
 		Follicle* folC = m_follicleArray[param->INTRINSIC_SLING_MUSCLE_INDEX[m][0]];
 		Follicle* folR = m_follicleArray[param->INTRINSIC_SLING_MUSCLE_INDEX[m][1]];
-		IntrinsicSlingMuscle* muscle = new IntrinsicSlingMuscle(folC, folR, frameC, frameR, param->k_intrinsicSlingMuscle, param->damping);
+		IntrinsicSlingMuscle* muscle = new IntrinsicSlingMuscle(folC, folR, frameC, frameR, param->k_ISM, param->damping);
 		m_dynamicsWorld->addConstraint(muscle->getConstraint(), true); // disable collision
-		m_intrinsicSlingMuscleArray.push_back(muscle);
+		m_ISMArray.push_back(muscle);
 
 	}
 	std::cout << "Done." << std::endl;
+}
+
+void MystacialPad::contract(int m_step, Parameter* param) {
+	// contract intrinsic sling muscle
+	int TrajectoryLength = param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY.size();
+	int step = (m_step <= TrajectoryLength) ? (m_step - 1) : (TrajectoryLength - 1);
+	if (param->contractISM) {
+		for (int i = 0; i < nSpringISM; i++) {
+			m_ISMArray[i]->setRestLength(param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY[step][0]);
+		}
+	}
 }
 
 void MystacialPad::update() {
@@ -74,8 +85,8 @@ void MystacialPad::update() {
 	for (int i = 0; i < nSpringLayer2; i++) {
 		m_layer2[i]->update();
 	}
-	for (int i = 0; i < nSpringIntrinscisSlingMuscle; i++) {
-		m_intrinsicSlingMuscleArray[i]->update();
+	for (int i = 0; i < nSpringISM; i++) {
+		m_ISMArray[i]->update();
 	}
 }
 
@@ -85,8 +96,8 @@ void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG
 			m_layer1[i]->debugDraw(m_dynamicsWorld);
 			m_layer2[i]->debugDraw(m_dynamicsWorld);
 		}
-		for (int i = 0; i < nSpringIntrinscisSlingMuscle; i++) {
-			m_intrinsicSlingMuscleArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
+		for (int i = 0; i < nSpringISM; i++) {
+			m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		}
 	}
 }

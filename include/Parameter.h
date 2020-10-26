@@ -39,7 +39,12 @@ public:
 	// instrinsic sling muscle parameter
 	std::string dir_intrinsic_sling_muscle_index;
 	std::vector<std::vector<int>>INTRINSIC_SLING_MUSCLE_INDEX;
-	btScalar k_intrinsicSlingMuscle;
+	btScalar k_ISM;
+
+	// Muscle contraction
+	bool contractISM;
+	std::string dir_intrinsic_sling_muscle_contraction_trajectory;
+	std::vector<std::vector<float>> INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY;
 
 };
 
