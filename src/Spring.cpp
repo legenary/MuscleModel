@@ -21,8 +21,8 @@ Spring::Spring(Follicle* fol1, Follicle* fol2, btTransform frame1, btTransform f
 			constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
 		}
 		restLength = btVector3(constraint->getEquilibriumPoint(0),
-			constraint->getEquilibriumPoint(1),
-			constraint->getEquilibriumPoint(2)).length();
+							   constraint->getEquilibriumPoint(1),
+							   constraint->getEquilibriumPoint(2)).length();
 	}
 	else {
 		std::cout << "In Spring::Spring(Follicle* fol1, Follicle* fol2, btTransform frame1, btTransform frame2, btScalar k, btScalar damping, bool isLinear):" << std::endl;
@@ -49,17 +49,26 @@ Spring::Spring(Follicle* fol2, btTransform frame2, btScalar k, btScalar damping,
 		restLength = 0;
 	}
 	else {
+		constraint->setLinearLowerLimit(btVector3(k, k, k));	// need to set lower > higher to free the dofs
+																// if k = 0, lock the linear movement (switch to hard anchoring mode)
+		constraint->setLinearUpperLimit(btVector3(0, 0, 0));
 		constraint->setAngularLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
 		constraint->setAngularUpperLimit(btVector3(0, 0, 0));
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 3; i++) {
+			constraint->enableSpring(i, true);
+			constraint->setStiffness(i, k);
+			constraint->setDamping(i, damping);	// guess: damping [0, 1] like restitution coefficient?
+			constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
+		}
+		for (int i = 3; i < 6; i++) {
 			constraint->enableSpring(i, true);
 			constraint->setStiffness(i, k);
 			constraint->setDamping(i, damping);	// guess: damping [0, 1] like restitution coefficient?
 			constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
 		}
 		restLength = btVector3(constraint->getEquilibriumPoint(0),
-			constraint->getEquilibriumPoint(1),
-			constraint->getEquilibriumPoint(2)).length();
+							   constraint->getEquilibriumPoint(1),
+							   constraint->getEquilibriumPoint(2)).length();
 	}
 
 	length = restLength;
@@ -78,13 +87,14 @@ void Spring::update() {
 	btVector3 q = TsQ.getOrigin();
 	// Second, get the equilibrium point location in world reference frame
 	length = (q - p).length();
-	eq = p + (q - p)*restLength/length;
+	eq = p + (q - p)*restLength / length;
 	// Third, get the equilibruim point location in body1 reference frame
 	btVector3 eq_in_p = TsP.inverse()*eq;
 
 	for (int i = 0; i < 3; i++) {
 		constraint->setEquilibriumPoint(i, eq_in_p[i]);
 	}
+	
 }
 
 void Spring::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, btVector3 clr) {

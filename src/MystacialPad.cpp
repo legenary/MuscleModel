@@ -109,11 +109,13 @@ void MystacialPad::update() {
 
 void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG) {
 	if (DEBUG) { // debug draw springs
-		for (int i = 0; i < nSpringLayer1; i++) {
+		for (int i = 0; i < m_layer1.size(); i++) {
 			m_layer1[i]->debugDraw(m_dynamicsWorld);
+		}
+		for (int i = 0; i < m_layer2.size(); i++) {
 			m_layer2[i]->debugDraw(m_dynamicsWorld);
 		}
-		for (int i = 0; i < nSpringISM; i++) {
+		for (int i = 0; i < m_ISMArray.size(); i++) {
 			m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		}
 	}

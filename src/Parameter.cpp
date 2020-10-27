@@ -26,16 +26,17 @@ Parameter::Parameter() {
 	// layer/spring parameter
 	dir_spring_hex_mesh_index = "../resources/spring_hex_mesh_idx.csv";
 	k_layer1 = 1000;
-	k_layer2 = 100;
-	damping = 0.002; // still need some work to find what critical damping ratio is
-	k_anchor = 100;
+	k_layer2 = 1000;
+	damping = 0.001;	// still need some work to find what critical damping ratio is
+	k_anchor = 0;		// k = 0 : hard anchor, no linear displacement, free angular movement
+						// k > 0 : soft anchor, springy linear and angular movement
 
 	// // instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_index = "../resources/intrinsic_sling_muscle_idx.csv";
 	k_ISM = 1000;
 
 	// Muscle contraction
-	contractISM = 0;
+	contractISM = true;
 	dir_intrinsic_sling_muscle_contraction_trajectory = "../resources/intrinsic_sling_muscle_contraction_trajectory.csv";
 
 }
