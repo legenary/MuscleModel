@@ -20,7 +20,8 @@ protected:
 	btScalar length;
 
 public:
-	Spring(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping = 0.01);
+	Spring(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping = 0.01, bool isLinear = true);
+	Spring(Follicle* fol2, btTransform frameInChild, btScalar k, btScalar damping = 0.01, bool isLinear = true);
 	virtual ~Spring(){}
 	
 	void update();
@@ -31,7 +32,6 @@ public:
 
 	void debugDraw(btDiscreteDynamicsWorld* world, btVector3 clr = btVector3(0., 0., 0.));
 };
-
 
 
 #endif

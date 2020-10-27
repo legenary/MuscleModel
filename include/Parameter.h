@@ -35,6 +35,7 @@ public:
 	btScalar k_layer1;
 	btScalar k_layer2;
 	btScalar damping;
+	btScalar k_anchor;
 
 	// instrinsic sling muscle parameter
 	std::string dir_intrinsic_sling_muscle_index;

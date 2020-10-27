@@ -3,7 +3,7 @@
 Parameter::Parameter() {
 	m_time_step = 1./60.;
 	m_num_internal_step = 10;
-	m_time_stop = 10;
+	m_time_stop = 0;
 
 	DEBUG = 1;	// 0: no debug
 				// 1: specified inline debug drawing only
@@ -15,7 +15,7 @@ Parameter::Parameter() {
 	camPos[1] = 0;
 	camPos[2] = 0;
 	camDist = 4;
-	camPitch = -50;
+	camPitch = -80;
 	camYaw = 0;
 
 	// foillicle parameter
@@ -25,16 +25,17 @@ Parameter::Parameter() {
 
 	// layer/spring parameter
 	dir_spring_hex_mesh_index = "../resources/spring_hex_mesh_idx.csv";
-	k_layer1 = 100;
+	k_layer1 = 1000;
 	k_layer2 = 100;
 	damping = 0.002; // still need some work to find what critical damping ratio is
+	k_anchor = 100;
 
 	// // instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_index = "../resources/intrinsic_sling_muscle_idx.csv";
 	k_ISM = 1000;
 
 	// Muscle contraction
-	contractISM = true;
+	contractISM = 0;
 	dir_intrinsic_sling_muscle_contraction_trajectory = "../resources/intrinsic_sling_muscle_contraction_trajectory.csv";
 
 }

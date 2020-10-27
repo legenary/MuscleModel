@@ -50,6 +50,21 @@ void MystacialPad::createLayer2(btDiscreteDynamicsWorld* m_dynamicsWorld, Parame
 	std::cout << "Done." << std::endl;
 }
 
+void MystacialPad::createAnchor(btDiscreteDynamicsWorld* m_dynamicsWorld, Parameter* param) {
+	std::cout << "Creating Follicle Anchoring...";
+	btTransform frameAnchor = createTransform(btVector3(param->fol_height, 0., 0.));
+
+	for (int f = 0; f < nFollicle; f++) {
+		Follicle* fol = m_follicleArray[f];
+		Spring* springAnchor = new Spring(fol, frameAnchor, param->k_anchor, param->damping, false);	// true = linear spring
+																										// false = torsional spring
+		m_dynamicsWorld->addConstraint(springAnchor->getConstraint(), true); // disable collision
+		m_anchor.push_back(springAnchor);
+	}
+
+	std::cout << "Done." << std::endl;
+}
+
 void MystacialPad::createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, Parameter* param) {
 	std::cout << "Creating intrinsic sling muscles...";
 	nSpringISM = param->INTRINSIC_SLING_MUSCLE_INDEX.size();
@@ -79,6 +94,8 @@ void MystacialPad::contract(int m_step, Parameter* param) {
 }
 
 void MystacialPad::update() {
+	// only linear springs need update
+	// torsional springs don't
 	for (int i = 0; i < nSpringLayer1; i++) {
 		m_layer1[i]->update();
 	}

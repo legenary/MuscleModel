@@ -15,6 +15,7 @@ private:
 	btAlignedObjectArray<Spring*> m_layer1;
 	btAlignedObjectArray<Spring*> m_layer2;
 	btAlignedObjectArray<Spring*> m_layer3;
+	btAlignedObjectArray<Spring*> m_anchor;
 	btAlignedObjectArray<IntrinsicSlingMuscle*> m_ISMArray;
 	int nFollicle;
 	int nSpringLayer1;
@@ -28,6 +29,7 @@ public:
 
 	void createLayer1(btDiscreteDynamicsWorld* world, Parameter* param);
 	void createLayer2(btDiscreteDynamicsWorld* world, Parameter* param);
+	void createAnchor(btDiscreteDynamicsWorld* world, Parameter* param);
 	void createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* world, Parameter* param);
 	void contract(int step,  Parameter* param);
 	void update();

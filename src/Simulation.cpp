@@ -15,7 +15,9 @@ void Simulation::stepSimulation() {
 
 	if (param->m_time_stop == 0 || m_time < param->m_time_stop) {
 		// update physics
-		m_mystacialPad->contract(m_step, param);
+		if (param->contractISM) {
+			m_mystacialPad->contract(m_step, param);
+		}
 		m_mystacialPad->update();
 		m_mystacialPad->debugDraw(m_dynamicsWorld, param->DEBUG);
 
@@ -104,6 +106,7 @@ void Simulation::initPhysics() {
 	read_csv_int(param->dir_spring_hex_mesh_index, param->SPRING_HEX_MESH_INDEX);
 	m_mystacialPad->createLayer1(m_dynamicsWorld, param);
 	m_mystacialPad->createLayer2(m_dynamicsWorld, param);
+	m_mystacialPad->createAnchor(m_dynamicsWorld, param);
 	read_csv_int(param->dir_intrinsic_sling_muscle_index, param->INTRINSIC_SLING_MUSCLE_INDEX);
 	m_mystacialPad->createIntrinsicSlingMuscle(m_dynamicsWorld, param);
 	read_csv_float(param->dir_intrinsic_sling_muscle_contraction_trajectory, param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY);
