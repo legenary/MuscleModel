@@ -26,26 +26,34 @@ public:
 	// follicle parameter
 	std::string dir_follicle_loc_orient;
 	std::vector<std::vector<float>> FOLLICLE_LOC_ORIENT;
-	btScalar fol_height;
+	btScalar fol_half_height;
 	btScalar fol_radius;
 
 	// layer/spring parameter
-	std::string dir_spring_hex_mesh_index;
-	std::vector<std::vector<int>> SPRING_HEX_MESH_INDEX;
+	std::string dir_spring_hex_mesh_idx;
+	std::vector<std::vector<int>> SPRING_HEX_MESH_IDX;
 	btScalar k_layer1;
 	btScalar k_layer2;
 	btScalar damping;
 	btScalar k_anchor;
 
 	// instrinsic sling muscle parameter
-	std::string dir_intrinsic_sling_muscle_index;
-	std::vector<std::vector<int>>INTRINSIC_SLING_MUSCLE_INDEX;
+	std::string dir_intrinsic_sling_muscle_idx;
+	std::vector<std::vector<int>>INTRINSIC_SLING_MUSCLE_IDX;
 	btScalar k_ISM;
 
-	// Muscle contraction
+	// instrinsic sling muscle contraction
 	bool contractISM;
 	std::string dir_intrinsic_sling_muscle_contraction_trajectory;
 	std::vector<std::vector<float>> INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY;
+
+	// M.nasolabialis
+	std::string dir_nasolabialis_node_pos;
+	std::vector<std::vector<float>> NASOLABIALIS_NODE_POS;
+	std::string dir_nasolabialis_construction_idx;
+	std::vector<std::vector<int>> NASOLABIALIS_CONSTRUCTION_IDX;
+	std::string dir_nasolabialis_insertion_idx;
+	std::vector<std::vector<int>> NASOLABIALIS_INSERTION_IDX;
 
 };
 

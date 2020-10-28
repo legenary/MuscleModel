@@ -14,29 +14,35 @@ Parameter::Parameter() {
 	camPos[0] = 0;
 	camPos[1] = 0;
 	camPos[2] = 0;
-	camDist = 4;
-	camPitch = -80;
+	camDist = 6;
+	camPitch = -89;
 	camYaw = 0;
 
 	// foillicle parameter
 	dir_follicle_loc_orient = "../resources/follicle_pos_ypr.csv";
-	fol_height = 0.7;
+	fol_half_height = 0.7;
 	fol_radius = 0.1;
 
 	// layer/spring parameter
-	dir_spring_hex_mesh_index = "../resources/spring_hex_mesh_idx.csv";
+	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";
 	k_layer1 = 1000;
 	k_layer2 = 1000;
 	damping = 0.001;	// still need some work to find what critical damping ratio is
-	k_anchor = 0;		// k = 0 : hard anchor, no linear displacement, free angular movement
+	k_anchor = 500;		// k = 0 : hard anchor, no linear displacement, free angular movement
 						// k > 0 : soft anchor, springy linear and angular movement
 
 	// // instrinsic sling muscle parameter
-	dir_intrinsic_sling_muscle_index = "../resources/intrinsic_sling_muscle_idx.csv";
+	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
 	k_ISM = 1000;
 
 	// Muscle contraction
 	contractISM = true;
 	dir_intrinsic_sling_muscle_contraction_trajectory = "../resources/intrinsic_sling_muscle_contraction_trajectory.csv";
+
+	// M.Nasolabialis
+	dir_nasolabialis_node_pos = "../resources/nasolabialis_node_pos.csv";
+	dir_nasolabialis_construction_idx = "../resources/nasolabialis_construction_idx.csv";
+	dir_nasolabialis_insertion_idx = "../resources/nasolabialis_insertion_idx.csv";
+
 
 }

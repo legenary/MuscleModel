@@ -62,7 +62,7 @@ Spring::Spring(Follicle* fol2, btTransform frame2, btScalar k, btScalar damping,
 		}
 		for (int i = 3; i < 6; i++) {
 			constraint->enableSpring(i, true);
-			constraint->setStiffness(i, k);
+			constraint->setStiffness(i, k/10);
 			constraint->setDamping(i, damping);	// guess: damping [0, 1] like restitution coefficient?
 			constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
 		}
