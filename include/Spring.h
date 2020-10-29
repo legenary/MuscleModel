@@ -2,13 +2,12 @@
 #define SPRING_H
 
 #include "Utility.h"
-#include "Follicle.h"
 
 class Spring {
 protected:
 	btGeneric6DofSpringConstraint* constraint;
-	Follicle* follicle1;
-	Follicle* follicle2;
+	btRigidBody* body1;
+	btRigidBody* body2;
 	btTransform T1P;
 	btTransform T2Q;
 	btTransform TsP;
@@ -20,8 +19,8 @@ protected:
 	btScalar length;
 
 public:
-	Spring(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping = 0.01, bool isLinear = true);
-	Spring(Follicle* fol2, btTransform frameInChild, btScalar k, btScalar damping = 0.01, bool isLinear = true);
+	Spring(btRigidBody* body1, btRigidBody* body2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping = 0.01, bool isLinear = true);
+	Spring(btRigidBody* body2, btTransform frameInChild, btScalar k, btScalar damping = 0.01, bool isLinear = true);
 	virtual ~Spring(){}
 	
 	void update();

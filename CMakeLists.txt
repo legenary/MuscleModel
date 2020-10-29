@@ -205,6 +205,7 @@ SET(SOURCE
 	src/Follicle.cpp
 	src/Spring.cpp
 	src/IntrinsicMuscle.cpp
+	src/ExtrinsicMuscle.cpp
 	bullet3-master/build3/bullet.rc
 )
 
@@ -216,6 +217,7 @@ SET(HEADERS
  	include/Follicle.h
  	include/Spring.h
  	include/IntrinsicMuscle.h
+ 	include/ExtrinsicMuscle.h
 )
 
 ADD_EXECUTABLE(MuscleModel

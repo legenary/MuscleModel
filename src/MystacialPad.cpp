@@ -27,7 +27,7 @@ void MystacialPad::createLayer1(btDiscreteDynamicsWorld* m_dynamicsWorld, Parame
 	for (int f = 0; f < nSpringLayer1; f++) {
 		Follicle* fol1 = m_follicleArray[param->SPRING_HEX_MESH_IDX[f][0]];
 		Follicle* fol2 = m_follicleArray[param->SPRING_HEX_MESH_IDX[f][1]];
-		Spring* springLayer1 = new Spring(fol1, fol2, frameLayer1, frameLayer1, param->k_layer1, param->damping);
+		Spring* springLayer1 = new Spring(fol1->getBody(), fol2->getBody(), frameLayer1, frameLayer1, param->k_layer1, param->damping);
 		m_dynamicsWorld->addConstraint(springLayer1->getConstraint(), true); // disable collision
 		m_layer1.push_back(springLayer1);
 	}
@@ -42,7 +42,7 @@ void MystacialPad::createLayer2(btDiscreteDynamicsWorld* m_dynamicsWorld, Parame
 	for (int f = 0; f < nSpringLayer2; f++) {
 		Follicle* fol1 = m_follicleArray[param->SPRING_HEX_MESH_IDX[f][0]];
 		Follicle* fol2 = m_follicleArray[param->SPRING_HEX_MESH_IDX[f][1]];
-		Spring* springLayer2 = new Spring(fol1, fol2, frameLayer2, frameLayer2, param->k_layer2, param->damping);
+		Spring* springLayer2 = new Spring(fol1->getBody(), fol2->getBody(), frameLayer2, frameLayer2, param->k_layer2, param->damping);
 		m_dynamicsWorld->addConstraint(springLayer2->getConstraint(), true); // disable collision
 		m_layer2.push_back(springLayer2);
 
@@ -56,7 +56,7 @@ void MystacialPad::createAnchor(btDiscreteDynamicsWorld* m_dynamicsWorld, Parame
 
 	for (int f = 0; f < nFollicle; f++) {
 		Follicle* fol = m_follicleArray[f];
-		Spring* springAnchor = new Spring(fol, frameAnchor, param->k_anchor, param->damping, false);	// true = linear spring
+		Spring* springAnchor = new Spring(fol->getBody(), frameAnchor, param->k_anchor, param->damping, false);	// true = linear spring
 																										// false = torsional spring
 		m_dynamicsWorld->addConstraint(springAnchor->getConstraint(), true); // disable collision
 		m_anchor.push_back(springAnchor);
@@ -74,7 +74,7 @@ void MystacialPad::createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* m_dynamic
 	for (int m = 0; m < nSpringISM; m++) {
 		Follicle* folC = m_follicleArray[param->INTRINSIC_SLING_MUSCLE_IDX[m][0]];
 		Follicle* folR = m_follicleArray[param->INTRINSIC_SLING_MUSCLE_IDX[m][1]];
-		IntrinsicSlingMuscle* muscle = new IntrinsicSlingMuscle(folC, folR, frameC, frameR, param->k_ISM, param->damping);
+		IntrinsicSlingMuscle* muscle = new IntrinsicSlingMuscle(folC->getBody(), folR->getBody(), frameC, frameR, param->k_ISM, param->damping);
 		m_dynamicsWorld->addConstraint(muscle->getConstraint(), true); // disable collision
 		m_ISMArray.push_back(muscle);
 
@@ -82,7 +82,7 @@ void MystacialPad::createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* m_dynamic
 	std::cout << "Done." << std::endl;
 }
 
-void MystacialPad::contract(int m_step, Parameter* param) {
+void MystacialPad::contractIntrinsicSlingMuscle(int m_step, Parameter* param) {
 	// contract intrinsic sling muscle
 	int TrajectoryLength = param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY.size();
 	int step = (m_step <= TrajectoryLength) ? (m_step - 1) : (TrajectoryLength - 1);
@@ -91,6 +91,14 @@ void MystacialPad::contract(int m_step, Parameter* param) {
 			m_ISMArray[i]->setRestLength(param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY[step][0]);
 		}
 	}
+}
+
+void MystacialPad::createNasolabialis(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
+	m_nasolabialis = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray,
+		param->NASOLABIALIS_NODE_POS, param->NASOLABIALIS_CONSTRUCTION_IDX, param->NASOLABIALIS_INSERTION_IDX);
+
+	
+
 }
 
 void MystacialPad::update() {
@@ -105,19 +113,21 @@ void MystacialPad::update() {
 	for (int i = 0; i < nSpringISM; i++) {
 		m_ISMArray[i]->update();
 	}
+	m_nasolabialis->update();
 }
 
 void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG) {
 	if (DEBUG) { // debug draw springs
-		for (int i = 0; i < m_layer1.size(); i++) {
+		/*for (int i = 0; i < m_layer1.size(); i++) {
 			m_layer1[i]->debugDraw(m_dynamicsWorld);
 		}
 		for (int i = 0; i < m_layer2.size(); i++) {
 			m_layer2[i]->debugDraw(m_dynamicsWorld);
-		}
+		}*/
 		for (int i = 0; i < m_ISMArray.size(); i++) {
 			m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		}
+		m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
 	}
 }
 

@@ -54,6 +54,7 @@ public:
 	std::vector<std::vector<int>> NASOLABIALIS_CONSTRUCTION_IDX;
 	std::string dir_nasolabialis_insertion_idx;
 	std::vector<std::vector<int>> NASOLABIALIS_INSERTION_IDX;
+	btScalar k_nasolabialis;
 
 };
 

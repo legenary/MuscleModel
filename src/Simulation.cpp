@@ -16,7 +16,7 @@ void Simulation::stepSimulation() {
 	if (param->m_time_stop == 0 || m_time < param->m_time_stop) {
 		// update physics
 		if (param->contractISM) {
-			m_mystacialPad->contract(m_step, param);
+			m_mystacialPad->contractIntrinsicSlingMuscle(m_step, param);
 		}
 		m_mystacialPad->update();
 		m_mystacialPad->debugDraw(m_dynamicsWorld, param->DEBUG);
@@ -81,7 +81,7 @@ void Simulation::initPhysics() {
 	// set gravity
 	m_dynamicsWorld->setGravity(btVector3(0, 0, 0));
 
-	// set debug drawer
+	// setup debug drawer
 	m_guiHelper->createPhysicsDebugDrawer(m_dynamicsWorld);
 	if (m_dynamicsWorld->getDebugDrawer()) {
 		if (param->DEBUG == 0 || param->DEBUG == 1) { // 
@@ -95,8 +95,6 @@ void Simulation::initPhysics() {
 		}
 	}
 
-	//m_guiHelper->createPhysicsDebugDrawer(m_dynamicsWorld);
-	//m_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_NoDebug);
 
 	// Initializing physics world
 	////////////////////////////////////////////////////////////////////////////////
@@ -115,6 +113,7 @@ void Simulation::initPhysics() {
 	read_csv_float(param->dir_nasolabialis_node_pos, param->NASOLABIALIS_NODE_POS);
 	read_csv_int(param->dir_nasolabialis_construction_idx, param->NASOLABIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_nasolabialis_insertion_idx, param->NASOLABIALIS_INSERTION_IDX);
+	m_mystacialPad->createNasolabialis(m_dynamicsWorld, &m_collisionShapes, param);
 
 	//m_mystacialPad->getFollicleByIndex(0)->getBody()->setLinearVelocity(btVector3(0, 0, 5));
 

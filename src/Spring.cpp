@@ -1,14 +1,12 @@
 #include "Spring.h"
 
-Spring::Spring(Follicle* fol1, Follicle* fol2, btTransform frame1, btTransform frame2, btScalar k, btScalar damping, bool isLinear) {
+Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform frame1, btTransform frame2, btScalar k, btScalar damping, bool isLinear) {
 
-	follicle1 = fol1;
-	follicle2 = fol2;
+	body1 = b1;
+	body2 = b2;
 	T1P = frame1;
 	T2Q = frame2;
 
-	btRigidBody* body1 = fol1->getBody();
-	btRigidBody* body2 = fol2->getBody();
 	constraint = new btGeneric6DofSpringConstraint(*body1, *body2, T1P, T2Q, true);
 	
 	if (isLinear) {
@@ -25,7 +23,7 @@ Spring::Spring(Follicle* fol1, Follicle* fol2, btTransform frame1, btTransform f
 							   constraint->getEquilibriumPoint(2)).length();
 	}
 	else {
-		std::cout << "In Spring::Spring(Follicle* fol1, Follicle* fol2, btTransform frame1, btTransform frame2, btScalar k, btScalar damping, bool isLinear):" << std::endl;
+		std::cout << "In Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform frame1, btTransform frame2, btScalar k, btScalar damping, bool isLinear):" << std::endl;
 		std::cout << "Torsional Spring between rigid bodies not implemented. Initialization Failed..." << std::endl;
 		restLength = 0;
 	}
@@ -34,17 +32,16 @@ Spring::Spring(Follicle* fol1, Follicle* fol2, btTransform frame1, btTransform f
 	restLengthDefault = restLength;
 }
 
-Spring::Spring(Follicle* fol2, btTransform frame2, btScalar k, btScalar damping, bool isLinear) {
+Spring::Spring(btRigidBody* b2, btTransform frame2, btScalar k, btScalar damping, bool isLinear) {
 
-	follicle2 = fol2;
+	body2 = b2;
 	T1P = createTransform();
 	T2Q = frame2;
 
-	btRigidBody* body2 = fol2->getBody();
 	constraint = new btGeneric6DofSpringConstraint(*body2, T2Q, true);
 
 	if (isLinear) {
-		std::cout << "In Spring::Spring(Follicle* fol2, btTransform frame2, btScalar k, btScalar damping, bool isLinear):" << std::endl;
+		std::cout << "In Spring::Spring(btRigidBody* b2, btTransform frame2, btScalar k, btScalar damping, bool isLinear):" << std::endl;
 		std::cout << "Linear Spring between a rigid body and the world not implementd. Initialization Failed..." << std::endl;
 		restLength = 0;
 	}
@@ -79,9 +76,9 @@ Spring::Spring(Follicle* fol2, btTransform frame2, btScalar k, btScalar damping,
 void Spring::update() {
 	// update equilibrium point location in frame 1
 	// First, get two attachment points location in world reference frame
-	TsP = follicle1->getBody()->getCenterOfMassTransform();
+	TsP = body1->getCenterOfMassTransform();
 	TsP *= T1P;
-	TsQ = follicle2->getBody()->getCenterOfMassTransform();
+	TsQ = body2->getCenterOfMassTransform();
 	TsQ *= T2Q;
 	btVector3 p = TsP.getOrigin();
 	btVector3 q = TsQ.getOrigin();

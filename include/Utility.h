@@ -18,14 +18,15 @@
 
 enum collisiontypes {
 	COL_NOTHING = 0, //Collide with nothing
-	COL_FOLLICLE = BIT(0), //Collide with head
-	COL_INT_MUS = BIT(1), //Collide with follicles
-	COL_EXT_MUS = BIT(2),		// Collide with base
+	COL_FOLLICLE = BIT(0),
+	COL_INT_MUS = BIT(1),
+	COL_EXT_MUS = BIT(2),
 };
 
+// unclear bug: why set extMusCollideWith = COL_EXT_MUS only will not allow user to drag the object using mouse cursor
 static int follicleCollideWith = COL_FOLLICLE;
-static int intMusCollideWith = COL_FOLLICLE | COL_EXT_MUS;
-static int extMusCollideWith = COL_FOLLICLE | COL_INT_MUS;
+static int intMusCollideWith = COL_INT_MUS;
+static int extMusCollideWith = COL_EXT_MUS | COL_FOLLICLE;
 
 
 btRigidBody* createDynamicBody(float mass, const btTransform& startTransform, btCollisionShape* shape);

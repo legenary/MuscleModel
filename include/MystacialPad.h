@@ -6,6 +6,7 @@
 #include "Parameter.h"
 #include "Spring.h"
 #include "IntrinsicMuscle.h"
+#include "ExtrinsicMuscle.h"
 
 #include "LinearMath/btAlignedObjectArray.h"
 
@@ -21,6 +22,7 @@ private:
 	int nSpringLayer1;
 	int nSpringLayer2;
 	int nSpringISM;
+	ExtrinsicMuscle* m_nasolabialis;
 
 
 public:
@@ -31,7 +33,9 @@ public:
 	void createLayer2(btDiscreteDynamicsWorld* world, Parameter* param);
 	void createAnchor(btDiscreteDynamicsWorld* world, Parameter* param);
 	void createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* world, Parameter* param);
-	void contract(int step,  Parameter* param);
+	void contractIntrinsicSlingMuscle(int step,  Parameter* param);
+	void createNasolabialis(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
+
 	void update();
 	
 	int getNumFollicles() const;

@@ -14,7 +14,7 @@ Parameter::Parameter() {
 	camPos[0] = 0;
 	camPos[1] = 0;
 	camPos[2] = 0;
-	camDist = 6;
+	camDist = 10;
 	camPitch = -89;
 	camYaw = 0;
 
@@ -31,18 +31,17 @@ Parameter::Parameter() {
 	k_anchor = 500;		// k = 0 : hard anchor, no linear displacement, free angular movement
 						// k > 0 : soft anchor, springy linear and angular movement
 
-	// // instrinsic sling muscle parameter
+	// instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
 	k_ISM = 1000;
-
-	// Muscle contraction
-	contractISM = true;
+	// contraction
 	dir_intrinsic_sling_muscle_contraction_trajectory = "../resources/intrinsic_sling_muscle_contraction_trajectory.csv";
+	contractISM = true;
 
 	// M.Nasolabialis
 	dir_nasolabialis_node_pos = "../resources/nasolabialis_node_pos.csv";
 	dir_nasolabialis_construction_idx = "../resources/nasolabialis_construction_idx.csv";
 	dir_nasolabialis_insertion_idx = "../resources/nasolabialis_insertion_idx.csv";
-
+	k_nasolabialis = 500;
 
 }

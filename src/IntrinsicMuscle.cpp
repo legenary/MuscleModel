@@ -1,7 +1,7 @@
 #include "IntrinsicMuscle.h"
 
-IntrinsicSlingMuscle::IntrinsicSlingMuscle(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping)
-	:Spring( fol1, fol2, frameInParent, frameInChild, k , damping) {
+IntrinsicSlingMuscle::IntrinsicSlingMuscle(btRigidBody* body1, btRigidBody* body2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping)
+	:Spring( body1, body2, frameInParent, frameInChild, k , damping) {
 	init();
 }
 
@@ -16,8 +16,8 @@ void IntrinsicSlingMuscle::contract() {
 
 
 
-IntrinsicObliqueMuscle::IntrinsicObliqueMuscle(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping)
-	:Spring(fol1, fol2, frameInParent, frameInChild, k, damping) {
+IntrinsicObliqueMuscle::IntrinsicObliqueMuscle(btRigidBody* body1, btRigidBody* body2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping)
+	:Spring(body1, body2, frameInParent, frameInChild, k, damping) {
 	init();
 }
 

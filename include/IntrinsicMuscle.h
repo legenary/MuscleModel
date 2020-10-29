@@ -12,14 +12,12 @@ private:
 	void init();
 
 public:
-	IntrinsicSlingMuscle(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping=0.01);
+	IntrinsicSlingMuscle(btRigidBody* body1, btRigidBody* body2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping=0.01);
 	virtual ~IntrinsicSlingMuscle(){}
 
 	void contract();
 
 };
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Intrinsic oblique muscle
@@ -28,12 +26,15 @@ private:
 	void init();
 
 public:
-	IntrinsicObliqueMuscle(Follicle* fol1, Follicle* fol2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping=0.01);
+	IntrinsicObliqueMuscle(btRigidBody* body1, btRigidBody* body2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping=0.01);
 	virtual ~IntrinsicObliqueMuscle() {}
 
 	void contract();
 
 };
+
+
+
 
 
 
