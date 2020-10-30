@@ -9,8 +9,8 @@ void IntrinsicSlingMuscle::init() {
 
 }
 
-void IntrinsicSlingMuscle::contract() {
-
+void IntrinsicSlingMuscle::contract(btScalar ratio) {
+	restLength = ratio * restLengthDefault;
 }
 
 

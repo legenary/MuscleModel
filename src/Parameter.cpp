@@ -43,5 +43,17 @@ Parameter::Parameter() {
 	dir_nasolabialis_construction_idx = "../resources/nasolabialis_construction_idx.csv";
 	dir_nasolabialis_insertion_idx = "../resources/nasolabialis_insertion_idx.csv";
 	k_nasolabialis = 500;
+	// contraction
+	dir_nasolabialis_contraction_trajectory = "../resources/nasolabialis_contraction_trajectory.csv";
+	contractNasolabialis = false;
+
+	// M.Maxillolabialis
+	dir_maxillolabialis_node_pos = "../resources/maxillolabialis_node_pos.csv";
+	dir_maxillolabialis_construction_idx = "../resources/maxillolabialis_construction_idx.csv";
+	dir_maxillolabialis_insertion_idx = "../resources/maxillolabialis_insertion_idx.csv";
+	k_maxillolabialis = 500;
+	// contraction
+	dir_maxillolabialis_contraction_trajectory = "../resources/maxillolabialis_contraction_trajectory.csv";
+	contractMaxillolabialis = false;
 
 }

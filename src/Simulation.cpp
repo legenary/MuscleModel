@@ -18,6 +18,12 @@ void Simulation::stepSimulation() {
 		if (param->contractISM) {
 			m_mystacialPad->contractIntrinsicSlingMuscle(m_step, param);
 		}
+		if (param->contractNasolabialis) {
+			m_mystacialPad->contractNasolabialis(m_step, param);
+		}
+		if (param->contractMaxillolabialis) {
+			m_mystacialPad->contractMaxillolabialis(m_step, param);
+		}
 		m_mystacialPad->update();
 		m_mystacialPad->debugDraw(m_dynamicsWorld, param->DEBUG);
 
@@ -101,19 +107,30 @@ void Simulation::initPhysics() {
 	read_csv_float(param->dir_follicle_loc_orient, param->FOLLICLE_LOC_ORIENT);
 	m_mystacialPad = new MystacialPad(m_dynamicsWorld, &m_collisionShapes, param);
 
+	// layers
 	read_csv_int(param->dir_spring_hex_mesh_idx, param->SPRING_HEX_MESH_IDX);
 	m_mystacialPad->createLayer1(m_dynamicsWorld, param);
 	m_mystacialPad->createLayer2(m_dynamicsWorld, param);
 	m_mystacialPad->createAnchor(m_dynamicsWorld, param);
 
+	// intrinsic sling muscles
 	read_csv_int(param->dir_intrinsic_sling_muscle_idx, param->INTRINSIC_SLING_MUSCLE_IDX);
 	read_csv_float(param->dir_intrinsic_sling_muscle_contraction_trajectory, param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY);
 	m_mystacialPad->createIntrinsicSlingMuscle(m_dynamicsWorld, param);
 	
+	// extrinsic: nasolabialis muscle
 	read_csv_float(param->dir_nasolabialis_node_pos, param->NASOLABIALIS_NODE_POS);
 	read_csv_int(param->dir_nasolabialis_construction_idx, param->NASOLABIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_nasolabialis_insertion_idx, param->NASOLABIALIS_INSERTION_IDX);
+	read_csv_float(param->dir_nasolabialis_contraction_trajectory, param->NASOLABIALIS_CONTRACTION_TRAJECTORY);
 	m_mystacialPad->createNasolabialis(m_dynamicsWorld, &m_collisionShapes, param);
+
+	// extrinsic: maxillolabialis muscle
+	read_csv_float(param->dir_maxillolabialis_node_pos, param->MAXILLOLABIALIS_NODE_POS);
+	read_csv_int(param->dir_maxillolabialis_construction_idx, param->MAXILLOLABIALIS_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_maxillolabialis_insertion_idx, param->MAXILLOLABIALIS_INSERTION_IDX);
+	read_csv_float(param->dir_maxillolabialis_contraction_trajectory, param->MAXILLOLABIALIS_CONTRACTION_TRAJECTORY);
+	m_mystacialPad->createMaxillolabialis(m_dynamicsWorld, &m_collisionShapes, param);
 
 	//m_mystacialPad->getFollicleByIndex(0)->getBody()->setLinearVelocity(btVector3(0, 0, 5));
 

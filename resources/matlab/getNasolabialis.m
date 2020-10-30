@@ -48,7 +48,7 @@ node_idx{33} = [16 14 15];
 node_idx{34} = [17 15 16];
 node_idx{35} = [18 16 17];
 for i = [1:3, 26:35]
-    foot = getFootOfPerpendicularLine(node_pos(node_idx{i}(1), :),...
+    foot = getFootOfPerpendicularToLine(node_pos(node_idx{i}(1), :),...
                                       vec_f2D(node_idx{i}(2)+1, :),...
                                       vec_f2D(node_idx{i}(3)+1, :));
     node_pos(i, :) = 2*foot - node_pos(node_idx{i}(1), :);
@@ -80,9 +80,9 @@ node_pos(41, :) = mean([foot1; foot2]);
 figure; hold on;
 plot3d(vec_f2D, 'ko');
 plot3d(node_pos(4:25, :), 'ro');
-plot3d(node_pos([1:3, 26:32], :), 'bo');
+plot3d(node_pos([1:3, 26:35], :), 'bo');
 
-plot3d(node_pos(33:38, :), 'ro');
+plot3d(node_pos(36:41, :), 'ro');
 axis equal
 
 node_pos_output = node_pos([41, 1:40], :);
@@ -111,12 +111,3 @@ insertion_index = [
     40 18 -1; 26 27 -1; 27 28 -1; 28 29 -1; 29 30 -1; 30 31 -1; 31 32 -1; 32 33 -1;
 ];
 writematrix(insertion_index, '../nasolabialis_insertion_idx.csv')
-
-
-
-
-
-
-
-
-

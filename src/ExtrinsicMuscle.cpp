@@ -10,7 +10,6 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAli
 	for (int i = 0; i < nNodes; i++) {
 		btTransform t = createTransform(btVector3(NODE_POS[i][0], NODE_POS[i][1], NODE_POS[i][2]));
 		btCollisionShape* s = new btSphereShape(0.1);
-		m_collisionShapes->push_back(s);
 		btRigidBody* b = createDynamicBody(0.1, t, s);
 		m_nodes.push_back(b);
 		m_dynamicsWorld->addRigidBody(b, COL_EXT_MUS, extMusCollideWith);
@@ -43,6 +42,12 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAli
 
 }
 
+void ExtrinsicMuscle::contract(btScalar ratio) {
+	for (int i = 0; i < nMusclePieces; i++) {
+		m_musclePieces[i]->setRestLength(ratio);
+	}
+}
+
 void ExtrinsicMuscle::update() {
 	for (int i = 0; i < nMusclePieces; i++) {
 		m_musclePieces[i]->update();
@@ -59,4 +64,14 @@ void ExtrinsicMuscle::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, btVect
 	for (int i = 0; i < nInsertionPieces; i++) {
 		m_insertionPieces[i]->debugDraw(m_dynamicsWorld, clr);
 	}
+}
+
+int ExtrinsicMuscle::getNumberOfNodes() {
+	return nNodes;
+}
+int ExtrinsicMuscle::getNumberOfMusclePieces() {
+	return nMusclePieces;
+}
+int ExtrinsicMuscle::getNumberOfInsertionPices() {
+	return nInsertionPieces;
 }

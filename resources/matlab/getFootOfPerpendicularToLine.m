@@ -1,5 +1,5 @@
-function foot = getFootOfPerpendicularLine(pt, s, e)
-%getFootOfPerpendicularLine gets the foot of perpendicular from a point in
+function foot = getFootOfPerpendicularToLine(pt, s, e)
+%getFootOfPerpendicularToLine gets the foot of perpendicular from a point in
 %space to a line, specified by start and end point
 
 dx = e(1) - s(1);

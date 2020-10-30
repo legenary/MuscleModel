@@ -86,19 +86,43 @@ void MystacialPad::contractIntrinsicSlingMuscle(int m_step, Parameter* param) {
 	// contract intrinsic sling muscle
 	int TrajectoryLength = param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY.size();
 	int step = (m_step <= TrajectoryLength) ? (m_step - 1) : (TrajectoryLength - 1);
-	if (param->contractISM) {
-		for (int i = 0; i < nSpringISM; i++) {
-			m_ISMArray[i]->setRestLength(param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY[step][0]);
-		}
+
+	for (int i = 0; i < nSpringISM; i++) {
+		m_ISMArray[i]->contract(param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY[step][0]);
 	}
 }
 
 void MystacialPad::createNasolabialis(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
+	std::cout << "Creating extrinsic muscles: M.Nasolabialis ...";
 	m_nasolabialis = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray,
 		param->NASOLABIALIS_NODE_POS, param->NASOLABIALIS_CONSTRUCTION_IDX, param->NASOLABIALIS_INSERTION_IDX);
+	std::cout << "Done." << std::endl;
+}
 
-	
+void MystacialPad::contractNasolabialis(int m_step, Parameter* param) {
+	// contract nasolabialis extrinsic muscle
+	int TrajectoryLength = param->NASOLABIALIS_CONTRACTION_TRAJECTORY.size();
+	int step = (m_step <= TrajectoryLength) ? (m_step - 1) : (TrajectoryLength - 1);
 
+	m_nasolabialis->contract(param->NASOLABIALIS_CONTRACTION_TRAJECTORY[step][0]);
+}
+
+void MystacialPad::createMaxillolabialis(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
+	std::cout << "Creating extrinsic muscles: M.Maxillolabialis ...";
+	m_maxillolabialis = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray,
+		param->MAXILLOLABIALIS_NODE_POS, param->MAXILLOLABIALIS_CONSTRUCTION_IDX, param->MAXILLOLABIALIS_INSERTION_IDX);
+	std::cout << m_maxillolabialis->getNumberOfNodes() << " "
+		<< m_maxillolabialis->getNumberOfMusclePieces() << " "
+		<< m_maxillolabialis->getNumberOfInsertionPices() << " ";
+	std::cout << "Done." << std::endl;
+}
+
+void MystacialPad::contractMaxillolabialis(int m_step, Parameter* param) {
+	// contract nasolabialis extrinsic muscle
+	int TrajectoryLength = param->MAXILLOLABIALIS_CONTRACTION_TRAJECTORY.size();
+	int step = (m_step <= TrajectoryLength) ? (m_step - 1) : (TrajectoryLength - 1);
+
+	m_maxillolabialis->contract(param->MAXILLOLABIALIS_CONTRACTION_TRAJECTORY[step][0]);
 }
 
 void MystacialPad::update() {
@@ -114,20 +138,22 @@ void MystacialPad::update() {
 		m_ISMArray[i]->update();
 	}
 	m_nasolabialis->update();
+	m_maxillolabialis->update();
 }
 
 void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG) {
 	if (DEBUG) { // debug draw springs
-		/*for (int i = 0; i < m_layer1.size(); i++) {
-			m_layer1[i]->debugDraw(m_dynamicsWorld);
-		}
-		for (int i = 0; i < m_layer2.size(); i++) {
-			m_layer2[i]->debugDraw(m_dynamicsWorld);
-		}*/
-		for (int i = 0; i < m_ISMArray.size(); i++) {
-			m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
-		}
+		//for (int i = 0; i < m_layer1.size(); i++) {
+		//	m_layer1[i]->debugDraw(m_dynamicsWorld);
+		//}
+		//for (int i = 0; i < m_layer2.size(); i++) {
+		//	m_layer2[i]->debugDraw(m_dynamicsWorld);
+		//}
+		//for (int i = 0; i < m_ISMArray.size(); i++) {
+		//	m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
+		//}
 		m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
+		m_maxillolabialis->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 	}
 }
 

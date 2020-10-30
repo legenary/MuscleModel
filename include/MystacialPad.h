@@ -23,6 +23,7 @@ private:
 	int nSpringLayer2;
 	int nSpringISM;
 	ExtrinsicMuscle* m_nasolabialis;
+	ExtrinsicMuscle* m_maxillolabialis;
 
 
 public:
@@ -35,6 +36,10 @@ public:
 	void createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* world, Parameter* param);
 	void contractIntrinsicSlingMuscle(int step,  Parameter* param);
 	void createNasolabialis(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
+	void contractNasolabialis(int step, Parameter* param);
+	void createMaxillolabialis(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
+	void contractMaxillolabialis(int step, Parameter* param);
+
 
 	void update();
 	

@@ -15,7 +15,7 @@ public:
 	IntrinsicSlingMuscle(btRigidBody* body1, btRigidBody* body2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping=0.01);
 	virtual ~IntrinsicSlingMuscle(){}
 
-	void contract();
+	void contract(btScalar ratio);
 
 };
 

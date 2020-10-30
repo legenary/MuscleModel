@@ -2,4 +2,4 @@ clear;
 getEmergenceVectors
 getSpringHexMeshIndex
 getIntrinsicSlingMuscleIndex
-getIntrinsicSlingMuscleContractionTrajectory
+getMuscleContractionTrajectory

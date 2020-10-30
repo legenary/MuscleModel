@@ -41,8 +41,7 @@ public:
 	std::string dir_intrinsic_sling_muscle_idx;
 	std::vector<std::vector<int>>INTRINSIC_SLING_MUSCLE_IDX;
 	btScalar k_ISM;
-
-	// instrinsic sling muscle contraction
+	// contraction
 	bool contractISM;
 	std::string dir_intrinsic_sling_muscle_contraction_trajectory;
 	std::vector<std::vector<float>> INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY;
@@ -55,6 +54,24 @@ public:
 	std::string dir_nasolabialis_insertion_idx;
 	std::vector<std::vector<int>> NASOLABIALIS_INSERTION_IDX;
 	btScalar k_nasolabialis;
+	// contraction
+	std::string dir_nasolabialis_contraction_trajectory;
+	std::vector<std::vector<float>> NASOLABIALIS_CONTRACTION_TRAJECTORY;
+	bool contractNasolabialis;
+
+	// M.maxillolabialis
+	std::string dir_maxillolabialis_node_pos;
+	std::vector<std::vector<float>> MAXILLOLABIALIS_NODE_POS;
+	std::string dir_maxillolabialis_construction_idx;
+	std::vector<std::vector<int>> MAXILLOLABIALIS_CONSTRUCTION_IDX;
+	std::string dir_maxillolabialis_insertion_idx;
+	std::vector<std::vector<int>> MAXILLOLABIALIS_INSERTION_IDX;
+	btScalar k_maxillolabialis;
+	// contraction
+	std::string dir_maxillolabialis_contraction_trajectory;
+	std::vector<std::vector<float>> MAXILLOLABIALIS_CONTRACTION_TRAJECTORY;
+	bool contractMaxillolabialis;
+
 
 };
 
