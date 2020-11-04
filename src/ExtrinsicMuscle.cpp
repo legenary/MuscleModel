@@ -2,10 +2,9 @@
 
 ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param,
 	btAlignedObjectArray<Follicle*> m_follicleArray, std::vector<std::vector<float>> NODE_POS,
-	std::vector<std::vector<int>> CONSTRUCTION_IDX, std::vector<std::vector<int>> INSERTION_IDX) {
+	std::vector<std::vector<int>> CONSTRUCTION_IDX, std::vector<std::vector<int>> INSERTION_IDX, btScalar top) {
 
 	// create extrinsic muscle nodes
-	// (remember: change this to createDynamic Body)
 	nNodes = NODE_POS.size();
 	for (int i = 0; i < nNodes; i++) {
 		btTransform t = createTransform(btVector3(NODE_POS[i][0], NODE_POS[i][1], NODE_POS[i][2]));
@@ -28,7 +27,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAli
 	int nInsertionGroups = INSERTION_IDX.size();
 	for (int i = 0; i < nInsertionGroups; i++) {
 		btRigidBody* node = m_nodes[INSERTION_IDX[i][0]];
-		btTransform trans = createTransform(btVector3(param->fol_half_height, 0., 0.));
+		btTransform trans = createTransform(btVector3(top*param->fol_half_height, 0., 0.));
 		for (int f = 1; f < 3; f++) {
 			if (INSERTION_IDX[i][f] >= 0) {
 				btRigidBody* body = m_follicleArray[INSERTION_IDX[i][f]]->getBody();

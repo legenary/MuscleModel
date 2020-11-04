@@ -36,7 +36,7 @@ Parameter::Parameter() {
 	k_ISM = 1000;
 	// contraction
 	dir_intrinsic_sling_muscle_contraction_trajectory = "../resources/intrinsic_sling_muscle_contraction_trajectory.csv";
-	contractISM = true;
+	contractISM = false;
 
 	// M.Nasolabialis
 	dir_nasolabialis_node_pos = "../resources/nasolabialis_node_pos.csv";
@@ -55,5 +55,11 @@ Parameter::Parameter() {
 	// contraction
 	dir_maxillolabialis_contraction_trajectory = "../resources/maxillolabialis_contraction_trajectory.csv";
 	contractMaxillolabialis = false;
+
+	// Pars media superior of M. Nasolabialis profundus
+	dir_pars_media_superior_node_pos = "../resources/pars_media_superior_node_pos.csv";
+	dir_pars_media_superior_construction_idx = "../resources/pars_media_superior_construction_idx.csv";
+	dir_pars_media_superior_insertion_idx = "../resources/pars_media_superior_insertion_idx.csv";
+	k_PMS = 500;
 
 }

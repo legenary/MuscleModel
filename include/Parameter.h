@@ -72,6 +72,14 @@ public:
 	std::vector<std::vector<float>> MAXILLOLABIALIS_CONTRACTION_TRAJECTORY;
 	bool contractMaxillolabialis;
 
+	// Pars media superior of M. Nasolabialis profundus
+	std::string dir_pars_media_superior_node_pos;
+	std::vector<std::vector<float>> PARS_MEDIA_SUPERIOR_NODE_POS;
+	std::string dir_pars_media_superior_construction_idx;
+	std::vector<std::vector<int>> PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX;
+	std::string dir_pars_media_superior_insertion_idx;
+	std::vector<std::vector<int>> PARS_MEDIA_SUPERIOR_INSERTION_IDX;
+	btScalar k_PMS;
 
 };
 
