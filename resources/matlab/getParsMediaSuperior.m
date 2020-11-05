@@ -30,7 +30,7 @@ node_pos(10, :) = 2*foot - node_pos(node_idx{10}(1), :);
 
 
 
-% above A row and below E row
+% above A row and below B row
 node_idx{ 1} = [6 0 1];
 node_idx{ 2} = [7 1 2];
 node_idx{ 3} = [8 2 3];

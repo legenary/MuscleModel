@@ -138,6 +138,12 @@ void Simulation::initPhysics() {
 	read_csv_int(param->dir_pars_media_superior_insertion_idx, param->PARS_MEDIA_SUPERIOR_INSERTION_IDX);
 	m_mystacialPad->createParsMediaSuperior(m_dynamicsWorld, &m_collisionShapes, param);
 
+	// extrinsic: pars media inferior of M. Nasolabialis profundus
+	read_csv_float(param->dir_pars_media_inferior_node_pos, param->PARS_MEDIA_INFERIOR_NODE_POS);
+	read_csv_int(param->dir_pars_media_inferior_construction_idx, param->PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_media_inferior_insertion_idx, param->PARS_MEDIA_INFERIOR_INSERTION_IDX);
+	m_mystacialPad->createParsMediaInferior(m_dynamicsWorld, &m_collisionShapes, param);
+
 
 	////////////////////////////////////////////////////////////////////////////////
 

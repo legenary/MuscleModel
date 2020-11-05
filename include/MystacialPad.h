@@ -25,6 +25,7 @@ private:
 	ExtrinsicMuscle* m_nasolabialis;
 	ExtrinsicMuscle* m_maxillolabialis;
 	ExtrinsicMuscle* m_PMS;
+	ExtrinsicMuscle* m_PMI;
 
 
 public:
@@ -41,6 +42,7 @@ public:
 	void createMaxillolabialis(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
 	void contractMaxillolabialis(int step, Parameter* param);
 	void createParsMediaSuperior(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
+	void createParsMediaInferior(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
 
 
 	void update();

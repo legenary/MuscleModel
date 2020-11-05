@@ -62,4 +62,10 @@ Parameter::Parameter() {
 	dir_pars_media_superior_insertion_idx = "../resources/pars_media_superior_insertion_idx.csv";
 	k_PMS = 500;
 
+	// Pars media inferior of M. Nasolabialis profundus
+	dir_pars_media_inferior_node_pos = "../resources/pars_media_inferior_node_pos.csv";
+	dir_pars_media_inferior_construction_idx = "../resources/pars_media_inferior_construction_idx.csv";
+	dir_pars_media_inferior_insertion_idx = "../resources/pars_media_inferior_insertion_idx.csv";
+	k_PMI = 500;
+
 }

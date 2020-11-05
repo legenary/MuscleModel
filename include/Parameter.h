@@ -81,6 +81,15 @@ public:
 	std::vector<std::vector<int>> PARS_MEDIA_SUPERIOR_INSERTION_IDX;
 	btScalar k_PMS;
 
+	// Pars media inferior of M. Nasolabialis profundus
+	std::string dir_pars_media_inferior_node_pos;
+	std::vector<std::vector<float>> PARS_MEDIA_INFERIOR_NODE_POS;
+	std::string dir_pars_media_inferior_construction_idx;
+	std::vector<std::vector<int>> PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX;
+	std::string dir_pars_media_inferior_insertion_idx;
+	std::vector<std::vector<int>> PARS_MEDIA_INFERIOR_INSERTION_IDX;
+	btScalar k_PMI;
+
 };
 
 

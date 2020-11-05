@@ -129,6 +129,13 @@ void MystacialPad::createParsMediaSuperior(btDiscreteDynamicsWorld* m_dynamicsWo
 	std::cout << "Done." << std::endl;
 }
 
+void MystacialPad::createParsMediaInferior(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
+	std::cout << "Creating extrinsci muscles: Pars media superior of M. Nasolabialis profundus...";
+	m_PMI = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray,
+		param->PARS_MEDIA_INFERIOR_NODE_POS, param->PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX, param->PARS_MEDIA_INFERIOR_INSERTION_IDX, 1);
+	std::cout << "Done." << std::endl;
+}
+
 void MystacialPad::update() {
 	// only linear springs need update
 	// torsional springs don't
@@ -144,6 +151,7 @@ void MystacialPad::update() {
 	m_nasolabialis->update();
 	m_maxillolabialis->update();
 	m_PMS->update();
+	m_PMI->update();
 }
 
 void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG) {
@@ -157,9 +165,10 @@ void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG
 		//for (int i = 0; i < m_ISMArray.size(); i++) {
 		//	m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		//}
-		m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
-		m_maxillolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
+		//m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
+		//m_maxillolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
 		m_PMS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
+		m_PMI->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 	}
 }
 
