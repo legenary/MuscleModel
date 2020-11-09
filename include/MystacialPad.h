@@ -26,6 +26,9 @@ private:
 	ExtrinsicMuscle* m_maxillolabialis;
 	ExtrinsicMuscle* m_PMS;
 	ExtrinsicMuscle* m_PMI;
+	ExtrinsicMuscle* m_PIP;
+	ExtrinsicMuscle* m_PM;
+	std::vector<std::vector<float>> heightPlaceHolder;
 
 
 public:
@@ -43,6 +46,8 @@ public:
 	void contractMaxillolabialis(int step, Parameter* param);
 	void createParsMediaSuperior(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
 	void createParsMediaInferior(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
+	void createParsInternaProfunda(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
+	void createParsMaxillaris(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
 
 
 	void update();

@@ -2,26 +2,28 @@ clear; close all;
 load('follicle_pos');
 
 %%
+subcapsular_level = -1.4;
+
 node_pos = zeros(27, 3);
-node_height = zeros(27, 1);
+node_height = subcapsular_level * ones(27, 1);
 node_idx = cell(27,3);
 
-% between C D E row
-node_idx{ 7} = [10 11 19];      node_height( 7) = 1;
-node_idx{ 8} = [11 12 19 20];   node_height( 8) = 0.9;
-node_idx{ 9} = [12 13 20 21];   node_height( 9) = 0.6;
-node_idx{10} = [13 14 21 22];   node_height(10) = 0.3;
-node_idx{11} = [14 15 22 23];   node_height(11) = 0;
-node_idx{12} = [15 16 23 24];   node_height(12) = -0.3;
-node_idx{13} = [16 17 24 25];   node_height(13) = -0.6;
+subcapsular_level = -1.4;% between C D E row
+node_idx{ 7} = [10 11 19];      
+node_idx{ 8} = [11 12 19 20];   
+node_idx{ 9} = [12 13 20 21];   
+node_idx{10} = [13 14 21 22];   
+node_idx{11} = [14 15 22 23];   
+node_idx{12} = [15 16 23 24];   
+node_idx{13} = [16 17 24 25];   
 
-node_idx{14} = [18 19 27];      node_height(14) = 1;
-node_idx{15} = [19 20 27 28];   node_height(15) = 0.9;
-node_idx{16} = [20 21 28 29];   node_height(16) = 0.6;
-node_idx{17} = [21 22 29 30];   node_height(17) = 0.3;
-node_idx{18} = [22 23 30 31];   node_height(18) = 0;
-node_idx{19} = [23 24 31 32];   node_height(19) = -0.3;
-node_idx{20} = [24 25 32 33];   node_height(20) = -0.6;
+node_idx{14} = [18 19 27];     
+node_idx{15} = [19 20 27 28];  
+node_idx{16} = [20 21 28 29]; 
+node_idx{17} = [21 22 29 30];  
+node_idx{18} = [22 23 30 31]; 
+node_idx{19} = [23 24 31 32]; 
+node_idx{20} = [24 25 32 33];  
 
 
 
@@ -57,7 +59,7 @@ end
 
 % rostral outside pad
 s1 = node_pos(12, :); e1 = node_pos(13, :); 
-s2 = node_pos(19, :); e2 = node_pos(20, :); 
+s2 = node_pos(25, :); e2 = node_pos(26, :); 
 [foot1, foot2] = getCommonFootOfPerpendicularLine(s1, e1, s2, e2);
 node_pos(27, :) = mean([foot1; foot2]);
 
@@ -69,7 +71,7 @@ plot3d(node_pos(1:27, :), 'k*');
 axis equal
 
 node_pos_output = node_pos([27, 1:26], :);
-writematrix(node_pos_output, '../pars_media_inferior_node_pos.csv')
+writematrix(node_pos_output, '../pars_maxillaris_node_pos.csv')
 
 %%
 constrcution_index = [
@@ -78,7 +80,7 @@ constrcution_index = [
     0 20; 20 19; 19 18; 18 17; 17 16; 16 15; 15 14;
     0 26; 26 25; 25 24; 24 23; 23 22; 22 21
 ];
-writematrix(constrcution_index, '../pars_media_inferior_construction_idx.csv')
+writematrix(constrcution_index, '../pars_maxillaris_construction_idx.csv')
 
 %%
 insertion_index = [
@@ -91,15 +93,15 @@ insertion_index = [
 ];
 
 insertion_height = [
-    0 -0.9; 0 -0.9; 0 -0.9;
-    1 0.9; 2 0.6; 3 0.3; 4 0; 5 -0.3; 6 -0.6;
-    7 1; 8 0.9; 9 0.6; 10 0.3; 11 0; 12 -0.3; 13 -0.6;
-    14 1; 15 0.9; 16 0.6; 17 0.3; 18 0; 19 -0.3; 20 -0.6;
-    21 0.9; 22 0.6; 23 0.3; 24 0; 25 -0.3; 26 -0.6
+    0 subcapsular_level; 0 subcapsular_level; 0 subcapsular_level;
+    1 subcapsular_level; 2 subcapsular_level; 3 subcapsular_level; 4 subcapsular_level; 5 subcapsular_level; 6 subcapsular_level;
+    7 subcapsular_level; 8 subcapsular_level; 9 subcapsular_level; 10 subcapsular_level; 11 subcapsular_level; 12 subcapsular_level; 13 subcapsular_level;
+    14 subcapsular_level; 15 subcapsular_level; 16 subcapsular_level; 17 subcapsular_level; 18 subcapsular_level; 19 subcapsular_level; 20 subcapsular_level;
+    21 subcapsular_level; 22 subcapsular_level; 23 subcapsular_level; 24 subcapsular_level; 25 subcapsular_level; 26 subcapsular_level
 ];
 
-writematrix(insertion_index, '../pars_media_inferior_insertion_idx.csv')
-writematrix(insertion_height, '../pars_media_inferior_insertion_height.csv')
+writematrix(insertion_index, '../pars_maxillaris_insertion_idx.csv')
+writematrix(insertion_height, '../pars_maxillaris_insertion_height.csv')
 
 
 

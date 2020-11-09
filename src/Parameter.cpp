@@ -33,10 +33,10 @@ Parameter::Parameter() {
 
 	// instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
-	k_ISM = 1000;
+	k_ISM = 3000;
 	// contraction
 	dir_intrinsic_sling_muscle_contraction_trajectory = "../resources/intrinsic_sling_muscle_contraction_trajectory.csv";
-	contractISM = false;
+	contractISM = true;
 
 	// M.Nasolabialis
 	dir_nasolabialis_node_pos = "../resources/nasolabialis_node_pos.csv";
@@ -60,12 +60,29 @@ Parameter::Parameter() {
 	dir_pars_media_superior_node_pos = "../resources/pars_media_superior_node_pos.csv";
 	dir_pars_media_superior_construction_idx = "../resources/pars_media_superior_construction_idx.csv";
 	dir_pars_media_superior_insertion_idx = "../resources/pars_media_superior_insertion_idx.csv";
+	dir_pars_media_superior_insertion_height = "../resources/pars_media_superior_insertion_height.csv";
 	k_PMS = 500;
 
 	// Pars media inferior of M. Nasolabialis profundus
 	dir_pars_media_inferior_node_pos = "../resources/pars_media_inferior_node_pos.csv";
 	dir_pars_media_inferior_construction_idx = "../resources/pars_media_inferior_construction_idx.csv";
 	dir_pars_media_inferior_insertion_idx = "../resources/pars_media_inferior_insertion_idx.csv";
+	dir_pars_media_inferior_insertion_height = "../resources/pars_media_inferior_insertion_height.csv";
 	k_PMI = 500;
+
+	// Pars interna profunda of M.Nasolabialis profundus
+	dir_pars_interna_profunda_node_pos = "../resources/pars_interna_profunda_node_pos.csv";
+	dir_pars_interna_profunda_construction_idx = "../resources/pars_interna_profunda_construction_idx.csv";
+	dir_pars_interna_profunda_insertion_idx = "../resources/pars_interna_profunda_insertion_idx.csv";
+	dir_pars_interna_profunda_insertion_height = "../resources/pars_interna_profunda_insertion_height.csv";
+	k_PIP = 500;
+
+	// Pars maxillaris superficialis of M. Nasolabialis profundus
+	// Pars maxillaris profunda of M. Nasolabialis profundus
+	dir_pars_maxillaris_node_pos = "../resources/pars_maxillaris_node_pos.csv";
+	dir_pars_maxillaris_construction_idx = "../resources/pars_maxillaris_construction_idx.csv";
+	dir_pars_maxillaris_insertion_idx = "../resources/pars_maxillaris_insertion_idx.csv";
+	dir_pars_maxillaris_insertion_height = "../resources/pars_maxillaris_insertion_height.csv";
+	k_PM = 500;
 
 }

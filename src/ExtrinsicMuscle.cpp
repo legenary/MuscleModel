@@ -1,8 +1,8 @@
 #include "ExtrinsicMuscle.h"
 
 ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param,
-	btAlignedObjectArray<Follicle*> m_follicleArray, std::vector<std::vector<float>> NODE_POS,
-	std::vector<std::vector<int>> CONSTRUCTION_IDX, std::vector<std::vector<int>> INSERTION_IDX, btScalar top) {
+	btAlignedObjectArray<Follicle*> m_follicleArray, std::vector<std::vector<float>> NODE_POS, std::vector<std::vector<int>> CONSTRUCTION_IDX, 
+	std::vector<std::vector<int>> INSERTION_IDX, std::vector<std::vector<float>> INSERTION_HEIGHT) {
 
 	// create extrinsic muscle nodes
 	nNodes = NODE_POS.size();
@@ -26,8 +26,10 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAli
 	// construct muscle insertion to follicle
 	int nInsertionGroups = INSERTION_IDX.size();
 	for (int i = 0; i < nInsertionGroups; i++) {
-		btRigidBody* node = m_nodes[INSERTION_IDX[i][0]];
-		btTransform trans = createTransform(btVector3(top*param->fol_half_height, 0., 0.));
+		btRigidBody* node = m_nodes[INSERTION_IDX[i][0]];\
+		// Insertion height: the height of point where the follicle is inserted by the muscle, range [-1, 1]*fol_half_height
+		// Default insertion height: 1, otherwise check INSERTION HEIGHT
+		btTransform trans = createTransform(btVector3((INSERTION_HEIGHT.size()?INSERTION_HEIGHT[i][1]:1) * param->fol_half_height, 0., 0.));
 		for (int f = 1; f < 3; f++) {
 			if (INSERTION_IDX[i][f] >= 0) {
 				btRigidBody* body = m_follicleArray[INSERTION_IDX[i][f]]->getBody();

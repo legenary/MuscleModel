@@ -95,7 +95,7 @@ void MystacialPad::contractIntrinsicSlingMuscle(int m_step, Parameter* param) {
 void MystacialPad::createNasolabialis(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
 	std::cout << "Creating extrinsic muscles: M.Nasolabialis ...";
 	m_nasolabialis = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray,
-		param->NASOLABIALIS_NODE_POS, param->NASOLABIALIS_CONSTRUCTION_IDX, param->NASOLABIALIS_INSERTION_IDX, 1);
+		param->NASOLABIALIS_NODE_POS, param->NASOLABIALIS_CONSTRUCTION_IDX, param->NASOLABIALIS_INSERTION_IDX, heightPlaceHolder);
 	std::cout << "Done." << std::endl;
 }
 
@@ -110,7 +110,7 @@ void MystacialPad::contractNasolabialis(int m_step, Parameter* param) {
 void MystacialPad::createMaxillolabialis(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
 	std::cout << "Creating extrinsic muscles: M.Maxillolabialis ...";
 	m_maxillolabialis = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray,
-		param->MAXILLOLABIALIS_NODE_POS, param->MAXILLOLABIALIS_CONSTRUCTION_IDX, param->MAXILLOLABIALIS_INSERTION_IDX, 1);
+		param->MAXILLOLABIALIS_NODE_POS, param->MAXILLOLABIALIS_CONSTRUCTION_IDX, param->MAXILLOLABIALIS_INSERTION_IDX, heightPlaceHolder);
 	std::cout << "Done." << std::endl;
 }
 
@@ -124,15 +124,29 @@ void MystacialPad::contractMaxillolabialis(int m_step, Parameter* param) {
 
 void MystacialPad::createParsMediaSuperior(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
 	std::cout << "Creating extrinsci muscles: Pars media superior of M. Nasolabialis profundus...";
-	m_PMS = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray,
-		param->PARS_MEDIA_SUPERIOR_NODE_POS, param->PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX, param->PARS_MEDIA_SUPERIOR_INSERTION_IDX, 1);
+	m_PMS = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray, param->PARS_MEDIA_SUPERIOR_NODE_POS, 
+		param->PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX, param->PARS_MEDIA_SUPERIOR_INSERTION_IDX, param->PARS_MEDIA_SUPERIOR_INSERTION_HEIGHT);
 	std::cout << "Done." << std::endl;
 }
 
 void MystacialPad::createParsMediaInferior(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
-	std::cout << "Creating extrinsci muscles: Pars media superior of M. Nasolabialis profundus...";
-	m_PMI = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray,
-		param->PARS_MEDIA_INFERIOR_NODE_POS, param->PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX, param->PARS_MEDIA_INFERIOR_INSERTION_IDX, 1);
+	std::cout << "Creating extrinsci muscles: Pars media inferior of M. Nasolabialis profundus...";
+	m_PMI = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray, param->PARS_MEDIA_INFERIOR_NODE_POS, 
+		param->PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX, param->PARS_MEDIA_INFERIOR_INSERTION_IDX, param->PARS_MEDIA_INFERIOR_INSERTION_HEIGHT);
+	std::cout << "Done." << std::endl;
+}
+
+void MystacialPad::createParsInternaProfunda(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
+	std::cout << "Creating extrinsci muscles: Pars interna profunda of M. Nasolabialis profundus...";
+	m_PIP = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray, param->PARS_INTERNA_PROFUNDA_NODE_POS,
+		param->PARS_INTERNA_PROFUNDA_CONSTRUCTION_IDX, param->PARS_INTERNA_PROFUNDA_INSERTION_IDX, param->PARS_INTERNA_PROFUNDA_INSERTION_HEIGHT);
+	std::cout << "Done." << std::endl;
+}
+
+void MystacialPad::createParsMaxillaris(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
+	std::cout << "Creating extrinsci muscles: Pars maxillaris (superficialis and profunda combined) of M. Nasolabialis profundus...";
+	m_PM = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray, param->PARS_MAXILLARIS_NODE_POS,
+		param->PARS_MAXILLARIS_CONSTRUCTION_IDX, param->PARS_MAXILLARIS_INSERTION_IDX, param->PARS_MAXILLARIS_INSERTION_HEIGHT);
 	std::cout << "Done." << std::endl;
 }
 
@@ -152,6 +166,8 @@ void MystacialPad::update() {
 	m_maxillolabialis->update();
 	m_PMS->update();
 	m_PMI->update();
+	m_PIP->update();
+	m_PM->update();
 }
 
 void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG) {
@@ -165,10 +181,12 @@ void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG
 		//for (int i = 0; i < m_ISMArray.size(); i++) {
 		//	m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		//}
-		//m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
-		//m_maxillolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
+		m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
+		m_maxillolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
 		m_PMS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		m_PMI->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
+		m_PIP->debugDraw(m_dynamicsWorld, btVector3(0., 1., 0.));
+		m_PM->debugDraw(m_dynamicsWorld, btVector3(0., 1., 0.));
 	}
 }
 

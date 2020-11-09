@@ -15,13 +15,14 @@ private:
 	int nInsertionPieces;
 	btAlignedObjectArray<btRigidBody*> m_nodes;
 	btAlignedObjectArray<Spring*> m_musclePieces;
-	btAlignedObjectArray<Spring*> m_insertionPieces;
+	btAlignedObjectArray<Spring*> m_insertionPieces; 
+	
 
 public:
 	// remember to add: a slider constraint (or point-to-point anchor) at the end of the extrinsic muscle bundle
 	ExtrinsicMuscle(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param,
-		btAlignedObjectArray<Follicle*> follicleArray, std::vector<std::vector<float>> NODE_POS,
-		std::vector<std::vector<int>> CONSTRUCTION_IDX, std::vector<std::vector<int>> INSERTION_IDX, btScalar top = 1);
+		btAlignedObjectArray<Follicle*> follicleArray, std::vector<std::vector<float>> NODE_POS, std::vector<std::vector<int>> CONSTRUCTION_IDX, 
+		std::vector<std::vector<int>> INSERTION_IDX, std::vector<std::vector<float>> INSERTION_HEIGHT);
 
 	void contract(btScalar ratio);
 	void update();
