@@ -33,7 +33,7 @@ Parameter::Parameter() {
 
 	// instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
-	k_ISM = 3000;
+	k_ISM = 2000;
 	// contraction
 	dir_intrinsic_sling_muscle_contraction_trajectory = "../resources/intrinsic_sling_muscle_contraction_trajectory.csv";
 	contractISM = true;
