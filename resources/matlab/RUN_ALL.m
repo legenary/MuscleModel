@@ -3,3 +3,9 @@ getEmergenceVectors
 getSpringHexMeshIndex
 getIntrinsicSlingMuscleIndex
 getMuscleContractionTrajectory
+getNasolabialis
+getMaxillolabialis
+getParsInternaProfunda
+getParsMediaInferior
+getParsMediaSuperior
+getParsMaxillaris

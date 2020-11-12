@@ -13,7 +13,7 @@ P2D = [zeros(size(P3D, 1), 1), modelPointsBP(1:35, 2:3)];
 
 %% get emergence vectors in world reference frame
 dir_0 = [0, -1, 0]';
-l = 1.4;
+l = -1.4;
 dir = zeros(35, 3);
 for w = 1:35
     dir(w, :) = rotz(modelThetaW(w), 'deg')*...
@@ -33,9 +33,9 @@ vec_f2D(:, 1) = -vec_f2D(:, 1);
 
 figure('Color', 'w'); hold on;
 for i = 1:35
-%     plot3d([vec_s2D(i,:); vec_f2D(i,:)], 'k-');
-%     plot3d(vec_s2D(i,:), 'ro');
-    plot3d(vec_f2D(i,:), 'bo');
+    plot3d([vec_s2D(i,:); vec_f2D(i,:)], 'k-');
+    plot3d(vec_s2D(i,:), 'ro');
+%     plot3d(vec_f2D(i,:), 'bo');
 end
 axis equal
 xlabel('x');
