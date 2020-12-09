@@ -132,6 +132,12 @@ void Simulation::initPhysics() {
 	read_csv_float(param->dir_maxillolabialis_contraction_trajectory, param->MAXILLOLABIALIS_CONTRACTION_TRAJECTORY);
 	m_mystacialPad->createMaxillolabialis(m_dynamicsWorld, &m_collisionShapes, param);
 
+	// extrinsic: nasolabialis superficialis
+	read_csv_float(param->dir_nasolabialis_superficialis_node_pos, param->NASOLABIALIS_SUPERFICIALIS_NODE_POS);
+	read_csv_int(param->dir_nasolabialis_superficialis_construction_idx, param->NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_nasolabialis_superficialis_insertion_idx, param->NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX);
+	m_mystacialPad->createNasolabialisSuperficialis(m_dynamicsWorld, &m_collisionShapes, param);
+
 	// extrinsic: pars media superior of M. Nasolabialis profundus
 	read_csv_float(param->dir_pars_media_superior_node_pos, param->PARS_MEDIA_SUPERIOR_NODE_POS);
 	read_csv_int(param->dir_pars_media_superior_construction_idx, param->PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX);

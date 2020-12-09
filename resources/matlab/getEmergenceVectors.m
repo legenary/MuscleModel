@@ -13,7 +13,7 @@ P2D = [zeros(size(P3D, 1), 1), modelPointsBP(1:35, 2:3)];
 
 %% get emergence vectors in world reference frame
 dir_0 = [0, -1, 0]';
-l = -1.4;
+l = 1.4;
 dir = zeros(35, 3);
 for w = 1:35
     dir(w, :) = rotz(modelThetaW(w), 'deg')*...

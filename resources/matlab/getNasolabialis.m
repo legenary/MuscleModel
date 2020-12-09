@@ -1,10 +1,19 @@
 clear; close all;
 load('follicle_pos');
 
-node_pos = zeros(41, 3);
-node_idx = cell(41,3);
+node_pos = zeros(17, 3);
+node_idx = cell(17,3);
 
 % between rows
+node_idx{ 7} = [3 4 8 9];
+node_idx{ 8} = [5 6];
+node_idx{ 9} = [6 7 11 12];
+node_idx{10} = [7 8 12 13];
+
+for i = 4:25
+    node_pos(i, :) = mean(vec_f2D(node_idx{i}+1, :));
+end
+
 node_idx{ 4} = [0 1];
 node_idx{ 5} = [1 2 6 7];
 node_idx{ 6} = [2 3 7 8];
@@ -30,6 +39,9 @@ node_idx{25} = [24 25 32 33];
 for i = 4:25
     node_pos(i, :) = mean(vec_f2D(node_idx{i}+1, :));
 end
+
+
+
 
 
 % 33 34 35

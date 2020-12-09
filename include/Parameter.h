@@ -72,6 +72,15 @@ public:
 	std::vector<std::vector<float>> MAXILLOLABIALIS_CONTRACTION_TRAJECTORY;
 	bool contractMaxillolabialis;
 
+	// M. Nasolabialis superficialis
+	std::string dir_nasolabialis_superficialis_node_pos;
+	std::vector<std::vector<float>> NASOLABIALIS_SUPERFICIALIS_NODE_POS;
+	std::string dir_nasolabialis_superficialis_construction_idx;
+	std::vector<std::vector<int>> NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX;
+	std::string dir_nasolabialis_superficialis_insertion_idx;
+	std::vector<std::vector<int>> NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX;
+	btScalar k_NS;
+
 	// Pars media superior of M. Nasolabialis profundus
 	std::string dir_pars_media_superior_node_pos;
 	std::vector<std::vector<float>> PARS_MEDIA_SUPERIOR_NODE_POS;
@@ -116,6 +125,7 @@ public:
 	std::string dir_pars_maxillaris_insertion_height;
 	std::vector<std::vector<float>> PARS_MAXILLARIS_INSERTION_HEIGHT;
 	btScalar k_PM;
+
 
 
 };

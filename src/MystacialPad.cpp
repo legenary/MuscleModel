@@ -122,6 +122,13 @@ void MystacialPad::contractMaxillolabialis(int m_step, Parameter* param) {
 	m_maxillolabialis->contract(param->MAXILLOLABIALIS_CONTRACTION_TRAJECTORY[step][0]);
 }
 
+void MystacialPad::createNasolabialisSuperficialis(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
+	std::cout << "Creating extrinsic muscles: M.Nasolabialis superficialis ...";
+	m_NS = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray,
+		param->NASOLABIALIS_SUPERFICIALIS_NODE_POS, param->NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX, param->NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX, heightPlaceHolder);
+	std::cout << "Done." << std::endl;
+}
+
 void MystacialPad::createParsMediaSuperior(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
 	std::cout << "Creating extrinsci muscles: Pars media superior of M. Nasolabialis profundus...";
 	m_PMS = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray, param->PARS_MEDIA_SUPERIOR_NODE_POS, 
@@ -164,6 +171,7 @@ void MystacialPad::update() {
 	}
 	m_nasolabialis->update();
 	m_maxillolabialis->update();
+	m_NS->update();
 	m_PMS->update();
 	m_PMI->update();
 	m_PIP->update();
@@ -183,10 +191,11 @@ void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG
 		//}
 		//m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
 		//m_maxillolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.)); 
-		m_PMS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
-		m_PMI->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
-		m_PIP->debugDraw(m_dynamicsWorld, btVector3(0., 1., 0.));
-		m_PM->debugDraw(m_dynamicsWorld, btVector3(0., 1., 0.));
+		m_NS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
+		//m_PMS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
+		//m_PMI->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
+		//m_PIP->debugDraw(m_dynamicsWorld, btVector3(0., 1., 0.));
+		//m_PM->debugDraw(m_dynamicsWorld, btVector3(0., 1., 0.));
 	}
 }
 

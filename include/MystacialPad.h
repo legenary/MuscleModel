@@ -24,6 +24,7 @@ private:
 	int nSpringISM;
 	ExtrinsicMuscle* m_nasolabialis;
 	ExtrinsicMuscle* m_maxillolabialis;
+	ExtrinsicMuscle* m_NS;
 	ExtrinsicMuscle* m_PMS;
 	ExtrinsicMuscle* m_PMI;
 	ExtrinsicMuscle* m_PIP;
@@ -44,6 +45,7 @@ public:
 	void contractNasolabialis(int step, Parameter* param);
 	void createMaxillolabialis(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
 	void contractMaxillolabialis(int step, Parameter* param);
+	void createNasolabialisSuperficialis(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
 	void createParsMediaSuperior(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
 	void createParsMediaInferior(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
 	void createParsInternaProfunda(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);

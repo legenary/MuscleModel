@@ -1,0 +1,80 @@
+clear; close all;
+load('follicle_pos');
+
+node_pos = zeros(17, 3);
+node_idx = cell(17,3);
+
+% between rows
+node_idx{ 7} = [3 4 8 9];
+node_idx{ 8} = [5 6];
+node_idx{ 9} = [6 7 11 12];
+node_idx{10} = [7 8 12 13];
+for i = 7:10
+    node_pos(i, :) = mean(vec_f2D(node_idx{i}+1, :));
+end
+
+% above A row and surrounding
+node_idx{ 2} = [7 0 1];
+node_idx{ 3} = [8 1 2];
+node_idx{ 4} = [9 2 3];
+node_idx{ 5} = [10 3 4];
+node_idx{11} = [10 4 9];
+node_idx{ 6} = [11 3 4];
+
+for i = [2:6, 11]
+    foot = getFootOfPerpendicularToLine(node_pos(node_idx{i}(1), :),...
+                                      vec_f2D(node_idx{i}(2)+1, :),...
+                                      vec_f2D(node_idx{i}(3)+1, :));
+    node_pos(i, :) = 2*foot - node_pos(node_idx{i}(1), :);
+end
+
+% muscle node #1
+node_pos(1, :) = 2*vec_f2D(0+1, :) - node_pos(7, :);
+
+
+
+
+
+% caudal outside pad
+offset = [0, 5, 0];
+node_pos(12, :) = node_pos(2, :) + offset;
+node_pos(13, :) = node_pos(3, :) + offset;
+node_pos(14, :) = node_pos(4, :) + offset;
+node_pos(15, :) = node_pos(5, :) + offset;
+node_pos(16, :) = node_pos(6, :) + offset;
+node_pos(17, :) = node_pos(1, :) + offset;
+                             
+                             
+figure; hold on;
+plot3d(vec_f2D, 'ko');
+plot3d(node_pos(1:6:, :), 'ro');
+plot3d(node_pos(1:17, :), 'ro');
+
+axis equal
+
+node_pos_output = node_pos([41, 1:40], :);
+% writematrix(node_pos_output, '../nasolabialis_node_pos.csv')
+
+
+%%
+constrcution_index = [
+    0 36; 36 1; 1 2; 2 3;
+    0 36; 36 4; 4 5; 5 6; 6 7;
+    0 37; 37 8; 8 9; 9 10; 10 11; 11 33; 33 34; 34 35;
+    0 38; 38 12; 12 13; 13 14; 14 15; 15 16; 16 17; 17 18;
+    0 39; 39 19; 19 20; 20 21; 21 22; 22 23; 23 24; 24 25;
+    0 40; 40 26; 26 27; 27 28; 28 29; 29 30; 30 31; 31 32;
+];
+% writematrix(constrcution_index, '../nasolabialis_construction_idx.csv')
+
+%%
+insertion_index = [
+    % mus node, follicle1 idx, follicle2 idx (-1 if none)
+    36 0 1; 1 2 -1; 2 3 -1; 3 4 -1;
+    4 1 6; 5 2 7; 6 3 8; 7 4 9;
+    37 0 5; 8 6 11; 9 7 12; 10 8 13; 11 9 14; 33 15 -1; 34 16 -1; 35 17 -1;
+    38 5 10; 12 11 19; 13 12 20; 14 13 21; 15 14 22; 16 15 23; 17 16 24; 18 17 25;
+    39 10 18; 19 19 27; 20 20 28; 21 21 29; 22 22 30; 23 23 31; 24 24 32; 25 25 33;
+    40 18 -1; 26 27 -1; 27 28 -1; 28 29 -1; 29 30 -1; 30 31 -1; 31 32 -1; 32 33 -1;
+];
+% writematrix(insertion_index, '../nasolabialis_insertion_idx.csv')
