@@ -41,6 +41,7 @@ public:
 	void createAnchor(btDiscreteDynamicsWorld* world, Parameter* param);
 	void createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* world, Parameter* param);
 	void contractIntrinsicSlingMuscle(int step,  Parameter* param);
+	void contractIntrinsicSlingMuscle(int step, Parameter* param, std::vector<int> those);
 	void createNasolabialis(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
 	void contractNasolabialis(int step, Parameter* param);
 	void createMaxillolabialis(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);

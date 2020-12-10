@@ -16,7 +16,8 @@ void Simulation::stepSimulation() {
 	if (param->m_time_stop == 0 || m_time < param->m_time_stop) {
 		// update physics
 		if (param->contractISM) {
-			m_mystacialPad->contractIntrinsicSlingMuscle(m_step, param);
+			std::vector<int> those = { 12, 13 }; // specify which muscle to contract: see modeling_log.pptx
+			m_mystacialPad->contractIntrinsicSlingMuscle(m_step, param, those);
 		}
 		if (param->contractNasolabialis) {
 			m_mystacialPad->contractNasolabialis(m_step, param);

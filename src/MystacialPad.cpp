@@ -92,6 +92,16 @@ void MystacialPad::contractIntrinsicSlingMuscle(int m_step, Parameter* param) {
 	}
 }
 
+void MystacialPad::contractIntrinsicSlingMuscle(int m_step, Parameter* param, std::vector<int> those) {
+	// contract intrinsic sling muscle
+	int TrajectoryLength = param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY.size();
+	int step = (m_step <= TrajectoryLength) ? (m_step - 1) : (TrajectoryLength - 1);
+
+	for (auto& that:those) {
+		m_ISMArray[that]->contract(param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY[step][0]);
+	}
+}
+
 void MystacialPad::createNasolabialis(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
 	std::cout << "Creating extrinsic muscles: M.Nasolabialis ...";
 	m_nasolabialis = new ExtrinsicMuscle(m_dynamicsWorld, m_collisionShapes, param, m_follicleArray,
@@ -180,18 +190,18 @@ void MystacialPad::update() {
 
 void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG) {
 	if (DEBUG) { // debug draw springs
-		//for (int i = 0; i < m_layer1.size(); i++) {
-		//	m_layer1[i]->debugDraw(m_dynamicsWorld);
-		//}
-		//for (int i = 0; i < m_layer2.size(); i++) {
-		//	m_layer2[i]->debugDraw(m_dynamicsWorld);
-		//}
-		//for (int i = 0; i < m_ISMArray.size(); i++) {
-		//	m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
-		//}
+		for (int i = 0; i < m_layer1.size(); i++) {
+			m_layer1[i]->debugDraw(m_dynamicsWorld);
+		}
+		for (int i = 0; i < m_layer2.size(); i++) {
+			m_layer2[i]->debugDraw(m_dynamicsWorld);
+		}
+		for (int i = 0; i < m_ISMArray.size(); i++) {
+			m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
+		}
 		//m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
 		//m_maxillolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.)); 
-		m_NS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
+		//m_NS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		//m_PMS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		//m_PMI->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		//m_PIP->debugDraw(m_dynamicsWorld, btVector3(0., 1., 0.));
