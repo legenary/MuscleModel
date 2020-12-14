@@ -28,6 +28,12 @@ private:
 	btScalar m_time = 0.;
 	int m_step = 0;
 
+	std::vector<std::vector<float>> output;
+
+	btRigidBody* box1;
+	btRigidBody* box2;
+	Spring* spring;
+	
 
 public:
 	Simulation(struct GUIHelperInterface* helper) :CommonRigidBodyBase(helper) {}

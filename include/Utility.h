@@ -12,6 +12,8 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <sys/stat.h>
+#include <direct.h>
 
 #define PI 3.14159265358979323846
 #define BIT(x) (1<<(x))
@@ -37,5 +39,8 @@ btTransform createTransform(btVector3 origin = btVector3(0., 0., 0.), btVector3 
 void read_csv_float(std::string fileName, std::vector<std::vector<float> > &dataList);
 void read_csv_int(std::string fileName, std::vector<std::vector<int>> &dataList);
 
+void write_csv_float(std::string folderName, std::string fileName, std::vector<std::vector<float> > &dataList);
+
+bool isPathExist(const std::string &s);
 
 #endif

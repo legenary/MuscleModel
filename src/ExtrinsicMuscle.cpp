@@ -54,6 +54,12 @@ void ExtrinsicMuscle::contract(btScalar ratio) {
 	}
 }
 
+void ExtrinsicMuscle::contract(btScalar ratio, std::vector<int> those) {
+	for (auto& that : those) {
+		m_musclePieces[that]->setRestLength(ratio);
+	}
+}
+
 void ExtrinsicMuscle::update() {
 	for (int i = 0; i < nMusclePieces; i++) {
 		m_musclePieces[i]->update();

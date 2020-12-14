@@ -176,7 +176,6 @@ ELSE(WIN32)
     ENDIF(APPLE)
 ENDIF(WIN32)
 
-
 INCLUDE_DIRECTORIES(
 	include
 	bullet3-master/

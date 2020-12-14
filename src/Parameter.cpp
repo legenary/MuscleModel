@@ -3,7 +3,7 @@
 Parameter::Parameter() {
 	m_time_step = 1./60.;
 	m_num_internal_step = 10;
-	m_time_stop = 0;
+	m_time_stop = 1;
 
 	DEBUG = 1;	// 0: no debug
 				// 1: specified inline debug drawing only
@@ -36,7 +36,7 @@ Parameter::Parameter() {
 	k_ISM = 2000;
 	// contraction
 	dir_intrinsic_sling_muscle_contraction_trajectory = "../resources/intrinsic_sling_muscle_contraction_trajectory.csv";
-	contractISM = true;
+	contractISM = false;
 
 	// M.Nasolabialis
 	dir_nasolabialis_node_pos = "../resources/nasolabialis_node_pos.csv";

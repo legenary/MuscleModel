@@ -97,7 +97,7 @@ void MystacialPad::contractIntrinsicSlingMuscle(int m_step, Parameter* param, st
 	int TrajectoryLength = param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY.size();
 	int step = (m_step <= TrajectoryLength) ? (m_step - 1) : (TrajectoryLength - 1);
 
-	for (auto& that:those) {
+	for (auto& that : those) {
 		m_ISMArray[that]->contract(param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY[step][0]);
 	}
 }
@@ -199,7 +199,7 @@ void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG
 		for (int i = 0; i < m_ISMArray.size(); i++) {
 			m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		}
-		//m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
+		m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
 		//m_maxillolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.)); 
 		//m_NS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		//m_PMS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));

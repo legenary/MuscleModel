@@ -63,3 +63,34 @@ void read_csv_int(std::string fileName, std::vector<std::vector<int>> &dataList)
 	}
 
 }
+
+void write_csv_float(std::string folderName, std::string fileName, std::vector<std::vector<float> > &dataList) {
+	std::string fullPath = folderName + "/" + fileName;
+
+	try {
+		if (!isPathExist(folderName)) {	// create folder if not exist
+			mkdir(folderName.c_str());
+			std::cout << "Creating output folder..." << std::endl;
+		}
+		// outputing...
+		std::ofstream outputFile;
+		outputFile.open(fullPath);
+		for (int row = 0; row < dataList.size(); row++) {
+			for (int col = 0; col < dataList[row].size(); col++) {
+				outputFile << dataList[row][col] << ",";
+			}
+			outputFile << std::endl;
+		}
+		outputFile.close();
+
+	}
+	catch (...) {
+		std::cout << "-saving csv float failed." << std::endl;
+	}
+}
+
+bool isPathExist(const std::string &s)
+{
+	struct stat buffer;
+	return (stat(s.c_str(), &buffer) == 0);
+}

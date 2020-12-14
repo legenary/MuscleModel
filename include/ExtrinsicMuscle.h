@@ -25,6 +25,8 @@ public:
 		std::vector<std::vector<int>> INSERTION_IDX, std::vector<std::vector<float>> INSERTION_HEIGHT);
 
 	void contract(btScalar ratio);
+	void contract(btScalar ratio, std::vector<int> those);	// specify which extrinsic muscle to contract by "those"
+															// intrinsic muslces see "MystacialPad" class
 	void update();
 	void debugDraw(btDiscreteDynamicsWorld* world, btVector3 clr = btVector3(1., 0., 0.));
 
