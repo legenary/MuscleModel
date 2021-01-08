@@ -32,9 +32,8 @@ static int extMusCollideWith = COL_FOLLICLE;
 
 
 btRigidBody* createDynamicBody(float mass, const btTransform& startTransform, btCollisionShape* shape);
-
 btTransform createTransform(btVector3 origin = btVector3(0., 0., 0.), btVector3 rotation = btVector3(0., 0., 0.));
-
+float getCriticalDampingRatio(float m1, float m2, float k);
 
 void read_csv_float(std::string fileName, std::vector<std::vector<float> > &dataList);
 void read_csv_int(std::string fileName, std::vector<std::vector<int>> &dataList);

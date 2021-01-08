@@ -30,6 +30,15 @@ btTransform createTransform(btVector3 origin, btVector3 YPR) {
 	return trans;
 }
 
+float getCriticalDampingRatio(float m1, float m2, float k) {
+	// get damping ratio
+	// when m1 = m2 = 1, k = 1, the critical damping ratio is 0.0465
+	// damping ratio ~ sqrt( (m1 + m2) / (m1 * m2  * k) )
+	float fold = std::sqrt((m1 + m2) / m1 / m2 / k);
+	return 0.0465 * fold / std::sqrt(2);
+
+}
+
 void read_csv_float(std::string fileName, std::vector<std::vector<float>> &dataList){
 
 	std::fstream data(fileName);
@@ -65,8 +74,6 @@ void read_csv_int(std::string fileName, std::vector<std::vector<int>> &dataList)
 }
 
 void write_csv_float(std::string folderName, std::string fileName, std::vector<std::vector<float> > &dataList) {
-	std::string fullPath = folderName + "/" + fileName;
-
 	try {
 		if (!isPathExist(folderName)) {	// create folder if not exist
 			mkdir(folderName.c_str());
@@ -74,7 +81,7 @@ void write_csv_float(std::string folderName, std::string fileName, std::vector<s
 		}
 		// outputing...
 		std::ofstream outputFile;
-		outputFile.open(fullPath);
+		outputFile.open(folderName + "/" + fileName);
 		for (int row = 0; row < dataList.size(); row++) {
 			for (int col = 0; col < dataList[row].size(); col++) {
 				outputFile << dataList[row][col] << ",";

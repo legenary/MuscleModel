@@ -34,13 +34,8 @@ void Simulation::stepSimulation() {
 
 		btVector3 pos1 = box1->getCenterOfMassPosition();
 		btVector3 pos2 = box2->getCenterOfMassPosition();
-		output.push_back(std::vector<float> ());
-		output[m_step - 1].push_back(pos1[0]);
-		output[m_step - 1].push_back(pos1[1]);
-		output[m_step - 1].push_back(pos1[2]);
-		output[m_step - 1].push_back(pos2[0]);
-		output[m_step - 1].push_back(pos2[1]);
-		output[m_step - 1].push_back(pos2[2]);
+		std::vector<float> vect{ pos1[0], pos1[1], pos1[2], pos2[0], pos2[1], pos2[2] };
+		output.push_back(vect);
 
 		// set exit flag to zero
 		exitSim = 0;
@@ -110,15 +105,18 @@ void Simulation::initPhysics() {
 		}
 	}
 
-
+	// box test trial
+	float m1 = 10;
+	float m2 = 0.1;
+	float k = 1;
 	btCollisionShape* boxShape = new btBoxShape(btVector3(0.5, 0.5, 0.5));
-	box1 = createDynamicBody(1, createTransform(), boxShape);
-	box2 = createDynamicBody(1, createTransform(btVector3(5, 0, 0)), boxShape);
+	box1 = createDynamicBody(m1, createTransform(), boxShape);
+	box2 = createDynamicBody(m2, createTransform(btVector3(5, 0, 0)), boxShape);
 	m_dynamicsWorld->addRigidBody(box1, COL_FOLLICLE, follicleCollideWith);
 	m_dynamicsWorld->addRigidBody(box2, COL_FOLLICLE, follicleCollideWith);
 	box1->setActivationState(DISABLE_DEACTIVATION);
 	box2->setActivationState(DISABLE_DEACTIVATION);
-	spring = new Spring(box1, box2, createTransform(), createTransform(), 1, 0.02);
+	spring = new Spring(box1, box2, createTransform(), createTransform(), k, 1.05*getCriticalDampingRatio(m1, m2, k));
 	m_dynamicsWorld->addConstraint(spring->getConstraint(), true); // disable collision
 	box1->setCenterOfMassTransform(createTransform(btVector3(-1, 0, 0)));
 	box2->setCenterOfMassTransform(createTransform(btVector3(6, 0, 0)));
