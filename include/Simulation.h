@@ -30,9 +30,9 @@ private:
 
 	std::vector<std::vector<float>> output;
 
-	btRigidBody* box1;
+	/*btRigidBody* box1;
 	btRigidBody* box2;
-	Spring* spring;
+	Spring* spring;*/
 	
 
 public:
