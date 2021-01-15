@@ -17,15 +17,15 @@ node_idx{ 8} = [2 3 7 8];   node_height( 8) = 0;
 node_idx{ 9} = [3 4 8 9];   node_height( 9) = -0.5;
 
 for i = 6:9
-    node_pos(i, :) = (1+node_height(i))/2 * mean(vec_f2D(node_idx{i}+1, :)) +...
-                     (1-node_height(i))/2 * mean(vec_s2D(node_idx{i}+1, :));
+    node_pos(i, :) = (1+node_height(i))/2 * mean(vec_top2D(node_idx{i}+1, :)) +...
+                     (1-node_height(i))/2 * mean(vec_bot2D(node_idx{i}+1, :));
 end
 
 % node 10
 node_idx{10} = [9 4 9];     node_height(10) = -0.5;
 foot = getFootOfPerpendicularToLine(node_pos(node_idx{10}(1), :),...
-           (1+node_height(9))/2 * vec_f2D(node_idx{10}(2)+1, :) + (1-node_height(9))/2 * vec_s2D(node_idx{10}(2)+1, :),...
-           (1+node_height(9))/2 * vec_f2D(node_idx{10}(3)+1, :) + (1-node_height(9))/2 * vec_s2D(node_idx{10}(3)+1, :));
+           (1+node_height(9))/2 * vec_top2D(node_idx{10}(2)+1, :) + (1-node_height(9))/2 * vec_bot2D(node_idx{10}(2)+1, :),...
+           (1+node_height(9))/2 * vec_top2D(node_idx{10}(3)+1, :) + (1-node_height(9))/2 * vec_bot2D(node_idx{10}(3)+1, :));
 node_pos(10, :) = 2*foot - node_pos(node_idx{10}(1), :);
 
 
@@ -45,8 +45,8 @@ node_idx{15} = [10 8 9];
 
 for i = [1:5, 11:15]
     foot = getFootOfPerpendicularToLine(node_pos(node_idx{i}(1), :),...
-               (1+node_height(node_idx{i}(1)))/2 * vec_f2D(node_idx{i}(2)+1, :) + (1-node_height(node_idx{i}(1)))/2 * vec_s2D(node_idx{i}(2)+1, :),...
-               (1+node_height(node_idx{i}(1)))/2 * vec_f2D(node_idx{i}(3)+1, :) + (1-node_height(node_idx{i}(1)))/2 * vec_s2D(node_idx{i}(3)+1, :));
+               (1+node_height(node_idx{i}(1)))/2 * vec_top2D(node_idx{i}(2)+1, :) + (1-node_height(node_idx{i}(1)))/2 * vec_bot2D(node_idx{i}(2)+1, :),...
+               (1+node_height(node_idx{i}(1)))/2 * vec_top2D(node_idx{i}(3)+1, :) + (1-node_height(node_idx{i}(1)))/2 * vec_bot2D(node_idx{i}(3)+1, :));
     node_pos(i, :) = 2*foot - node_pos(node_idx{i}(1), :);
 end
 
@@ -57,8 +57,8 @@ node_pos(16, :) = node_pos(15, :) + 3*(node_pos(15, :) - node_pos(14, :));
 node_pos(16, 3) = -0.5;
 
 figure; hold on;
-plot3d(vec_s2D, 'ro');
-plot3d(vec_f2D, 'bo');
+plot3d(vec_bot2D, 'ro');
+plot3d(vec_top2D, 'bo');
 plot3d(node_pos([1:16], :), 'k*');
 axis equal
 

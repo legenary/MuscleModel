@@ -28,7 +28,7 @@ node_idx{23} = [22 23 30 31];
 node_idx{24} = [23 24 31 32];
 node_idx{25} = [24 25 32 33];
 for i = 5:26
-    node_pos(i, :) = mean(vec_f2D(node_idx{i}+1, :));
+    node_pos(i, :) = mean(vec_top2D(node_idx{i}+1, :));
 end
 
 % 33 34 35
@@ -48,8 +48,8 @@ node_idx{34} = [17 15 16];
 node_idx{35} = [18 16 17];
 for i = [1:4, 27:35]
     foot = getFootOfPerpendicularToLine(node_pos(node_idx{i}(1), :),...
-                                      vec_f2D(node_idx{i}(2)+1, :),...
-                                      vec_f2D(node_idx{i}(3)+1, :));
+                                      vec_top2D(node_idx{i}(2)+1, :),...
+                                      vec_top2D(node_idx{i}(3)+1, :));
     node_pos(i, :) = 2*foot - node_pos(node_idx{i}(1), :);
 end
 
@@ -76,7 +76,7 @@ s2 = node_pos(27, :); e2 = node_pos(40, :);
 node_pos(41, :) = mean([foot1; foot2]);
 
 figure; hold on;
-plot3d(vec_f2D, 'ko');
+plot3d(vec_top2D, 'ko');
 plot3d(node_pos(5:26, :), 'ro');
 plot3d(node_pos([1:4, 27:32], :), 'bo');
 

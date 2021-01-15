@@ -26,8 +26,8 @@ node_idx{20} = [24 25 32 33];   node_height(20) = -0.6;
 
 
 for i = 7:20
-    node_pos(i, :) = (1+node_height(i))/2 * mean(vec_f2D(node_idx{i}+1, :)) +...
-                     (1-node_height(i))/2 * mean(vec_s2D(node_idx{i}+1, :));
+    node_pos(i, :) = (1+node_height(i))/2 * mean(vec_top2D(node_idx{i}+1, :)) +...
+                     (1-node_height(i))/2 * mean(vec_bot2D(node_idx{i}+1, :));
 end
 
 % above C row and below E row
@@ -49,8 +49,8 @@ node_idx{26} = [20 32 33];
 
 for i = [1:6, 21:26]
     foot = getFootOfPerpendicularToLine(node_pos(node_idx{i}(1), :),...
-               (1+node_height(node_idx{i}(1)))/2 * vec_f2D(node_idx{i}(2)+1, :) + (1-node_height(node_idx{i}(1)))/2 * vec_s2D(node_idx{i}(2)+1, :),...
-               (1+node_height(node_idx{i}(1)))/2 * vec_f2D(node_idx{i}(3)+1, :) + (1-node_height(node_idx{i}(1)))/2 * vec_s2D(node_idx{i}(3)+1, :));
+               (1+node_height(node_idx{i}(1)))/2 * vec_top2D(node_idx{i}(2)+1, :) + (1-node_height(node_idx{i}(1)))/2 * vec_bot2D(node_idx{i}(2)+1, :),...
+               (1+node_height(node_idx{i}(1)))/2 * vec_top2D(node_idx{i}(3)+1, :) + (1-node_height(node_idx{i}(1)))/2 * vec_bot2D(node_idx{i}(3)+1, :));
     node_pos(i, :) = 2*foot - node_pos(node_idx{i}(1), :);
 end
 
@@ -63,8 +63,8 @@ node_pos(27, :) = mean([foot1; foot2]);
 
 
 figure; hold on;
-plot3d(vec_s2D, 'ro');
-plot3d(vec_f2D, 'bo');
+plot3d(vec_bot2D, 'ro');
+plot3d(vec_top2D, 'bo');
 plot3d(node_pos(1:27, :), 'k*');
 axis equal
 

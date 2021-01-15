@@ -10,7 +10,7 @@ node_idx{ 8} = [1 2 6 7];
 node_idx{ 9} = [2 3 7 8];
 node_idx{10} = [3 4 8 9];
 for i = 7:10
-    node_pos(i, :) = mean(vec_f2D(node_idx{i}+1, :));
+    node_pos(i, :) = mean(vec_top2D(node_idx{i}+1, :));
 end
 
 % above A row and surrounding
@@ -23,13 +23,13 @@ node_idx{ 6} = [11 3 4];
 
 for i = [2:5, 11, 6]
     foot = getFootOfPerpendicularToLine(node_pos(node_idx{i}(1), :),...
-                                      vec_f2D(node_idx{i}(2)+1, :),...
-                                      vec_f2D(node_idx{i}(3)+1, :));
+                                      vec_top2D(node_idx{i}(2)+1, :),...
+                                      vec_top2D(node_idx{i}(3)+1, :));
     node_pos(i, :) = 2*foot - node_pos(node_idx{i}(1), :);
 end
 
 % muscle node #1
-node_pos(1, :) = 2*vec_f2D(0+1, :) - node_pos(7, :);
+node_pos(1, :) = 2*vec_top2D(0+1, :) - node_pos(7, :);
 
 
 % caudal outside pad
@@ -43,7 +43,7 @@ node_pos(17, :) = node_pos(1, :) + offset;
                              
                              
 figure; hold on;
-plot3d(vec_f2D, 'ko');
+plot3d(vec_top2D, 'ko');
 plot3d(node_pos([1:6, 11], :), 'ro');
 plot3d(node_pos(7:10, :), 'bo');
 plot3d(node_pos(12:17, :), 'bo');
