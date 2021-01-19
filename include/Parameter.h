@@ -25,8 +25,8 @@ public:
 	btScalar camYaw;
 
 	// follicle parameter
-	std::string dir_follicle_loc_orient;
-	std::vector<std::vector<float>> FOLLICLE_LOC_ORIENT;
+	std::string dir_follicle_pos_orient_len_vol;
+	std::vector<std::vector<float>> FOLLICLE_POS_ORIENT_LEN_VOL;
 	btScalar fol_half_height;
 	btScalar fol_radius;
 

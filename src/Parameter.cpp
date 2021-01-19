@@ -19,7 +19,7 @@ Parameter::Parameter() {
 	camYaw = 0;
 
 	// foillicle parameter
-	dir_follicle_loc_orient = "../resources/follicle_pos_ypr.csv";
+	dir_follicle_pos_orient_len_vol = "../resources/follicle_pos_ypr_len_vol.csv";
 	fol_half_height = 0.7;
 	fol_radius = 0.1;
 

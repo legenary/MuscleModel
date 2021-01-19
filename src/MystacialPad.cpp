@@ -3,17 +3,18 @@
 MystacialPad::MystacialPad(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
 	std::cout << "Creating follicles...";
 	// create follicles
-	nFollicle = param->FOLLICLE_LOC_ORIENT.size();
+	nFollicle = param->FOLLICLE_POS_ORIENT_LEN_VOL.size();
 	std::cout << "Total Number " << nFollicle << "... ";
 	for (int f = 0; f < nFollicle; f++) {
-		btVector3 this_pos = btVector3(param->FOLLICLE_LOC_ORIENT[f][0],
-									   param->FOLLICLE_LOC_ORIENT[f][1],
-									   param->FOLLICLE_LOC_ORIENT[f][2]);
-		btVector3 this_ypr = btVector3(param->FOLLICLE_LOC_ORIENT[f][3],
-									   -param->FOLLICLE_LOC_ORIENT[f][4],
-									   param->FOLLICLE_LOC_ORIENT[f][5]);
+		btVector3 this_pos = btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[f][0],
+									   param->FOLLICLE_POS_ORIENT_LEN_VOL[f][1],
+									   param->FOLLICLE_POS_ORIENT_LEN_VOL[f][2]);
+		btVector3 this_ypr = btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[f][3],
+									   -param->FOLLICLE_POS_ORIENT_LEN_VOL[f][4],
+									   param->FOLLICLE_POS_ORIENT_LEN_VOL[f][5]);
+		btScalar this_len = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6];
 		btTransform this_trans = createTransform(this_pos, this_ypr);
-		Follicle* follicle = new Follicle(m_dynamicsWorld, m_collisionShapes, this_trans, param->fol_radius, param->fol_half_height);
+		Follicle* follicle = new Follicle(m_dynamicsWorld, m_collisionShapes, this_trans, param->fol_radius, this_len/2);
 		m_follicleArray.push_back(follicle);
 	}
 	std::cout << "Done." << std::endl;
@@ -22,12 +23,13 @@ MystacialPad::MystacialPad(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedOb
 void MystacialPad::createLayer1(btDiscreteDynamicsWorld* m_dynamicsWorld, Parameter* param) {
 	std::cout << "Creating Layer1...";
 	nSpringLayer1 = param->SPRING_HEX_MESH_IDX.size();
-	btTransform frameLayer1 = createTransform(btVector3(param->fol_half_height, 0., 0.));
 
-	for (int f = 0; f < nSpringLayer1; f++) {
-		Follicle* fol1 = m_follicleArray[param->SPRING_HEX_MESH_IDX[f][0]];
-		Follicle* fol2 = m_follicleArray[param->SPRING_HEX_MESH_IDX[f][1]];
-		Spring* springLayer1 = new Spring(fol1->getBody(), fol2->getBody(), frameLayer1, frameLayer1, param->k_layer1, param->damping);
+	for (int s = 0; s < nSpringLayer1; s++) {
+		Follicle* fol1 = m_follicleArray[param->SPRING_HEX_MESH_IDX[s][0]];
+		Follicle* fol2 = m_follicleArray[param->SPRING_HEX_MESH_IDX[s][1]];
+		btTransform frameLayer1fol1 = createTransform(btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[param->SPRING_HEX_MESH_IDX[s][0]][6] / 2, 0., 0.));
+		btTransform frameLayer1fol2 = createTransform(btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[param->SPRING_HEX_MESH_IDX[s][1]][6] / 2, 0., 0.));
+		Spring* springLayer1 = new Spring(fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2, param->k_layer1, param->damping);
 		m_dynamicsWorld->addConstraint(springLayer1->getConstraint(), true); // disable collision
 		m_layer1.push_back(springLayer1);
 	}
@@ -37,12 +39,13 @@ void MystacialPad::createLayer1(btDiscreteDynamicsWorld* m_dynamicsWorld, Parame
 void MystacialPad::createLayer2(btDiscreteDynamicsWorld* m_dynamicsWorld, Parameter* param) {
 	std::cout << "Creating Layer2...";
 	nSpringLayer2 = param->SPRING_HEX_MESH_IDX.size();
-	btTransform frameLayer2 = createTransform(btVector3(-param->fol_half_height, 0., 0.));
 
-	for (int f = 0; f < nSpringLayer2; f++) {
-		Follicle* fol1 = m_follicleArray[param->SPRING_HEX_MESH_IDX[f][0]];
-		Follicle* fol2 = m_follicleArray[param->SPRING_HEX_MESH_IDX[f][1]];
-		Spring* springLayer2 = new Spring(fol1->getBody(), fol2->getBody(), frameLayer2, frameLayer2, param->k_layer2, param->damping);
+	for (int s = 0; s < nSpringLayer2; s++) {
+		Follicle* fol1 = m_follicleArray[param->SPRING_HEX_MESH_IDX[s][0]];
+		Follicle* fol2 = m_follicleArray[param->SPRING_HEX_MESH_IDX[s][1]];
+		btTransform frameLayer2fol1 = createTransform(btVector3(-param->FOLLICLE_POS_ORIENT_LEN_VOL[param->SPRING_HEX_MESH_IDX[s][0]][6] / 2, 0., 0.));
+		btTransform frameLayer2fol2 = createTransform(btVector3(-param->FOLLICLE_POS_ORIENT_LEN_VOL[param->SPRING_HEX_MESH_IDX[s][1]][6] / 2, 0., 0.));
+		Spring* springLayer2 = new Spring(fol1->getBody(), fol2->getBody(), frameLayer2fol1, frameLayer2fol2, param->k_layer2, param->damping);
 		m_dynamicsWorld->addConstraint(springLayer2->getConstraint(), true); // disable collision
 		m_layer2.push_back(springLayer2);
 
@@ -52,10 +55,10 @@ void MystacialPad::createLayer2(btDiscreteDynamicsWorld* m_dynamicsWorld, Parame
 
 void MystacialPad::createAnchor(btDiscreteDynamicsWorld* m_dynamicsWorld, Parameter* param) {
 	std::cout << "Creating Follicle Anchoring...";
-	btTransform frameAnchor = createTransform(btVector3(param->fol_half_height, 0., 0.));
 
 	for (int f = 0; f < nFollicle; f++) {
 		Follicle* fol = m_follicleArray[f];
+		btTransform frameAnchor = createTransform(btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6] / 2, 0., 0.));
 		Spring* springAnchor = new Spring(fol->getBody(), frameAnchor, param->k_anchor, param->damping, false);	// true = linear spring
 																										// false = torsional spring
 		m_dynamicsWorld->addConstraint(springAnchor->getConstraint(), true); // disable collision
@@ -71,9 +74,11 @@ void MystacialPad::createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* m_dynamic
 	btTransform frameC = createTransform(btVector3(param->fol_half_height, 0., 0.));
 	btTransform frameR = createTransform(btVector3(-param->fol_half_height, 0., 0.));
 
-	for (int m = 0; m < nSpringISM; m++) {
-		Follicle* folC = m_follicleArray[param->INTRINSIC_SLING_MUSCLE_IDX[m][0]];
-		Follicle* folR = m_follicleArray[param->INTRINSIC_SLING_MUSCLE_IDX[m][1]];
+	for (int s = 0; s < nSpringISM; s++) {
+		Follicle* folC = m_follicleArray[param->INTRINSIC_SLING_MUSCLE_IDX[s][0]];
+		Follicle* folR = m_follicleArray[param->INTRINSIC_SLING_MUSCLE_IDX[s][1]];
+		btTransform frameC = createTransform(btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[param->INTRINSIC_SLING_MUSCLE_IDX[s][0]][6] / 2, 0., 0.));
+		btTransform frameR = createTransform(btVector3(-param->FOLLICLE_POS_ORIENT_LEN_VOL[param->INTRINSIC_SLING_MUSCLE_IDX[s][1]][6] / 2, 0., 0.));
 		IntrinsicSlingMuscle* muscle = new IntrinsicSlingMuscle(folC->getBody(), folR->getBody(), frameC, frameR, param->k_ISM, param->damping);
 		m_dynamicsWorld->addConstraint(muscle->getConstraint(), true); // disable collision
 		m_ISMArray.push_back(muscle);
@@ -190,16 +195,16 @@ void MystacialPad::update() {
 
 void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG) {
 	if (DEBUG) { // debug draw springs
-		for (int i = 0; i < m_layer1.size(); i++) {
-			m_layer1[i]->debugDraw(m_dynamicsWorld);
-		}
-		for (int i = 0; i < m_layer2.size(); i++) {
-			m_layer2[i]->debugDraw(m_dynamicsWorld);
-		}
+		//for (int i = 0; i < m_layer1.size(); i++) {
+		//	m_layer1[i]->debugDraw(m_dynamicsWorld);
+		//}
+		//for (int i = 0; i < m_layer2.size(); i++) {
+		//	m_layer2[i]->debugDraw(m_dynamicsWorld);
+		//}
 		for (int i = 0; i < m_ISMArray.size(); i++) {
 			m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		}
-		m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
+		//m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
 		//m_maxillolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.)); 
 		//m_NS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		//m_PMS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
