@@ -53,19 +53,24 @@ for i = [1:6, 21:26]
                (1+node_height(node_idx{i}(1)))/2 * vec_top2D(node_idx{i}(3)+1, :) + (1-node_height(node_idx{i}(1)))/2 * vec_bot2D(node_idx{i}(3)+1, :));
     node_pos(i, :) = 2*foot - node_pos(node_idx{i}(1), :);
 end
-
+% some correction
+node_pos(25, :) = (node_pos(24, :) + node_pos(26, :))/2;
+node_pos(6, :) = 2.05*node_pos(5,:) - node_pos(4,:);
 
 % rostral outside pad
-s1 = node_pos(12, :); e1 = node_pos(13, :); 
+s1 = node_pos(10, :); e1 = node_pos(11, :); 
 s2 = node_pos(19, :); e2 = node_pos(20, :); 
 [foot1, foot2] = getCommonFootOfPerpendicularLine(s1, e1, s2, e2);
 node_pos(27, :) = mean([foot1; foot2]);
+node_pos(27, 1) = node_pos(27, 1) - 2;
 
 
 figure; hold on;
 plot3d(vec_bot2D, 'ro');
 plot3d(vec_top2D, 'bo');
+for i = 1:35, plot3d([vec_top2D(i,:); vec_bot2D(i,:)], 'r-'); end
 plot3d(node_pos(1:27, :), 'k*');
+plot3d(node_pos([12,5,6,13], :), 'ko');
 axis equal
 
 node_pos_output = node_pos([27, 1:26], :);

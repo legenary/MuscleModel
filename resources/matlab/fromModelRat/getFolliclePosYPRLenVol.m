@@ -2,9 +2,11 @@
 % at the end of this script, vec_top2D means the basepoint location, which is the top end of the follicle,
 % and vec_bot2D means the deeper end of the follicle.
 % 
+% this script generates follicle information. The location and orientation
+% is based on 
 
 clear;
-ca;
+
 
 load('NewRatMapModelOutput.mat');
 
@@ -22,19 +24,21 @@ idx2fol40 = [1, 2, 3, 4, 5, ...
              17, 18, 19, 20, 21, 22, 23, 24, ... %(extra),
              25, 26, 27, 28, 29, 30, 31, 32, ...
              33, 34, 35, 36, 37, 38, 39, 40]';
-regPad2Resliced = load('../../../../../_ARP/04c_Reslice/data_resliced/regPad2Reslice.mat').FolResliced;
+%          
+regPad2Resliced = load('../../../../../../_ARP/04c_Reslice/data_resliced/regPad2Reslice.mat').FolResliced;
 empties = cellfun(@isempty, regPad2Resliced);
 regPad2Resliced(empties) = {nan};
 regPad2Length = cell2mat(regPad2Resliced(2, idx2fol40));
 regPad2Volume = cell2mat(regPad2Resliced(3, idx2fol40));
-regPad3Resliced = load('../../../../../_ARP/04c_Reslice/data_resliced/regPad3Reslice.mat').FolResliced;
+regPad3Resliced = load('../../../../../../_ARP/04c_Reslice/data_resliced/regPad3Reslice.mat').FolResliced;
 empties = cellfun(@isempty, regPad3Resliced);
 regPad3Resliced(empties) = {nan};
 regPad3Length = cell2mat(regPad3Resliced(2, idx2fol40));
 regPad3Volume = cell2mat(regPad3Resliced(3, idx2fol40));
-
 avgLength = nanmean([regPad2Length; regPad3Length]);
 avgVolume = nanmean([regPad2Volume; regPad3Volume]);
+
+
 % note: after this step, i = 27/34 is still nan. This is due to the indexing
 % offset of "e0" follicle. It needs to be taken out.
 avgLength(27) = []; avgVolume(27) = [];
@@ -83,8 +87,8 @@ vec_bot2D(:, 1) = -vec_bot2D(:, 1);
 
 figure('Color', 'w'); hold on;
 for i = 1:35
-    plot3d([vec_top2D(i,:); vec_bot2D(i,:)], 'k-');
-    plot3d(vec_top2D(i,:), 'ro');
+    plot3d([vec_top2D(i,:); vec_bot2D(i,:)]*1000, 'k-');
+    plot3d(vec_top2D(i,:)*1000, 'ro');
 %     plot3d(vec_bot2D(i,:), 'bo');
 end
 axis equal
@@ -105,18 +109,18 @@ zlabel('z');
 
 direction_vector = vec_top2D - vec_bot2D;
 
-follicle_pos_ypr = zeros(35, 6);
-follicle_pos_ypr(:, 1:3) = (vec_top2D + vec_bot2D)/2;
+follicle_pos_ypr_len_vol = zeros(35, 6);
+follicle_pos_ypr_len_vol(:, 1:3) = (vec_top2D + vec_bot2D)/2;
 
 for i = 1:35
     [th, pi, r] = cart2sph(direction_vector(i, 1), direction_vector(i, 2), direction_vector(i, 3));
-    follicle_pos_ypr(i, 4:6) = [th, pi, 0];
+    follicle_pos_ypr_len_vol(i, 4:6) = [th, pi, 0];
 end
 
-follicle_pos_ypr(:, 7) = avgLength';
-follicle_pos_ypr(:, 8) = avgVolume';
+follicle_pos_ypr_len_vol(:, 7) = avgLength';
+follicle_pos_ypr_len_vol(:, 8) = avgVolume';
 
-writematrix(follicle_pos_ypr, '../follicle_pos_ypr_len_vol.csv')
+writematrix(follicle_pos_ypr_len_vol, '../../follicle_pos_ypr_len_vol.csv')
 save('follicle_pos', 'vec_top2D', 'vec_bot2D');
 
 

@@ -184,13 +184,13 @@ void MystacialPad::update() {
 	for (int i = 0; i < nSpringISM; i++) {
 		m_ISMArray[i]->update();
 	}
-	m_nasolabialis->update();
-	m_maxillolabialis->update();
-	m_NS->update();
-	m_PMS->update();
-	m_PMI->update();
-	m_PIP->update();
-	m_PM->update();
+	//m_nasolabialis->update();
+	//m_maxillolabialis->update();
+	//m_NS->update();
+	//m_PMS->update();
+	//m_PMI->update();
+	//m_PIP->update();
+	//m_PM->update();
 }
 
 void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG) {

@@ -28,11 +28,11 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAli
 	for (int i = 0; i < nInsertionGroups; i++) {
 		btRigidBody* node = m_nodes[INSERTION_IDX[i][0]];\
 		// Insertion height: the height of point where the follicle is inserted by the muscle, range [-1, 1]*fol_half_height
-		// Default insertion height: 1, otherwise check INSERTION HEIGHT
-		btTransform trans = createTransform(btVector3((INSERTION_HEIGHT.size()?INSERTION_HEIGHT[i][1]:1) * param->fol_half_height, 0., 0.));
 		for (int f = 1; f < 3; f++) {
 			if (INSERTION_IDX[i][f] >= 0) {
 				btRigidBody* body = m_follicleArray[INSERTION_IDX[i][f]]->getBody();
+				// Default insertion height: 1, otherwise check INSERTION HEIGHT
+				btTransform trans = createTransform(btVector3((INSERTION_HEIGHT.size() ? INSERTION_HEIGHT[i][1] : 1) * param->FOLLICLE_POS_ORIENT_LEN_VOL[INSERTION_IDX[i][f]][6] / 2, 0., 0.));
 				Spring* spring = new Spring(node, body, createTransform(), trans, param->k_nasolabialis, param->damping);
 				m_dynamicsWorld->addConstraint(spring->getConstraint(), true);
 				m_insertionPieces.push_back(spring);

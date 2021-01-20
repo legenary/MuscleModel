@@ -60,6 +60,7 @@ node_pos(16, 3) = -1;
 figure; hold on;
 plot3d(vec_bot2D, 'ro');
 plot3d(vec_top2D, 'bo');
+for i = 1:35, plot3d([vec_top2D(i,:); vec_bot2D(i,:)], 'r-'); end
 plot3d(node_pos([1:16], :), 'k*');
 axis equal
 
