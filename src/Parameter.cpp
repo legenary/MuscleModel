@@ -20,8 +20,8 @@ Parameter::Parameter() {
 
 	// foillicle parameter
 	dir_follicle_pos_orient_len_vol = "../resources/follicle_pos_ypr_len_vol.csv";
-	fol_half_height = 0.7;
 	fol_radius = 0.1;
+	fol_density = 1;	// unit:g/mm^3
 
 	// layer/spring parameter
 	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";

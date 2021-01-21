@@ -7,6 +7,8 @@
 
 clear;
 
+follicle_pos_ypr_len_vol = zeros(31, 8);
+
 PadResliced = load('../../../../../../_ARP/04c_Reslice/data_resliced/2019-17LReslice.mat').FolResliced;
 % the imported indexing is (40 in total):
 fol_name = {'a0','a1','a2','a3','a4','a5','a6','a7',...
@@ -32,24 +34,24 @@ for i = 1:31
     end
 end
 % reverse y-axis
-vec_top2D(:, 2) = 
+vec_top2D(:, 2) = -vec_top2D(:, 2);
+vec_bot2D(:, 2) = -vec_bot2D(:, 2);
+% change unit to mm:
+vec_top2D = vec_top2D/1000;
+vec_bot2D = vec_bot2D/1000;
+
+follicle_pos_ypr_len_vol(:, 1:3) = (vec_top2D + vec_bot2D) / 2;
 
 %% get follicle length and volume
+follicle_pos_ypr_len_vol(:, 7) = cell2mat(PadResliced(2, :))'; %length
+follicle_pos_ypr_len_vol(:, 8) = cell2mat(PadResliced(3, :))'; %volume
 
-
-
-
-% 
-% follicle_pos_ypr_len_vol = zeros(31, 6);
-% follicle_pos_ypr_len_vol(:, 1:3) = (vec_top2D + vec_bot2D)/2;
-% 
-% for i = 1:35
-%     [th, pi, r] = cart2sph(direction_vector(i, 1), direction_vector(i, 2), direction_vector(i, 3));
-%     follicle_pos_ypr_len_vol(i, 4:6) = [th, pi, 0];
-% end
-% 
-% follicle_pos_ypr_len_vol(:, 7) = avgLength';
-% follicle_pos_ypr_len_vol(:, 8) = avgVolume';
+%% get follicle ypr angle
+direction_vector = vec_top2D - vec_bot2D;
+for i = 1:31
+    [th, pi, r] = cart2sph(direction_vector(i, 1), direction_vector(i, 2), direction_vector(i, 3));
+    follicle_pos_ypr_len_vol(i, 4:6) = [th, pi, 0];
+end
 
 
 hold on;
@@ -61,8 +63,9 @@ end
 axis equal
 
 
-
-
+writematrix(follicle_pos_ypr_len_vol, '../../follicle_pos_ypr_len_vol.csv')
+save('follicle_pos.mat'
+)
 
 
 

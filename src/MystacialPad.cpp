@@ -12,9 +12,10 @@ MystacialPad::MystacialPad(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedOb
 		btVector3 this_ypr = btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[f][3],
 									   -param->FOLLICLE_POS_ORIENT_LEN_VOL[f][4],
 									   param->FOLLICLE_POS_ORIENT_LEN_VOL[f][5]);
-		btScalar this_len = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6];
+		btScalar this_len = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6];	// length already in mm
+		btScalar this_mass = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][7];	// volume already in mm^3
 		btTransform this_trans = createTransform(this_pos, this_ypr);
-		Follicle* follicle = new Follicle(m_dynamicsWorld, m_collisionShapes, this_trans, param->fol_radius, this_len/2);
+		Follicle* follicle = new Follicle(m_dynamicsWorld, m_collisionShapes, this_trans, param->fol_radius, this_len/2, this_mass);
 		m_follicleArray.push_back(follicle);
 	}
 	std::cout << "Done." << std::endl;
@@ -71,8 +72,6 @@ void MystacialPad::createAnchor(btDiscreteDynamicsWorld* m_dynamicsWorld, Parame
 void MystacialPad::createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, Parameter* param) {
 	std::cout << "Creating intrinsic sling muscles...";
 	nSpringISM = param->INTRINSIC_SLING_MUSCLE_IDX.size();
-	btTransform frameC = createTransform(btVector3(param->fol_half_height, 0., 0.));
-	btTransform frameR = createTransform(btVector3(-param->fol_half_height, 0., 0.));
 
 	for (int s = 0; s < nSpringISM; s++) {
 		Follicle* folC = m_follicleArray[param->INTRINSIC_SLING_MUSCLE_IDX[s][0]];
@@ -184,13 +183,13 @@ void MystacialPad::update() {
 	for (int i = 0; i < nSpringISM; i++) {
 		m_ISMArray[i]->update();
 	}
-	//m_nasolabialis->update();
-	//m_maxillolabialis->update();
-	//m_NS->update();
-	//m_PMS->update();
-	//m_PMI->update();
-	//m_PIP->update();
-	//m_PM->update();
+	m_nasolabialis->update();
+	m_maxillolabialis->update();
+	m_NS->update();
+	m_PMS->update();
+	m_PMI->update();
+	m_PIP->update();
+	m_PM->update();
 }
 
 void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG) {

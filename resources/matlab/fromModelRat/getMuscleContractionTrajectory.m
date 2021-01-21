@@ -14,7 +14,7 @@ trajectory(1:startTime*fps) = ones(startTime*fps, 1);
 trajectory(startTime*fps+(1:contractTime*fps)) = cos(2*pi/T*t)*(1-contractRatio)/2 + (1+contractRatio)/2;
 
 % plot(trajectory);
-writematrix(trajectory, '../intrinsic_sling_muscle_contraction_trajectory.csv')
+writematrix(trajectory, '../../intrinsic_sling_muscle_contraction_trajectory.csv')
 
 %% extrinsic nasolabialis muscle
 totalTime = 10;
@@ -30,7 +30,7 @@ trajectory(1:startTime*fps) = ones(startTime*fps, 1);
 trajectory(startTime*fps+(1:contractTime*fps)) = cos(2*pi/T*t)*(1-contractRatio)/2 + (1+contractRatio)/2;
 
 % plot(trajectory);
-writematrix(trajectory, '../nasolabialis_contraction_trajectory.csv')
+writematrix(trajectory, '../../nasolabialis_contraction_trajectory.csv')
 
 %% extrinsic maxillolabialis muscle
 totalTime = 10;
@@ -46,4 +46,4 @@ trajectory(1:startTime*fps) = ones(startTime*fps, 1);
 trajectory(startTime*fps+(1:contractTime*fps)) = cos(2*pi/T*t)*(1-contractRatio)/2 + (1+contractRatio)/2;
 
 % plot(trajectory);
-writematrix(trajectory, '../maxillolabialis_contraction_trajectory.csv')
+writematrix(trajectory, '../../maxillolabialis_contraction_trajectory.csv')

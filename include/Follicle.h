@@ -14,7 +14,7 @@ private:
 
 public:
 	Follicle(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, 
-		     btTransform trans, btScalar radius, btScalar height);
+		     btTransform trans, btScalar radius, btScalar height, btScalar mass);
 	virtual ~Follicle(){}
 
 	btRigidBody* getBody();

@@ -64,7 +64,7 @@ axis equal
 
 
 writematrix(follicle_pos_ypr_len_vol, '../../follicle_pos_ypr_len_vol.csv')
-
+save('follicle_pos.mat', 'vec_top2D', 'vec_bot2D');
 
 
 
