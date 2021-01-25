@@ -8,7 +8,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAli
 	nNodes = NODE_POS.size();
 	for (int i = 0; i < nNodes; i++) {
 		btTransform t = createTransform(btVector3(NODE_POS[i][0], NODE_POS[i][1], NODE_POS[i][2]));
-		btCollisionShape* s = new btSphereShape(0.01);
+		btCollisionShape* s = new btSphereShape((i == 0) ? 0.1 : 0.01);
 		btRigidBody* b = createDynamicBody(0.1, t, s);
 		m_nodes.push_back(b);
 		m_dynamicsWorld->addRigidBody(b, COL_EXT_MUS, extMusCollideWith);

@@ -1,0 +1,14 @@
+clear; ca;
+
+getFolliclePosYPRLenVol_avg
+% getFolliclePosYPRLenVol_201917L
+
+getSpringHexMeshIndex
+getIntrinsicSlingMuscleIndex
+getNasolabialis
+getMaxillolabialis
+getNasolabialisSuperficialis
+getParsMaxillaris
+getParsMediaSuperior
+getParsMediaInferior
+getParsInternaProfunda

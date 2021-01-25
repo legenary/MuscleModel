@@ -58,13 +58,19 @@ node_pos(11, 1) = node_pos(11, 1) - 0.6;
 node_pos(12, 1) = node_pos(12, 1) - 0.6;
 node_pos(11, 3) = node_pos(11, 3) + 0.1;
 node_pos(12, 3) = node_pos(12, 3) + 0.1;
+node_pos(20, 1) = node_pos(20, 1) + 0.5;
 node_pos(24, 3) = node_pos(24, 3) - 0.5;
+
+
 
 % rostral outside pad
 s1 = node_pos(11, :); e1 = node_pos(12, :); 
 s2 = node_pos(18, :); e2 = node_pos(19, :); 
 [foot1, foot2] = getCommonFootOfPerpendicularLine(s1, e1, s2, e2);
 node_pos(27, :) = mean([foot1; foot2]);
+node_pos(27, 1) = node_pos(27, 1) - 3;
+
+for i = 1:27, node_pos(i, 1) = node_pos(i, 1) - 0.5; end
 
 
 figure; hold on;

@@ -54,6 +54,7 @@ node_pos(15, :) = 2*node_pos(14, :) - node_pos(13, :);
 % node 16
 node_pos(16, :) = 2*node_pos(15, :) - node_pos(12, :);
 node_pos(16, 3) = node_pos(16, 3) - 0.7;
+node_pos(16, 2) = node_pos(16, 2) + 0.7;
 
 
 figure; hold on;

@@ -5,7 +5,7 @@ node_pos = zeros(17, 3);
 node_idx = cell(17,3);
 
 % between rows
-node_idx{ 7} = [0 1 6];
+node_idx{ 7} = [0 5 6];
 node_idx{ 8} = [1 2 6 7];
 node_idx{ 9} = [2 3 7 8];
 node_idx{10} = [3 4 8 9];
@@ -28,8 +28,11 @@ for i = [2:5, 11, 6]
     node_pos(i, :) = 2*foot - node_pos(node_idx{i}(1), :);
 end
 
+node_pos(3, :) = node_pos(8, :) + node_pos(4, :) - node_pos(9, :);
+node_pos(2, :) = node_pos(7, :) + node_pos(4, :) - node_pos(9, :);
+
 % muscle node #1
-node_pos(1, :) = 2*vec_top2D(0+1, :) - node_pos(7, :);
+node_pos(1, :) = 2*node_pos(2, :) - vec_top2D(1+1, :);
 
 
 % caudal outside pad
@@ -44,9 +47,10 @@ node_pos(17, :) = node_pos(1, :) + offset;
                              
 figure; hold on;
 plot3d(vec_top2D, 'ko');
-plot3d(node_pos([1:6, 11], :), 'ro');
+
 plot3d(node_pos(7:10, :), 'bo');
-plot3d(node_pos(12:17, :), 'bo');
+plot3d(node_pos(1:17, :), 'bo');
+plot3d(node_pos([1], :), 'ro');
 
 axis equal
 

@@ -69,6 +69,7 @@ node_pos(35, :) = node_pos(8, :) + (node_pos(8, :) - node_pos(5, :))...
 node_pos(34, :) = node_pos(4, :) + (node_pos(4, :) - node_pos(1, :))...
                                  /norm(node_pos(4, :) - node_pos(1, :))*len;
 node_pos(38, 1) = node_pos(38, 1) - 0.5;
+node_pos(34, 2) = node_pos(34, 2) + 0.5;
                              
 s1 = node_pos(4, :); e1 = node_pos(34, :); 
 s2 = node_pos(27, :); e2 = node_pos(38, :); 

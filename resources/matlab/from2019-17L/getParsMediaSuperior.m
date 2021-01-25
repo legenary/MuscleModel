@@ -27,7 +27,8 @@ foot = getFootOfPerpendicularToLine(node_pos(node_idx{10}(1), :),...
            (1+node_height(9))/2 * vec_top2D(node_idx{10}(2)+1, :) + (1-node_height(9))/2 * vec_bot2D(node_idx{10}(2)+1, :),...
            (1+node_height(9))/2 * vec_top2D(node_idx{10}(3)+1, :) + (1-node_height(9))/2 * vec_bot2D(node_idx{10}(3)+1, :));
 node_pos(10, :) = 2*foot - node_pos(node_idx{10}(1), :);
-node_pos(10, 2) = node_pos(10, 2) - 0.3;
+node_pos(10, 2) = node_pos(10, 2) + 0.2;
+node_pos(10, 3) = node_pos(10, 3) - 0.2;
 
 
 
@@ -51,23 +52,24 @@ for i = [1:5, 11:15]
                (1+node_height(node_idx{i}(1)))/2 * vec_top2D(node_idx{i}(3)+1, :) + (1-node_height(node_idx{i}(1)))/2 * vec_bot2D(node_idx{i}(3)+1, :));
     node_pos(i, :) = 2*foot - node_pos(node_idx{i}(1), :);
 end
-node_pos(11, 3) = node_pos(11, 3) - 0.5;
+node_pos(5, 2) = node_pos(5, 2) - 0.5;
+node_pos(11, 3) = node_pos(11, 3) - 1;
 node_pos(14, 3) = node_pos(14, 3) + 0.2;
 node_pos(15, 3) = node_pos(15, 3) - 0.2;
 
 
 % node 16
 s1 = node_pos(4, :); e1 = node_pos(5, :); 
-s2 = node_pos(9, :); e2 = node_pos(10, :); 
+s2 = node_pos(14, :); e2 = node_pos(15, :); 
 [foot1, foot2] = getCommonFootOfPerpendicularLine(s1, e1, s2, e2);
 node_pos(16, :) = mean([foot1; foot2]);
-node_pos(16, 1) = node_pos(16, 1) + 15;
+node_pos(16, 1) = node_pos(16, 1) + 3;
 
 figure; hold on;
 plot3d(vec_bot2D, 'ro');
 plot3d(vec_top2D, 'bo');
 plot3d(node_pos([1:16], :), 'k*');
-plot3d(node_pos(16, :), 'ro');
+plot3d(node_pos([4,5,14,15,16], :), 'ro');
 axis equal
 
 node_pos_output = node_pos([16, 1:15], :);

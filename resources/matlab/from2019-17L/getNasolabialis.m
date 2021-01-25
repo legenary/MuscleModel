@@ -61,7 +61,7 @@ end
 
 % caudal outside pad
 s1 = node_pos(2, :); e1 = node_pos(1, :); 
-s2 = node_pos(5, :); e2 = node_pos(4, :); 
+s2 = node_pos(6, :); e2 = node_pos(4, :); 
 [foot1, foot2] = getCommonFootOfPerpendicularLine(s1, e1, s2, e2);
 node_pos(34, :) = mean([foot1; foot2]);
 len = norm(node_pos(34, :) - node_pos(4, :));

@@ -54,11 +54,14 @@ for i = [1:5, 11:12, 20:25]
                (1+node_height(node_idx{i}(1)))/2 * vec_top2D(node_idx{i}(3)+1, :) + (1-node_height(node_idx{i}(1)))/2 * vec_bot2D(node_idx{i}(3)+1, :));
     node_pos(i, :) = 2*foot - node_pos(node_idx{i}(1), :);
 end
+node_pos(1, 1) = node_pos(1, 1) - 1.5;
 node_pos(5, :) = 2*node_pos(4, :) - node_pos(3, :);
 node_pos(5, 1) = node_pos(5, 1) - 0.5;
 node_pos(5, 3) = node_pos(5, 3) - 0.2;
 node_pos(12, 1) = node_pos(12, 1) - 0.5;
 node_pos(24, 3) = node_pos(24, 3) - 0.5;
+node_pos(25, 1) = node_pos(25, 1) - 0.5;
+node_pos(25, 2) = node_pos(25, 2) - 0.5;
 
 % rostral outside pad
 s1 = node_pos(4, :); e1 = node_pos(5, :); 
