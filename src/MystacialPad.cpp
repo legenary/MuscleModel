@@ -30,7 +30,8 @@ void MystacialPad::createLayer1(btDiscreteDynamicsWorld* m_dynamicsWorld, Parame
 		Follicle* fol2 = m_follicleArray[param->SPRING_HEX_MESH_IDX[s][1]];
 		btTransform frameLayer1fol1 = createTransform(btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[param->SPRING_HEX_MESH_IDX[s][0]][6] / 2, 0., 0.));
 		btTransform frameLayer1fol2 = createTransform(btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[param->SPRING_HEX_MESH_IDX[s][1]][6] / 2, 0., 0.));
-		Spring* springLayer1 = new Spring(fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2, param->k_layer1, param->damping);
+		Spring* springLayer1 = new Spring(fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2);
+		springLayer1->initializeLayer(param->E_skin, param->damping);
 		m_dynamicsWorld->addConstraint(springLayer1->getConstraint(), true); // disable collision
 		m_layer1.push_back(springLayer1);
 	}
@@ -46,7 +47,8 @@ void MystacialPad::createLayer2(btDiscreteDynamicsWorld* m_dynamicsWorld, Parame
 		Follicle* fol2 = m_follicleArray[param->SPRING_HEX_MESH_IDX[s][1]];
 		btTransform frameLayer2fol1 = createTransform(btVector3(-param->FOLLICLE_POS_ORIENT_LEN_VOL[param->SPRING_HEX_MESH_IDX[s][0]][6] / 2, 0., 0.));
 		btTransform frameLayer2fol2 = createTransform(btVector3(-param->FOLLICLE_POS_ORIENT_LEN_VOL[param->SPRING_HEX_MESH_IDX[s][1]][6] / 2, 0., 0.));
-		Spring* springLayer2 = new Spring(fol1->getBody(), fol2->getBody(), frameLayer2fol1, frameLayer2fol2, param->k_layer2, param->damping);
+		Spring* springLayer2 = new Spring(fol1->getBody(), fol2->getBody(), frameLayer2fol1, frameLayer2fol2);
+		springLayer2->initializeLayer(param->E_skin, param->damping);
 		m_dynamicsWorld->addConstraint(springLayer2->getConstraint(), true); // disable collision
 		m_layer2.push_back(springLayer2);
 

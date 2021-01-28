@@ -9,7 +9,7 @@
 // Intrinsic sling muscle
 class IntrinsicSlingMuscle : public Spring {
 private:
-	void init();
+	void init(btScalar k, btScalar damping);
 
 public:
 	IntrinsicSlingMuscle(btRigidBody* body1, btRigidBody* body2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping=0.01);
@@ -23,7 +23,7 @@ public:
 // Intrinsic oblique muscle
 class IntrinsicObliqueMuscle : public Spring {
 private:
-	void init();
+	void init(btScalar k, btScalar damping);
 
 public:
 	IntrinsicObliqueMuscle(btRigidBody* body1, btRigidBody* body2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping=0.01);

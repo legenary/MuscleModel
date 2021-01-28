@@ -19,7 +19,8 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAli
 	for (int i = 0; i < nMusclePieces; i++) {
 		btRigidBody* node1 = m_nodes[CONSTRUCTION_IDX[i][0]];
 		btRigidBody* node2 = m_nodes[CONSTRUCTION_IDX[i][1]];
-		Spring* spring = new Spring(node1, node2, createTransform(), createTransform(), param->k_nasolabialis, param->damping);
+		Spring* spring = new Spring(node1, node2, createTransform(), createTransform());
+		spring->initialize(param->k_nasolabialis, param->damping);
 		m_dynamicsWorld->addConstraint(spring->getConstraint(), true);
 		m_musclePieces.push_back(spring);
 	}
@@ -33,7 +34,8 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAli
 				btRigidBody* body = m_follicleArray[INSERTION_IDX[i][f]]->getBody();
 				// Default insertion height: 1, otherwise check INSERTION HEIGHT
 				btTransform trans = createTransform(btVector3((INSERTION_HEIGHT.size() ? INSERTION_HEIGHT[i][1] : 1) * param->FOLLICLE_POS_ORIENT_LEN_VOL[INSERTION_IDX[i][f]][6] / 2, 0., 0.));
-				Spring* spring = new Spring(node, body, createTransform(), trans, param->k_nasolabialis, param->damping);
+				Spring* spring = new Spring(node, body, createTransform(), trans);
+				spring->initialize(param->k_nasolabialis, param->damping);
 				m_dynamicsWorld->addConstraint(spring->getConstraint(), true);
 				m_insertionPieces.push_back(spring);
 			}

@@ -1,6 +1,6 @@
 #include "Spring.h"
 
-Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform frame1, btTransform frame2, btScalar k, btScalar damping, bool isLinear) {
+Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform frame1, btTransform frame2, bool isLinear) {
 
 	body1 = b1;
 	body2 = b2;
@@ -10,14 +10,6 @@ Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform frame1, btTransform
 	constraint = new btGeneric6DofSpringConstraint(*body1, *body2, T1P, T2Q, true);
 	
 	if (isLinear) {
-		constraint->setLinearLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
-		constraint->setLinearUpperLimit(btVector3(0, 0, 0));
-		for (int i = 0; i < 3; i++) {
-			constraint->enableSpring(i, true);
-			constraint->setStiffness(i, k);
-			constraint->setDamping(i, damping);	// guess: damping [0, 1] like restitution coefficient?
-			constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
-		}
 		restLength = btVector3(constraint->getEquilibriumPoint(0),
 							   constraint->getEquilibriumPoint(1),
 							   constraint->getEquilibriumPoint(2)).length();
@@ -70,6 +62,42 @@ Spring::Spring(btRigidBody* b2, btTransform frame2, btScalar k, btScalar damping
 
 	length = restLength;
 	restLengthDefault = restLength;
+}
+
+void Spring::initialize(btScalar k, btScalar damping, bool isLinear) {
+	if (isLinear) {
+		constraint->setLinearLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
+		constraint->setLinearUpperLimit(btVector3(0, 0, 0));
+		for (int i = 0; i < 3; i++) {
+			constraint->enableSpring(i, true);
+			constraint->setStiffness(i, k);
+			constraint->setDamping(i, damping);	// guess: damping [0, 1] like restitution coefficient?
+			constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
+		}
+		restLength = btVector3(constraint->getEquilibriumPoint(0),
+			constraint->getEquilibriumPoint(1),
+			constraint->getEquilibriumPoint(2)).length();
+	}
+	else {
+		std::cout << "In Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform frame1, btTransform frame2, btScalar k, btScalar damping, bool isLinear):" << std::endl;
+		std::cout << "Torsional Spring between rigid bodies not implemented. Initialization Failed..." << std::endl;
+		restLength = 0;
+	}
+}
+
+void Spring::initializeLayer(btScalar E_skin, btScalar damping) {
+	// this initialization calculate spring constants based on the skin Young's Modulus and follicle interspace.
+	constraint->setLinearLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
+	constraint->setLinearUpperLimit(btVector3(0, 0, 0));
+	for (int i = 0; i < 3; i++) {
+		constraint->enableSpring(i, true);
+		constraint->setStiffness(i, E_skin * restLengthDefault);
+		constraint->setDamping(i, damping);	// guess: damping [0, 1] like restitution coefficient?
+		constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
+	}
+	restLength = btVector3(constraint->getEquilibriumPoint(0),
+		constraint->getEquilibriumPoint(1),
+		constraint->getEquilibriumPoint(2)).length();
 }
 
 // NEED DEBUG
