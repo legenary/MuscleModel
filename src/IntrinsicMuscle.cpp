@@ -13,6 +13,9 @@ void IntrinsicSlingMuscle::contract(btScalar ratio) {
 	restLength = ratio * restLengthDefault;
 }
 
+void IntrinsicSlingMuscle::contract_HillType() {
+
+}
 
 
 

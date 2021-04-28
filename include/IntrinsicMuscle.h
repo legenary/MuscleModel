@@ -11,11 +11,15 @@ class IntrinsicSlingMuscle : public Spring {
 private:
 	void init(btScalar k, btScalar damping);
 
+	// parameters for muscle contraction
+
+
 public:
 	IntrinsicSlingMuscle(btRigidBody* body1, btRigidBody* body2, btTransform frameInParent, btTransform frameInChild, btScalar k, btScalar damping=0.01);
 	virtual ~IntrinsicSlingMuscle(){}
 
 	void contract(btScalar ratio);
+	void contract_HillType();
 
 };
 

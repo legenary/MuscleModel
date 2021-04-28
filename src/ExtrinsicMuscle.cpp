@@ -44,8 +44,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAli
 	nInsertionPieces = m_insertionPieces.size();
 
 	// construct muscle end anchoring (to skull/cartilage)
-	Spring* anchor = new Spring(m_nodes[0], createTransform(), param->k_anchor, param->damping, false);	// true = linear spring
-																										// false = torsional spring
+	Spring* anchor = new Spring(m_nodes[0], createTransform(), param->k_anchor, param->damping);	//this is a linear + torsional spring
 	m_dynamicsWorld->addConstraint(anchor->getConstraint(), true); // disable collision
 
 }

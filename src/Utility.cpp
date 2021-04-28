@@ -31,7 +31,7 @@ btTransform createTransform(btVector3 origin, btVector3 YPR) {
 }
 
 float getCriticalDampingRatio(float m1, float m2, float k) {
-	// get damping ratio
+	// get damping ratio (in Bullet)
 	// when m1 = m2 = 1, k = 1, the critical damping ratio is 0.0465
 	// damping ratio ~ sqrt( (m1 + m2) / (m1 * m2  * k) )
 	float fold = std::sqrt((m1 + m2) / m1 / m2 / k);
