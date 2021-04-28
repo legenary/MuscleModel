@@ -19,9 +19,11 @@ For more information or feedback contact yifuluo@u.northwestern.edu
 
    Run CMake-gui.exe. 
 
-   Select source code directory as "../MuscleModel/bullet3-master".
+   Select source code directory as "../MuscleModel/bullet3".
 
-   Select binaries directory as "../MuscleModel/bullet3-master/build" (select "yes" when prompted asking to create build directory).
+   Select binaries directory as "../MuscleModel/bullet3/build" (select "yes" when prompted asking to create build directory).
+   
+   **Specify "LIBRARY_OUTPUT_PATH" field value to "../MuscleModel/bullet3/build/lib" if it is not so already.**
 
    Click **Configure**, then **Generate**, select your version of visual studio as the generator.
 
