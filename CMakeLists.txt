@@ -178,19 +178,19 @@ ENDIF(WIN32)
 
 INCLUDE_DIRECTORIES(
 	include
-	bullet3-master/
-    bullet3-master/src
-    bullet3-master/examples
-    bullet3-master/Extras
+	bullet3/
+    bullet3/src
+    bullet3/examples
+    bullet3/Extras
     ${OPENGL_INCLUDE_DIRS}
 	${GLUT_INCLUDE_DIRS}
 )
 
 
-SET(BULLETLIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bullet3-master/build/lib/Debug)
+SET(BULLETLIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bullet3/build/lib/Debug)
 LINK_DIRECTORIES(${BULLETLIB_DIR})
 
-# ADD_SUBDIRECTORY(${BULLETLIB_DIR}/bullet3-master)
+# ADD_SUBDIRECTORY(${BULLETLIB_DIR}/bullet3)
 # SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BULLETLIB_DIR})
 # SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BULLETLIB_DIR})
 
@@ -205,7 +205,7 @@ SET(SOURCE
 	src/Spring.cpp
 	src/IntrinsicMuscle.cpp
 	src/ExtrinsicMuscle.cpp
-	bullet3-master/build3/bullet.rc
+	bullet3/build3/bullet.rc
 )
 
 SET(HEADERS
