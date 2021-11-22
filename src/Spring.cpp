@@ -1,6 +1,7 @@
 #include "Spring.h"
 
-Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform frame1, btTransform frame2, bool isLinear) {
+Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform frame1, btTransform frame2) {
+	// spring between two bodies are linear
 
 	body1 = b1;
 	body2 = b2;
@@ -8,23 +9,10 @@ Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform frame1, btTransform
 	T2Q = frame2;
 
 	constraint = new btGeneric6DofSpringConstraint(*body1, *body2, T1P, T2Q, true);
-	
-	if (isLinear) {
-		restLength = btVector3(constraint->getEquilibriumPoint(0),
-							   constraint->getEquilibriumPoint(1),
-							   constraint->getEquilibriumPoint(2)).length();
-	}
-	else {
-		std::cout << "In Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform frame1, btTransform frame2, btScalar k, btScalar damping, bool isLinear):" << std::endl;
-		std::cout << "Torsional Spring between rigid bodies not implemented. Initialization Failed..." << std::endl;
-		restLength = 0;
-	}
-
-	length = restLength;
-	restLengthDefault = restLength;
 }
 
-Spring::Spring(btRigidBody* b2, btTransform frame2, btScalar k, btScalar damping, bool isLinear) {
+Spring::Spring(btRigidBody* b2, btTransform frame2, btScalar k, btScalar damping) {
+	// spring for anchoring a body to the world is both linear and torsional
 
 	body2 = b2;
 	T1P = createTransform();
@@ -32,33 +20,26 @@ Spring::Spring(btRigidBody* b2, btTransform frame2, btScalar k, btScalar damping
 
 	constraint = new btGeneric6DofSpringConstraint(*body2, T2Q, true);
 
-	if (isLinear) {
-		std::cout << "In Spring::Spring(btRigidBody* b2, btTransform frame2, btScalar k, btScalar damping, bool isLinear):" << std::endl;
-		std::cout << "Linear Spring between a rigid body and the world not implementd. Initialization Failed..." << std::endl;
-		restLength = 0;
+	constraint->setLinearLowerLimit(btVector3(k, k, k));	// need to set lower > higher to free the dofs
+															// if k = 0, lock the linear movement (switch to hard anchoring mode)
+	constraint->setLinearUpperLimit(btVector3(0, 0, 0));
+	constraint->setAngularLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
+	constraint->setAngularUpperLimit(btVector3(0, 0, 0));
+	for (int i = 0; i < 3; i++) {
+		constraint->enableSpring(i, true);
+		constraint->setStiffness(i, k);
+		constraint->setDamping(i, damping);	// guess: damping [0, 1] like restitution coefficient?
+		constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
 	}
-	else {
-		constraint->setLinearLowerLimit(btVector3(k, k, k));	// need to set lower > higher to free the dofs
-																// if k = 0, lock the linear movement (switch to hard anchoring mode)
-		constraint->setLinearUpperLimit(btVector3(0, 0, 0));
-		constraint->setAngularLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
-		constraint->setAngularUpperLimit(btVector3(0, 0, 0));
-		for (int i = 0; i < 3; i++) {
-			constraint->enableSpring(i, true);
-			constraint->setStiffness(i, k);
-			constraint->setDamping(i, damping);	// guess: damping [0, 1] like restitution coefficient?
-			constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
-		}
-		for (int i = 3; i < 6; i++) {
-			constraint->enableSpring(i, true);
-			constraint->setStiffness(i, k/10);
-			constraint->setDamping(i, damping);	// guess: damping [0, 1] like restitution coefficient?
-			constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
-		}
-		restLength = btVector3(constraint->getEquilibriumPoint(0),
-							   constraint->getEquilibriumPoint(1),
-							   constraint->getEquilibriumPoint(2)).length();
+	for (int i = 3; i < 6; i++) {
+		constraint->enableSpring(i, true);
+		constraint->setStiffness(i, k/10);
+		constraint->setDamping(i, damping);	// guess: damping [0, 1] like restitution coefficient?
+		constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
 	}
+	restLength = btVector3(constraint->getEquilibriumPoint(0),
+							constraint->getEquilibriumPoint(1),
+							constraint->getEquilibriumPoint(2)).length();
 
 	length = restLength;
 	restLengthDefault = restLength;
@@ -83,21 +64,50 @@ void Spring::initialize(btScalar k, btScalar damping, bool isLinear) {
 		std::cout << "Torsional Spring between rigid bodies not implemented. Initialization Failed..." << std::endl;
 		restLength = 0;
 	}
+	length = restLength;
+	restLengthDefault = restLength;
 }
 
-void Spring::initializeLayer(btScalar E_skin, btScalar damping) {
+void Spring::initializeLayer(btScalar E_skin, btScalar m1, btScalar m2) {
 	// this initialization calculate spring constants based on the skin Young's Modulus and follicle interspace.
+	// Note: 2 springs in parallel, so springs constants are divided by 2
+	//								but damping in Bullet should be multiplied by 2
+	
+	
+
 	constraint->setLinearLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
 	constraint->setLinearUpperLimit(btVector3(0, 0, 0));
 	for (int i = 0; i < 3; i++) {
 		constraint->enableSpring(i, true);
-		constraint->setStiffness(i, E_skin * restLengthDefault);
-		constraint->setDamping(i, damping);	// guess: damping [0, 1] like restitution coefficient?
+		constraint->setStiffness(i, 100);
+		constraint->setDamping(i, 1);
 		constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
 	}
+	// get rest length
 	restLength = btVector3(constraint->getEquilibriumPoint(0),
 		constraint->getEquilibriumPoint(1),
 		constraint->getEquilibriumPoint(2)).length();
+
+	// calculate spring constants
+	//btScalar k_eq = E_skin * restLength;
+	//btScalar k_this = k_eq / 2;
+	//btScalar damping_this = getCriticalDampingRatio(m1, m2, k_eq) * 2;
+	
+	btScalar k_eq = 300;
+	btScalar k_this = k_eq / 2;
+	btScalar damping_this = getCriticalDampingRatio(m1, m2, k_eq) * 2;
+
+	std::cout << damping_this << std::endl;
+
+	for (int i = 0; i < 3; i++) {
+		constraint->setStiffness(i, k_this);
+		constraint->setDamping(i, damping_this);
+	}
+
+
+
+	length = restLength;
+	restLengthDefault = restLength;
 }
 
 // NEED DEBUG

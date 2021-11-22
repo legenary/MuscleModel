@@ -30,8 +30,10 @@ void MystacialPad::createLayer1(btDiscreteDynamicsWorld* m_dynamicsWorld, Parame
 		Follicle* fol2 = m_follicleArray[param->SPRING_HEX_MESH_IDX[s][1]];
 		btTransform frameLayer1fol1 = createTransform(btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[param->SPRING_HEX_MESH_IDX[s][0]][6] / 2, 0., 0.));
 		btTransform frameLayer1fol2 = createTransform(btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[param->SPRING_HEX_MESH_IDX[s][1]][6] / 2, 0., 0.));
+
 		Spring* springLayer1 = new Spring(fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2);
-		springLayer1->initializeLayer(param->E_skin, param->damping);
+		springLayer1->initializeLayer(param->E_skin, fol1->getMass(), fol2->getMass());
+
 		m_dynamicsWorld->addConstraint(springLayer1->getConstraint(), true); // disable collision
 		m_layer1.push_back(springLayer1);
 	}
@@ -47,8 +49,10 @@ void MystacialPad::createLayer2(btDiscreteDynamicsWorld* m_dynamicsWorld, Parame
 		Follicle* fol2 = m_follicleArray[param->SPRING_HEX_MESH_IDX[s][1]];
 		btTransform frameLayer2fol1 = createTransform(btVector3(-param->FOLLICLE_POS_ORIENT_LEN_VOL[param->SPRING_HEX_MESH_IDX[s][0]][6] / 2, 0., 0.));
 		btTransform frameLayer2fol2 = createTransform(btVector3(-param->FOLLICLE_POS_ORIENT_LEN_VOL[param->SPRING_HEX_MESH_IDX[s][1]][6] / 2, 0., 0.));
+
 		Spring* springLayer2 = new Spring(fol1->getBody(), fol2->getBody(), frameLayer2fol1, frameLayer2fol2);
-		springLayer2->initializeLayer(param->E_skin, param->damping);
+		springLayer2->initializeLayer(param->E_skin, fol1->getMass(), fol2->getMass());
+
 		m_dynamicsWorld->addConstraint(springLayer2->getConstraint(), true); // disable collision
 		m_layer2.push_back(springLayer2);
 
@@ -62,8 +66,8 @@ void MystacialPad::createAnchor(btDiscreteDynamicsWorld* m_dynamicsWorld, Parame
 	for (int f = 0; f < nFollicle; f++) {
 		Follicle* fol = m_follicleArray[f];
 		btTransform frameAnchor = createTransform(btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6] / 2, 0., 0.));
-		Spring* springAnchor = new Spring(fol->getBody(), frameAnchor, param->k_anchor, param->damping, false);	// true = linear spring
-																										// false = torsional spring
+		Spring* springAnchor = new Spring(fol->getBody(), frameAnchor, param->k_anchor, param->damping);	// this is a linear + torsional spring
+																										
 		m_dynamicsWorld->addConstraint(springAnchor->getConstraint(), true); // disable collision
 		m_anchor.push_back(springAnchor);
 	}
@@ -79,7 +83,7 @@ void MystacialPad::createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* m_dynamic
 		Follicle* folC = m_follicleArray[param->INTRINSIC_SLING_MUSCLE_IDX[s][0]];
 		Follicle* folR = m_follicleArray[param->INTRINSIC_SLING_MUSCLE_IDX[s][1]];
 		btTransform frameC = createTransform(btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[param->INTRINSIC_SLING_MUSCLE_IDX[s][0]][6] / 2, 0., 0.));
-		btTransform frameR = createTransform(btVector3(-param->FOLLICLE_POS_ORIENT_LEN_VOL[param->INTRINSIC_SLING_MUSCLE_IDX[s][1]][6] / 2, 0., 0.));
+		btTransform frameR = createTransform(btVector3(-param->FOLLICLE_POS_ORIENT_LEN_VOL[param->INTRINSIC_SLING_MUSCLE_IDX[s][1]][6] / 2 * 0.4, 0., 0.)); // 70% of rostral member
 		IntrinsicSlingMuscle* muscle = new IntrinsicSlingMuscle(folC->getBody(), folR->getBody(), frameC, frameR, param->k_ISM, param->damping);
 		m_dynamicsWorld->addConstraint(muscle->getConstraint(), true); // disable collision
 		m_ISMArray.push_back(muscle);
@@ -202,9 +206,9 @@ void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG
 		//for (int i = 0; i < m_layer2.size(); i++) {
 		//	m_layer2[i]->debugDraw(m_dynamicsWorld);
 		//}
-		//for (int i = 0; i < m_ISMArray.size(); i++) {
-		//	m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
-		//}
+		for (int i = 0; i < m_ISMArray.size(); i++) {
+			m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
+		}
 		//m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
 		//m_maxillolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.)); 
 		m_NS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));

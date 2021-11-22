@@ -25,8 +25,8 @@ Parameter::Parameter() {
 
 	// layer/spring parameter
 	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";
-	E_skin = 8000000;	// Skin's Young's Modulus is ~8MPa
-	damping = 0.001;	// still need some work to find what critical damping ratio is
+	E_skin = 8000000;	// Skin's Young's Modulus is ~8MPa (Karimi and Navidbakhsh, 2015)
+	damping = 0.001;	// still need to coorperate critical damping into coding
 	k_anchor = 500;		// k = 0 : hard anchor, no linear displacement, free angular movement
 						// k > 0 : soft anchor, springy linear and angular movement
 
