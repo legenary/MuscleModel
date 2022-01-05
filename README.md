@@ -1,4 +1,4 @@
-The MuscleModel is a 3D dynamical model of the one-sided rat mystacial musculature and collagenous skeleton (Haidarliu et al. 2010, Hardarliu et al. 2011) using the open-source physics engine Bullet Physics (https://github.com/bulletphysics) and OpenGL. This project is still under development but will eventually allow researchers to freely set paramteres for a certain groups of extrinsic and intrinsic muscles, as well as their actuation profile. The connection from each muscle bundle connecting follicles and facial tissues is modeled as a series of customized damped springs. A detailed description of the model is currently in preparation. 
+The MuscleModel, developed by the SeNSE (Hartmann) Lab at Northwestern University, is a 3D dynamical model of the one-sided rat mystacial musculature and collagenous skeleton (Haidarliu et al. 2010, Hardarliu et al. 2011) using the open-source physics engine Bullet Physics (https://github.com/bulletphysics) and OpenGL. This project is still under development but will eventually allow researchers to freely set paramteres for a certain groups of extrinsic and intrinsic muscles, as well as their actuation profile. The connection from each muscle bundle connecting follicles and facial tissues is modeled as a series of customized damped springs. A detailed description of the model is currently in preparation. 
 
 Combined with WhiskitPhysics (https://github.com/SeNSE-lab/whiskitphysics) developed by the same lab, the researchers will also be able to simulate the movement of the whiskers by inputting different muscle parameters.
 
@@ -27,11 +27,11 @@ For more information or feedback contact yifuluo@u.northwestern.edu
 
    Select source code directory as "{your_path}/MuscleModel/bullet3".
 
-   Select binaries directory as "{your_path}/MuscleModel/bullet3/build" (select "yes" when prompted asking to create build directory).
+   Select binaries directory as "{your_path}/MuscleModel/bullet3/build".
    
    **Specify "LIBRARY_OUTPUT_PATH" field value to "{your_path}/MuscleModel/bullet3/build/lib" if it is not so already.**
 
-   Click **Configure**, then **Generate**, select your version of visual studio as the generator.
+   Click **Configure** (select "yes" when prompted asking to create build directory), then **Generate**, select your version of visual studio as the generator.
 
    Double-click open "MuscleModel/bullet3-master/build/BULLET_PHYSICS.sln" using Microsoft Visual Studio.
 
@@ -45,12 +45,14 @@ For more information or feedback contact yifuluo@u.northwestern.edu
 
    Select source code directory as "{your_path}/MuscleModel".
 
-   Select binaries directory as "{your_path}/MuscleModel/build" (select "yes" when prompted asking to create build directory).
+   Select binaries directory as "{your_path}/MuscleModel/build".
 
-   Click **Configure**, then **Generate**, select your version of visual studio as the generator.
+   Click **Configure** (select "yes" when prompted asking to create build directory), then **Generate**, select your version of visual studio as the generator.
 
    Double-click open "MuscleModel/build/Apps_MuscleModel.sln" using Microsoft Visual Studio.
 
    In the Solution Explorere, right click "ALL_BUILD" to compile MuscleModel.
+   
+   Set 'MuscleModel' as your startup project.
 
    
