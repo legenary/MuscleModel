@@ -2,7 +2,7 @@ The MuscleModel is a 3D dynamical model of the one-sided rat mystacial musculatu
 
 Combined with WhiskitPhysics (https://github.com/SeNSE-lab/whiskitphysics) developed by the same lab, the researchers will also be able to simulate the movement of the whiskers by inputting different muscle parameters.
 
-<img src="docs/rat_face_and_muscle_model.png" height="568px" width="1370px" >
+<img src="docs/rat_face_and_muscle_model.PNG">
 
 For more information or feedback contact yifuluo@u.northwestern.edu
 
