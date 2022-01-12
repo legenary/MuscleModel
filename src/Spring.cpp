@@ -1,6 +1,6 @@
 #include "Spring.h"
 
-Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform frame1, btTransform frame2) {
+Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform& frame1, btTransform& frame2) {
 	// spring between two bodies are linear
 
 	body1 = b1;
@@ -11,7 +11,7 @@ Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform frame1, btTransform
 	constraint = new btGeneric6DofSpringConstraint(*body1, *body2, T1P, T2Q, true);
 }
 
-Spring::Spring(btRigidBody* b2, btTransform frame2, btScalar k, btScalar damping) {
+Spring::Spring(btRigidBody* b2, btTransform& frame2, btScalar k, btScalar damping) {
 	// spring for anchoring a body to the world is both linear and torsional
 
 	body2 = b2;

@@ -19,8 +19,8 @@ protected:
 	btScalar length;
 
 public:
-	Spring(btRigidBody* body1, btRigidBody* body2, btTransform frameInParent, btTransform frameInChild);
-	Spring(btRigidBody* body2, btTransform frameInChild, btScalar k, btScalar damping = 0.01);
+	Spring(btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild);
+	Spring(btRigidBody* body2, btTransform& frameInChild, btScalar k, btScalar damping = 0.01);
 	virtual ~Spring(){}
 
 	// "initialize" is a place-holder function that needs to be replaced with specialized initializing function, 

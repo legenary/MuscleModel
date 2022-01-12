@@ -35,11 +35,11 @@ btRigidBody* createDynamicBody(float mass, const btTransform& startTransform, bt
 btTransform createTransform(btVector3 origin = btVector3(0., 0., 0.), btVector3 rotation = btVector3(0., 0., 0.));
 float getCriticalDampingRatio(float m1, float m2, float k);
 
-void read_csv_float(std::string fileName, std::vector<std::vector<float> > &dataList);
-void read_csv_int(std::string fileName, std::vector<std::vector<int>> &dataList);
+void read_csv_float(std::string fileName, std::vector<std::vector<float>>& dataList);
+void read_csv_int(std::string fileName, std::vector<std::vector<int>>& dataList);
 
-void write_csv_float(std::string folderName, std::string fileName, std::vector<std::vector<float> > &dataList);
+void write_csv_float(std::string folderName, std::string fileName, std::vector<std::vector<float>>& dataList);
 
-bool isPathExist(const std::string &s);
+bool isPathExist(const std::string& s);
 
 #endif

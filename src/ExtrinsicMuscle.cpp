@@ -1,8 +1,8 @@
 #include "ExtrinsicMuscle.h"
 
 ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param,
-	btAlignedObjectArray<Follicle*> m_follicleArray, std::vector<std::vector<float>> NODE_POS, std::vector<std::vector<int>> CONSTRUCTION_IDX, 
-	std::vector<std::vector<int>> INSERTION_IDX, std::vector<std::vector<float>> INSERTION_HEIGHT) {
+	btAlignedObjectArray<Follicle*>& m_follicleArray, std::vector<std::vector<float>>& NODE_POS, std::vector<std::vector<int>>& CONSTRUCTION_IDX, 
+	std::vector<std::vector<int>>& INSERTION_IDX, std::vector<std::vector<float>>& INSERTION_HEIGHT) {
 
 	// create extrinsic muscle nodes
 	nNodes = NODE_POS.size();
@@ -55,7 +55,7 @@ void ExtrinsicMuscle::contract(btScalar ratio) {
 	}
 }
 
-void ExtrinsicMuscle::contract(btScalar ratio, std::vector<int> those) {
+void ExtrinsicMuscle::contract(btScalar ratio, std::vector<int>& those) {
 	for (auto& that : those) {
 		m_musclePieces[that]->setRestLength(ratio);
 	}

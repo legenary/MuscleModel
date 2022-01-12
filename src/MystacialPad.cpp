@@ -102,7 +102,7 @@ void MystacialPad::contractIntrinsicSlingMuscle(int m_step, Parameter* param) {
 	}
 }
 
-void MystacialPad::contractIntrinsicSlingMuscle(int m_step, Parameter* param, std::vector<int> those) {
+void MystacialPad::contractIntrinsicSlingMuscle(int m_step, Parameter* param, std::vector<int>& those) {
 	// contract intrinsic sling muscle
 	int TrajectoryLength = param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY.size();
 	int step = (m_step <= TrajectoryLength) ? (m_step - 1) : (TrajectoryLength - 1);

@@ -39,7 +39,7 @@ float getCriticalDampingRatio(float m1, float m2, float k) {
 
 }
 
-void read_csv_float(std::string fileName, std::vector<std::vector<float>> &dataList){
+void read_csv_float(std::string fileName, std::vector<std::vector<float>>& dataList){
 
 	std::fstream data(fileName);
 	std::string line;
@@ -56,7 +56,7 @@ void read_csv_float(std::string fileName, std::vector<std::vector<float>> &dataL
 	
 }
 
-void read_csv_int(std::string fileName, std::vector<std::vector<int>> &dataList) {
+void read_csv_int(std::string fileName, std::vector<std::vector<int>>& dataList) {
 
 	std::fstream data(fileName);
 	std::string line;
@@ -73,7 +73,7 @@ void read_csv_int(std::string fileName, std::vector<std::vector<int>> &dataList)
 
 }
 
-void write_csv_float(std::string folderName, std::string fileName, std::vector<std::vector<float> > &dataList) {
+void write_csv_float(std::string folderName, std::string fileName, std::vector<std::vector<float>>& dataList) {
 	try {
 		if (!isPathExist(folderName)) {	// create folder if not exist
 			mkdir(folderName.c_str());
@@ -96,7 +96,7 @@ void write_csv_float(std::string folderName, std::string fileName, std::vector<s
 	}
 }
 
-bool isPathExist(const std::string &s)
+bool isPathExist(const std::string& s)
 {
 	struct stat buffer;
 	return (stat(s.c_str(), &buffer) == 0);
