@@ -8,7 +8,7 @@
 #include "IntrinsicMuscle.h"
 #include "ExtrinsicMuscle.h"
 
-#include "LinearMath/btAlignedObjectArray.h"
+//#include "LinearMath/btAlignedObjectArray.h"
 
 class MystacialPad {
 private:

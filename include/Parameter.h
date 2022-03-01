@@ -3,9 +3,9 @@
 
 #include "Utility.h"
 
-#include "LinearMath/btVector3.h"
-#include <vector>
-#include <string>
+//#include "LinearMath/btVector3.h"
+//#include <vector>
+//#include <string>
 
 
 class Parameter {

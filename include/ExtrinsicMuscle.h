@@ -6,7 +6,7 @@
 #include "Spring.h"
 #include "Follicle.h"
 
-#include "LinearMath/btAlignedObjectArray.h"
+//#include "LinearMath/btAlignedObjectArray.h"
 
 class ExtrinsicMuscle {
 private:

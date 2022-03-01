@@ -1,4 +1,6 @@
+#include "my_pch.h"
 #include "Parameter.h"
+
 
 Parameter::Parameter() {
 	m_time_step = 1./60.;

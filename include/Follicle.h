@@ -1,8 +1,8 @@
 #ifndef FOLLICLE_H
 #define FOLLICLE_H
 
-#include "btBulletDynamicsCommon.h"
-#include "LinearMath/btVector3.h"
+//#include "btBulletDynamicsCommon.h"
+//#include "LinearMath/btVector3.h"
 
 #include "Utility.h"
 

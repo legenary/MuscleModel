@@ -1,4 +1,7 @@
+#include "my_pch.h"
 #include "ExtrinsicMuscle.h"
+
+
 
 ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param,
 	btAlignedObjectArray<Follicle*>& m_follicleArray, std::vector<std::vector<float>>& NODE_POS, std::vector<std::vector<int>>& CONSTRUCTION_IDX, 
