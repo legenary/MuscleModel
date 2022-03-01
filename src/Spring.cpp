@@ -1,6 +1,8 @@
 #include "my_pch.h"
 #include "Spring.h"
 
+#include "Utility.h"
+
 
 Spring::Spring(btRigidBody* b1, btRigidBody* b2, btTransform& frame1, btTransform& frame2) {
 	// spring between two bodies are linear

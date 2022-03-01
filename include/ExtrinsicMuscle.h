@@ -1,12 +1,11 @@
 #ifndef EXTRINSIC_MUSCLE_H
 #define EXTRINSIC_MUSCLE_H
 
-#include "Utility.h"
-#include "Parameter.h"
-#include "Spring.h"
-#include "Follicle.h"
-
 //#include "LinearMath/btAlignedObjectArray.h"
+
+class Spring;
+class Parameter;
+class Follicle;
 
 class ExtrinsicMuscle {
 private:

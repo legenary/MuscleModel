@@ -1,20 +1,11 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
-#include "Parameter.h"
-#include "MystacialPad.h"
+class Parameter;
+class MystacialPad;
 
-//#include <iostream>
-//#include <chrono> 
-//#include <iomanip>      // std::setprecision
-
-//#include "btBulletDynamicsCommon.h"
-//#include "LinearMath/btVector3.h"
-//#include "LinearMath/btAlignedObjectArray.h"
-//#include "LinearMath/btQuaternion.h"
 #include "CommonInterfaces/CommonRigidBodyBase.h"
-#include "CommonInterfaces/CommonGUIHelperInterface.h"
-#include "CommonInterfaces/CommonParameterInterface.h"
+
 
 class Simulation* SimulationCreateFunc(struct CommonExampleOptions& options);
 //class Simulation* StandaloneExampleCreateFunc(struct CommonExampleOptions& options);

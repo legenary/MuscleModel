@@ -1,6 +1,7 @@
 #include "my_pch.h"
 #include "Follicle.h"
 
+#include "Utility.h"
 
 Follicle::Follicle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes,
 	               btTransform trans, btScalar radius, btScalar half_height, btScalar mass) {

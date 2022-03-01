@@ -1,7 +1,6 @@
 #ifndef SPRING_H
 #define SPRING_H
 
-#include "Utility.h"
 
 class Spring {
 protected:

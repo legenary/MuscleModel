@@ -1,6 +1,12 @@
 #include "my_pch.h"
 #include "Simulation.h"
 
+#include "Parameter.h"
+#include "Utility.h"
+#include "MystacialPad.h"
+
+#include "CommonInterfaces/CommonGUIHelperInterface.h"
+#include "CommonInterfaces/CommonParameterInterface.h"
 
 #define BIT(x) (1<<(x))
 

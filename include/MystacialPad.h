@@ -1,14 +1,11 @@
 #ifndef MYSTACIAL_PAD_H
 #define MYSTACIAL_PAD_H
 
-#include "Follicle.h"
-#include "Utility.h"
-#include "Parameter.h"
-#include "Spring.h"
-#include "IntrinsicMuscle.h"
-#include "ExtrinsicMuscle.h"
-
-//#include "LinearMath/btAlignedObjectArray.h"
+class Follicle;
+class Spring;
+class IntrinsicSlingMuscle;
+class ExtrinsicMuscle;
+class Parameter;
 
 class MystacialPad {
 private:

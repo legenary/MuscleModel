@@ -1,12 +1,6 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
-//#include "btBulletDynamicsCommon.h"
-//#include "btBulletCollisionCommon.h"
-//#include "LinearMath/btVector3.h"
-#include "CommonInterfaces/CommonGUIHelperInterface.h"
-
-
 #define PI 3.14159265358979323846
 #define BIT(x) (1<<(x))
 

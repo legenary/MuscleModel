@@ -1,6 +1,12 @@
 #include "my_pch.h"
 #include "MystacialPad.h"
 
+#include "Follicle.h"
+#include "Utility.h"
+#include "Parameter.h"
+#include "Spring.h"
+#include "IntrinsicMuscle.h"
+#include "ExtrinsicMuscle.h"
 
 MystacialPad::MystacialPad(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param) {
 	std::cout << "Creating follicles...";

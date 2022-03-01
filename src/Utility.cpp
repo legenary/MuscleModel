@@ -1,6 +1,7 @@
 #include "my_pch.h"
 #include "Utility.h"
 
+#include "CommonInterfaces/CommonGUIHelperInterface.h"
 
 btRigidBody* createDynamicBody(float mass, const btTransform& startTransform, btCollisionShape* shape) {
 	// rigidbody is dynamic if and only if mass is non zero, otherwise static
