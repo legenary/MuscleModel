@@ -14,9 +14,7 @@ Simulation::~Simulation() {
 	delete m_mystacialPad;
 }
 
-
-
-void Simulation::stepSimulation() {
+void Simulation::stepSimulation(float deltaTime) {
 	auto start = std::chrono::high_resolution_clock::now();
 	m_time += param->m_time_step; 						// increase time
 	m_step += 1;										// increase step
@@ -36,31 +34,22 @@ void Simulation::stepSimulation() {
 		m_mystacialPad->update();
 		m_mystacialPad->debugDraw(m_dynamicsWorld, param->DEBUG);
 
-		// box test trial
-		//spring->update();
-
 		// last step: step simulation
-		m_dynamicsWorld->stepSimulation(param->m_time_step, param->m_num_internal_step,
+		m_dynamicsWorld->stepSimulation(deltaTime, param->m_num_internal_step,
 			param->m_time_step / param->m_num_internal_step);
 
 		if (param->DEBUG) {
 			m_dynamicsWorld->debugDrawWorld();
 		}
 
-		// box test trial
-		//btvector3 pos1 = box1->getcenterofmassposition();
-		//btvector3 pos2 = box2->getcenterofmassposition();
-		//std::vector<float> vect{ pos1[0], pos1[1], pos1[2], pos2[0], pos2[1], pos2[2] };
-		//output.push_back(vect);
-
 		// set exit flag to zero
-		exitSim = 0;
+		exitSim = false;
 	}
 	else {
 		write_csv_float("../output", "test_output.csv", output);
 
 		// timeout -> set exit flag
-		exitSim = 1;
+		exitSim = true;
 	}
 
 	auto stop = std::chrono::high_resolution_clock::now();
@@ -121,21 +110,6 @@ void Simulation::initPhysics() {
 		}
 	}
 
-	//// box test trial
-	//float m1 = 10;
-	//float m2 = 0.1;
-	//float k = 1;
-	//btCollisionShape* boxShape = new btBoxShape(btVector3(0.5, 0.5, 0.5));
-	//box1 = createDynamicBody(m1, createTransform(), boxShape);
-	//box2 = createDynamicBody(m2, createTransform(btVector3(5, 0, 0)), boxShape);
-	//m_dynamicsWorld->addRigidBody(box1, COL_FOLLICLE, follicleCollideWith);
-	//m_dynamicsWorld->addRigidBody(box2, COL_FOLLICLE, follicleCollideWith);
-	//box1->setActivationState(DISABLE_DEACTIVATION);
-	//box2->setActivationState(DISABLE_DEACTIVATION);
-	//spring = new Spring(box1, box2, createTransform(), createTransform(), k, 1.05*getCriticalDampingRatio(m1, m2, k));
-	//m_dynamicsWorld->addConstraint(spring->getConstraint(), true); // disable collision
-	//box1->setCenterOfMassTransform(createTransform(btVector3(-1, 0, 0)));
-	//box2->setCenterOfMassTransform(createTransform(btVector3(6, 0, 0)));
 
 
 	// Initializing physics world
@@ -221,15 +195,3 @@ void Simulation::resetCamera() {
 	m_guiHelper->resetCamera(param->camDist, param->camYaw, param->camPitch, 
 							 param->camPos[0], param->camPos[1], param->camPos[2]);
 }
-
-//Simulation* SimulationCreateFunc(CommonExampleOptions& options)
-//{
-//	return new Simulation(options.m_guiHelper);
-//}
-
-void Simulation::renderScene()
-{
-	CommonRigidBodyBase::renderScene();
-}
-
-//B3_STANDALONE_EXAMPLE(SimulationCreateFunc)

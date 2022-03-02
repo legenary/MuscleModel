@@ -31,6 +31,8 @@ private:
 
 public:
 	MystacialPad(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
+	MystacialPad(const MystacialPad&) = delete;
+	MystacialPad& operator=(MystacialPad const&) = delete;
 	virtual ~MystacialPad();
 
 	void createLayer1(btDiscreteDynamicsWorld* world, Parameter* param);

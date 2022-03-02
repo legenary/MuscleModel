@@ -15,11 +15,13 @@ private:
 public:
 	Follicle(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, 
 		     btTransform trans, btScalar radius, btScalar half_height, btScalar mass);
+	Follicle(const Follicle&) = delete;
+	Follicle& operator=(Follicle const&) = delete;
 	virtual ~Follicle();
 
-	btRigidBody* getBody();
-	btScalar getLength();
-	btScalar getMass();
+	btRigidBody* getBody() const;
+	btScalar getLength() const;
+	btScalar getMass() const;
 	
 
 

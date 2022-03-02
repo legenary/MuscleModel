@@ -20,14 +20,14 @@ Follicle::~Follicle() {
 	// m_body gets deleted with m_dynamicsworld so no deletion here.
 }
 
-btRigidBody* Follicle::getBody() {
+btRigidBody* Follicle::getBody() const {
 	return m_body;
 }
 
-btScalar Follicle::getLength() {
+btScalar Follicle::getLength() const {
 	return m_length;
 }
 
-btScalar Follicle::getMass() {
+btScalar Follicle::getMass() const {
 	return m_mass;
 }

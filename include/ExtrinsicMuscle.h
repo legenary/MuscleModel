@@ -27,6 +27,8 @@ public:
 		std::vector<std::vector<int>>& CONSTRUCTION_IDX, 
 		std::vector<std::vector<int>>& INSERTION_IDX, 
 		std::vector<std::vector<float>>& INSERTION_HEIGHT);
+	ExtrinsicMuscle(const ExtrinsicMuscle&) = delete;
+	ExtrinsicMuscle& operator=(ExtrinsicMuscle const&) = delete;
 	virtual ~ExtrinsicMuscle();
 
 	void contract(btScalar ratio);
@@ -35,9 +37,9 @@ public:
 	void update();
 	void debugDraw(btDiscreteDynamicsWorld* world, btVector3 clr = btVector3(1., 0., 0.));
 
-	int getNumberOfNodes();
-	int getNumberOfMusclePieces();
-	int getNumberOfInsertionPices();
+	int getNumberOfNodes() const;
+	int getNumberOfMusclePieces() const;
+	int getNumberOfInsertionPices() const;
 
 };
 

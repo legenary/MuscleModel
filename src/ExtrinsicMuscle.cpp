@@ -98,12 +98,12 @@ void ExtrinsicMuscle::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, btVect
 	}
 }
 
-int ExtrinsicMuscle::getNumberOfNodes() {
+int ExtrinsicMuscle::getNumberOfNodes() const {
 	return nNodes;
 }
-int ExtrinsicMuscle::getNumberOfMusclePieces() {
+int ExtrinsicMuscle::getNumberOfMusclePieces() const {
 	return nMusclePieces;
 }
-int ExtrinsicMuscle::getNumberOfInsertionPices() {
+int ExtrinsicMuscle::getNumberOfInsertionPices() const {
 	return nInsertionPieces;
 }
