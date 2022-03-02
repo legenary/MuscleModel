@@ -3,7 +3,7 @@
 
 //#include "LinearMath/btAlignedObjectArray.h"
 
-class Spring;
+class Tissue;
 class Parameter;
 class Follicle;
 
@@ -13,8 +13,8 @@ private:
 	int nMusclePieces;
 	int nInsertionPieces;
 	btAlignedObjectArray<btRigidBody*> m_nodes;
-	btAlignedObjectArray<Spring*> m_musclePieces;
-	btAlignedObjectArray<Spring*> m_insertionPieces; 
+	btAlignedObjectArray<Tissue*> m_musclePieces;
+	btAlignedObjectArray<Tissue*> m_insertionPieces;
 	
 
 public:

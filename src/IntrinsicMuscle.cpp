@@ -5,7 +5,7 @@
 #include "Follicle.h"
 
 IntrinsicSlingMuscle::IntrinsicSlingMuscle(btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping)
-	:SpringBetween( body1, body2, frameInParent, frameInChild, k, damping) {}
+	:TissueBetween( body1, body2, frameInParent, frameInChild, k, damping) {}
 
 
 void IntrinsicSlingMuscle::contract(btScalar ratio) {
@@ -19,7 +19,7 @@ void IntrinsicSlingMuscle::contract_HillType() {
 
 
 IntrinsicObliqueMuscle::IntrinsicObliqueMuscle(btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping)
-	:SpringBetween(body1, body2, frameInParent, frameInChild, k, damping) {
+	:TissueBetween(body1, body2, frameInParent, frameInChild, k, damping) {
 }
 
 

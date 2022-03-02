@@ -1,13 +1,13 @@
 #ifndef INTRINSIC_MUSCLE_H
 #define INTRINSIC_MUSCLE_H
 
-#include "Spring.h"
+#include "Tissue.h"
 
 class Follicle;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Intrinsic sling muscle
-class IntrinsicSlingMuscle : public SpringBetween {
+class IntrinsicSlingMuscle : public TissueBetween {
 private:
 
 	// parameters for muscle contraction
@@ -24,7 +24,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Intrinsic oblique muscle
-class IntrinsicObliqueMuscle : public SpringBetween {
+class IntrinsicObliqueMuscle : public TissueBetween {
 private:
 
 public:

@@ -3,7 +3,7 @@
 
 #include "Utility.h"
 #include "Parameter.h"
-#include "Spring.h"
+#include "Tissue.h"
 #include "Follicle.h"
 
 ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, 
@@ -30,11 +30,11 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld,
 	for (int i = 0; i < nMusclePieces; i++) {
 		btRigidBody* node1 = m_nodes[CONSTRUCTION_IDX[i][0]];
 		btRigidBody* node2 = m_nodes[CONSTRUCTION_IDX[i][1]];
-		SpringBetween* spring = new SpringBetween(
+		Tissue* tissue = new TissueBetween(
 			node1, node2, createTransform(), createTransform(),
 			param->k_nasolabialis, param->damping);
-		m_dynamicsWorld->addConstraint(spring->getConstraint(), true);
-		m_musclePieces.push_back(spring);
+		m_dynamicsWorld->addConstraint(tissue->getConstraint(), true);
+		m_musclePieces.push_back(tissue);
 	}
 	// construct muscle insertion to follicle
 	int nInsertionGroups = INSERTION_IDX.size();
@@ -46,18 +46,18 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld,
 				btRigidBody* body = m_follicleArray[INSERTION_IDX[i][f]]->getBody();
 				// Default insertion height: 1, otherwise check INSERTION HEIGHT
 				btTransform trans = createTransform(btVector3((INSERTION_HEIGHT.size() ? INSERTION_HEIGHT[i][1] : 1) * param->FOLLICLE_POS_ORIENT_LEN_VOL[INSERTION_IDX[i][f]][6] / 2, 0., 0.));
-				SpringBetween* spring = new SpringBetween(
+				Tissue* tissue = new TissueBetween(
 					node, body, createTransform(), trans, 
 					param->k_nasolabialis, param->damping);
-				m_dynamicsWorld->addConstraint(spring->getConstraint(), true);
-				m_insertionPieces.push_back(spring);
+				m_dynamicsWorld->addConstraint(tissue->getConstraint(), true);
+				m_insertionPieces.push_back(tissue);
 			}
 		}
 	}
 	nInsertionPieces = m_insertionPieces.size();
 
 	// construct muscle end anchoring (to skull/cartilage)
-	SpringAnchor* anchor = new SpringAnchor(m_nodes[0], createTransform(), param->k_anchor, param->damping);	//this is a linear + torsional spring
+	TissueAnchor* anchor = new TissueAnchor(m_nodes[0], createTransform(), param->k_anchor, param->damping);	//this is a linear + torsional spring
 	m_dynamicsWorld->addConstraint(anchor->getConstraint(), true); // disable collision
 }
 

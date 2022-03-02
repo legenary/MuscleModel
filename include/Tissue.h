@@ -1,8 +1,8 @@
-#ifndef SPRING_H
-#define SPRING_H
+#ifndef TISSUE_H
+#define TISSUE_H
 
 // abstract class (derived class in the same file)
-class Spring {
+class Tissue {
 protected:
 	
 	btRigidBody* body2;	// body2 is this body
@@ -22,13 +22,16 @@ protected:
 	btScalar m_length;
 
 public:
-	Spring(btRigidBody* b2, btTransform& frameInParent, btTransform& frameInChild, 
+	Tissue(btRigidBody* b2, btTransform& frameInParent, btTransform& frameInChild, 
 		btScalar k, btScalar damping);
-	Spring(btRigidBody* b2, btTransform& frameInChild, 
+	Tissue(btRigidBody* b2, btTransform& frameInChild,
 		btScalar k, btScalar damping);
-	Spring(const Spring&) = delete;
-	Spring& operator=(Spring const&) = delete;
-	virtual ~Spring();
+	Tissue(const Tissue&) = delete;
+	Tissue& operator=(Tissue const&) = delete;
+	virtual ~Tissue();
+
+	void* operator new(size_t i) { return _mm_malloc(i, 16); }
+	void operator delete(void* p) { _mm_free(p); }
 
 	virtual void update() = 0;
 	virtual void init() = 0;
@@ -43,25 +46,25 @@ public:
 
 
 // derived class
-class SpringBetween : public Spring {
+class TissueBetween : public Tissue {
 protected:
 	btRigidBody* body1;	//body1 is other body
 public:
-	SpringBetween(btRigidBody* b1, btRigidBody* b2, 
+	TissueBetween(btRigidBody* b1, btRigidBody* b2, 
 		btTransform& frameInParent, btTransform& frameInChild, 
 		btScalar k, btScalar damping);
-	virtual ~SpringBetween() override {};
+	virtual ~TissueBetween() override {};
 	
 	virtual void init() override;
 	virtual void update() override;
 }; 
 
 
-class SpringAnchor : public Spring {
+class TissueAnchor : public Tissue {
 public:
-	SpringAnchor(btRigidBody* b2, btTransform& frameInChild, 
+	TissueAnchor(btRigidBody* b2, btTransform& frameInChild, 
 		btScalar k, btScalar damping);
-	virtual ~SpringAnchor() override {};
+	virtual ~TissueAnchor() override {};
 	
 	virtual void init() override;
 	virtual void update() override;

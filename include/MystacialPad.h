@@ -2,7 +2,7 @@
 #define MYSTACIAL_PAD_H
 
 class Follicle;
-class Spring;
+class Tissue;
 class IntrinsicSlingMuscle;
 class ExtrinsicMuscle;
 class Parameter;
@@ -10,15 +10,16 @@ class Parameter;
 class MystacialPad {
 private:
 	btAlignedObjectArray<Follicle*> m_follicleArray;
-	btAlignedObjectArray<Spring*> m_layer1;
-	btAlignedObjectArray<Spring*> m_layer2;
-	btAlignedObjectArray<Spring*> m_layer3;
-	btAlignedObjectArray<Spring*> m_anchor;
+	btAlignedObjectArray<Tissue*> m_layer1;
+	btAlignedObjectArray<Tissue*> m_layer2;
+	btAlignedObjectArray<Tissue*> m_layer3;
+	btAlignedObjectArray<Tissue*> m_anchor;
 	btAlignedObjectArray<IntrinsicSlingMuscle*> m_ISMArray;
 	int nFollicle;
-	int nSpringLayer1;
-	int nSpringLayer2;
-	int nSpringISM;
+	int nTissueLayer1;
+	int nTissueLayer2;
+	int nTissueAnchor;
+	int nTissueISM;
 	ExtrinsicMuscle* m_nasolabialis;
 	ExtrinsicMuscle* m_maxillolabialis;
 	ExtrinsicMuscle* m_NS;
@@ -41,7 +42,7 @@ public:
 	void createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* world, Parameter* param);
 	void contractIntrinsicSlingMuscle(int step,  Parameter* param);
 	void contractIntrinsicSlingMuscle(int step, Parameter* param, std::vector<int>& those); // spcify which intrinsic muscle to contract by "those"
-																							// extrinsisc muscles see "ExtrinsicMuscle" class
+	
 	void createNasolabialis(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
 	void contractNasolabialis(int step, Parameter* param);
 	void createMaxillolabialis(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);

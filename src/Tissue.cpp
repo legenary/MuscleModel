@@ -1,58 +1,58 @@
 #include "my_pch.h"
-#include "Spring.h"
+#include "Tissue.h"
 
 #include "Utility.h"
 
 //////////////////////////////////////////////////////////////////////////////////
-// Spring ////////////////////////////////////////////////////////////////////////
+// Tissue ////////////////////////////////////////////////////////////////////////
 
-Spring::Spring(btRigidBody* b2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping)
+Tissue::Tissue(btRigidBody* b2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping)
 	: body2(b2), T1P(frameInParent), T2Q(frameInChild), m_k(k), m_damping(damping) {}
 
-Spring::Spring(btRigidBody* b2, btTransform& frameInChild, btScalar k, btScalar damping)
+Tissue::Tissue(btRigidBody* b2, btTransform& frameInChild, btScalar k, btScalar damping)
 	: body2(b2), T2Q(frameInChild), m_k(k), m_damping(damping) {}
 
-Spring::~Spring() {
+Tissue::~Tissue() {
 	delete m_constraint;
 }
 
-
-void Spring::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, btVector3 clr) {
+void Tissue::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, btVector3 clr) {
 	m_dynamicsWorld->getDebugDrawer()->drawLine(TsP.getOrigin(), m_eq, clr);
 }
 
-btScalar Spring::getRestLength() const {
+btScalar Tissue::getRestLength() const {
 	return m_restLength;
 }
 
-void Spring::setRestLength(const btScalar ratio) {
+void Tissue::setRestLength(const btScalar ratio) {
 	m_restLength = ratio * m_restLengthDefault;
 }
 
-btScalar Spring::getLength() const {
+btScalar Tissue::getLength() const {
 	return m_length;
 }
 
-btGeneric6DofSpringConstraint* Spring::getConstraint() const {
+btGeneric6DofSpringConstraint* Tissue::getConstraint() const {
 	return m_constraint;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-// SpringBetween /////////////////////////////////////////////////////////////////
-SpringBetween::SpringBetween(btRigidBody* b1, btRigidBody* b2,
+// TissueBetween /////////////////////////////////////////////////////////////////
+TissueBetween::TissueBetween(btRigidBody* b1, btRigidBody* b2,
 	btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping)
-	: Spring(b2, frameInParent, frameInChild, k, damping)
+	: Tissue(b2, frameInParent, frameInChild, k, damping)
 	, body1(b1) {
+
 	m_constraint = new btGeneric6DofSpringConstraint(*body1, *body2, T1P, T2Q, true);
 	init();
 };
 
-//SpringBetween::~SpringBetween() {
+//TissueBetween::~TissueBetween() {
 //	delete m_constraint;
 //}
 
 
-void SpringBetween::init() {
+void TissueBetween::init() {
 	m_constraint->setLinearLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
 	m_constraint->setLinearUpperLimit(btVector3(0, 0, 0));
 	for (int i = 0; i < 3; i++) {
@@ -69,7 +69,7 @@ void SpringBetween::init() {
 }
 
 // NEED DEBUG
-void SpringBetween::update() {
+void TissueBetween::update() {
 	// update equilibrium point location in frame 1
 	// First, get two attachment points location in world reference frame
 	TsP = body1->getCenterOfMassTransform();
@@ -93,19 +93,19 @@ void SpringBetween::update() {
 
 
 //////////////////////////////////////////////////////////////////////////////////
-// SpringAnchor //////////////////////////////////////////////////////////////////
-SpringAnchor::SpringAnchor(btRigidBody* b2, btTransform& frameInChild, btScalar k, btScalar damping) 
-	: Spring(b2, frameInChild, k, damping) {
+// TissueAnchor //////////////////////////////////////////////////////////////////
+TissueAnchor::TissueAnchor(btRigidBody* b2, btTransform& frameInChild, btScalar k, btScalar damping) 
+	: Tissue(b2, frameInChild, k, damping) {
 
 	m_constraint = new btGeneric6DofSpringConstraint(*body2, T2Q, true);
 	init();
 };
 
-//SpringAnchor::~SpringAnchor() {
+//TissueAnchor::~TissueAnchor() {
 //	delete m_constraint;
 //}
 
-void SpringAnchor::init() {
+void TissueAnchor::init() {
 	m_constraint->setLinearLowerLimit(btVector3(m_k, m_k, m_k));	// need to set lower > higher to free the dofs
 															// if k = 0, lock the linear movement (switch to hard anchoring mode)
 	m_constraint->setLinearUpperLimit(btVector3(0, 0, 0));
@@ -131,7 +131,7 @@ void SpringAnchor::init() {
 	m_restLengthDefault = m_restLength;
 }
 
-void SpringAnchor::update() {
+void TissueAnchor::update() {
 	// to implement
 }
 
