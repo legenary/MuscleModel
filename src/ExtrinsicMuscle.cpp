@@ -6,9 +6,14 @@
 #include "Spring.h"
 #include "Follicle.h"
 
-ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, Parameter* param,
-	btAlignedObjectArray<Follicle*>& m_follicleArray, std::vector<std::vector<float>>& NODE_POS, std::vector<std::vector<int>>& CONSTRUCTION_IDX, 
-	std::vector<std::vector<int>>& INSERTION_IDX, std::vector<std::vector<float>>& INSERTION_HEIGHT) {
+ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, 
+	btAlignedObjectArray<btCollisionShape*>* m_collisionShapes, 
+	Parameter* param,
+	btAlignedObjectArray<Follicle*>& m_follicleArray, 
+	std::vector<std::vector<float>>& NODE_POS, 
+	std::vector<std::vector<int>>& CONSTRUCTION_IDX, 
+	std::vector<std::vector<int>>& INSERTION_IDX, 
+	std::vector<std::vector<float>>& INSERTION_HEIGHT) {
 
 	// create extrinsic muscle nodes
 	nNodes = NODE_POS.size();
@@ -25,8 +30,9 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAli
 	for (int i = 0; i < nMusclePieces; i++) {
 		btRigidBody* node1 = m_nodes[CONSTRUCTION_IDX[i][0]];
 		btRigidBody* node2 = m_nodes[CONSTRUCTION_IDX[i][1]];
-		Spring* spring = new Spring(node1, node2, createTransform(), createTransform());
-		spring->initialize(param->k_nasolabialis, param->damping);
+		SpringBetween* spring = new SpringBetween(
+			node1, node2, createTransform(), createTransform(),
+			param->k_nasolabialis, param->damping);
 		m_dynamicsWorld->addConstraint(spring->getConstraint(), true);
 		m_musclePieces.push_back(spring);
 	}
@@ -40,8 +46,9 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAli
 				btRigidBody* body = m_follicleArray[INSERTION_IDX[i][f]]->getBody();
 				// Default insertion height: 1, otherwise check INSERTION HEIGHT
 				btTransform trans = createTransform(btVector3((INSERTION_HEIGHT.size() ? INSERTION_HEIGHT[i][1] : 1) * param->FOLLICLE_POS_ORIENT_LEN_VOL[INSERTION_IDX[i][f]][6] / 2, 0., 0.));
-				Spring* spring = new Spring(node, body, createTransform(), trans);
-				spring->initialize(param->k_nasolabialis, param->damping);
+				SpringBetween* spring = new SpringBetween(
+					node, body, createTransform(), trans, 
+					param->k_nasolabialis, param->damping);
 				m_dynamicsWorld->addConstraint(spring->getConstraint(), true);
 				m_insertionPieces.push_back(spring);
 			}
@@ -50,9 +57,15 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAli
 	nInsertionPieces = m_insertionPieces.size();
 
 	// construct muscle end anchoring (to skull/cartilage)
-	Spring* anchor = new Spring(m_nodes[0], createTransform(), param->k_anchor, param->damping);	//this is a linear + torsional spring
+	SpringAnchor* anchor = new SpringAnchor(m_nodes[0], createTransform(), param->k_anchor, param->damping);	//this is a linear + torsional spring
 	m_dynamicsWorld->addConstraint(anchor->getConstraint(), true); // disable collision
+}
 
+
+ExtrinsicMuscle::~ExtrinsicMuscle() {
+	//elements of m_nodes gets deleted with m_dynamicsworld so no deletion here.
+	freeAlignedObjectArray(m_musclePieces);
+	freeAlignedObjectArray(m_insertionPieces);
 }
 
 void ExtrinsicMuscle::contract(btScalar ratio) {

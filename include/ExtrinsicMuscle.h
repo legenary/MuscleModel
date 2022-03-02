@@ -19,9 +19,15 @@ private:
 
 public:
 	// remember to add: a slider constraint (or point-to-point anchor) at the end of the extrinsic muscle bundle
-	ExtrinsicMuscle(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param,
-		btAlignedObjectArray<Follicle*>& follicleArray, std::vector<std::vector<float>>& NODE_POS, std::vector<std::vector<int>>& CONSTRUCTION_IDX, 
-		std::vector<std::vector<int>>& INSERTION_IDX, std::vector<std::vector<float>>& INSERTION_HEIGHT);
+	ExtrinsicMuscle(btDiscreteDynamicsWorld* world, 
+		btAlignedObjectArray<btCollisionShape*>* shapes, 
+		Parameter* param,
+		btAlignedObjectArray<Follicle*>& follicleArray, 
+		std::vector<std::vector<float>>& NODE_POS, 
+		std::vector<std::vector<int>>& CONSTRUCTION_IDX, 
+		std::vector<std::vector<int>>& INSERTION_IDX, 
+		std::vector<std::vector<float>>& INSERTION_HEIGHT);
+	virtual ~ExtrinsicMuscle();
 
 	void contract(btScalar ratio);
 	void contract(btScalar ratio, std::vector<int>& those);	// specify which extrinsic muscle to contract by "those"
@@ -32,8 +38,6 @@ public:
 	int getNumberOfNodes();
 	int getNumberOfMusclePieces();
 	int getNumberOfInsertionPices();
-
-
 
 };
 

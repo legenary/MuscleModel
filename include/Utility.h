@@ -4,6 +4,9 @@
 #define PI 3.14159265358979323846
 #define BIT(x) (1<<(x))
 
+template <typename>
+class btAlignedObjectArray;
+
 enum collisiontypes {
 	COL_NOTHING = 0, //Collide with nothing
 	COL_FOLLICLE = BIT(0),
@@ -16,16 +19,41 @@ static int follicleCollideWith = COL_FOLLICLE;
 static int intMusCollideWith = COL_INT_MUS;
 static int extMusCollideWith = COL_FOLLICLE;
 
+// scoped timer
+struct Timer {
+	std::chrono::time_point<std::chrono::steady_clock> start, end;
+	std::chrono::duration<float> duration;
+	std::string message = "no msg";
 
-btRigidBody* createDynamicBody(float mass, const btTransform& startTransform, btCollisionShape* shape);
-btTransform createTransform(btVector3 origin = btVector3(0., 0., 0.), btVector3 rotation = btVector3(0., 0., 0.));
-float getCriticalDampingRatio(float m1, float m2, float k);
+	Timer() : start(std::chrono::high_resolution_clock::now()) {}
+	Timer(std::string msg) : start(std::chrono::high_resolution_clock::now()), message(msg) {}
 
-void read_csv_float(std::string fileName, std::vector<std::vector<float>>& dataList);
-void read_csv_int(std::string fileName, std::vector<std::vector<int>>& dataList);
+	~Timer() {
+		end = std::chrono::high_resolution_clock::now();
+		duration = end - start;
+		float ms = duration.count() * 1000.f;
+		std::cout << "(" << message << ") Timer took: " << ms << "ms\n";
+	}
+};
 
-void write_csv_float(std::string folderName, std::string fileName, std::vector<std::vector<float>>& dataList);
+btRigidBody* createDynamicBody(const float mass, const btTransform& startTransform, btCollisionShape* shape);
+btTransform createTransform(const btVector3& origin = btVector3(0., 0., 0.), const btVector3& rotation = btVector3(0., 0., 0.));
+float getCriticalDampingRatio(const float m1, const float m2, const float k);
+
+void read_csv_float(const std::string& fileName, std::vector<std::vector<float>>& dataList);
+void read_csv_int(const std::string& fileName, std::vector<std::vector<int>>& dataList);
+
+void write_csv_float(const std::string& folderName, const std::string& fileName, std::vector<std::vector<float>>& dataList);
 
 bool isPathExist(const std::string& s);
+
+template <typename T>
+void freeAlignedObjectArray(btAlignedObjectArray<T*>& arr) {
+	int sz = arr.size();
+	for (int i = 0; i < arr.size(); i++) {
+		delete arr[i];
+	}
+	arr.clear();
+}
 
 #endif

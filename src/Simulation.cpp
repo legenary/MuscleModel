@@ -10,6 +10,12 @@
 
 #define BIT(x) (1<<(x))
 
+Simulation::~Simulation() {
+	delete m_mystacialPad;
+}
+
+
+
 void Simulation::stepSimulation() {
 	auto start = std::chrono::high_resolution_clock::now();
 	m_time += param->m_time_step; 						// increase time
@@ -135,7 +141,6 @@ void Simulation::initPhysics() {
 	// Initializing physics world
 	////////////////////////////////////////////////////////////////////////////////
 	read_csv_float(param->dir_follicle_pos_orient_len_vol, param->FOLLICLE_POS_ORIENT_LEN_VOL);
-	std::cout << param->FOLLICLE_POS_ORIENT_LEN_VOL[0][6] << std::endl;
 	m_mystacialPad = new MystacialPad(m_dynamicsWorld, &m_collisionShapes, param);
 
 	// layers

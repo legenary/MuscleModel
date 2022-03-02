@@ -3,7 +3,7 @@
 
 #include "CommonInterfaces/CommonGUIHelperInterface.h"
 
-btRigidBody* createDynamicBody(float mass, const btTransform& startTransform, btCollisionShape* shape) {
+btRigidBody* createDynamicBody(const float mass, const btTransform& startTransform, btCollisionShape* shape) {
 	// rigidbody is dynamic if and only if mass is non zero, otherwise static
 	bool isDynamic = (mass != 0.f);
 
@@ -23,7 +23,7 @@ btRigidBody* createDynamicBody(float mass, const btTransform& startTransform, bt
 	return body;
 }
 
-btTransform createTransform(btVector3 origin, btVector3 YPR) {
+btTransform createTransform(const btVector3& origin, const btVector3& YPR) {
 	// rotation: EuelrZYX rotation orders
 
 	btTransform trans;
@@ -33,7 +33,7 @@ btTransform createTransform(btVector3 origin, btVector3 YPR) {
 	return trans;
 }
 
-float getCriticalDampingRatio(float m1, float m2, float k) {
+float getCriticalDampingRatio(const float m1, const float m2, const float k) {
 	// get damping ratio (in Bullet)
 	// when m1 = m2 = 1, k = 1, the critical damping ratio is 0.0465
 	// damping ratio ~ sqrt( (m1 + m2) / (m1 * m2  * k) )
@@ -42,7 +42,7 @@ float getCriticalDampingRatio(float m1, float m2, float k) {
 
 }
 
-void read_csv_float(std::string fileName, std::vector<std::vector<float>>& dataList){
+void read_csv_float(const std::string& fileName, std::vector<std::vector<float>>& dataList){
 
 	std::fstream data(fileName);
 	std::string line;
@@ -59,7 +59,7 @@ void read_csv_float(std::string fileName, std::vector<std::vector<float>>& dataL
 	
 }
 
-void read_csv_int(std::string fileName, std::vector<std::vector<int>>& dataList) {
+void read_csv_int(const std::string& fileName, std::vector<std::vector<int>>& dataList) {
 
 	std::fstream data(fileName);
 	std::string line;
@@ -76,7 +76,7 @@ void read_csv_int(std::string fileName, std::vector<std::vector<int>>& dataList)
 
 }
 
-void write_csv_float(std::string folderName, std::string fileName, std::vector<std::vector<float>>& dataList) {
+void write_csv_float(const std::string& folderName, const std::string& fileName, std::vector<std::vector<float>>& dataList) {
 	try {
 		if (!isPathExist(folderName)) {	// create folder if not exist
 			mkdir(folderName.c_str());
@@ -104,3 +104,5 @@ bool isPathExist(const std::string& s)
 	struct stat buffer;
 	return (stat(s.c_str(), &buffer) == 0);
 }
+
+

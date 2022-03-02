@@ -4,17 +4,18 @@
 
 class Follicle {
 private:
-	btVector3 position;
-	btVector3 orientation;
-	btRigidBody* body;
-	btScalar l;
-	btScalar m;
+	//btVector3 m_position;
+	//btVector3 m_orientation;
+	btScalar m_mass;
+	btScalar m_length;
 	
+	btRigidBody* m_body;
+	btCollisionShape* m_shape;
 
 public:
 	Follicle(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, 
 		     btTransform trans, btScalar radius, btScalar half_height, btScalar mass);
-	virtual ~Follicle(){}
+	virtual ~Follicle();
 
 	btRigidBody* getBody();
 	btScalar getLength();

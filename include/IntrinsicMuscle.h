@@ -7,16 +7,15 @@ class Follicle;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Intrinsic sling muscle
-class IntrinsicSlingMuscle : public Spring {
+class IntrinsicSlingMuscle : public SpringBetween {
 private:
-	void init(btScalar k, btScalar damping);
 
 	// parameters for muscle contraction
 
 
 public:
 	IntrinsicSlingMuscle(btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping=0.01);
-	virtual ~IntrinsicSlingMuscle(){}
+	virtual ~IntrinsicSlingMuscle() {};
 
 	void contract(btScalar ratio);
 	void contract_HillType();
@@ -25,9 +24,8 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Intrinsic oblique muscle
-class IntrinsicObliqueMuscle : public Spring {
+class IntrinsicObliqueMuscle : public SpringBetween {
 private:
-	void init(btScalar k, btScalar damping);
 
 public:
 	IntrinsicObliqueMuscle(btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping=0.01);

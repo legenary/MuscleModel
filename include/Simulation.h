@@ -28,7 +28,7 @@ private:
 
 public:
 	Simulation(struct GUIHelperInterface* helper) :CommonRigidBodyBase(helper) {}
-	virtual ~Simulation() {}
+	virtual ~Simulation();
 	void initParameter(Parameter* parameter);
 	virtual void initPhysics();
 	virtual void renderScene();
