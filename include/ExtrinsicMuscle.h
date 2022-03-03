@@ -27,6 +27,7 @@ public:
 		std::vector<std::vector<int>>& CONSTRUCTION_IDX, 
 		std::vector<std::vector<int>>& INSERTION_IDX, 
 		std::vector<std::vector<float>>& INSERTION_HEIGHT);
+	// disable copy constructor (override if needed in the future)
 	ExtrinsicMuscle(const ExtrinsicMuscle&) = delete;
 	ExtrinsicMuscle& operator=(ExtrinsicMuscle const&) = delete;
 	virtual ~ExtrinsicMuscle();

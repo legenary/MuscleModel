@@ -7,7 +7,7 @@ class Follicle;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Intrinsic sling muscle
-class IntrinsicSlingMuscle : public TissueBetween {
+class IntrinsicSlingMuscle : public Tissue {
 private:
 
 	// parameters for muscle contraction
@@ -24,7 +24,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Intrinsic oblique muscle
-class IntrinsicObliqueMuscle : public TissueBetween {
+class IntrinsicObliqueMuscle : public Tissue {
 private:
 
 public:

@@ -30,7 +30,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld,
 	for (int i = 0; i < nMusclePieces; i++) {
 		btRigidBody* node1 = m_nodes[CONSTRUCTION_IDX[i][0]];
 		btRigidBody* node2 = m_nodes[CONSTRUCTION_IDX[i][1]];
-		Tissue* tissue = new TissueBetween(
+		Tissue* tissue = new Tissue(
 			node1, node2, createTransform(), createTransform(),
 			param->k_nasolabialis, param->damping);
 		m_dynamicsWorld->addConstraint(tissue->getConstraint(), true);
@@ -46,7 +46,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld,
 				btRigidBody* body = m_follicleArray[INSERTION_IDX[i][f]]->getBody();
 				// Default insertion height: 1, otherwise check INSERTION HEIGHT
 				btTransform trans = createTransform(btVector3((INSERTION_HEIGHT.size() ? INSERTION_HEIGHT[i][1] : 1) * param->FOLLICLE_POS_ORIENT_LEN_VOL[INSERTION_IDX[i][f]][6] / 2, 0., 0.));
-				Tissue* tissue = new TissueBetween(
+				Tissue* tissue = new Tissue(
 					node, body, createTransform(), trans, 
 					param->k_nasolabialis, param->damping);
 				m_dynamicsWorld->addConstraint(tissue->getConstraint(), true);
@@ -57,7 +57,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld,
 	nInsertionPieces = m_insertionPieces.size();
 
 	// construct muscle end anchoring (to skull/cartilage)
-	TissueAnchor* anchor = new TissueAnchor(m_nodes[0], createTransform(), param->k_anchor, param->damping);	//this is a linear + torsional spring
+	Tissue* anchor = new Tissue(m_nodes[0], createTransform(), param->k_anchor, param->damping);	//this is a linear + torsional spring
 	m_dynamicsWorld->addConstraint(anchor->getConstraint(), true); // disable collision
 }
 

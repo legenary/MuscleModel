@@ -4,8 +4,8 @@
 #include "Utility.h"
 
 Follicle::Follicle(btDiscreteDynamicsWorld* m_dynamicsWorld, btAlignedObjectArray<btCollisionShape*>* m_collisionShapes,
-	               btTransform trans, btScalar radius, btScalar half_height, btScalar mass)
-	: m_mass(mass), m_length(2*half_height) {
+	               btTransform trans, btScalar radius, btScalar half_height, btScalar mass, int f)
+	: m_mass(mass), m_length(2*half_height), m_index(f) {
 
 	m_shape = new btCylinderShapeX(btVector3(half_height, radius, radius));
 	m_collisionShapes->push_back(m_shape);
@@ -30,4 +30,8 @@ btScalar Follicle::getLength() const {
 
 btScalar Follicle::getMass() const {
 	return m_mass;
+}
+
+int Follicle::getIndex() const {
+	return m_index;
 }

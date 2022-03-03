@@ -32,6 +32,7 @@ private:
 
 public:
 	MystacialPad(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
+	// disable copy constructor (override if needed in the future)
 	MystacialPad(const MystacialPad&) = delete;
 	MystacialPad& operator=(MystacialPad const&) = delete;
 	virtual ~MystacialPad();
