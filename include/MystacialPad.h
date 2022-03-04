@@ -1,6 +1,8 @@
 #ifndef MYSTACIAL_PAD_H
 #define MYSTACIAL_PAD_H
 
+#include "Simulation.h"
+
 class Follicle;
 class Tissue;
 class IntrinsicSlingMuscle;
@@ -9,6 +11,9 @@ class Parameter;
 
 class MystacialPad {
 private:
+	Simulation* m_sim;
+	Parameter* m_parameter;
+
 	btAlignedObjectArray<Follicle*> m_follicleArray;
 	btAlignedObjectArray<Tissue*> m_layer1;
 	btAlignedObjectArray<Tissue*> m_layer2;
@@ -31,28 +36,28 @@ private:
 
 
 public:
-	MystacialPad(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
+	MystacialPad(Simulation* sim, Parameter* param);
 	// disable copy constructor (override if needed in the future)
 	MystacialPad(const MystacialPad&) = delete;
 	MystacialPad& operator=(MystacialPad const&) = delete;
 	virtual ~MystacialPad();
 
-	void createLayer1(btDiscreteDynamicsWorld* world, Parameter* param);
-	void createLayer2(btDiscreteDynamicsWorld* world, Parameter* param);
-	void createAnchor(btDiscreteDynamicsWorld* world, Parameter* param);
-	void createIntrinsicSlingMuscle(btDiscreteDynamicsWorld* world, Parameter* param);
-	void contractIntrinsicSlingMuscle(int step,  Parameter* param);
-	void contractIntrinsicSlingMuscle(int step, Parameter* param, std::vector<int>& those); // spcify which intrinsic muscle to contract by "those"
+	void createLayer1();
+	void createLayer2();
+	void createAnchor();
+	void createIntrinsicSlingMuscle();
+	void contractIntrinsicSlingMuscle(int step);
+	void contractIntrinsicSlingMuscle(int step, std::vector<int>& those); // spcify which intrinsic muscle to contract by "those"
 	
-	void createNasolabialis(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
-	void contractNasolabialis(int step, Parameter* param);
-	void createMaxillolabialis(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
-	void contractMaxillolabialis(int step, Parameter* param);
-	void createNasolabialisSuperficialis(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
-	void createParsMediaSuperior(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
-	void createParsMediaInferior(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
-	void createParsInternaProfunda(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
-	void createParsMaxillaris(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, Parameter* param);
+	void createNasolabialis();
+	void contractNasolabialis(int step);
+	void createMaxillolabialis();
+	void contractMaxillolabialis(int step);
+	void createNasolabialisSuperficialis();
+	void createParsMediaSuperior();
+	void createParsMediaInferior();
+	void createParsInternaProfunda();
+	void createParsMaxillaris();
 
 
 	void update();
@@ -60,7 +65,13 @@ public:
 	int getNumFollicles() const;
 	Follicle* getFollicleByIndex(int idx);
 
-	void debugDraw(btDiscreteDynamicsWorld* world, int DEBUG);
+	void debugDraw(int DEBUG);
+	inline btDynamicsWorld* getWorld() {
+		return m_sim->getDynamicsWorld();
+	}
+	inline btAlignedObjectArray<btCollisionShape*>* getCollisionShapes() {
+		return &(m_sim->m_collisionShapes);
+	}
 	
 };
 

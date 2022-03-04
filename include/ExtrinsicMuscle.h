@@ -2,6 +2,7 @@
 #define EXTRINSIC_MUSCLE_H
 
 //#include "LinearMath/btAlignedObjectArray.h"
+#include "Simulation.h"
 
 class Tissue;
 class Fiber;
@@ -10,19 +11,20 @@ class Follicle;
 
 class ExtrinsicMuscle {
 private:
+	Simulation* m_sim;
+	Parameter* m_parameter;
+
 	int nNodes;
 	int nMusclePieces;
 	int nInsertionPieces;
 	btAlignedObjectArray<btRigidBody*> m_nodes;
-	btAlignedObjectArray<Tissue*> m_musclePieces;
-	btAlignedObjectArray<Fiber*> m_insertionPieces;
+	btAlignedObjectArray<Fiber*> m_musclePieces;
+	btAlignedObjectArray<Tissue*> m_insertionPieces;
 	
 
 public:
 	// remember to add: a slider constraint (or point-to-point anchor) at the end of the extrinsic muscle bundle
-	ExtrinsicMuscle(btDiscreteDynamicsWorld* world, 
-		btAlignedObjectArray<btCollisionShape*>* shapes, 
-		Parameter* param,
+	ExtrinsicMuscle(Simulation* sim, Parameter* param,
 		btAlignedObjectArray<Follicle*>& follicleArray, 
 		std::vector<std::vector<float>>& NODE_POS, 
 		std::vector<std::vector<int>>& CONSTRUCTION_IDX, 
@@ -37,11 +39,18 @@ public:
 	void contract(btScalar ratio, std::vector<int>& those);	// specify which extrinsic muscle to contract by "those"
 															// intrinsic muslces see "MystacialPad" class
 	void update();
-	void debugDraw(btDiscreteDynamicsWorld* world, btVector3 clr = btVector3(0., 0., 0.));
+	void debugDraw(btVector3 clr = btVector3(0., 0., 0.));
 
 	int getNumberOfNodes() const;
 	int getNumberOfMusclePieces() const;
 	int getNumberOfInsertionPices() const;
+
+	inline btDynamicsWorld* getWorld() {
+		return m_sim->getDynamicsWorld();
+	}
+	inline btAlignedObjectArray<btCollisionShape*>* getCollisionShapes() {
+		return &(m_sim->m_collisionShapes);
+	}
 
 };
 

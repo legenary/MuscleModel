@@ -19,7 +19,7 @@ btRigidBody* createDynamicBody(const float mass, const btTransform& startTransfo
 	//cInfo.m_friction = friction;
 	btRigidBody* body = new btRigidBody(cInfo);
 	body->setUserIndex(-1);
-
+	
 	return body;
 }
 

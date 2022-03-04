@@ -4,6 +4,7 @@
 #include "Parameter.h"
 #include "Utility.h"
 #include "MystacialPad.h"
+#include "Fiber.h"
 
 #include "CommonInterfaces/CommonGUIHelperInterface.h"
 #include "CommonInterfaces/CommonParameterInterface.h"
@@ -23,16 +24,16 @@ void Simulation::stepSimulation(float deltaTime) {
 		// update physics
 		if (param->contractISM) {
 			std::vector<int> those = { 12, 13 }; // specify which muscle to contract: see modeling_log.pptx
-			m_mystacialPad->contractIntrinsicSlingMuscle(m_step, param, those);
+			m_mystacialPad->contractIntrinsicSlingMuscle(m_step, those);
 		}
 		if (param->contractNasolabialis) {
-			m_mystacialPad->contractNasolabialis(m_step, param);
+			m_mystacialPad->contractNasolabialis(m_step);
 		}
 		if (param->contractMaxillolabialis) {
-			m_mystacialPad->contractMaxillolabialis(m_step, param);
+			m_mystacialPad->contractMaxillolabialis(m_step);
 		}
 		m_mystacialPad->update();
-		m_mystacialPad->debugDraw(m_dynamicsWorld, param->DEBUG);
+		m_mystacialPad->debugDraw(param->DEBUG);
 
 		// last step: step simulation
 		m_dynamicsWorld->stepSimulation(deltaTime, param->m_num_internal_step,
@@ -114,13 +115,13 @@ void Simulation::initPhysics() {
 	// Initializing physics world
 	////////////////////////////////////////////////////////////////////////////////
 	read_csv_float(param->dir_follicle_pos_orient_len_vol, param->FOLLICLE_POS_ORIENT_LEN_VOL);
-	m_mystacialPad = new MystacialPad(m_dynamicsWorld, &m_collisionShapes, param);
+	m_mystacialPad = new MystacialPad(this, param);
 
 	// layers
 	read_csv_int(param->dir_spring_hex_mesh_idx, param->SPRING_HEX_MESH_IDX);
-	m_mystacialPad->createLayer1(m_dynamicsWorld, param);
-	m_mystacialPad->createLayer2(m_dynamicsWorld, param);
-	m_mystacialPad->createAnchor(m_dynamicsWorld, param);
+	m_mystacialPad->createLayer1();
+	m_mystacialPad->createLayer2();
+	m_mystacialPad->createAnchor();
 
 	//// intrinsic sling muscles
 	//read_csv_int(param->dir_intrinsic_sling_muscle_idx, param->INTRINSIC_SLING_MUSCLE_IDX);
@@ -226,7 +227,6 @@ void Simulation::initPhysics_test() {
 	// set gravity
 	m_dynamicsWorld->setGravity(btVector3(0, 0, 0));
 
-
 	btCollisionShape* boxShape = new btBoxShape(btVector3(1, 1, 1));
 	m_collisionShapes.push_back(boxShape);
 	box1 = createDynamicBody(1, createTransform(btVector3(0, 0, 0)), boxShape);
@@ -236,7 +236,8 @@ void Simulation::initPhysics_test() {
 	box1->setActivationState(DISABLE_DEACTIVATION);
 	box2->setActivationState(DISABLE_DEACTIVATION);
 
-
+	fiber = new Fiber(this, box1, box2, createTransform(), createTransform(), 10, 1);
+	m_dynamicsWorld->addConstraint(fiber->getConstraint(), true);
 
 	m_guiHelper->autogenerateGraphicsObjects(m_dynamicsWorld);
 	resetCamera();
@@ -249,13 +250,16 @@ void Simulation::stepSimulation_test(float deltaTime) {
 
 	if (param->m_time_stop == 0 || m_time <= param->m_time_stop) {
 		// update everything here:
-		btVector3 force(0.1, 0, 0);
+		btVector3 force(1, 0, 0);
 		box1->applyCentralForce(force);
+		//box1->applyTorque(btVector3(0, 0, 1));
 		//box1->applyCentralImpulse(force * param->m_time_step);
 		btVector3 box1pos = box1->getCenterOfMassPosition();
 		std::vector<float> vect{ box1pos[0], box1pos[1], box1pos[2] };
 		output.push_back(vect);
 
+		fiber->update();
+		
 
 		// ask world to step simulation
 		m_dynamicsWorld->stepSimulation(deltaTime, param->m_num_internal_step,

@@ -2,6 +2,7 @@
 #define INTRINSIC_MUSCLE_H
 
 #include "Tissue.h"
+#include "Simulation.h"
 
 class Follicle;
 
@@ -14,7 +15,7 @@ private:
 
 
 public:
-	IntrinsicSlingMuscle(btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping=0.01);
+	IntrinsicSlingMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping=0.01);
 	virtual ~IntrinsicSlingMuscle() {};
 
 	void contract(btScalar ratio);
@@ -28,7 +29,7 @@ class IntrinsicObliqueMuscle : public Tissue {
 private:
 
 public:
-	IntrinsicObliqueMuscle(btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping=0.01);
+	IntrinsicObliqueMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping=0.01);
 	virtual ~IntrinsicObliqueMuscle() {}
 
 	void contract();

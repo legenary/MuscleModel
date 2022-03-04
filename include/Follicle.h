@@ -1,11 +1,14 @@
 #ifndef FOLLICLE_H
 #define FOLLICLE_H
 
+#include "MystacialPad.h"
 
 class Follicle {
 private:
 	//btVector3 m_position;
 	//btVector3 m_orientation;
+	MystacialPad* m_pad;
+
 	btScalar m_mass;
 	btScalar m_length;
 	int m_index;
@@ -14,8 +17,7 @@ private:
 	btCollisionShape* m_shape;
 
 public:
-	Follicle(btDiscreteDynamicsWorld* world, btAlignedObjectArray<btCollisionShape*>* shapes, 
-		     btTransform trans, btScalar radius, btScalar half_height, btScalar mass, int f);
+	Follicle(MystacialPad* pad, btTransform trans, btScalar radius, btScalar half_height, btScalar mass, int f);
 	// disable copy constructor (override if needed in the future)
 	Follicle(const Follicle&) = delete;
 	Follicle& operator=(Follicle const&) = delete;
@@ -26,7 +28,12 @@ public:
 	btScalar getMass() const;
 	int getIndex() const;
 	
-
+	inline btDynamicsWorld* getWorld() {
+		return m_pad->getWorld();
+	}
+	inline btAlignedObjectArray<btCollisionShape*>* getCollisionShapes() {
+		return m_pad->getCollisionShapes();
+	}
 
 
 };

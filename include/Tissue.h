@@ -1,6 +1,8 @@
 #ifndef TISSUE_H
 #define TISSUE_H
 
+#include "Simulation.h"
+
 enum type {
 	between = 0,
 	anchor = 1
@@ -8,6 +10,8 @@ enum type {
 
 class Tissue {
 protected:
+	Simulation* m_sim;
+
 	btScalar m_k;
 	btScalar m_damping;
 	type m_type;
@@ -24,10 +28,10 @@ protected:
 
 public:
 	//Tissue(btScalar k, btScalar damping);
-	Tissue(btRigidBody* rbA, btRigidBody* rbB,
+	Tissue(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 		btTransform& frameInA, btTransform& frameInB,
 		btScalar k, btScalar damping);
-	Tissue(btRigidBody* rbB, btTransform& frameInB,
+	Tissue(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
 		btScalar k, btScalar damping);
 	// disable copy constructor (override if needed in the future)
 	Tissue(const Tissue&) = delete;
@@ -46,7 +50,11 @@ public:
 	void setRestLength(const btScalar ratio);
 	btScalar getLength() const;
 
-	void debugDraw(btDiscreteDynamicsWorld* world, btVector3 clr = btVector3(0., 0., 0.), bool dynamic = false);
+	void debugDraw(btVector3 clr = btVector3(0., 0., 0.), bool dynamic = false);
+	inline btDynamicsWorld* getWorld() {
+		return m_sim->getDynamicsWorld();
+	}
+	
 };
 
 #endif

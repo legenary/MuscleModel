@@ -4,16 +4,18 @@
 #include "myGeneric6DofMuscleConstraint.h"
 #include "Utility.h"
 
-Fiber::Fiber(btRigidBody* rbA, btRigidBody* rbB,
+Fiber::Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 	btTransform& frameInA, btTransform& frameInB,
-	btScalar k, btScalar damping) : m_k(k), m_damping(damping) {
+	btScalar k, btScalar damping) 
+	: m_sim(sim), m_k(k), m_damping(damping) {
 
 	m_constraint = new myGeneric6DofMuscleConstraint(*rbA, *rbB, frameInA, frameInB, true);
 	init();
 };
 
-Fiber::Fiber(btRigidBody* rbB, btTransform& frameInB,
-	btScalar k, btScalar damping) : m_k(k), m_damping(damping){
+Fiber::Fiber(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
+	btScalar k, btScalar damping) 
+	: m_sim(sim), m_k(k), m_damping(damping){
 
 	m_constraint = new myGeneric6DofMuscleConstraint(*rbB, frameInB, true);
 	init();
@@ -75,11 +77,11 @@ void Fiber::update() {
 }
 
 
-void Fiber::debugDraw(btDiscreteDynamicsWorld* world, btVector3 clr, bool dynamic) {
+void Fiber::debugDraw(btVector3 clr, bool dynamic) {
 	if (dynamic)
-		world->getDebugDrawer()->drawLine(TsQ.getOrigin(), m_eq, clr);
+		getWorld()->getDebugDrawer()->drawLine(TsQ.getOrigin(), m_eq, clr);
 	else
-		world->getDebugDrawer()->drawLine(TsP.getOrigin(), m_eq, clr);
+		getWorld()->getDebugDrawer()->drawLine(TsP.getOrigin(), m_eq, clr);
 }
 
 btScalar Fiber::getRestLength() const {

@@ -4,10 +4,14 @@
 #ifndef FIBER_H
 #define FIBER_H
 
+#include "Simulation.h"
+
 class myGeneric6DofMuscleConstraint;
 
 class Fiber {
 protected:
+	Simulation* m_sim;
+
 	btScalar m_k;
 	btScalar m_damping;
 
@@ -23,10 +27,10 @@ protected:
 
 public:
 	//Tissue(btScalar k, btScalar damping);
-	Fiber(btRigidBody* rbA, btRigidBody* rbB,
+	Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 		btTransform& frameInA, btTransform& frameInB,
 		btScalar k, btScalar damping);
-	Fiber(btRigidBody* rbB, btTransform& frameInB,
+	Fiber(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
 		btScalar k, btScalar damping);
 	// disable copy constructor (override if needed in the future)
 	Fiber(const Fiber&) = delete;
@@ -45,7 +49,11 @@ public:
 	void setRestLength(const btScalar ratio);
 	btScalar getLength() const;
 
-	void debugDraw(btDiscreteDynamicsWorld* world, btVector3 clr = btVector3(0., 0., 0.), bool dynamic = false);
+	void debugDraw(btVector3 clr = btVector3(0., 0., 0.), bool dynamic = false);
+	inline btDynamicsWorld* getWorld() {
+		return m_sim->getDynamicsWorld();
+	}
+
 };
 
 

@@ -3,16 +3,18 @@
 
 #include "Utility.h"
 
-Tissue::Tissue(btRigidBody* rbA, btRigidBody* rbB,
+Tissue::Tissue(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 	btTransform& frameInA, btTransform& frameInB, 
-	btScalar k, btScalar damping): m_k(k), m_damping(damping), m_type(between) {
+	btScalar k, btScalar damping)
+	: m_sim(sim), m_k(k), m_damping(damping), m_type(between) {
 
 	m_constraint = new btGeneric6DofSpringConstraint(*rbA, *rbB, frameInA, frameInB, true);
 	init();
 };
 
-Tissue::Tissue(btRigidBody* rbB, btTransform& frameInB, 
-	btScalar k, btScalar damping) : m_k(k), m_damping(damping), m_type(anchor) {
+Tissue::Tissue(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
+	btScalar k, btScalar damping)
+	: m_sim(sim), m_k(k), m_damping(damping), m_type(anchor) {
 
 	m_constraint = new btGeneric6DofSpringConstraint(*rbB, frameInB, true);
 	init();
@@ -96,11 +98,11 @@ void Tissue::update() {
 }
 
 
-void Tissue::debugDraw(btDiscreteDynamicsWorld* world, btVector3 clr, bool dynamic) {
+void Tissue::debugDraw(btVector3 clr, bool dynamic) {
 	if (dynamic)
-		world->getDebugDrawer()->drawLine(TsQ.getOrigin(), m_eq, clr);
+		getWorld()->getDebugDrawer()->drawLine(TsQ.getOrigin(), m_eq, clr);
 	else
-		world->getDebugDrawer()->drawLine(TsP.getOrigin(), m_eq, clr);
+		getWorld()->getDebugDrawer()->drawLine(TsP.getOrigin(), m_eq, clr);
 }
 
 btScalar Tissue::getRestLength() const {
