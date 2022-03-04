@@ -3,10 +3,6 @@
 
 #include "Utility.h"
 
-//////////////////////////////////////////////////////////////////////////////////
-// Tissue ////////////////////////////////////////////////////////////////////////
-
-
 Tissue::Tissue(btRigidBody* rbA, btRigidBody* rbB,
 	btTransform& frameInA, btTransform& frameInB, 
 	btScalar k, btScalar damping): m_k(k), m_damping(damping), m_type(between) {
@@ -53,7 +49,9 @@ void Tissue::init() {
 
 
 	if (m_type == anchor) {
-
+		// torsional spring is needed for anchor, 
+		// and equilibrium point is easy to update
+		// so don't worry
 		for (int i = 3; i < 6; i++) {
 			m_constraint->enableSpring(i, true);
 			m_constraint->setStiffness(i, m_k / 10);
@@ -98,8 +96,11 @@ void Tissue::update() {
 }
 
 
-void Tissue::debugDraw(btDiscreteDynamicsWorld* world, btVector3 clr) {
-	world->getDebugDrawer()->drawLine(TsQ.getOrigin(), m_eq, clr);
+void Tissue::debugDraw(btDiscreteDynamicsWorld* world, btVector3 clr, bool dynamic) {
+	if (dynamic)
+		world->getDebugDrawer()->drawLine(TsQ.getOrigin(), m_eq, clr);
+	else
+		world->getDebugDrawer()->drawLine(TsP.getOrigin(), m_eq, clr);
 }
 
 btScalar Tissue::getRestLength() const {

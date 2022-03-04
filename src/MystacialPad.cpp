@@ -240,21 +240,20 @@ void MystacialPad::update() {
 void MystacialPad::debugDraw(btDiscreteDynamicsWorld* m_dynamicsWorld, int DEBUG) {
 	if (DEBUG) { // debug draw springs
 		for (int i = 0; i < m_layer1.size(); i++) {
-			m_layer1[i]->debugDraw(m_dynamicsWorld);
+			m_layer1[i]->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.), true);
 		}
 		for (int i = 0; i < m_layer2.size(); i++) {
-			m_layer2[i]->debugDraw(m_dynamicsWorld);
+			m_layer2[i]->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.), true);
 		}
 		for (int i = 0; i < m_anchor.size(); i++) {
-			m_anchor[i]->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
+			m_anchor[i]->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.), true);
 		}
-		
 
 		//for (int i = 0; i < m_ISMArray.size(); i++) {
 		//	m_ISMArray[i]->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		//}
-		//m_nasolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.));
-		//m_maxillolabialis->debugDraw(m_dynamicsWorld, btVector3(1., 0., 0.)); 
+		//m_nasolabialis->debugDraw(m_dynamicsWorld);
+		//m_maxillolabialis->debugDraw(m_dynamicsWorld); 
 		//m_NS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		//m_PMS->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));
 		//m_PMI->debugDraw(m_dynamicsWorld, btVector3(0., 0., 1.));

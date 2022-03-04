@@ -128,18 +128,18 @@ void Simulation::initPhysics() {
 	//read_csv_float(param->dir_intrinsic_sling_muscle_contraction_trajectory, param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY);
 	//m_mystacialPad->createIntrinsicSlingMuscle(m_dynamicsWorld, param);
 	//
-	//// extrinsic: nasolabialis muscle
-	//read_csv_float(param->dir_nasolabialis_node_pos, param->NASOLABIALIS_NODE_POS);
-	//read_csv_int(param->dir_nasolabialis_construction_idx, param->NASOLABIALIS_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_nasolabialis_insertion_idx, param->NASOLABIALIS_INSERTION_IDX);
-	//read_csv_float(param->dir_nasolabialis_contraction_trajectory, param->NASOLABIALIS_CONTRACTION_TRAJECTORY);
+	// extrinsic: nasolabialis muscle
+	read_csv_float(param->dir_nasolabialis_node_pos, param->NASOLABIALIS_NODE_POS);
+	read_csv_int(param->dir_nasolabialis_construction_idx, param->NASOLABIALIS_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_nasolabialis_insertion_idx, param->NASOLABIALIS_INSERTION_IDX);
+	read_csv_float(param->dir_nasolabialis_contraction_trajectory, param->NASOLABIALIS_CONTRACTION_TRAJECTORY);
 	//m_mystacialPad->createNasolabialis(m_dynamicsWorld, &m_collisionShapes, param);
 
-	//// extrinsic: maxillolabialis muscle
-	//read_csv_float(param->dir_maxillolabialis_node_pos, param->MAXILLOLABIALIS_NODE_POS);
-	//read_csv_int(param->dir_maxillolabialis_construction_idx, param->MAXILLOLABIALIS_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_maxillolabialis_insertion_idx, param->MAXILLOLABIALIS_INSERTION_IDX);
-	//read_csv_float(param->dir_maxillolabialis_contraction_trajectory, param->MAXILLOLABIALIS_CONTRACTION_TRAJECTORY);
+	// extrinsic: maxillolabialis muscle
+	read_csv_float(param->dir_maxillolabialis_node_pos, param->MAXILLOLABIALIS_NODE_POS);
+	read_csv_int(param->dir_maxillolabialis_construction_idx, param->MAXILLOLABIALIS_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_maxillolabialis_insertion_idx, param->MAXILLOLABIALIS_INSERTION_IDX);
+	read_csv_float(param->dir_maxillolabialis_contraction_trajectory, param->MAXILLOLABIALIS_CONTRACTION_TRAJECTORY);
 	//m_mystacialPad->createMaxillolabialis(m_dynamicsWorld, &m_collisionShapes, param);
 
 	//// extrinsic: nasolabialis superficialis

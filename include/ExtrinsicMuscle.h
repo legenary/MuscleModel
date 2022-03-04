@@ -4,6 +4,7 @@
 //#include "LinearMath/btAlignedObjectArray.h"
 
 class Tissue;
+class Fiber;
 class Parameter;
 class Follicle;
 
@@ -14,7 +15,7 @@ private:
 	int nInsertionPieces;
 	btAlignedObjectArray<btRigidBody*> m_nodes;
 	btAlignedObjectArray<Tissue*> m_musclePieces;
-	btAlignedObjectArray<Tissue*> m_insertionPieces;
+	btAlignedObjectArray<Fiber*> m_insertionPieces;
 	
 
 public:
@@ -36,7 +37,7 @@ public:
 	void contract(btScalar ratio, std::vector<int>& those);	// specify which extrinsic muscle to contract by "those"
 															// intrinsic muslces see "MystacialPad" class
 	void update();
-	void debugDraw(btDiscreteDynamicsWorld* world, btVector3 clr = btVector3(1., 0., 0.));
+	void debugDraw(btDiscreteDynamicsWorld* world, btVector3 clr = btVector3(0., 0., 0.));
 
 	int getNumberOfNodes() const;
 	int getNumberOfMusclePieces() const;

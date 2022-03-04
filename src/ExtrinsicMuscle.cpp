@@ -4,6 +4,7 @@
 #include "Utility.h"
 #include "Parameter.h"
 #include "Tissue.h"
+#include "Fiber.h"
 #include "Follicle.h"
 
 ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld, 
@@ -25,7 +26,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld,
 		m_dynamicsWorld->addRigidBody(b, COL_EXT_MUS, extMusCollideWith);
 		b->setActivationState(DISABLE_DEACTIVATION);
 	}
-	// construct muscle structural springs
+	// construct muscle structural fibers // rewrite
 	nMusclePieces = CONSTRUCTION_IDX.size();
 	for (int i = 0; i < nMusclePieces; i++) {
 		btRigidBody* node1 = m_nodes[CONSTRUCTION_IDX[i][0]];
@@ -45,12 +46,13 @@ ExtrinsicMuscle::ExtrinsicMuscle(btDiscreteDynamicsWorld* m_dynamicsWorld,
 			if (INSERTION_IDX[i][f] >= 0) {
 				btRigidBody* body = m_follicleArray[INSERTION_IDX[i][f]]->getBody();
 				// Default insertion height: 1, otherwise check INSERTION HEIGHT
-				btTransform trans = createTransform(btVector3((INSERTION_HEIGHT.size() ? INSERTION_HEIGHT[i][1] : 1) * param->FOLLICLE_POS_ORIENT_LEN_VOL[INSERTION_IDX[i][f]][6] / 2, 0., 0.));
-				Tissue* tissue = new Tissue(
+				btScalar insertion_height = (INSERTION_HEIGHT.size() ? INSERTION_HEIGHT[i][1] : 1) * param->FOLLICLE_POS_ORIENT_LEN_VOL[INSERTION_IDX[i][f]][6] / 2;
+				btTransform trans = createTransform(btVector3(insertion_height, 0., 0.));
+				Fiber* fiber = new Fiber(
 					node, body, createTransform(), trans, 
 					param->k_nasolabialis, param->damping);
-				m_dynamicsWorld->addConstraint(tissue->getConstraint(), true);
-				m_insertionPieces.push_back(tissue);
+				m_dynamicsWorld->addConstraint(fiber->getConstraint(), true);
+				m_insertionPieces.push_back(fiber);
 			}
 		}
 	}
