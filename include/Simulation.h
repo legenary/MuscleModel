@@ -17,6 +17,9 @@ private:
 	btScalar m_time;
 	int m_step;
 
+	btRigidBody* box1;
+	btRigidBody* box2;
+
 	Parameter *param; 
 	MystacialPad* m_mystacialPad;
 
@@ -28,9 +31,17 @@ public:
 	Simulation(const Simulation&) = delete;
 	Simulation& operator=(Simulation const&) = delete;
 	virtual ~Simulation();
+	// override new and delete operator to make sure object is aligned 16 on the heap
+	void* operator new(size_t i) { return _mm_malloc(i, 16); }
+	void operator delete(void* p) { _mm_free(p); }
+
+
 	void initParameter(Parameter* parameter);
 	virtual void initPhysics() override;
 	virtual void stepSimulation(float deltaTime) override;
+
+	void initPhysics_test();
+	void stepSimulation_test(float deltaTime);
 	
 	void resetCamera();
 	bool exitSim = false;

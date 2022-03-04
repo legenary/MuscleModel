@@ -111,7 +111,6 @@ void Simulation::initPhysics() {
 	}
 
 
-
 	// Initializing physics world
 	////////////////////////////////////////////////////////////////////////////////
 	read_csv_float(param->dir_follicle_pos_orient_len_vol, param->FOLLICLE_POS_ORIENT_LEN_VOL);
@@ -194,4 +193,92 @@ void Simulation::initPhysics() {
 void Simulation::resetCamera() {
 	m_guiHelper->resetCamera(param->camDist, param->camYaw, param->camPitch, 
 							 param->camPos[0], param->camPos[1], param->camPos[2]);
+}
+
+
+void Simulation::initPhysics_test() {
+	std::cout << "Physics engine initiating...." << std::endl;
+	// set visual axis
+	m_guiHelper->setUpAxis(2);
+
+	// create empty dynamics world[0]
+	m_collisionConfiguration = new btDefaultCollisionConfiguration();
+	m_dispatcher = new	btCollisionDispatcher(m_collisionConfiguration);
+
+	// broadphase algorithm
+	m_broadphase = new btDbvtBroadphase();
+
+	// select solver
+	std::cout << "Using btSequentialImpulseConstraintSolver..." << std::endl;
+	m_solver = new btSequentialImpulseConstraintSolver();
+
+	m_dynamicsWorld = new btDiscreteDynamicsWorld(m_dispatcher, m_broadphase, m_solver, m_collisionConfiguration);
+
+	// set number of iterations
+	m_dynamicsWorld->getSolverInfo().m_numIterations = 20;
+	m_dynamicsWorld->getSolverInfo().m_solverMode = SOLVER_SIMD |
+		SOLVER_USE_WARMSTARTING |
+		SOLVER_RANDMIZE_ORDER |
+		0;
+	m_dynamicsWorld->getSolverInfo().m_splitImpulse = true;
+	m_dynamicsWorld->getSolverInfo().m_erp = 0.8f;
+
+	// set gravity
+	m_dynamicsWorld->setGravity(btVector3(0, 0, 0));
+
+
+	btCollisionShape* boxShape = new btBoxShape(btVector3(1, 1, 1));
+	m_collisionShapes.push_back(boxShape);
+	box1 = createDynamicBody(1, createTransform(btVector3(0, 0, 0)), boxShape);
+	box2 = createDynamicBody(1, createTransform(btVector3(-5, 0, 0)), boxShape);
+	m_dynamicsWorld->addRigidBody(box1, COL_FOLLICLE, follicleCollideWith);
+	m_dynamicsWorld->addRigidBody(box2, COL_FOLLICLE, follicleCollideWith);
+	box1->setActivationState(DISABLE_DEACTIVATION);
+	box2->setActivationState(DISABLE_DEACTIVATION);
+
+
+
+	m_guiHelper->autogenerateGraphicsObjects(m_dynamicsWorld);
+	resetCamera();
+}
+
+void Simulation::stepSimulation_test(float deltaTime) {
+	auto start = std::chrono::high_resolution_clock::now();
+	m_time += param->m_time_step; 						// increase time
+	m_step += 1;										// increase step
+
+	if (param->m_time_stop == 0 || m_time <= param->m_time_stop) {
+		// update everything here:
+		btVector3 force(0.1, 0, 0);
+		box1->applyCentralForce(force);
+		//box1->applyCentralImpulse(force * param->m_time_step);
+		btVector3 box1pos = box1->getCenterOfMassPosition();
+		std::vector<float> vect{ box1pos[0], box1pos[1], box1pos[2] };
+		output.push_back(vect);
+
+
+		// ask world to step simulation
+		m_dynamicsWorld->stepSimulation(deltaTime, param->m_num_internal_step,
+			param->m_time_step / param->m_num_internal_step);
+
+		if (param->DEBUG) {
+			m_dynamicsWorld->debugDrawWorld();
+		}
+
+		// set exit flag to zero
+		exitSim = false;
+	}
+	else {
+		write_csv_float("../output", "test_output.csv", output);
+		// timeout -> set exit flag
+		exitSim = true;
+	}
+
+	auto stop = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+	m_time_elapsed += duration.count() / 1000.f;
+	auto factor = m_time_elapsed / m_time;
+	auto time_remaining = (int)((param->m_time_stop - m_time) * (factor));
+
+
 }

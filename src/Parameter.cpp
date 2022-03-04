@@ -6,7 +6,7 @@
 Parameter::Parameter() {
 	m_time_step = 1./60.;
 	m_num_internal_step = 10;
-	m_time_stop = 50;
+	m_time_stop = 10;
 
 	DEBUG = 1;	// 0: no debug
 				// 1: specified inline debug drawing only
