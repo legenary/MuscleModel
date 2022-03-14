@@ -5,8 +5,10 @@
 
 Parameter::Parameter() {
 	m_time_step = 1./60.;
-	m_num_internal_step = 10;
-	m_time_stop = 10;
+	m_num_internal_step = 20;	// for constraint solver
+								// Note: number of iterations grows linear with mass ratios
+								// iter = 3*ratio + 2;
+	m_time_stop = 100;
 
 	DEBUG = 1;	// 0: no debug
 				// 1: specified inline debug drawing only

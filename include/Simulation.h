@@ -48,6 +48,8 @@ public:
 	void resetCamera();
 	bool exitSim = false;
 
+	inline Parameter* getParameter() const { return param; }
+
 };
 
 

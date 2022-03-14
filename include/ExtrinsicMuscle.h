@@ -55,7 +55,7 @@ public:
 };
 
 
-
+// fPE lookup table for interpolation
 
 
 

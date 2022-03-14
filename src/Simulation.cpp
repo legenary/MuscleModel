@@ -124,10 +124,10 @@ void Simulation::initPhysics() {
 	m_mystacialPad->createAnchor();
 
 	//// intrinsic sling muscles
-	//read_csv_int(param->dir_intrinsic_sling_muscle_idx, param->INTRINSIC_SLING_MUSCLE_IDX);
-	//read_csv_float(param->dir_intrinsic_sling_muscle_contraction_trajectory, param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY);
-	//m_mystacialPad->createIntrinsicSlingMuscle(m_dynamicsWorld, param);
-	//
+	read_csv_int(param->dir_intrinsic_sling_muscle_idx, param->INTRINSIC_SLING_MUSCLE_IDX);
+	read_csv_float(param->dir_intrinsic_sling_muscle_contraction_trajectory, param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY);
+	m_mystacialPad->createIntrinsicSlingMuscle();
+	
 	// extrinsic: nasolabialis muscle
 	read_csv_float(param->dir_nasolabialis_node_pos, param->NASOLABIALIS_NODE_POS);
 	read_csv_int(param->dir_nasolabialis_construction_idx, param->NASOLABIALIS_CONSTRUCTION_IDX);
@@ -216,7 +216,7 @@ void Simulation::initPhysics_test() {
 	m_dynamicsWorld = new btDiscreteDynamicsWorld(m_dispatcher, m_broadphase, m_solver, m_collisionConfiguration);
 
 	// set number of iterations
-	m_dynamicsWorld->getSolverInfo().m_numIterations = 20;
+	m_dynamicsWorld->getSolverInfo().m_numIterations = param->m_num_internal_step;
 	m_dynamicsWorld->getSolverInfo().m_solverMode = SOLVER_SIMD |
 		SOLVER_USE_WARMSTARTING |
 		SOLVER_RANDMIZE_ORDER |

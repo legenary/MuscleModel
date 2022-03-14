@@ -85,8 +85,9 @@ void write_csv_float(const std::string& folderName, const std::string& fileName,
 		// outputing...
 		std::ofstream outputFile;
 		outputFile.open(folderName + "/" + fileName);
-		for (int row = 0; row < dataList.size(); row++) {
-			for (int col = 0; col < dataList[row].size(); col++) {
+		int m = dataList.size(), n = dataList[0].size();
+		for (int row = 0; row < m; row++) {
+			for (int col = 0; col < n; col++) {
 				outputFile << dataList[row][col] << ",";
 			}
 			outputFile << std::endl;
@@ -103,6 +104,31 @@ bool isPathExist(const std::string& s)
 {
 	struct stat buffer;
 	return (stat(s.c_str(), &buffer) == 0);
+}
+
+// assume xData is sorted and strictly monotonic increasing
+// if x outside of range, take extreme values
+btScalar interp1(std::vector<btScalar>& xData, std::vector<btScalar>& yData, btScalar x) {
+
+	if (xData.size() != yData.size())
+		throw std::invalid_argument("xData.size() != yData.size()");
+
+	int sz = xData.size();
+	// if out of range
+	if (x <= xData[0]) {
+		return yData[0];
+	}
+	else if (x >= xData[sz - 1]) {
+		return yData[sz-1];
+	}
+
+	// find interval xData[i-1] <= x < xData[i]
+	int i = 0;
+	while (xData[i] <= x) i++;
+	
+	// interpolate
+	btScalar xL = xData[i - 1], xR = xData[i], yL = yData[i - 1], yR = yData[i];
+	return yL + (yR - yL) / (xR - xL)*(x - xL);
 }
 
 

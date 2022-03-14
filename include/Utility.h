@@ -56,7 +56,7 @@ void freeAlignedObjectArray(btAlignedObjectArray<T*>& arr) {
 	arr.clear();
 }
 
-
+btScalar interp1(std::vector<btScalar>& xData, std::vector<btScalar>& yData, btScalar x);
 
 
 

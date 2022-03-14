@@ -7,7 +7,7 @@
 Fiber::Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 	btTransform& frameInA, btTransform& frameInB,
 	btScalar k, btScalar damping) 
-	: m_sim(sim), m_k(k), m_damping(damping) {
+	: m_sim(sim), fPE0(500), m_k(k), m_damping(damping), m_velocity(0) {
 
 	m_constraint = new myGeneric6DofMuscleConstraint(*rbA, *rbB, frameInA, frameInB, true);
 	init();
@@ -41,14 +41,14 @@ void Fiber::init() {
 		m_constraint->setEquilibriumPoint(i);
 	}
 
-	m_restLength = btVector3(
+	m_length = btVector3(
 		m_constraint->getEquilibriumPoint(0),
 		m_constraint->getEquilibriumPoint(1),
 		m_constraint->getEquilibriumPoint(2)
 	).length();
 
-	m_length = m_restLength;
-	m_restLengthDefault = m_restLength;
+	m_restLengthActive= m_length;
+	m_restLengthPassive = m_length;
 
 }
 
@@ -57,23 +57,30 @@ void Fiber::update() {
 	m_constraint->calculateTransforms();
 	TsP = m_constraint->getCalculatedTransformA();
 	TsQ = m_constraint->getCalculatedTransformB();
-
-
+	// if passive: passive restlength stays unchanged
 	// update equilibrium point location in rbA frame
-	// First, get two attachment points location in world reference frame
-
+		// First, get two attachment points location in world reference frame
 	btVector3 p = TsP.getOrigin();
 	btVector3 q = TsQ.getOrigin();
-	// Second, get the equilibrium point location in world reference frame
+		// Second, get the equilibrium point location in world reference frame
 	m_length = (q - p).length();
-	m_eq = p + (q - p)*m_restLength / m_length;
-	// Third, get the equilibruim point location in body1 reference frame
+	m_eq = p + (q - p)*m_restLengthPassive / m_length;
+		// Third, get the equilibruim point location in body1 reference frame
 	btVector3 eq_in_p = TsP.inverse()*m_eq;
-
-	// set equilibruim point
-	for (int i = 0; i < 3; i++) {
+		// set equilibruim point
+	for (int i = 0; i < 3; i++) 
 		m_constraint->setEquilibriumPoint(i, eq_in_p[i]);
-	}
+
+	// TO DO::: if passive: update force based on fPE(l) (not Hooke's Law)
+
+	// force along direction of equilibrium points
+	std::cout << m_length / m_restLengthPassive << std::endl;
+	btVector3 dir = (m_constraint->getCalculatedLinearDiff() - eq_in_p).normalize();
+	btVector3 force = fPE0 * interp1(fPE[0], fPE[1], m_length / m_restLengthPassive) * dir;
+	updateNetForce(force);	// passive force fPE
+
+	// 
+
 }
 
 
@@ -85,11 +92,11 @@ void Fiber::debugDraw(btVector3 clr, bool dynamic) {
 }
 
 btScalar Fiber::getRestLength() const {
-	return m_restLength;
+	return m_restLengthActive;
 }
 
 void Fiber::setRestLength(const btScalar ratio) {
-	m_restLength = ratio * m_restLengthDefault;
+	m_restLengthActive = ratio * m_restLengthPassive;
 }
 
 btScalar Fiber::getLength() const {
@@ -100,5 +107,7 @@ btGeneric6DofSpringConstraint* Fiber::getConstraint() const {
 	return m_constraint;
 }
 
-
-
+// pass calculate linear force to the constraint
+void Fiber::updateNetForce(btVector3 force) {
+	m_constraint->updateForce(force);
+}

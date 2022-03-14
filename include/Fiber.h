@@ -12,6 +12,7 @@ class Fiber {
 protected:
 	Simulation* m_sim;
 
+	btScalar fPE0;
 	btScalar m_k;
 	btScalar m_damping;
 
@@ -21,9 +22,10 @@ protected:
 	btVector3 m_eq;	// equilibrium point that is restLength from body 1 frame
 					// equilibrium point is represented in world frame
 
-	btScalar m_restLength;
-	btScalar m_restLengthDefault;
+	btScalar m_restLengthActive;
+	btScalar m_restLengthPassive;
 	btScalar m_length;
+	btScalar m_velocity;
 
 public:
 	//Tissue(btScalar k, btScalar damping);
@@ -54,8 +56,11 @@ public:
 		return m_sim->getDynamicsWorld();
 	}
 
+	void updateNetForce(btVector3 force);
+	std::vector<std::vector<btScalar>> fPE{
+		{1.1,	1.2,	1.3,	1.4,	1.5,	1.6,	1.7,	1.8,	1.9,	2.0},
+		{0.01,	0.04,	0.11,	0.26,	0.45,	0.7,	1.0,	1.3,	1.6,	2.0} };
 };
-
 
 
 

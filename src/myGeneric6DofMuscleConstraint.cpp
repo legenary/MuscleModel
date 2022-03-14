@@ -31,24 +31,9 @@ void myGeneric6DofMuscleConstraint::m_internalUpdateMuscles(btConstraintInfo2* i
 			btScalar currPos = m_calculatedLinearDiff[i];
 			// calculate difference
 			btScalar delta = currPos - m_equilibriumPoint[i];
-			// spring force is (delta * m_stiffness) according to Hooke's Law
-			btScalar force = delta * m_springStiffness[i];
-			btScalar velFactor = info->fps * m_springDamping[i] / btScalar(info->m_numIterations);
-			m_linearLimits.m_targetVelocity[i] = velFactor * force;
-			m_linearLimits.m_maxMotorForce[i] = btFabs(force); // absolute value
-		}
-	}
-	for (i = 0; i < 3; i++) {
-		if (m_springEnabled[i + 3]) {
-			// get current position of constraint
-			btScalar currPos = m_calculatedAxisAngleDiff[i];
-			// calculate difference
-			btScalar delta = currPos - m_equilibriumPoint[i + 3];
-			// spring force is (-delta * m_stiffness) according to Hooke's Law
-			btScalar force = -delta * m_springStiffness[i + 3];
-			btScalar velFactor = info->fps * m_springDamping[i + 3] / btScalar(info->m_numIterations);
-			m_angularLimits[i].m_targetVelocity = velFactor * force;
-			m_angularLimits[i].m_maxMotorForce = btFabs(force);
+			// muscle force is calculated outside of the constraint (not Hooke's law)
+			m_linearLimits.m_targetVelocity[i] = 1 * m_force[i];
+			m_linearLimits.m_maxMotorForce[i] = btFabs(m_force[i]); // absolute value
 		}
 	}
 }

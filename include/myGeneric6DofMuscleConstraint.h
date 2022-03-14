@@ -7,6 +7,7 @@
 class myGeneric6DofMuscleConstraint : public btGeneric6DofSpringConstraint{
 protected:
 	void m_internalUpdateMuscles(btConstraintInfo2* info);
+	btVector3 m_force;
 
 public:
 	//BT_DECLARE_ALIGNED_ALLOCATOR();
@@ -15,6 +16,9 @@ public:
 	myGeneric6DofMuscleConstraint(btRigidBody& rbB, const btTransform& frameInB, bool useLinearReferenceFrameB);
 
 	virtual void getInfo2(btConstraintInfo2* info) override;
+
+	inline void updateForce(btVector3 f) { m_force = f; }
+	inline btVector3 getCalculatedLinearDiff() const { return m_calculatedLinearDiff; }
 
 };
 
