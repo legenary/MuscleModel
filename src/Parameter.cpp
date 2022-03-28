@@ -39,8 +39,8 @@ Parameter::Parameter() {
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
 	k_ISM = 2000;
 	// contraction
-	dir_intrinsic_sling_muscle_contraction_trajectory = "../resources/intrinsic_sling_muscle_contraction_trajectory.csv";
-	contractISM = false;
+	//dir_intrinsic_sling_muscle_contraction_trajectory = "../resources/intrinsic_sling_muscle_contraction_trajectory.csv";
+	//contractISM = false;
 
 	// M.Nasolabialis
 	dir_nasolabialis_node_pos = "../resources/nasolabialis_node_pos.csv";
@@ -48,8 +48,8 @@ Parameter::Parameter() {
 	dir_nasolabialis_insertion_idx = "../resources/nasolabialis_insertion_idx.csv";
 	k_nasolabialis = 500;
 	// contraction
-	dir_nasolabialis_contraction_trajectory = "../resources/nasolabialis_contraction_trajectory.csv";
-	contractNasolabialis = false;
+	//dir_nasolabialis_contraction_trajectory = "../resources/nasolabialis_contraction_trajectory.csv";
+	//contractNasolabialis = false;
 
 	// M.Maxillolabialis
 	dir_maxillolabialis_node_pos = "../resources/maxillolabialis_node_pos.csv";
@@ -57,8 +57,8 @@ Parameter::Parameter() {
 	dir_maxillolabialis_insertion_idx = "../resources/maxillolabialis_insertion_idx.csv";
 	k_maxillolabialis = 500;
 	// contraction
-	dir_maxillolabialis_contraction_trajectory = "../resources/maxillolabialis_contraction_trajectory.csv";
-	contractMaxillolabialis = false;
+	//dir_maxillolabialis_contraction_trajectory = "../resources/maxillolabialis_contraction_trajectory.csv";
+	//contractMaxillolabialis = false;
 
 	// M.Nasolabialis superficialis
 	dir_nasolabialis_superficialis_node_pos = "../resources/nasolabialis_superficialis_node_pos.csv";

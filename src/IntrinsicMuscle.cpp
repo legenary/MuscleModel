@@ -6,20 +6,17 @@
 
 
 IntrinsicSlingMuscle::IntrinsicSlingMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping)
-	:Tissue(sim, body1, body2, frameInParent, frameInChild, k, damping) {}
+	:Fiber(sim, body1, body2, frameInParent, frameInChild, k, damping) {}
 
-void IntrinsicSlingMuscle::contract(btScalar ratio) {
-	m_restLength = ratio * m_restLengthDefault;
-}
+//void IntrinsicSlingMuscle::contractTo(btScalar ratio) {
+//	m_restLength = ratio * m_restLengthDefault;
+//}
 
-void IntrinsicSlingMuscle::contract_HillType() {
-	
-}
 
 
 
 IntrinsicObliqueMuscle::IntrinsicObliqueMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping)
-	:Tissue(sim, body1, body2, frameInParent, frameInChild, k, damping) {}
+	:Fiber(sim, body1, body2, frameInParent, frameInChild, k, damping) {}
 
 
 void IntrinsicObliqueMuscle::contract() {

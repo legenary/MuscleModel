@@ -35,8 +35,8 @@ public:
 	ExtrinsicMuscle& operator=(ExtrinsicMuscle const&) = delete;
 	virtual ~ExtrinsicMuscle();
 
-	void contract(btScalar ratio);
-	void contract(btScalar ratio, std::vector<int>& those);	// specify which extrinsic muscle to contract by "those"
+	void contractTo(btScalar ratio);
+	void contractTo(btScalar ratio, std::vector<int>& those);	// specify which extrinsic muscle to contract by "those"
 															// intrinsic muslces see "MystacialPad" class
 	void update();
 	void debugDraw(btVector3 clr = btVector3(0., 0., 0.));

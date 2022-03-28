@@ -33,7 +33,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(Simulation* sim, Parameter* param,
 		btRigidBody* node2 = m_nodes[CONSTRUCTION_IDX[i][1]];
 		Fiber* fiber = new Fiber(m_sim, 
 			node1, node2, createTransform(), createTransform(),
-			m_parameter->k_nasolabialis, m_parameter->damping);
+			m_parameter->k_nasolabialis, m_parameter->damping, i);
 		getWorld()->addConstraint(fiber->getConstraint(), true);
 		m_musclePieces.push_back(fiber);
 	}
@@ -70,16 +70,16 @@ ExtrinsicMuscle::~ExtrinsicMuscle() {
 	freeAlignedObjectArray(m_insertionPieces);
 }
 
-void ExtrinsicMuscle::contract(btScalar ratio) {
+void ExtrinsicMuscle::contractTo(btScalar ratio) {
 	for (int i = 0; i < nMusclePieces; i++) {
-		m_musclePieces[i]->setRestLength(ratio);
+		m_musclePieces[i]->contractTo(ratio);
 	}
 }
 
-void ExtrinsicMuscle::contract(btScalar ratio, std::vector<int>& those) {
-	for (auto& that : those) {
-		m_musclePieces[that]->setRestLength(ratio);
-	}
+void ExtrinsicMuscle::contractTo(btScalar ratio, std::vector<int>& those) {
+	//for (auto& that : those) {
+	//	m_musclePieces[that]->setRestLength(ratio);
+	//}
 }
 
 void ExtrinsicMuscle::update() {

@@ -4,10 +4,16 @@
 #include "myGeneric6DofMuscleConstraint.h"
 #include "Utility.h"
 
-Fiber::Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
-	btTransform& frameInA, btTransform& frameInB,
-	btScalar k, btScalar damping) 
-	: m_sim(sim), fPE0(500), m_k(k), m_damping(damping), m_velocity(0) {
+// constructor
+Fiber::Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB, 
+	btTransform& frameInA, btTransform& frameInB, btScalar k, btScalar damping, int idx) 
+	: m_sim(sim)
+	, f0(100)
+	, m_k(k)
+	, m_damping(damping)
+	, m_idx(idx)
+	, m_velocity(0)
+	, m_activation(0) {
 
 	m_constraint = new myGeneric6DofMuscleConstraint(*rbA, *rbB, frameInA, frameInB, true);
 	init();
@@ -47,7 +53,7 @@ void Fiber::init() {
 		m_constraint->getEquilibriumPoint(2)
 	).length();
 
-	m_restLengthActive= m_length;
+	m_restLength= m_length;
 	m_restLengthPassive = m_length;
 
 }
@@ -63,8 +69,9 @@ void Fiber::update() {
 	btVector3 p = TsP.getOrigin();
 	btVector3 q = TsQ.getOrigin();
 		// Second, get the equilibrium point location in world reference frame
+	btScalar vLength = (q - p).length()/m_length - 1.0;
 	m_length = (q - p).length();
-	m_eq = p + (q - p)*m_restLengthPassive / m_length;
+	m_eq = p + (q - p)*m_restLength / m_length;
 		// Third, get the equilibruim point location in body1 reference frame
 	btVector3 eq_in_p = TsP.inverse()*m_eq;
 		// set equilibruim point
@@ -74,10 +81,16 @@ void Fiber::update() {
 	// TO DO::: if passive: update force based on fPE(l) (not Hooke's Law)
 
 	// force along direction of equilibrium points
-	std::cout << m_length / m_restLengthPassive << std::endl;
-	btVector3 dir = (m_constraint->getCalculatedLinearDiff() - eq_in_p).normalize();
-	btVector3 force = fPE0 * interp1(fPE[0], fPE[1], m_length / m_restLengthPassive) * dir;
-	updateNetForce(force);	// passive force fPE
+	btVector3 dir = (m_constraint->getCalculatedLinearDiff() - eq_in_p);
+	dir = (dir.length() > 0.02) ? dir / dir.length() : btVector3(0, 0, 0);
+	// force = (fPE + a*fL*fV)
+	btVector3 force = f0 * (
+					interp1(fPE[0], fPE[1], m_length / m_restLength) +
+					m_activation * interp1(fL[0], fL[1], m_length / m_restLength)
+								 * interp1(fV[0], fV[1], vLength)
+					) * dir;
+	updateNetForce(force);
+
 
 	// 
 
@@ -92,11 +105,28 @@ void Fiber::debugDraw(btVector3 clr, bool dynamic) {
 }
 
 btScalar Fiber::getRestLength() const {
-	return m_restLengthActive;
+	return m_restLength;
+}
+
+void Fiber::contractTo(btScalar ratio) {
+	if (ratio < 0.6 || ratio > 1.0) {
+		std::cerr << "Invalid muscle contraction ratio. Should be between 0.6 and 1.0.\n";
+	}
+	m_activation = (1.0 - ratio) / 0.4;
+	setRestLength(ratio);
+
+	/*static int cc = 0;
+	cc++;
+	if (cc == 1) {
+		std::cout << m_length / m_restLength << std::endl;
+		std::cout << interp1(fPE[0], fPE[1], m_length / m_restLength) << std::endl;
+		std::cout << interp1(fL[0], fL[1], m_length / m_restLength) << std::endl;
+	}*/
+	
 }
 
 void Fiber::setRestLength(const btScalar ratio) {
-	m_restLengthActive = ratio * m_restLengthPassive;
+	m_restLength = ratio * m_restLengthPassive;
 }
 
 btScalar Fiber::getLength() const {

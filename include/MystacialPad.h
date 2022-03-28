@@ -24,7 +24,7 @@ private:
 	int nTissueLayer1;
 	int nTissueLayer2;
 	int nTissueAnchor;
-	int nTissueISM;
+	int nISM;
 	ExtrinsicMuscle* m_nasolabialis;
 	ExtrinsicMuscle* m_maxillolabialis;
 	ExtrinsicMuscle* m_NS;
@@ -46,13 +46,14 @@ public:
 	void createLayer2();
 	void createAnchor();
 	void createIntrinsicSlingMuscle();
-	void contractIntrinsicSlingMuscle(int step);
-	void contractIntrinsicSlingMuscle(int step, std::vector<int>& those); // spcify which intrinsic muscle to contract by "those"
-	
+	//void contractIntrinsicSlingMuscle(int step);
+	//void contractIntrinsicSlingMuscle(int step, std::vector<int>& those); // spcify which intrinsic muscle to contract by "those"
+	void contractIntrinsicSlingMuscle(btScalar ratio);
+
 	void createNasolabialis();
-	void contractNasolabialis(int step);
+	void contractNasolabialis(btScalar ratio);
 	void createMaxillolabialis();
-	void contractMaxillolabialis(int step);
+	void contractMaxillolabialis(btScalar ratio);
 	void createNasolabialisSuperficialis();
 	void createParsMediaSuperior();
 	void createParsMediaInferior();
@@ -65,7 +66,7 @@ public:
 	int getNumFollicles() const;
 	Follicle* getFollicleByIndex(int idx);
 
-	void debugDraw(int DEBUG);
+	void debugDraw();
 	inline btDynamicsWorld* getWorld() {
 		return m_sim->getDynamicsWorld();
 	}
