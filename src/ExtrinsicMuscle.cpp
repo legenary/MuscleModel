@@ -13,20 +13,28 @@ ExtrinsicMuscle::ExtrinsicMuscle(Simulation* sim, Parameter* param,
 	std::vector<std::vector<float>>& NODE_POS, 
 	std::vector<std::vector<int>>& CONSTRUCTION_IDX, 
 	std::vector<std::vector<int>>& INSERTION_IDX, 
-	std::vector<std::vector<float>>& INSERTION_HEIGHT)
-	: m_sim(sim), m_parameter(param) {
+	std::vector<std::vector<float>>& INSERTION_HEIGHT,
+	std::set<int>& anchorNodeIdx)
+	: m_sim(sim)
+	, m_parameter(param) {
 
 	// create extrinsic muscle nodes
 	nNodes = NODE_POS.size();
+	std::cout << nNodes << std::endl;
 	for (int i = 0; i < nNodes; i++) {
 		btTransform t = createTransform(btVector3(NODE_POS[i][0], NODE_POS[i][1], NODE_POS[i][2]));
-		btCollisionShape* s = new btSphereShape((i == 0) ? 0.1 : 0.01);
+		btCollisionShape* s = new btSphereShape((anchorNodeIdx.count(i)) ? 0.1 : 0.01);
 		btRigidBody* b = createDynamicBody(0.1, t, s);
 		m_nodes.push_back(b);
 		getWorld()->addRigidBody(b, COL_EXT_MUS, extMusCollideWith);
 		b->setActivationState(DISABLE_DEACTIVATION);
+		// add anchor tissue to the anchor nodes
+		if (anchorNodeIdx.count(i)) {
+			Tissue* anchor = new Tissue(m_sim, m_nodes[i], createTransform(), m_parameter->k_anchor, m_parameter->damping);	//this is a linear + torsional spring
+			getWorld()->addConstraint(anchor->getConstraint(), true); // disable collision
+		}
 	}
-	// construct muscle structural fibers // rewrite
+	// construct muscle structural fibers
 	nMusclePieces = CONSTRUCTION_IDX.size();
 	for (int i = 0; i < nMusclePieces; i++) {
 		btRigidBody* node1 = m_nodes[CONSTRUCTION_IDX[i][0]];
@@ -37,7 +45,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(Simulation* sim, Parameter* param,
 		getWorld()->addConstraint(fiber->getConstraint(), true);
 		m_musclePieces.push_back(fiber);
 	}
-	// construct muscle insertion to follicle
+	// construct muscle insertion tissue to follicle
 	int nInsertionGroups = INSERTION_IDX.size();
 	for (int i = 0; i < nInsertionGroups; i++) {
 		btRigidBody* node = m_nodes[INSERTION_IDX[i][0]];\
@@ -59,8 +67,8 @@ ExtrinsicMuscle::ExtrinsicMuscle(Simulation* sim, Parameter* param,
 	nInsertionPieces = m_insertionPieces.size();
 
 	// construct muscle end anchoring (to skull/cartilage)
-	Tissue* anchor = new Tissue(m_sim, m_nodes[0], createTransform(), m_parameter->k_anchor, m_parameter->damping);	//this is a linear + torsional spring
-	getWorld()->addConstraint(anchor->getConstraint(), true); // disable collision
+	//Tissue* anchor = new Tissue(m_sim, m_nodes[0], createTransform(), m_parameter->k_anchor, m_parameter->damping);	//this is a linear + torsional spring
+	//getWorld()->addConstraint(anchor->getConstraint(), true); // disable collision
 }
 
 
@@ -74,12 +82,6 @@ void ExtrinsicMuscle::contractTo(btScalar ratio) {
 	for (int i = 0; i < nMusclePieces; i++) {
 		m_musclePieces[i]->contractTo(ratio);
 	}
-}
-
-void ExtrinsicMuscle::contractTo(btScalar ratio, std::vector<int>& those) {
-	//for (auto& that : those) {
-	//	m_musclePieces[that]->setRestLength(ratio);
-	//}
 }
 
 void ExtrinsicMuscle::update() {

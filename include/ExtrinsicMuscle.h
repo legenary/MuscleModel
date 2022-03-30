@@ -29,7 +29,8 @@ public:
 		std::vector<std::vector<float>>& NODE_POS, 
 		std::vector<std::vector<int>>& CONSTRUCTION_IDX, 
 		std::vector<std::vector<int>>& INSERTION_IDX, 
-		std::vector<std::vector<float>>& INSERTION_HEIGHT);
+		std::vector<std::vector<float>>& INSERTION_HEIGHT,
+		std::set<int>& anchorNodeIdx = std::set<int>{ 0 });
 	// disable copy constructor (override if needed in the future)
 	ExtrinsicMuscle(const ExtrinsicMuscle&) = delete;
 	ExtrinsicMuscle& operator=(ExtrinsicMuscle const&) = delete;

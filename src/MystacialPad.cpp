@@ -175,7 +175,8 @@ void MystacialPad::contractMuscle(Muscle mus, btScalar ratio) {
 void MystacialPad::createNasolabialisSuperficialis() {
 	std::cout << "Creating extrinsic muscles: M.Nasolabialis superficialis ...";
 	m_NS = new ExtrinsicMuscle(m_sim, m_parameter, m_follicleArray,
-		m_parameter->NASOLABIALIS_SUPERFICIALIS_NODE_POS, m_parameter->NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX, m_parameter->NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX, heightPlaceHolder);
+		m_parameter->NASOLABIALIS_SUPERFICIALIS_NODE_POS, m_parameter->NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX, m_parameter->NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX, heightPlaceHolder,
+		std::set<int>{ 0, 12, 13, 14, 15, 16 });
 	std::cout << "Done.\n";
 }
 
@@ -249,11 +250,11 @@ void MystacialPad::debugDraw() {
 	//}
 	//m_nasolabialis->debugDraw(btVector3(0., 0., 1.));
 	//m_maxillolabialis->debugDraw(btVector3(0., 0., 1.));
-	//m_NS->debugDraw(btVector3(0., 0., 1.));
+	m_NS->debugDraw(btVector3(0., 0., 1.));
 	//m_PMS->debugDraw(btVector3(0., 0., 1.));
 	//m_PMI->debugDraw(btVector3(0., 0., 1.));
 	//m_PIP->debugDraw(btVector3(0., 1., 0.));
-	m_PM->debugDraw(btVector3(0., 1., 0.));
+	//m_PM->debugDraw(btVector3(0., 1., 0.));
 }
 
 int MystacialPad::getNumFollicles() const {
