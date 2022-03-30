@@ -66,6 +66,9 @@ void Tissue::init() {
 
 // NEED DEBUG
 void Tissue::update() {
+	// for Tissue: eq points are used to calculate the force direction
+	// as well as to update forces using Hooke's Law
+
 	m_constraint->calculateTransforms();
 	TsP = m_constraint->getCalculatedTransformA();
 	TsQ = m_constraint->getCalculatedTransformB();
@@ -93,7 +96,6 @@ void Tissue::update() {
 		// therefore there is no need to do anything in anchor.update()
 		m_eq = TsP.getOrigin();
 	}
-	
 
 }
 

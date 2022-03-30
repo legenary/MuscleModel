@@ -9,6 +9,8 @@ class IntrinsicSlingMuscle;
 class ExtrinsicMuscle;
 class Parameter;
 
+enum Muscle { INTRINSIC, N, M, NS, PMS, PMI, PIP, PM };
+
 class MystacialPad {
 private:
 	Simulation* m_sim;
@@ -46,20 +48,15 @@ public:
 	void createLayer2();
 	void createAnchor();
 	void createIntrinsicSlingMuscle();
-	//void contractIntrinsicSlingMuscle(int step);
-	//void contractIntrinsicSlingMuscle(int step, std::vector<int>& those); // spcify which intrinsic muscle to contract by "those"
-	void contractIntrinsicSlingMuscle(btScalar ratio);
-
 	void createNasolabialis();
-	void contractNasolabialis(btScalar ratio);
 	void createMaxillolabialis();
-	void contractMaxillolabialis(btScalar ratio);
 	void createNasolabialisSuperficialis();
 	void createParsMediaSuperior();
 	void createParsMediaInferior();
 	void createParsInternaProfunda();
 	void createParsMaxillaris();
 
+	void contractMuscle(Muscle mus, btScalar ratio);
 
 	void update();
 	

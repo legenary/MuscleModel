@@ -21,21 +21,6 @@ void Simulation::stepSimulation(float deltaTime) {
 	m_step += 1;										// increase step
 
 	if (param->m_time_stop == 0 || m_time < param->m_time_stop) {
-		//// 
-		//// Muslce contraction section is moved to initPhysics();
-		//// Muscle contraction is set at the beginning of the simulation instead every step
-		////
-		//
-		//if (param->contractISM) {
-		//	std::vector<int> those = { 12, 13 }; // specify which muscle to contract: see modeling_log.pptx
-		//	m_mystacialPad->contractIntrinsicSlingMuscle(m_step, those);
-		//}
-		//if (param->contractNasolabialis) {
-		//	m_mystacialPad->contractNasolabialis(m_step);
-		//}
-		//if (param->contractMaxillolabialis) {
-		//	m_mystacialPad->contractMaxillolabialis(m_step);
-		//}
 
 		// update physics
 		m_mystacialPad->update();
@@ -120,6 +105,7 @@ void Simulation::initPhysics() {
 
 
 	// Initializing physics world
+	// create and contract muscles
 	////////////////////////////////////////////////////////////////////////////////
 	read_csv_float(param->dir_follicle_pos_orient_len_vol, param->FOLLICLE_POS_ORIENT_LEN_VOL);
 	m_mystacialPad = new MystacialPad(this, param);
@@ -132,58 +118,62 @@ void Simulation::initPhysics() {
 
 	//// intrinsic sling muscles
 	read_csv_int(param->dir_intrinsic_sling_muscle_idx, param->INTRINSIC_SLING_MUSCLE_IDX);
-	//read_csv_float(param->dir_intrinsic_sling_muscle_contraction_trajectory, param->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY);
 	m_mystacialPad->createIntrinsicSlingMuscle();
-	m_mystacialPad->contractIntrinsicSlingMuscle(0.8);
+	m_mystacialPad->contractMuscle(INTRINSIC, 0.8);
 	
 	// extrinsic: nasolabialis muscle
 	read_csv_float(param->dir_nasolabialis_node_pos, param->NASOLABIALIS_NODE_POS);
 	read_csv_int(param->dir_nasolabialis_construction_idx, param->NASOLABIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_nasolabialis_insertion_idx, param->NASOLABIALIS_INSERTION_IDX);
-	//read_csv_float(param->dir_nasolabialis_contraction_trajectory, param->NASOLABIALIS_CONTRACTION_TRAJECTORY);
 	m_mystacialPad->createNasolabialis();
+	//m_mystacialPad->contractMuscle(N, 0.8);
 
 	// extrinsic: maxillolabialis muscle
 	read_csv_float(param->dir_maxillolabialis_node_pos, param->MAXILLOLABIALIS_NODE_POS);
 	read_csv_int(param->dir_maxillolabialis_construction_idx, param->MAXILLOLABIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_maxillolabialis_insertion_idx, param->MAXILLOLABIALIS_INSERTION_IDX);
-	//read_csv_float(param->dir_maxillolabialis_contraction_trajectory, param->MAXILLOLABIALIS_CONTRACTION_TRAJECTORY);
 	m_mystacialPad->createMaxillolabialis();
+	//m_mystacialPad->contractMuscle(M, 0.8);
 
+	// fix: add multiple nodes
 	//// extrinsic: nasolabialis superficialis
-	//read_csv_float(param->dir_nasolabialis_superficialis_node_pos, param->NASOLABIALIS_SUPERFICIALIS_NODE_POS);
-	//read_csv_int(param->dir_nasolabialis_superficialis_construction_idx, param->NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_nasolabialis_superficialis_insertion_idx, param->NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX);
-	//m_mystacialPad->createNasolabialisSuperficialis();
+	read_csv_float(param->dir_nasolabialis_superficialis_node_pos, param->NASOLABIALIS_SUPERFICIALIS_NODE_POS);
+	read_csv_int(param->dir_nasolabialis_superficialis_construction_idx, param->NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_nasolabialis_superficialis_insertion_idx, param->NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX);
+	m_mystacialPad->createNasolabialisSuperficialis();
+	//m_mystacialPad->contractMuscle(NS, 0.8);
 
 	//// extrinsic: pars media superior of M. Nasolabialis profundus
-	//read_csv_float(param->dir_pars_media_superior_node_pos, param->PARS_MEDIA_SUPERIOR_NODE_POS);
-	//read_csv_int(param->dir_pars_media_superior_construction_idx, param->PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_pars_media_superior_insertion_idx, param->PARS_MEDIA_SUPERIOR_INSERTION_IDX);
-	//read_csv_float(param->dir_pars_media_superior_insertion_height, param->PARS_MEDIA_SUPERIOR_INSERTION_HEIGHT);
-	//m_mystacialPad->createParsMediaSuperior();
+	read_csv_float(param->dir_pars_media_superior_node_pos, param->PARS_MEDIA_SUPERIOR_NODE_POS);
+	read_csv_int(param->dir_pars_media_superior_construction_idx, param->PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_media_superior_insertion_idx, param->PARS_MEDIA_SUPERIOR_INSERTION_IDX);
+	read_csv_float(param->dir_pars_media_superior_insertion_height, param->PARS_MEDIA_SUPERIOR_INSERTION_HEIGHT);
+	m_mystacialPad->createParsMediaSuperior();
+	//m_mystacialPad->contractMuscle(PMS, 0.8);
 
 	//// extrinsic: pars media inferior of M. Nasolabialis profundus
-	//read_csv_float(param->dir_pars_media_inferior_node_pos, param->PARS_MEDIA_INFERIOR_NODE_POS);
-	//read_csv_int(param->dir_pars_media_inferior_construction_idx, param->PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_pars_media_inferior_insertion_idx, param->PARS_MEDIA_INFERIOR_INSERTION_IDX);
-	//read_csv_float(param->dir_pars_media_inferior_insertion_height, param->PARS_MEDIA_INFERIOR_INSERTION_HEIGHT);
-	//m_mystacialPad->createParsMediaInferior();
+	read_csv_float(param->dir_pars_media_inferior_node_pos, param->PARS_MEDIA_INFERIOR_NODE_POS);
+	read_csv_int(param->dir_pars_media_inferior_construction_idx, param->PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_media_inferior_insertion_idx, param->PARS_MEDIA_INFERIOR_INSERTION_IDX);
+	read_csv_float(param->dir_pars_media_inferior_insertion_height, param->PARS_MEDIA_INFERIOR_INSERTION_HEIGHT);
+	m_mystacialPad->createParsMediaInferior();
+	//m_mystacialPad->contractMuscle(PMI, 0.8);
 
 	//// extrinsic: pars interna profunda of M. Nasolabialis profundus
-	//read_csv_float(param->dir_pars_interna_profunda_node_pos, param->PARS_INTERNA_PROFUNDA_NODE_POS);
-	//read_csv_int(param->dir_pars_interna_profunda_construction_idx, param->PARS_INTERNA_PROFUNDA_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_pars_interna_profunda_insertion_idx, param->PARS_INTERNA_PROFUNDA_INSERTION_IDX);
-	//read_csv_float(param->dir_pars_interna_profunda_insertion_height, param->PARS_INTERNA_PROFUNDA_INSERTION_HEIGHT);
-	//m_mystacialPad->createParsInternaProfunda();
+	read_csv_float(param->dir_pars_interna_profunda_node_pos, param->PARS_INTERNA_PROFUNDA_NODE_POS);
+	read_csv_int(param->dir_pars_interna_profunda_construction_idx, param->PARS_INTERNA_PROFUNDA_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_interna_profunda_insertion_idx, param->PARS_INTERNA_PROFUNDA_INSERTION_IDX);
+	read_csv_float(param->dir_pars_interna_profunda_insertion_height, param->PARS_INTERNA_PROFUNDA_INSERTION_HEIGHT);
+	m_mystacialPad->createParsInternaProfunda();
+	//m_mystacialPad->contractMuscle(PIP, 0.8);
 
 	//// extrinsic: pars maxillaris of M. Nasolabialis profundus
-	//read_csv_float(param->dir_pars_maxillaris_node_pos, param->PARS_MAXILLARIS_NODE_POS);
-	//read_csv_int(param->dir_pars_maxillaris_construction_idx, param->PARS_MAXILLARIS_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_pars_maxillaris_insertion_idx, param->PARS_MAXILLARIS_INSERTION_IDX);
-	//read_csv_float(param->dir_pars_maxillaris_insertion_height, param->PARS_MAXILLARIS_INSERTION_HEIGHT);
-	//m_mystacialPad->createParsMaxillaris();
-
+	read_csv_float(param->dir_pars_maxillaris_node_pos, param->PARS_MAXILLARIS_NODE_POS);
+	read_csv_int(param->dir_pars_maxillaris_construction_idx, param->PARS_MAXILLARIS_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_maxillaris_insertion_idx, param->PARS_MAXILLARIS_INSERTION_IDX);
+	read_csv_float(param->dir_pars_maxillaris_insertion_height, param->PARS_MAXILLARIS_INSERTION_HEIGHT);
+	m_mystacialPad->createParsMaxillaris();
+	//m_mystacialPad->contractMuscle(PM, 0.8);
 
 	////////////////////////////////////////////////////////////////////////////////
 

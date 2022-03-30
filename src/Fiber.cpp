@@ -39,6 +39,7 @@ void Fiber::init() {
 	// index 0, 1, 2: translational dimensions
 	for (int i = 0; i < 3; i++) {
 		m_constraint->enableSpring(i, true);
+		// stiffness is practically useless because we're directly updating forces?
 		m_constraint->setStiffness(i, m_k);
 		// not sure how damping coefficient is defined
 		// guess: damping [0, 1] like restitution coefficient?
@@ -60,6 +61,9 @@ void Fiber::init() {
 
 // NEED DEBUG
 void Fiber::update() {
+	// for Fiber: eq points are used to calculate the force direction
+	// but no longer used to update forces using Hooke's Law
+
 	m_constraint->calculateTransforms();
 	TsP = m_constraint->getCalculatedTransformA();
 	TsQ = m_constraint->getCalculatedTransformB();
@@ -69,7 +73,7 @@ void Fiber::update() {
 	btVector3 p = TsP.getOrigin();
 	btVector3 q = TsQ.getOrigin();
 		// Second, get the equilibrium point location in world reference frame
-	btScalar vLength = (q - p).length()/m_length - 1.0;
+	btScalar vLength = (q - p).length()/m_length - 1.0; // muscle velocity
 	m_length = (q - p).length();
 	m_eq = p + (q - p)*m_restLength / m_length;
 		// Third, get the equilibruim point location in body1 reference frame
@@ -77,8 +81,6 @@ void Fiber::update() {
 		// set equilibruim point
 	for (int i = 0; i < 3; i++) 
 		m_constraint->setEquilibriumPoint(i, eq_in_p[i]);
-
-	// TO DO::: if passive: update force based on fPE(l) (not Hooke's Law)
 
 	// force along direction of equilibrium points
 	btVector3 dir = (m_constraint->getCalculatedLinearDiff() - eq_in_p);
@@ -91,8 +93,6 @@ void Fiber::update() {
 					) * dir;
 	updateNetForce(force);
 
-
-	// 
 
 }
 

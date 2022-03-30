@@ -8,6 +8,7 @@
 #include "IntrinsicMuscle.h"
 #include "ExtrinsicMuscle.h"
 
+
 MystacialPad::MystacialPad(Simulation* sim, Parameter* param)
 	: m_sim(sim), m_parameter(param)
 	, nFollicle(0), nTissueLayer1(0), nTissueLayer2(0), nTissueAnchor(0), nISM(0)
@@ -126,32 +127,6 @@ void MystacialPad::createIntrinsicSlingMuscle() {
 	std::cout << "Done.\n";
 }
 
-void MystacialPad::contractIntrinsicSlingMuscle(btScalar ratio) {
-	for (int s = 0; s < nISM; s++) {
-		m_ISMArray[s]->contractTo(ratio);
-	}
-}
-
-//void MystacialPad::contractIntrinsicSlingMuscle(int m_step) {
-//	// contract intrinsic sling muscle
-//	int TrajectoryLength = m_parameter->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY.size();
-//	int step = (m_step <= TrajectoryLength) ? (m_step - 1) : (TrajectoryLength - 1);
-//
-//	for (int i = 0; i < nTissueISM; i++) {
-//		m_ISMArray[i]->contract(m_parameter->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY[step][0]);
-//	}
-//}
-//
-//void MystacialPad::contractIntrinsicSlingMuscle(int m_step, std::vector<int>& those) {
-//	// contract intrinsic sling muscle
-//	int TrajectoryLength = m_parameter->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY.size();
-//	int step = (m_step <= TrajectoryLength) ? (m_step - 1) : (TrajectoryLength - 1);
-//
-//	for (auto& that : those) {
-//		m_ISMArray[that]->contract(m_parameter->INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY[step][0]);
-//	}
-//}
-
 void MystacialPad::createNasolabialis() {
 	std::cout << "Creating extrinsic muscles: M.Nasolabialis ...";
 	m_nasolabialis = new ExtrinsicMuscle(m_sim, m_parameter, m_follicleArray,
@@ -159,35 +134,42 @@ void MystacialPad::createNasolabialis() {
 	std::cout << "Done.\n";
 }
 
-//void MystacialPad::contractNasolabialis(int m_step) {
-//	// contract nasolabialis extrinsic muscle
-//	int TrajectoryLength = m_parameter->NASOLABIALIS_CONTRACTION_TRAJECTORY.size();
-//	int step = (m_step <= TrajectoryLength) ? (m_step - 1) : (TrajectoryLength - 1);
-//
-//	m_nasolabialis->contract(m_parameter->NASOLABIALIS_CONTRACTION_TRAJECTORY[step][0]);
-//}
-//
+
 void MystacialPad::createMaxillolabialis() {
 	std::cout << "Creating extrinsic muscles: M.Maxillolabialis ...";
 	m_maxillolabialis = new ExtrinsicMuscle(m_sim, m_parameter, m_follicleArray,
 		m_parameter->MAXILLOLABIALIS_NODE_POS, m_parameter->MAXILLOLABIALIS_CONSTRUCTION_IDX, m_parameter->MAXILLOLABIALIS_INSERTION_IDX, heightPlaceHolder);
 	std::cout << "Done." << std::endl;
 }
-//
-//void MystacialPad::contractMaxillolabialis(int m_step) {
-//	// contract nasolabialis extrinsic muscle
-//	int TrajectoryLength = m_parameter->MAXILLOLABIALIS_CONTRACTION_TRAJECTORY.size();
-//	int step = (m_step <= TrajectoryLength) ? (m_step - 1) : (TrajectoryLength - 1);
-//
-//	m_maxillolabialis->contract(m_parameter->MAXILLOLABIALIS_CONTRACTION_TRAJECTORY[step][0]);
-//}
 
-void MystacialPad::contractNasolabialis(btScalar ratio) {
-	m_nasolabialis->contractTo(ratio);
-}
-
-void MystacialPad::contractMaxillolabialis(btScalar ratio) {
-	m_maxillolabialis->contractTo(ratio);
+void MystacialPad::contractMuscle(Muscle mus, btScalar ratio) {
+	switch (mus) {
+	case INTRINSIC:
+		for (int s = 0; s < nISM; s++)
+			m_ISMArray[s]->contractTo(ratio);
+		break;
+	case N:
+		m_nasolabialis->contractTo(ratio);
+		break;
+	case M:
+		m_maxillolabialis->contractTo(ratio);
+		break;
+	case NS:
+		m_NS->contractTo(ratio);
+		break;
+	case PMS:
+		m_PMS->contractTo(ratio);
+		break;
+	case PMI:
+		m_PMI->contractTo(ratio);
+		break;
+	case PIP:
+		m_PIP->contractTo(ratio);
+		break;
+	case PM:
+		m_PM->contractTo(ratio);
+		break;
+	}
 }
 
 void MystacialPad::createNasolabialisSuperficialis() {
@@ -262,16 +244,16 @@ void MystacialPad::debugDraw() {
 		m_anchor[i]->debugDraw(btVector3(1., 0., 0.), true);
 	}
 
-	for (int i = 0; i < m_ISMArray.size(); i++) {
-		m_ISMArray[i]->debugDraw(btVector3(0., 0., 1.), false);
-	}
-	//m_nasolabialis->debugDraw(getWorld());
-	//m_maxillolabialis->debugDraw(getWorld()); 
-	//m_NS->debugDraw(getWorld(), btVector3(0., 0., 1.));
-	//m_PMS->debugDraw(getWorld(), btVector3(0., 0., 1.));
-	//m_PMI->debugDraw(getWorld(), btVector3(0., 0., 1.));
-	//m_PIP->debugDraw(getWorld(), btVector3(0., 1., 0.));
-	//m_PM->debugDraw(getWorld(), btVector3(0., 1., 0.));
+	//for (int i = 0; i < m_ISMArray.size(); i++) {
+	//	m_ISMArray[i]->debugDraw(btVector3(0., 0., 1.), false);
+	//}
+	//m_nasolabialis->debugDraw(btVector3(0., 0., 1.));
+	//m_maxillolabialis->debugDraw(btVector3(0., 0., 1.));
+	//m_NS->debugDraw(btVector3(0., 0., 1.));
+	//m_PMS->debugDraw(btVector3(0., 0., 1.));
+	//m_PMI->debugDraw(btVector3(0., 0., 1.));
+	//m_PIP->debugDraw(btVector3(0., 1., 0.));
+	m_PM->debugDraw(btVector3(0., 1., 0.));
 }
 
 int MystacialPad::getNumFollicles() const {
