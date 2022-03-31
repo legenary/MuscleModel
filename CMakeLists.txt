@@ -202,9 +202,12 @@ SET(SOURCE
 	src/Utility.cpp
 	src/MystacialPad.cpp
 	src/Follicle.cpp
-	src/Spring.cpp
+	src/my_pch.cpp
+	src/Fiber.cpp
+	src/Tissue.cpp
 	src/IntrinsicMuscle.cpp
 	src/ExtrinsicMuscle.cpp
+	src/myGeneric6DofMuscleConstraint.cpp
 	bullet3/build3/bullet.rc
 )
 
@@ -214,9 +217,12 @@ SET(HEADERS
  	include/Utility.h
  	include/MystacialPad.h
  	include/Follicle.h
- 	include/Spring.h
+ 	include/Fiber.h
+ 	include/Tissue.h
+ 	include/my_pch.h
  	include/IntrinsicMuscle.h
  	include/ExtrinsicMuscle.h
+ 	include/myGeneric6DofMuscleConstraint.h
 )
 
 ADD_EXECUTABLE(MuscleModel
