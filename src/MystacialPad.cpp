@@ -241,16 +241,16 @@ void MystacialPad::debugDraw() {
 	for (int i = 0; i < m_layer2.size(); i++) {
 		m_layer2[i]->debugDraw(btVector3(1., 0., 0.), true);
 	}
-	for (int i = 0; i < m_anchor.size(); i++) {
-		m_anchor[i]->debugDraw(btVector3(1., 0., 0.), true);
-	}
+	//for (int i = 0; i < m_anchor.size(); i++) {
+	//	m_anchor[i]->debugDraw(btVector3(1., 0., 0.), true);
+	//}
 
 	//for (int i = 0; i < m_ISMArray.size(); i++) {
 	//	m_ISMArray[i]->debugDraw(btVector3(0., 0., 1.), false);
 	//}
 	//m_nasolabialis->debugDraw(btVector3(0., 0., 1.));
 	//m_maxillolabialis->debugDraw(btVector3(0., 0., 1.));
-	m_NS->debugDraw(btVector3(0., 0., 1.));
+	//m_NS->debugDraw(btVector3(0., 0., 1.));
 	//m_PMS->debugDraw(btVector3(0., 0., 1.));
 	//m_PMI->debugDraw(btVector3(0., 0., 1.));
 	//m_PIP->debugDraw(btVector3(0., 1., 0.));

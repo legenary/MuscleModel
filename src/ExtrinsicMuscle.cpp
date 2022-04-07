@@ -29,6 +29,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(Simulation* sim, Parameter* param,
 		getWorld()->addRigidBody(b, COL_EXT_MUS, extMusCollideWith);
 		b->setActivationState(DISABLE_DEACTIVATION);
 		// add anchor tissue to the anchor nodes
+		// (attach end of muscle to skull/cartilage)
 		if (anchorNodeIdx.count(i)) {
 			Tissue* anchor = new Tissue(m_sim, m_nodes[i], createTransform(), m_parameter->k_anchor, m_parameter->damping);	//this is a linear + torsional spring
 			getWorld()->addConstraint(anchor->getConstraint(), true); // disable collision
@@ -66,9 +67,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(Simulation* sim, Parameter* param,
 	}
 	nInsertionPieces = m_insertionPieces.size();
 
-	// construct muscle end anchoring (to skull/cartilage)
-	//Tissue* anchor = new Tissue(m_sim, m_nodes[0], createTransform(), m_parameter->k_anchor, m_parameter->damping);	//this is a linear + torsional spring
-	//getWorld()->addConstraint(anchor->getConstraint(), true); // disable collision
+	
 }
 
 

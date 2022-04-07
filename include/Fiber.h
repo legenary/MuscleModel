@@ -64,7 +64,6 @@ public:
 	
 private:
 	void setRestLength(const btScalar ratio);
-	void updateNetForce(btVector3 force);
 	std::vector<std::vector<btScalar>> fPE{
 		{1.0,	1.1,	1.2,	1.3,	1.4,	1.5,	1.6,	1.7,	1.8,	1.9,	2.0},
 		{0.0,	0.01,	0.04,	0.11,	0.26,	0.45,	0.7,	1.0,	1.3,	1.6,	2.0}
@@ -77,6 +76,7 @@ private:
 		{-1.0,	-0.8,	-0.6,	-0.5,	-0.4,	-0.3,	-0.2,	-0.1,	-0.05,	0.0,	0.05,	0.1,	0.2,	1.0},
 		{0.0,	0.04,	0.11,	0.16,	0.24,	0.34,	0.46,	0.64,	0.8,	1.0,	1.16,	1.23,	1.28,	1.4}
 	};
+	btScalar ratio2activation(btScalar ratio);
 	
 
 

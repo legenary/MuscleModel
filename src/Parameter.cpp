@@ -7,7 +7,8 @@ Parameter::Parameter() {
 	m_time_step = 1./60.;
 	m_num_internal_step = 20;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
-								// iter = 3*ratio + 2;
+								// iter = 3*ratio + 2
+	m_internal_time_step = m_time_step / m_num_internal_step;
 	m_time_stop = 100;
 
 	DEBUG = 1;	// 0: no debug
@@ -38,27 +39,18 @@ Parameter::Parameter() {
 	// instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
 	k_ISM = 2000;
-	// contraction
-	//dir_intrinsic_sling_muscle_contraction_trajectory = "../resources/intrinsic_sling_muscle_contraction_trajectory.csv";
-	//contractISM = false;
 
 	// M.Nasolabialis
 	dir_nasolabialis_node_pos = "../resources/nasolabialis_node_pos.csv";
 	dir_nasolabialis_construction_idx = "../resources/nasolabialis_construction_idx.csv";
 	dir_nasolabialis_insertion_idx = "../resources/nasolabialis_insertion_idx.csv";
 	k_nasolabialis = 500;
-	// contraction
-	//dir_nasolabialis_contraction_trajectory = "../resources/nasolabialis_contraction_trajectory.csv";
-	//contractNasolabialis = false;
 
 	// M.Maxillolabialis
 	dir_maxillolabialis_node_pos = "../resources/maxillolabialis_node_pos.csv";
 	dir_maxillolabialis_construction_idx = "../resources/maxillolabialis_construction_idx.csv";
 	dir_maxillolabialis_insertion_idx = "../resources/maxillolabialis_insertion_idx.csv";
 	k_maxillolabialis = 500;
-	// contraction
-	//dir_maxillolabialis_contraction_trajectory = "../resources/maxillolabialis_contraction_trajectory.csv";
-	//contractMaxillolabialis = false;
 
 	// M.Nasolabialis superficialis
 	dir_nasolabialis_superficialis_node_pos = "../resources/nasolabialis_superficialis_node_pos.csv";

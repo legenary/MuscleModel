@@ -73,7 +73,9 @@ void Fiber::update() {
 	btVector3 p = TsP.getOrigin();
 	btVector3 q = TsQ.getOrigin();
 		// Second, get the equilibrium point location in world reference frame
-	btScalar vLength = (q - p).length()/m_length - 1.0; // muscle velocity
+	btScalar vLength = (q - p).length()/m_length - 1.0; // muscle velocity? double-check
+														// muscle velocity needs to be normalized to v_max
+														// which is a parameter decided by the model
 	m_length = (q - p).length();
 	m_eq = p + (q - p)*m_restLength / m_length;
 		// Third, get the equilibruim point location in body1 reference frame
@@ -91,9 +93,7 @@ void Fiber::update() {
 					m_activation * interp1(fL[0], fL[1], m_length / m_restLength)
 								 * interp1(fV[0], fV[1], vLength)
 					) * dir;
-	updateNetForce(force);
-
-
+	m_constraint->updateForce(force);
 }
 
 
@@ -112,9 +112,10 @@ void Fiber::contractTo(btScalar ratio) {
 	if (ratio < 0.6 || ratio > 1.0) {
 		std::cerr << "Invalid muscle contraction ratio. Should be between 0.6 and 1.0.\n";
 	}
-	m_activation = (1.0 - ratio) / 0.4;
+	m_activation = ratio2activation(ratio);
 	setRestLength(ratio);
 
+	// debug
 	/*static int cc = 0;
 	cc++;
 	if (cc == 1) {
@@ -122,7 +123,10 @@ void Fiber::contractTo(btScalar ratio) {
 		std::cout << interp1(fPE[0], fPE[1], m_length / m_restLength) << std::endl;
 		std::cout << interp1(fL[0], fL[1], m_length / m_restLength) << std::endl;
 	}*/
-	
+}
+
+btScalar Fiber::ratio2activation(btScalar ratio) {
+	return (1.0 - ratio) / 0.5;
 }
 
 void Fiber::setRestLength(const btScalar ratio) {
@@ -135,9 +139,4 @@ btScalar Fiber::getLength() const {
 
 btGeneric6DofSpringConstraint* Fiber::getConstraint() const {
 	return m_constraint;
-}
-
-// pass calculate linear force to the constraint
-void Fiber::updateNetForce(btVector3 force) {
-	m_constraint->updateForce(force);
 }

@@ -26,8 +26,9 @@ void Simulation::stepSimulation(float deltaTime) {
 		m_mystacialPad->update();
 
 		// last step: step simulation
-		m_dynamicsWorld->stepSimulation(deltaTime, param->m_num_internal_step,
-			param->m_time_step / param->m_num_internal_step);
+		m_dynamicsWorld->stepSimulation(deltaTime, 
+			param->m_num_internal_step,
+			param->m_internal_time_step);
 
 		// debug draw
 		if (param->DEBUG) {
@@ -35,8 +36,6 @@ void Simulation::stepSimulation(float deltaTime) {
 			m_dynamicsWorld->debugDrawWorld();
 		}
 
-		// set exit flag to zero
-		exitSim = false;
 	}
 	else {
 		write_csv_float("../output", "test_output.csv", output);
@@ -50,7 +49,6 @@ void Simulation::stepSimulation(float deltaTime) {
 	m_time_elapsed += duration.count() / 1000.f;
 	auto factor = m_time_elapsed / m_time;
 	auto time_remaining = (int)((param->m_time_stop - m_time) * (factor));
-
 
 }
 
@@ -85,7 +83,6 @@ void Simulation::initPhysics() {
 	m_dynamicsWorld->getSolverInfo().m_splitImpulse = true;
 	m_dynamicsWorld->getSolverInfo().m_erp = 0.8f;
 
-
 	// set gravity
 	m_dynamicsWorld->setGravity(btVector3(0, 0, 0));
 
@@ -118,7 +115,7 @@ void Simulation::initPhysics() {
 
 	//// intrinsic sling muscles
 	read_csv_int(param->dir_intrinsic_sling_muscle_idx, param->INTRINSIC_SLING_MUSCLE_IDX);
-	m_mystacialPad->createIntrinsicSlingMuscle();
+	//m_mystacialPad->createIntrinsicSlingMuscle();
 	//m_mystacialPad->contractMuscle(INTRINSIC, 0.8);
 	
 	// extrinsic: nasolabialis muscle
@@ -140,10 +137,11 @@ void Simulation::initPhysics() {
 	read_csv_float(param->dir_nasolabialis_superficialis_node_pos, param->NASOLABIALIS_SUPERFICIALIS_NODE_POS);
 	read_csv_int(param->dir_nasolabialis_superficialis_construction_idx, param->NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_nasolabialis_superficialis_insertion_idx, param->NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX);
-	m_mystacialPad->createNasolabialisSuperficialis();
-	m_mystacialPad->contractMuscle(NS, 0.8);
+	//m_mystacialPad->createNasolabialisSuperficialis();
+	//m_mystacialPad->contractMuscle(NS, 0.8);
 
 	//// extrinsic: pars media superior of M. Nasolabialis profundus
+	// corium
 	//read_csv_float(param->dir_pars_media_superior_node_pos, param->PARS_MEDIA_SUPERIOR_NODE_POS);
 	//read_csv_int(param->dir_pars_media_superior_construction_idx, param->PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX);
 	//read_csv_int(param->dir_pars_media_superior_insertion_idx, param->PARS_MEDIA_SUPERIOR_INSERTION_IDX);
@@ -152,6 +150,7 @@ void Simulation::initPhysics() {
 	//m_mystacialPad->contractMuscle(PMS, 0.8);
 
 	//// extrinsic: pars media inferior of M. Nasolabialis profundus
+	// corium
 	//read_csv_float(param->dir_pars_media_inferior_node_pos, param->PARS_MEDIA_INFERIOR_NODE_POS);
 	//read_csv_int(param->dir_pars_media_inferior_construction_idx, param->PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX);
 	//read_csv_int(param->dir_pars_media_inferior_insertion_idx, param->PARS_MEDIA_INFERIOR_INSERTION_IDX);
@@ -160,6 +159,7 @@ void Simulation::initPhysics() {
 	//m_mystacialPad->contractMuscle(PMI, 0.8);
 
 	//// extrinsic: pars interna profunda of M. Nasolabialis profundus
+	// subcapsular
 	//read_csv_float(param->dir_pars_interna_profunda_node_pos, param->PARS_INTERNA_PROFUNDA_NODE_POS);
 	//read_csv_int(param->dir_pars_interna_profunda_construction_idx, param->PARS_INTERNA_PROFUNDA_CONSTRUCTION_IDX);
 	//read_csv_int(param->dir_pars_interna_profunda_insertion_idx, param->PARS_INTERNA_PROFUNDA_INSERTION_IDX);
@@ -167,7 +167,8 @@ void Simulation::initPhysics() {
 	//m_mystacialPad->createParsInternaProfunda();
 	//m_mystacialPad->contractMuscle(PIP, 0.8);
 
-	//// extrinsic: pars maxillaris of M. Nasolabialis profundus
+	//// extrinsic: pars maxillaris & profunda of M. Nasolabialis profundus
+	// subcapsular
 	//read_csv_float(param->dir_pars_maxillaris_node_pos, param->PARS_MAXILLARIS_NODE_POS);
 	//read_csv_int(param->dir_pars_maxillaris_construction_idx, param->PARS_MAXILLARIS_CONSTRUCTION_IDX);
 	//read_csv_int(param->dir_pars_maxillaris_insertion_idx, param->PARS_MAXILLARIS_INSERTION_IDX);
@@ -179,10 +180,10 @@ void Simulation::initPhysics() {
 
 	// generate graphics
 	m_guiHelper->autogenerateGraphicsObjects(m_dynamicsWorld);
-
 	resetCamera();
 
-	// initialize time/step tracker
+	// set exit flag to zero
+	exitSim = false;
 
 	std::cout << "\n\nStart simulation..." << std::endl;
 	std::cout << "\n====================================================\n" << std::endl;
@@ -266,9 +267,6 @@ void Simulation::stepSimulation_test(float deltaTime) {
 		if (param->DEBUG) {
 			m_dynamicsWorld->debugDrawWorld();
 		}
-
-		// set exit flag to zero
-		exitSim = false;
 	}
 	else {
 		write_csv_float("../output", "test_output.csv", output);
