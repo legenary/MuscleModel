@@ -37,8 +37,6 @@ public:
 	virtual ~ExtrinsicMuscle();
 
 	void contractTo(btScalar ratio);
-	void contractTo(btScalar ratio, std::vector<int>& those);	// specify which extrinsic muscle to contract by "those"
-															// intrinsic muslces see "MystacialPad" class
 	void update();
 	void debugDraw(btVector3 clr = btVector3(0., 0., 0.));
 
@@ -52,7 +50,6 @@ public:
 	inline btAlignedObjectArray<btCollisionShape*>* getCollisionShapes() {
 		return &(m_sim->m_collisionShapes);
 	}
-
 };
 
 
