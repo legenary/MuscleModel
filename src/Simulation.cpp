@@ -122,17 +122,17 @@ void Simulation::initPhysics() {
 	//m_mystacialPad->contractMuscle(INTRINSIC, 0.8);
 	
 	// extrinsic: nasolabialis muscle
-	//read_csv_float(param->dir_nasolabialis_node_pos, param->NASOLABIALIS_NODE_POS);
-	//read_csv_int(param->dir_nasolabialis_construction_idx, param->NASOLABIALIS_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_nasolabialis_insertion_idx, param->NASOLABIALIS_INSERTION_IDX);
-	//m_mystacialPad->createNasolabialis();
+	read_csv_float(param->dir_nasolabialis_node_pos, param->NASOLABIALIS_NODE_POS);
+	read_csv_int(param->dir_nasolabialis_construction_idx, param->NASOLABIALIS_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_nasolabialis_insertion_idx, param->NASOLABIALIS_INSERTION_IDX);
+	m_mystacialPad->createNasolabialis();
 	//m_mystacialPad->contractMuscle(N, 0.8);
 
 	// extrinsic: maxillolabialis muscle
-	//read_csv_float(param->dir_maxillolabialis_node_pos, param->MAXILLOLABIALIS_NODE_POS);
-	//read_csv_int(param->dir_maxillolabialis_construction_idx, param->MAXILLOLABIALIS_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_maxillolabialis_insertion_idx, param->MAXILLOLABIALIS_INSERTION_IDX);
-	//m_mystacialPad->createMaxillolabialis();
+	read_csv_float(param->dir_maxillolabialis_node_pos, param->MAXILLOLABIALIS_NODE_POS);
+	read_csv_int(param->dir_maxillolabialis_construction_idx, param->MAXILLOLABIALIS_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_maxillolabialis_insertion_idx, param->MAXILLOLABIALIS_INSERTION_IDX);
+	m_mystacialPad->createMaxillolabialis();
 	//m_mystacialPad->contractMuscle(M, 0.8);
 
 	// fix: add multiple nodes
@@ -141,7 +141,7 @@ void Simulation::initPhysics() {
 	read_csv_int(param->dir_nasolabialis_superficialis_construction_idx, param->NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_nasolabialis_superficialis_insertion_idx, param->NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX);
 	m_mystacialPad->createNasolabialisSuperficialis();
-	m_mystacialPad->contractMuscle(NS, 0.8);
+	//m_mystacialPad->contractMuscle(NS, 0.8);
 
 	//// extrinsic: pars media superior of M. Nasolabialis profundus
 	//read_csv_float(param->dir_pars_media_superior_node_pos, param->PARS_MEDIA_SUPERIOR_NODE_POS);

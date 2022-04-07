@@ -63,6 +63,7 @@ void Fiber::init() {
 void Fiber::update() {
 	// for Fiber: eq points are used to calculate the force direction
 	// but no longer used to update forces using Hooke's Law
+	// the force is calcualted from Hill-type muscle model
 
 	m_constraint->calculateTransforms();
 	TsP = m_constraint->getCalculatedTransformA();
