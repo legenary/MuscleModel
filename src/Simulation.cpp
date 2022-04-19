@@ -11,29 +11,6 @@
 
 #define BIT(x) (1<<(x))
 
-// a collision listener in the internal callback function
-std::map<const btCollisionObject*, std::vector<btManifoldPoint*>> objectsCollisions;
-void myTickCallback(btDynamicsWorld *dynamicsWorld, btScalar timeStep) {
-	objectsCollisions.clear();
-	int numManifolds = dynamicsWorld->getDispatcher()->getNumManifolds();
-	for (int i = 0; i < numManifolds; i++) {
-		btPersistentManifold *contactManifold = dynamicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
-		auto *objA = contactManifold->getBody0();
-		auto *objB = contactManifold->getBody1();
-		auto& vecManifoldPointsA = objectsCollisions[objA];
-		auto& vecManifoldPointsB = objectsCollisions[objB];
-		int numContacts = contactManifold->getNumContacts();
-		if (numContacts) {
-			std::cout << numContacts << " collision detected.\n";
-		}
-		for (int j = 0; j < numContacts; j++) {
-			
-			btManifoldPoint& pt = contactManifold->getContactPoint(j);
-			vecManifoldPointsA.push_back(&pt);
-			vecManifoldPointsB.push_back(&pt);
-		}
-	}
-}
 
 Simulation::~Simulation() {
 	delete m_mystacialPad;
@@ -53,6 +30,29 @@ void Simulation::stepSimulation(float deltaTime) {
 		m_dynamicsWorld->stepSimulation(deltaTime, 
 			param->m_num_internal_step,
 			param->m_internal_time_step);
+
+		// collision listener
+		{
+			objectsCollisions.clear();
+			int numManifolds = m_dynamicsWorld->getDispatcher()->getNumManifolds();
+			for (int i = 0; i < numManifolds; i++) {
+				btPersistentManifold *contactManifold = m_dynamicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
+				auto *objA = contactManifold->getBody0();
+				auto *objB = contactManifold->getBody1();
+				auto& vecManifoldPointsA = objectsCollisions[objA];
+				auto& vecManifoldPointsB = objectsCollisions[objB];
+				int numContacts = contactManifold->getNumContacts();
+				if (numContacts) {
+					std::cout << numContacts << " collision detected.\n";
+				}
+				for (int j = 0; j < numContacts; j++) {
+
+					btManifoldPoint& pt = contactManifold->getContactPoint(j);
+					vecManifoldPointsA.push_back(&pt);
+					vecManifoldPointsB.push_back(&pt);
+				}
+			}
+		}
 
 		// debug draw
 		if (param->DEBUG) {
@@ -109,9 +109,6 @@ void Simulation::initPhysics() {
 
 	// set gravity
 	m_dynamicsWorld->setGravity(btVector3(0, 0, 0));
-
-	// set internal callback function
-	m_dynamicsWorld->setInternalTickCallback(myTickCallback);
 
 	// setup debug drawer
 	m_guiHelper->createPhysicsDebugDrawer(m_dynamicsWorld);

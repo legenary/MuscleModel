@@ -26,6 +26,7 @@ private:
 	MystacialPad* m_mystacialPad;
 
 	std::vector<std::vector<float>> output;
+	std::map<const btCollisionObject*, std::vector<btManifoldPoint*>> objectsCollisions;
 
 public:
 	Simulation(struct GUIHelperInterface* helper)

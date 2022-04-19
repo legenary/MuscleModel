@@ -236,7 +236,7 @@ void MystacialPad::update() {
 
 void MystacialPad::debugDraw() {
 	for (int i = 0; i < m_layer1.size(); i++) {
-		m_layer1[i]->debugDraw(btVector3(1., 0., 0.), false);
+		m_layer1[i]->debugDraw(btVector3(1., 0., 0.), true);
 	}
 	for (int i = 0; i < m_layer2.size(); i++) {
 		m_layer2[i]->debugDraw(btVector3(1., 0., 0.), true);
