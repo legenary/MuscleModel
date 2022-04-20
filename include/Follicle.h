@@ -3,6 +3,12 @@
 
 #include "MystacialPad.h"
 
+struct Follicle_info {
+	int userIndex;
+	Follicle_info() : userIndex(0) {}
+	Follicle_info(int idx) : userIndex(idx) {}
+};
+
 class Follicle {
 private:
 	//btVector3 m_position;
@@ -11,10 +17,10 @@ private:
 
 	btScalar m_mass;
 	btScalar m_length;
-	int m_index;
 	
 	btRigidBody* m_body;
 	btCollisionShape* m_shape;
+	Follicle_info* m_info;
 
 public:
 	Follicle(MystacialPad* pad, btTransform trans, btScalar radius, btScalar half_height, btScalar mass, int f);
@@ -26,7 +32,9 @@ public:
 	btRigidBody* getBody() const;
 	btScalar getLength() const;
 	btScalar getMass() const;
-	int getIndex() const;
+	void* getUserPointer() const;
+	void setUserPointer(void* idxuserPointer);
+	inline Follicle_info* getInfo() const { return m_info; }
 	
 	inline btDynamicsWorld* getWorld() {
 		return m_pad->getWorld();

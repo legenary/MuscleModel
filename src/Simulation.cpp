@@ -5,6 +5,7 @@
 #include "Utility.h"
 #include "MystacialPad.h"
 #include "Fiber.h"
+#include "Follicle.h"
 
 #include "CommonInterfaces/CommonGUIHelperInterface.h"
 #include "CommonInterfaces/CommonParameterInterface.h"
@@ -39,11 +40,21 @@ void Simulation::stepSimulation(float deltaTime) {
 				btPersistentManifold *contactManifold = m_dynamicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
 				auto *objA = contactManifold->getBody0();
 				auto *objB = contactManifold->getBody1();
+				
 				auto& vecManifoldPointsA = objectsCollisions[objA];
 				auto& vecManifoldPointsB = objectsCollisions[objB];
 				int numContacts = contactManifold->getNumContacts();
 				if (numContacts) {
-					std::cout << numContacts << " collision detected.\n";
+					double color[4] = { 0, 0, 0, 1 };
+					m_guiHelper->changeRGBAColor(objA->getUserIndex(), color);
+					m_guiHelper->changeRGBAColor(objB->getUserIndex(), color);
+					Follicle_info* infoA = static_cast<Follicle_info *>(objA->getUserPointer());
+					Follicle_info* infoB = static_cast<Follicle_info *>(objB->getUserPointer());
+					std::cout << "Follicle " 
+						<< infoA->userIndex 
+						<< " is colliding with Follicle "
+						<< infoB->userIndex 
+						<< std::endl;
 				}
 				for (int j = 0; j < numContacts; j++) {
 
