@@ -1,1 +1,0 @@
-add '\Dependencies\ffmpeg-5.0.1-essentials_build\bin' to PATH
