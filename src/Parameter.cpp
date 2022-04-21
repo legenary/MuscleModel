@@ -36,6 +36,7 @@ Parameter::Parameter() {
 	k_anchor = 500;		// k = 0 : hard anchor, no linear displacement, free angular movement
 						// k > 0 : soft anchor, springy linear and angular movement
 
+	btScalar k_mus = 100;
 	// instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
 	k_ISM = 2000;
@@ -44,40 +45,40 @@ Parameter::Parameter() {
 	dir_nasolabialis_node_pos = "../resources/nasolabialis_node_pos.csv";
 	dir_nasolabialis_construction_idx = "../resources/nasolabialis_construction_idx.csv";
 	dir_nasolabialis_insertion_idx = "../resources/nasolabialis_insertion_idx.csv";
-	k_nasolabialis = 500;
+	k_nasolabialis = 25*k_mus;
 
 	// M.Maxillolabialis
 	dir_maxillolabialis_node_pos = "../resources/maxillolabialis_node_pos.csv";
 	dir_maxillolabialis_construction_idx = "../resources/maxillolabialis_construction_idx.csv";
 	dir_maxillolabialis_insertion_idx = "../resources/maxillolabialis_insertion_idx.csv";
-	k_maxillolabialis = 500;
+	k_maxillolabialis = 25*k_mus;
 
 	// M.Nasolabialis superficialis
 	dir_nasolabialis_superficialis_node_pos = "../resources/nasolabialis_superficialis_node_pos.csv";
 	dir_nasolabialis_superficialis_construction_idx = "../resources/nasolabialis_superficialis_construction_idx.csv";
 	dir_nasolabialis_superficialis_insertion_idx = "../resources/nasolabialis_superficialis_insertion_idx.csv";
-	k_NS = 500;
+	k_NS = 1*k_mus;
 
 	// Pars media superior of M. Nasolabialis profundus
 	dir_pars_media_superior_node_pos = "../resources/pars_media_superior_node_pos.csv";
 	dir_pars_media_superior_construction_idx = "../resources/pars_media_superior_construction_idx.csv";
 	dir_pars_media_superior_insertion_idx = "../resources/pars_media_superior_insertion_idx.csv";
 	dir_pars_media_superior_insertion_height = "../resources/pars_media_superior_insertion_height.csv";
-	k_PMS = 500;
+	k_PMS = 1*k_mus;
 
 	// Pars media inferior of M. Nasolabialis profundus
 	dir_pars_media_inferior_node_pos = "../resources/pars_media_inferior_node_pos.csv";
 	dir_pars_media_inferior_construction_idx = "../resources/pars_media_inferior_construction_idx.csv";
 	dir_pars_media_inferior_insertion_idx = "../resources/pars_media_inferior_insertion_idx.csv";
 	dir_pars_media_inferior_insertion_height = "../resources/pars_media_inferior_insertion_height.csv";
-	k_PMI = 500;
+	k_PMI = 1*k_mus;
 
 	// Pars interna profunda of M.Nasolabialis profundus
 	dir_pars_interna_profunda_node_pos = "../resources/pars_interna_profunda_node_pos.csv";
 	dir_pars_interna_profunda_construction_idx = "../resources/pars_interna_profunda_construction_idx.csv";
 	dir_pars_interna_profunda_insertion_idx = "../resources/pars_interna_profunda_insertion_idx.csv";
 	dir_pars_interna_profunda_insertion_height = "../resources/pars_interna_profunda_insertion_height.csv";
-	k_PIP = 500;
+	k_PIP = 4*k_mus;
 
 	// Pars maxillaris superficialis of M. Nasolabialis profundus
 	// Pars maxillaris profunda of M. Nasolabialis profundus
@@ -85,7 +86,7 @@ Parameter::Parameter() {
 	dir_pars_maxillaris_construction_idx = "../resources/pars_maxillaris_construction_idx.csv";
 	dir_pars_maxillaris_insertion_idx = "../resources/pars_maxillaris_insertion_idx.csv";
 	dir_pars_maxillaris_insertion_height = "../resources/pars_maxillaris_insertion_height.csv";
-	k_PM = 500;
+	k_PM = 4*k_mus;
 
 
 }

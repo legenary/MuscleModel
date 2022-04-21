@@ -13,7 +13,7 @@ MystacialPad::MystacialPad(Simulation* sim, Parameter* param)
 	: m_sim(sim), m_parameter(param)
 	, nFollicle(0), nTissueLayer1(0), nTissueLayer2(0), nTissueAnchor(0), nISM(0)
 	, m_nasolabialis(nullptr), m_maxillolabialis(nullptr), m_NS(nullptr)
-	, m_PMS(nullptr), m_PMI(nullptr), m_PIP(nullptr), m_PM(nullptr) {
+	, m_PMS(nullptr), m_PMI(nullptr), m_PIP(nullptr), m_PMP(nullptr) {
 	std::cout << "Creating follicles...";
 	// create follicles
 	nFollicle = param->FOLLICLE_POS_ORIENT_LEN_VOL.size();
@@ -49,7 +49,7 @@ MystacialPad::~MystacialPad() {
 	delete m_PMS;
 	delete m_PMI;
 	delete m_PIP;
-	delete m_PM;
+	delete m_PMP;
 }
 
 void MystacialPad::createLayer1() {
@@ -167,8 +167,8 @@ void MystacialPad::contractMuscle(Muscle mus, btScalar ratio) {
 	case PIP:
 		m_PIP->contractTo(ratio);
 		break;
-	case PM:
-		m_PM->contractTo(ratio);
+	case PMP:
+		m_PMP->contractTo(ratio);
 		break;
 	}
 }
@@ -202,9 +202,9 @@ void MystacialPad::createParsInternaProfunda() {
 	std::cout << "Done.\n";
 }
 
-void MystacialPad::createParsMaxillaris() {
+void MystacialPad::createParsMaxillarisProfunda() {
 	std::cout << "Creating extrinsci muscles: Pars maxillaris (superficialis and profunda combined) of M. Nasolabialis profundus...";
-	m_PM = new ExtrinsicMuscle(m_sim, m_parameter, m_follicleArray, m_parameter->PARS_MAXILLARIS_NODE_POS,
+	m_PMP = new ExtrinsicMuscle(m_sim, m_parameter, m_follicleArray, m_parameter->PARS_MAXILLARIS_NODE_POS,
 		m_parameter->PARS_MAXILLARIS_CONSTRUCTION_IDX, m_parameter->PARS_MAXILLARIS_INSERTION_IDX, m_parameter->PARS_MAXILLARIS_INSERTION_HEIGHT);
 	std::cout << "Done.\n";
 }
@@ -232,7 +232,7 @@ void MystacialPad::update() {
 	if (m_PMS != nullptr)				m_PMS->update();
 	if (m_PMI != nullptr)				m_PMI->update();
 	if (m_PIP != nullptr)				m_PIP->update();
-	if (m_PM != nullptr)				m_PM->update();
+	if (m_PMP != nullptr)				m_PMP->update();
 }
 
 void MystacialPad::debugDraw() {
@@ -242,20 +242,20 @@ void MystacialPad::debugDraw() {
 	for (int i = 0; i < m_layer2.size(); i++) {
 		m_layer2[i]->debugDraw(btVector3(1., 0., 0.), true);
 	}
-	//for (int i = 0; i < m_anchor.size(); i++) {
-	//	m_anchor[i]->debugDraw(btVector3(1., 0., 0.), true);
-	//}
+	for (int i = 0; i < m_anchor.size(); i++) {
+		m_anchor[i]->debugDraw(btVector3(1., 0., 0.), true);
+	}
 
-	//for (int i = 0; i < m_ISMArray.size(); i++) {
-	//	m_ISMArray[i]->debugDraw(btVector3(0., 0., 1.), false);
-	//}
-	//m_nasolabialis->debugDraw(btVector3(0., 0., 1.));
-	//m_maxillolabialis->debugDraw(btVector3(0., 0., 1.));
-	//m_NS->debugDraw(btVector3(0., 0., 1.));
-	//m_PMS->debugDraw(btVector3(0., 0., 1.));
-	//m_PMI->debugDraw(btVector3(0., 0., 1.));
-	//m_PIP->debugDraw(btVector3(0., 1., 0.));
-	//m_PM->debugDraw(btVector3(0., 1., 0.));
+	for (int i = 0; i < m_ISMArray.size(); i++) {
+		m_ISMArray[i]->debugDraw(btVector3(0., 0., 1.), false);
+	}
+	m_nasolabialis->debugDraw(btVector3(0., 0., 1.));
+	m_maxillolabialis->debugDraw(btVector3(0., 0., 1.));
+	m_NS->debugDraw(btVector3(0., 0., 1.));
+	m_PMS->debugDraw(btVector3(0., 0., 1.));
+	m_PMI->debugDraw(btVector3(0., 0., 1.));
+	m_PIP->debugDraw(btVector3(0., 1., 0.));
+	m_PMP->debugDraw(btVector3(0., 1., 0.));
 }
 
 int MystacialPad::getNumFollicles() const {

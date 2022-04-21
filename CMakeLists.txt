@@ -176,19 +176,27 @@ ELSE(WIN32)
     ENDIF(APPLE)
 ENDIF(WIN32)
 
+LIST(APPEND CMAKE_PROGRAM_PATH
+	/Dependencies/ffmpeg-5.0.1-essentials_build/bin
+)
+
 INCLUDE_DIRECTORIES(
 	include
 	bullet3/
     bullet3/src
     bullet3/examples
     bullet3/Extras
+    Dependencies/FFmpeg/include
     ${OPENGL_INCLUDE_DIRS}
 	${GLUT_INCLUDE_DIRS}
 )
 
 
 SET(BULLETLIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bullet3/build/lib/Debug)
-LINK_DIRECTORIES(${BULLETLIB_DIR})
+SET(FFMPEGLIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Dependencies/FFmpeg/lib/x64/Debug)
+LINK_DIRECTORIES(
+	${BULLETLIB_DIR}
+	)
 
 # ADD_SUBDIRECTORY(${BULLETLIB_DIR}/bullet3)
 # SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BULLETLIB_DIR})
@@ -196,7 +204,7 @@ LINK_DIRECTORIES(${BULLETLIB_DIR})
 
 
 SET(SOURCE
-  	src/main.cpp
+	src/main.cpp
 	src/Simulation.cpp
 	src/Parameter.cpp
 	src/Utility.cpp
@@ -229,6 +237,8 @@ ADD_EXECUTABLE(MuscleModel
     ${SOURCE}
     ${HEADERS}
 )
+
+
 
 TARGET_LINK_LIBRARIES(MuscleModel
 	Bullet3Common_Debug
