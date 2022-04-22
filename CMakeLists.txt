@@ -177,7 +177,7 @@ ELSE(WIN32)
 ENDIF(WIN32)
 
 LIST(APPEND CMAKE_PROGRAM_PATH
-	/Dependencies/ffmpeg-5.0.1-essentials_build/bin
+	Dependencies/ffmpeg-4.4.1-essentials_build/bin
 )
 
 INCLUDE_DIRECTORIES(
@@ -186,7 +186,6 @@ INCLUDE_DIRECTORIES(
     bullet3/src
     bullet3/examples
     bullet3/Extras
-    Dependencies/FFmpeg/include
     ${OPENGL_INCLUDE_DIRS}
 	${GLUT_INCLUDE_DIRS}
 )

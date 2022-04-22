@@ -9,7 +9,7 @@ Parameter::Parameter() {
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / m_num_internal_step;
-	m_time_stop = 100;
+	m_time_stop = 0.5;
 
 	DEBUG = 1;	// 0: no debug
 				// 1: specified inline debug drawing only
