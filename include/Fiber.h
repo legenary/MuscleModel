@@ -55,15 +55,12 @@ public:
 	btScalar getLength() const;
 	inline btDynamicsWorld* getWorld() { return m_sim->getDynamicsWorld(); }
 
-	// TO DO...
-	// contract to a rest length: call set rest
-	// should be between 0.6 and 1.0 m_restLengthPassive
 	void contractTo(btScalar ratio);
 
 
 	
 private:
-	void setRestLength(const btScalar ratio);
+	void setRestLengthRatio(const btScalar ratio);
 	std::vector<std::vector<btScalar>> fPE{
 		{1.0,	1.1,	1.2,	1.3,	1.4,	1.5,	1.6,	1.7,	1.8,	1.9,	2.0},
 		{0.0,	0.01,	0.04,	0.11,	0.26,	0.45,	0.7,	1.0,	1.3,	1.6,	2.0}

@@ -144,27 +144,27 @@ void Simulation::initPhysics() {
 
 	// layers
 	read_csv_int(param->dir_spring_hex_mesh_idx, param->SPRING_HEX_MESH_IDX);
-	//m_mystacialPad->createLayer1();
-	//m_mystacialPad->createLayer2();
-	//m_mystacialPad->createAnchor();
+	m_mystacialPad->createLayer1();
+	m_mystacialPad->createLayer2();
+	m_mystacialPad->createAnchor();
 
 	//// intrinsic sling muscles
 	read_csv_int(param->dir_intrinsic_sling_muscle_idx, param->INTRINSIC_SLING_MUSCLE_IDX);
-	//m_mystacialPad->createIntrinsicSlingMuscle();
-	//m_mystacialPad->contractMuscle(INTRINSIC, 0.8);
+	m_mystacialPad->createIntrinsicSlingMuscle();
+	m_mystacialPad->contractMuscle(INTRINSIC, 0.8);
 	
 	// extrinsic: nasolabialis muscle
 	read_csv_float(param->dir_nasolabialis_node_pos, param->NASOLABIALIS_NODE_POS);
 	read_csv_int(param->dir_nasolabialis_construction_idx, param->NASOLABIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_nasolabialis_insertion_idx, param->NASOLABIALIS_INSERTION_IDX);
-	//m_mystacialPad->createNasolabialis();
+	m_mystacialPad->createNasolabialis();
 	//m_mystacialPad->contractMuscle(N, 0.8);
 
 	// extrinsic: maxillolabialis muscle
 	read_csv_float(param->dir_maxillolabialis_node_pos, param->MAXILLOLABIALIS_NODE_POS);
 	read_csv_int(param->dir_maxillolabialis_construction_idx, param->MAXILLOLABIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_maxillolabialis_insertion_idx, param->MAXILLOLABIALIS_INSERTION_IDX);
-	//m_mystacialPad->createMaxillolabialis();
+	m_mystacialPad->createMaxillolabialis();
 	//m_mystacialPad->contractMuscle(M, 0.8);
 
 	//// extrinsic: nasolabialis superficialis

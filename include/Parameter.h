@@ -7,6 +7,7 @@ public:
 	Parameter();
 	virtual ~Parameter() {}
 
+	int m_fps;
 	btScalar m_time_step;
 	btScalar m_num_internal_step;
 	btScalar m_internal_time_step;
@@ -120,7 +121,8 @@ public:
 	std::vector<std::vector<float>> PARS_MAXILLARIS_INSERTION_HEIGHT;
 	btScalar k_PM;
 
-
+	// getter
+	inline int getFPS() { return m_fps; }
 
 };
 
