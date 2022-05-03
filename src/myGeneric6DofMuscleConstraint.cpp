@@ -18,8 +18,6 @@ myGeneric6DofMuscleConstraint::myGeneric6DofMuscleConstraint(btRigidBody& rbB, c
 
 
 // currently it is the same as btGeneric6DofSpringConstraint::internalUpdateSprings
-// I need to rewrite this so it doesn't act like a linear spring.
-// Some of the parameters for force-length plot should be (imported?) in this class, too
 void myGeneric6DofMuscleConstraint::m_internalUpdateMuscles(btConstraintInfo2* info)
 {
 // it is assumed that calculateTransforms() have been called before this call
@@ -34,6 +32,8 @@ void myGeneric6DofMuscleConstraint::m_internalUpdateMuscles(btConstraintInfo2* i
 			// muscle force is calculated outside of the constraint (not Hooke's law)
 			m_linearLimits.m_targetVelocity[i] = 1 * m_force[i];
 			m_linearLimits.m_maxMotorForce[i] = btFabs(m_force[i]); // absolute value
+
+
 		}
 	}
 }

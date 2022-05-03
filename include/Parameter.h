@@ -122,7 +122,7 @@ public:
 	btScalar k_PM;
 
 	// getter
-	inline int getFPS() { return m_fps; }
+	inline int getFPS() const { return m_fps; }
 
 };
 

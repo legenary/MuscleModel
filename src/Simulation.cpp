@@ -157,14 +157,14 @@ void Simulation::initPhysics() {
 	read_csv_float(param->dir_nasolabialis_node_pos, param->NASOLABIALIS_NODE_POS);
 	read_csv_int(param->dir_nasolabialis_construction_idx, param->NASOLABIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_nasolabialis_insertion_idx, param->NASOLABIALIS_INSERTION_IDX);
-	m_mystacialPad->createNasolabialis();
+	//m_mystacialPad->createNasolabialis();
 	//m_mystacialPad->contractMuscle(N, 0.8);
 
 	// extrinsic: maxillolabialis muscle
 	read_csv_float(param->dir_maxillolabialis_node_pos, param->MAXILLOLABIALIS_NODE_POS);
 	read_csv_int(param->dir_maxillolabialis_construction_idx, param->MAXILLOLABIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_maxillolabialis_insertion_idx, param->MAXILLOLABIALIS_INSERTION_IDX);
-	m_mystacialPad->createMaxillolabialis();
+	//m_mystacialPad->createMaxillolabialis();
 	//m_mystacialPad->contractMuscle(M, 0.8);
 
 	//// extrinsic: nasolabialis superficialis

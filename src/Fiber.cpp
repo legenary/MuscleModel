@@ -14,7 +14,8 @@ Fiber::Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 	, m_idx(idx)
 	, m_velocity(0)
 	, m_activation(0) {
-
+	//myGeneric6DofMuscleConstraint temp_constraint(*rbA, *rbB, frameInA, frameInB, true);
+	//m_constraint = &temp_constraint;
 	m_constraint = new myGeneric6DofMuscleConstraint(*rbA, *rbB, frameInA, frameInB, true);
 	init();
 };
@@ -22,7 +23,8 @@ Fiber::Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 Fiber::Fiber(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
 	btScalar k, btScalar damping) 
 	: m_sim(sim), m_k(k), m_damping(damping){
-
+	//myGeneric6DofMuscleConstraint temp_constraint(*rbB, frameInB, true);
+	//m_constraint = &temp_constraint;
 	m_constraint = new myGeneric6DofMuscleConstraint(*rbB, frameInB, true);
 	init();
 };
@@ -42,7 +44,6 @@ void Fiber::init() {
 		// stiffness is practically useless because we're directly updating forces?
 		m_constraint->setStiffness(i, m_k);
 		// not sure how damping coefficient is defined
-		// guess: damping [0, 1] like restitution coefficient?
 		m_constraint->setDamping(i, m_damping);
 		// set m_equilibriumPoint[index] = distance from A to B
 		m_constraint->setEquilibriumPoint(i);
@@ -114,7 +115,7 @@ void Fiber::contractTo(btScalar ratio) {
 		std::cerr << "Invalid muscle contraction ratio. Should be between 0.6 and 1.0.\n";
 	}
 	m_activation = ratio2activation(ratio);
-	setRestLength(ratio);
+	setRestLengthRatio(ratio);
 
 	// debug
 	/*static int cc = 0;
@@ -130,7 +131,7 @@ btScalar Fiber::ratio2activation(btScalar ratio) {
 	return (1.0 - ratio) / 0.5;
 }
 
-void Fiber::setRestLength(const btScalar ratio) {
+void Fiber::setRestLengthRatio(const btScalar ratio) {
 	m_restLength = ratio * m_restLengthPassive;
 }
 
