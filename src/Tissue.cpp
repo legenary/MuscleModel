@@ -6,7 +6,7 @@
 Tissue::Tissue(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 	btTransform& frameInA, btTransform& frameInB, 
 	btScalar k, btScalar damping)
-	: m_sim(sim), m_k(k), m_damping(damping), m_type(between) {
+	: m_sim(sim), m_k(k), m_damping(damping), m_type(myTissueType::between) {
 
 	m_constraint = new btGeneric6DofSpringConstraint(*rbA, *rbB, frameInA, frameInB, true);
 	init();
@@ -14,7 +14,7 @@ Tissue::Tissue(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 
 Tissue::Tissue(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
 	btScalar k, btScalar damping)
-	: m_sim(sim), m_k(k), m_damping(damping), m_type(anchor) {
+	: m_sim(sim), m_k(k), m_damping(damping), m_type(myTissueType::anchor) {
 
 	m_constraint = new btGeneric6DofSpringConstraint(*rbB, frameInB, true);
 	init();
@@ -50,7 +50,7 @@ void Tissue::init() {
 	m_restLengthDefault = m_restLength;
 
 
-	if (m_type == anchor) {
+	if (m_type == myTissueType::anchor) {
 		// torsional spring is needed for anchor, 
 		// and equilibrium point is easy to update
 		// so don't worry
@@ -73,7 +73,7 @@ void Tissue::update() {
 	TsP = m_constraint->getCalculatedTransformA();
 	TsQ = m_constraint->getCalculatedTransformB();
 
-	if (m_type == between) {
+	if (m_type == myTissueType::between) {
 		// update equilibrium point location in rbA frame
 		// First, get two attachment points location in world reference frame
 
@@ -90,7 +90,7 @@ void Tissue::update() {
 			m_constraint->setEquilibriumPoint(i, eq_in_p[i]);
 		}
 	}
-	else if (m_type == anchor) {
+	else if (m_type == myTissueType::anchor) {
 		// equilibrium point is relative to rbA, in this case it's [0, 0, 0]
 		// no matter how rbB moves, eq will not move, and will always be [0, 0, 0]
 		// therefore there is no need to do anything in anchor.update()

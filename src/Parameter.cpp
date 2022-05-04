@@ -28,14 +28,15 @@ Parameter::Parameter() {
 	// foillicle parameter
 	dir_follicle_pos_orient_len_vol = "../resources/follicle_pos_ypr_len_vol.csv";
 	fol_radius = 0.1;
-	fol_density = 1;	// unit:g/mm^3
+	fol_density = 1;		// unit:g/mm^3
 
-	// layer/spring parameter
+	// layer tissue parameter
 	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";
-	E_skin = 8000000;	// Skin's Young's Modulus is ~8MPa (Karimi and Navidbakhsh, 2015)
-	damping = 0;		// still need to coorperate critical damping into coding (1 == no damping)
-	k_anchor = 500;		// k = 0 : hard anchor, no linear displacement, free angular movement
-						// k > 0 : soft anchor, springy linear and angular movement
+	E_skin = 8000000;		// Skin's Young's Modulus is ~8MPa (Karimi and Navidbakhsh, 2015)
+	damping_anchor = 0.0001;// This is the damping ratio set for (1) tissue anchor, (2) extrinsic muscle anchor, (3) extrinsic muscle insertion
+							/// TODO: still need to figure out critical damping (1 == no damping)
+	k_anchor = 500;			// k = 0 : hard anchor, no linear displacement, free angular movement
+							// k > 0 : soft anchor, springy linear and angular movement
 
 	btScalar k_mus = 100;
 	// instrinsic sling muscle parameter

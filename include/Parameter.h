@@ -29,7 +29,7 @@ public:
 	std::string dir_spring_hex_mesh_idx;
 	std::vector<std::vector<int>> SPRING_HEX_MESH_IDX;
 	btScalar E_skin;
-	btScalar damping;
+	btScalar damping_anchor;
 	btScalar k_anchor;
 
 	// instrinsic sling muscle parameter

@@ -3,7 +3,7 @@
 
 #include "Simulation.h"
 
-enum type {
+enum class myTissueType {
 	between = 0,
 	anchor = 1
 };
@@ -14,7 +14,7 @@ protected:
 
 	btScalar m_k;
 	btScalar m_damping;
-	type m_type;
+	myTissueType m_type;
 
 	btGeneric6DofSpringConstraint* m_constraint;
 	btTransform TsP;

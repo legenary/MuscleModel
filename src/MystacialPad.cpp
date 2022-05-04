@@ -102,7 +102,7 @@ void MystacialPad::createAnchor() {
 	for (int f = 0; f < nTissueAnchor; f++) {
 		Follicle* fol = m_follicleArray[f];
 		btTransform frameAnchor = createTransform(btVector3(m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[f][6] / 2, 0., 0.));
-		Tissue* tissueAnchor = new Tissue(m_sim, fol->getBody(), frameAnchor, m_parameter->k_anchor, m_parameter->damping);	// this is a linear + torsional spring
+		Tissue* tissueAnchor = new Tissue(m_sim, fol->getBody(), frameAnchor, m_parameter->k_anchor, m_parameter->damping_anchor);	// this is a linear + torsional spring
 																										
 		getWorld()->addConstraint(tissueAnchor->getConstraint(), true); // disable collision
 		m_anchor.push_back(tissueAnchor);
@@ -120,7 +120,7 @@ void MystacialPad::createIntrinsicSlingMuscle() {
 		Follicle* folR = m_follicleArray[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][1]];
 		btTransform frameC = createTransform(btVector3(m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][0]][6] / 2, 0., 0.));
 		btTransform frameR = createTransform(btVector3(-m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][1]][6] / 2 * 0.4, 0., 0.)); // 70% of rostral member
-		IntrinsicSlingMuscle* muscle = new IntrinsicSlingMuscle(m_sim, folC->getBody(), folR->getBody(), frameC, frameR, m_parameter->k_ISM, m_parameter->damping);
+		IntrinsicSlingMuscle* muscle = new IntrinsicSlingMuscle(m_sim, folC->getBody(), folR->getBody(), frameC, frameR, m_parameter->k_ISM, 1 /*no damping*/);
 		getWorld()->addConstraint(muscle->getConstraint(), true); // disable collision
 		m_ISMArray.push_back(muscle);
 
@@ -242,9 +242,9 @@ void MystacialPad::debugDraw() {
 	//for (int i = 0; i < m_layer2.size(); i++) {
 	//	m_layer2[i]->debugDraw(btVector3(1., 0., 0.), true);
 	//}
-	//for (int i = 0; i < m_anchor.size(); i++) {
-	//	m_anchor[i]->debugDraw(btVector3(1., 0., 0.), true);
-	//}
+	for (int i = 0; i < m_anchor.size(); i++) {
+		m_anchor[i]->debugDraw(btVector3(1., 0., 0.), true);
+	}
 
 	for (int i = 0; i < m_ISMArray.size(); i++) {
 		m_ISMArray[i]->debugDraw(btVector3(0., 0., 1.), false);

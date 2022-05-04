@@ -31,7 +31,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(Simulation* sim, Parameter* param,
 		// add anchor tissue to the anchor nodes
 		// (attach end of muscle to skull/cartilage)
 		if (anchorNodeIdx.count(i)) {
-			Tissue* anchor = new Tissue(m_sim, m_nodes[i], createTransform(), m_parameter->k_anchor, m_parameter->damping);	//this is a linear + torsional spring
+			Tissue* anchor = new Tissue(m_sim, m_nodes[i], createTransform(), m_parameter->k_anchor, m_parameter->damping_anchor);	//this is a linear + torsional spring
 			getWorld()->addConstraint(anchor->getConstraint(), true); // disable collision
 		}
 	}
@@ -42,7 +42,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(Simulation* sim, Parameter* param,
 		btRigidBody* node2 = m_nodes[CONSTRUCTION_IDX[i][1]];
 		Fiber* fiber = new Fiber(m_sim, 
 			node1, node2, createTransform(), createTransform(),
-			m_parameter->k_nasolabialis, m_parameter->damping, i);
+			m_parameter->k_nasolabialis, 1 /*no damping*/, i);
 		getWorld()->addConstraint(fiber->getConstraint(), true);
 		m_musclePieces.push_back(fiber);
 	}
@@ -59,7 +59,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(Simulation* sim, Parameter* param,
 				btTransform trans = createTransform(btVector3(insertion_height, 0., 0.));
 				Tissue* tissue = new Tissue(m_sim, 
 					node, body, createTransform(), trans, 
-					m_parameter->k_nasolabialis, m_parameter->damping);
+					m_parameter->k_nasolabialis, m_parameter->damping_anchor);
 				getWorld()->addConstraint(tissue->getConstraint(), true);
 				m_insertionPieces.push_back(tissue);
 			}

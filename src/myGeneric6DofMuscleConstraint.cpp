@@ -30,7 +30,7 @@ void myGeneric6DofMuscleConstraint::m_internalUpdateMuscles(btConstraintInfo2* i
 			// calculate difference
 			btScalar delta = currPos - m_equilibriumPoint[i];
 			// muscle force is calculated outside of the constraint (not Hooke's law)
-			m_linearLimits.m_targetVelocity[i] = 1 * m_force[i];
+			m_linearLimits.m_targetVelocity[i] = info->fps / btScalar(info->m_numIterations) * m_force[i];
 			m_linearLimits.m_maxMotorForce[i] = btFabs(m_force[i]); // absolute value
 
 
