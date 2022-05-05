@@ -14,7 +14,8 @@ enum collisiontypes {
 	COL_EXT_MUS = BIT(2),
 };
 
-// unclear bug: why set extMusCollideWith = COL_EXT_MUS only will not allow user to drag the object using mouse cursor
+// unclear bug: why set extMusCollideWith = COL_EXT_MUS only
+// will not allow user to drag the object using mouse cursor
 static int follicleCollideWith = COL_FOLLICLE;
 static int intMusCollideWith = COL_INT_MUS;
 static int extMusCollideWith = COL_FOLLICLE;
@@ -42,7 +43,6 @@ float getCriticalDampingRatio(const float m1, const float m2, const float k);
 
 void read_csv_float(const std::string& fileName, std::vector<std::vector<float>>& dataList);
 void read_csv_int(const std::string& fileName, std::vector<std::vector<int>>& dataList);
-
 void write_csv_float(const std::string& folderName, const std::string& fileName, std::vector<std::vector<float>>& dataList);
 
 bool isPathExist(const std::string& s);

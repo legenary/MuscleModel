@@ -29,7 +29,8 @@ public:
 	std::string dir_spring_hex_mesh_idx;
 	std::vector<std::vector<int>> SPRING_HEX_MESH_IDX;
 	btScalar E_skin;
-	btScalar damping_anchor;
+	btScalar k_layer;
+	btScalar dmp_anchor;
 	btScalar k_anchor;
 
 	// instrinsic sling muscle parameter
@@ -49,10 +50,7 @@ public:
 	std::string dir_nasolabialis_insertion_idx;
 	std::vector<std::vector<int>> NASOLABIALIS_INSERTION_IDX;
 	btScalar k_nasolabialis;
-	// contraction
-	std::string dir_nasolabialis_contraction_trajectory;
-	std::vector<std::vector<float>> NASOLABIALIS_CONTRACTION_TRAJECTORY;
-	bool contractNasolabialis;
+
 
 	// M.maxillolabialis
 	std::string dir_maxillolabialis_node_pos;
@@ -62,10 +60,6 @@ public:
 	std::string dir_maxillolabialis_insertion_idx;
 	std::vector<std::vector<int>> MAXILLOLABIALIS_INSERTION_IDX;
 	btScalar k_maxillolabialis;
-	// contraction
-	std::string dir_maxillolabialis_contraction_trajectory;
-	std::vector<std::vector<float>> MAXILLOLABIALIS_CONTRACTION_TRAJECTORY;
-	bool contractMaxillolabialis;
 
 	// M. Nasolabialis superficialis
 	std::string dir_nasolabialis_superficialis_node_pos;
@@ -121,7 +115,7 @@ public:
 	std::vector<std::vector<float>> PARS_MAXILLARIS_INSERTION_HEIGHT;
 	btScalar k_PM;
 
-	// getter
+	// getters
 	inline int getFPS() const { return m_fps; }
 
 };

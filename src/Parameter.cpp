@@ -21,7 +21,7 @@ Parameter::Parameter() {
 	camPos[0] = 0;
 	camPos[1] = 0;
 	camPos[2] = 0;
-	camDist = 10;
+	camDist = 8;
 	camPitch = -89;
 	camYaw = 0;
 
@@ -33,7 +33,8 @@ Parameter::Parameter() {
 	// layer tissue parameter
 	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";
 	E_skin = 8000000;		// Skin's Young's Modulus is ~8MPa (Karimi and Navidbakhsh, 2015)
-	damping_anchor = 0.0001;// This is the damping ratio set for (1) tissue anchor, (2) extrinsic muscle anchor, (3) extrinsic muscle insertion
+	k_layer = 300;
+	dmp_anchor = 0.0001;	// This is the damping ratio set for (1) tissue anchor, (2) extrinsic muscle anchor, (3) extrinsic muscle insertion
 							/// TODO: still need to figure out critical damping (1 == no damping)
 	k_anchor = 500;			// k = 0 : hard anchor, no linear displacement, free angular movement
 							// k > 0 : soft anchor, springy linear and angular movement
@@ -41,7 +42,7 @@ Parameter::Parameter() {
 	btScalar k_mus = 100;
 	// instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
-	k_ISM = 2000;
+	k_ISM = 20*k_mus;
 
 	// M.Nasolabialis
 	dir_nasolabialis_node_pos = "../resources/nasolabialis_node_pos.csv";
@@ -89,6 +90,5 @@ Parameter::Parameter() {
 	dir_pars_maxillaris_insertion_idx = "../resources/pars_maxillaris_insertion_idx.csv";
 	dir_pars_maxillaris_insertion_height = "../resources/pars_maxillaris_insertion_height.csv";
 	k_PM = 4*k_mus;
-
 
 }
