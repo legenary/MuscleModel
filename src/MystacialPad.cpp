@@ -233,9 +233,19 @@ void MystacialPad::update() {
 	if (m_PMI != nullptr)				m_PMI->update();
 	if (m_PIP != nullptr)				m_PIP->update();
 	if (m_PMP != nullptr)				m_PMP->update();
+
+	
+}
+
+void MystacialPad::output(std::vector<std::vector<float>>& output, int fol_idx) {
+	// output is already updated, passing up
+	btVector3 pos = m_follicleArray[fol_idx]->getBody()->getCenterOfMassPosition();
+	std::vector<btScalar> posVec{ pos[0], pos[1], pos[2] };
+	output.push_back(posVec);
 }
 
 void MystacialPad::debugDraw() {
+
 	//for (int i = 0; i < m_layer1.size(); i++) {
 	//	m_layer1[i]->debugDraw(btVector3(1., 0., 0.), true);
 	//}

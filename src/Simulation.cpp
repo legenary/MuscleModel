@@ -23,9 +23,18 @@ void Simulation::stepSimulation(float deltaTime) {
 	m_step += 1;										// increase step
 
 	if (param->m_time_stop == 0 || m_time < param->m_time_stop) {
-
 		// update physics
 		m_mystacialPad->update();
+
+		// set up output options
+		{
+			int fol_idx = 13;
+			double color[4] = { 1, 1, 1, 1 };
+			m_guiHelper->changeRGBAColor(m_mystacialPad->getFollicleByIndex(fol_idx)
+				->getBody()->getUserIndex(), color);
+			m_mystacialPad->output(output, fol_idx);
+		}
+		
 
 		// last step: step simulation
 		m_dynamicsWorld->stepSimulation(deltaTime, 
@@ -73,7 +82,7 @@ void Simulation::stepSimulation(float deltaTime) {
 
 	}
 	else {
-		//write_csv_float("../output", "test_output.csv", output);
+		write_csv_float("../output", "test_output.csv", output);
 
 		// timeout -> set exit flag
 		exitSim = true;
@@ -85,6 +94,14 @@ void Simulation::stepSimulation(float deltaTime) {
 	auto factor = m_time_elapsed / m_time;
 	auto time_remaining = (int)((param->m_time_stop - m_time) * (factor));
 
+}
+
+void Simulation::zeroFrameSetup() {
+	// initialize follicle color
+	double color[4] = { .4, .4, .4, 1 };
+	for (int i = 0; i < 31; i++) {
+		m_guiHelper->changeRGBAColor(m_mystacialPad->getFollicleByIndex(i)->getBody()->getUserIndex(), color);
+	}
 }
 
 void Simulation::initParameter(Parameter *parameter) {
@@ -141,6 +158,7 @@ void Simulation::initPhysics() {
 	////////////////////////////////////////////////////////////////////////////////
 	read_csv_float(param->dir_follicle_pos_orient_len_vol, param->FOLLICLE_POS_ORIENT_LEN_VOL);
 	m_mystacialPad = new MystacialPad(this, param);
+	
 
 	// layers
 	read_csv_int(param->dir_spring_hex_mesh_idx, param->SPRING_HEX_MESH_IDX);
@@ -214,6 +232,7 @@ void Simulation::initPhysics() {
 
 	// generate graphics
 	m_guiHelper->autogenerateGraphicsObjects(m_dynamicsWorld);
+	zeroFrameSetup();
 	resetCamera();
 
 	// set exit flag to zero

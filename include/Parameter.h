@@ -115,6 +115,9 @@ public:
 	std::vector<std::vector<float>> PARS_MAXILLARIS_INSERTION_HEIGHT;
 	btScalar k_PM;
 
+	// output
+
+
 	// getters
 	inline int getFPS() const { return m_fps; }
 

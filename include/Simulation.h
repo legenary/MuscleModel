@@ -28,6 +28,8 @@ private:
 	std::vector<std::vector<float>> output;
 	std::map<const btCollisionObject*, std::vector<btManifoldPoint*>> objectsCollisions;
 
+	void zeroFrameSetup();
+
 public:
 	Simulation(struct GUIHelperInterface* helper)
 		: CommonRigidBodyBase(helper), m_time_elapsed(0.), m_time(0.), m_step(0) {}

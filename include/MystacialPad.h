@@ -59,6 +59,7 @@ public:
 	void contractMuscle(Muscle mus, btScalar ratio);
 
 	void update();
+	void output(std::vector<std::vector<float>>& output, int fol_idx);
 	
 	int getNumFollicles() const;
 	Follicle* getFollicleByIndex(int idx);
@@ -69,6 +70,9 @@ public:
 	}
 	inline btAlignedObjectArray<btCollisionShape*>* getCollisionShapes() {
 		return &(m_sim->m_collisionShapes);
+	}
+	inline Follicle* getFollicleByIndex(int i) const {
+		return m_follicleArray[i];
 	}
 	
 };
