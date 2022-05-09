@@ -123,7 +123,6 @@ void MystacialPad::createIntrinsicSlingMuscle() {
 		IntrinsicSlingMuscle* muscle = new IntrinsicSlingMuscle(m_sim, folC->getBody(), folR->getBody(), frameC, frameR, m_parameter->f0_ISM);
 		getWorld()->addConstraint(muscle->getConstraint(), true); // disable collision
 		m_ISMArray.push_back(muscle);
-
 	}
 	std::cout << "Done.\n";
 }

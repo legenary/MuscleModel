@@ -3,7 +3,7 @@
 
 #include "CommonInterfaces/CommonGUIHelperInterface.h"
 
-btRigidBody* createDynamicBody(const float mass, const btTransform& startTransform, btCollisionShape* shape) {
+btRigidBody* createDynamicBody(const float mass, const btTransform& startTransform, btCollisionShape* shape, btScalar damping) {
 	// rigidbody is dynamic if and only if mass is non zero, otherwise static
 	bool isDynamic = (mass != 0.f);
 
@@ -17,8 +17,12 @@ btRigidBody* createDynamicBody(const float mass, const btTransform& startTransfo
 	btRigidBody::btRigidBodyConstructionInfo cInfo(mass, myMotionState, shape, localInertia);
 	//cInfo.m_restitution = restitution;
 	//cInfo.m_friction = friction;
+
+	cInfo.m_linearDamping = damping; // 0 by default, no damping
+	//TODO: add damping differently for follicle and muscle nodes
+
 	btRigidBody* body = new btRigidBody(cInfo);
-	body->setUserIndex(-1);
+	
 	
 	return body;
 }

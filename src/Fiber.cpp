@@ -42,11 +42,10 @@ void Fiber::init() {
 	).length();
 
 	m_restLength= m_length;
-	m_restLengthPassive = m_length;
+	m_restLengthNoAvtivation = m_length;
 
 }
 
-// NEED DEBUG
 void Fiber::update() {
 	// for Fiber: eq points are used to calculate the force direction
 	// but no longer used to update forces using Hooke's Law
@@ -118,7 +117,7 @@ btScalar Fiber::ratio2activation(btScalar ratio) {
 }
 
 void Fiber::setRestLengthRatio(const btScalar ratio) {
-	m_restLength = ratio * m_restLengthPassive;
+	m_restLength = ratio * m_restLengthNoAvtivation;
 }
 
 btScalar Fiber::getLength() const {

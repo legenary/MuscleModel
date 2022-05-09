@@ -9,7 +9,7 @@ Follicle::Follicle(MystacialPad* pad, btTransform trans, btScalar radius, btScal
 
 	m_shape = new btCylinderShapeX(btVector3(half_height, radius, radius));
 	getCollisionShapes()->push_back(m_shape);
-	m_body = createDynamicBody(mass, trans, m_shape);
+	m_body = createDynamicBody(mass, trans, m_shape, 0 /*damping*/);
 	getWorld()->addRigidBody(m_body, COL_FOLLICLE, follicleCollideWith);
 	m_body->setActivationState(DISABLE_DEACTIVATION);
 	m_info = new Follicle_info(f);

@@ -22,7 +22,7 @@ protected:
 					// equilibrium point is represented in world frame
 
 	btScalar m_restLength;	
-	btScalar m_restLengthPassive;
+	btScalar m_restLengthNoAvtivation;
 	btScalar m_length;				// fiber length
 	btScalar m_velocity;			// fiber lengthening/shortening velocity
 	btScalar m_activation;			// activation level
