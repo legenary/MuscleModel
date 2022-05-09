@@ -8,14 +8,15 @@
 #include "Follicle.h"
 
 
-ExtrinsicMuscle::ExtrinsicMuscle(Simulation* sim, Parameter* param,
-	btAlignedObjectArray<Follicle*>& m_follicleArray, 
-	std::vector<std::vector<float>>& NODE_POS, 
-	std::vector<std::vector<int>>& CONSTRUCTION_IDX, 
-	std::vector<std::vector<int>>& INSERTION_IDX, 
+ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param,
+	btAlignedObjectArray<Follicle*>& m_follicleArray,
+	std::vector<std::vector<float>>& NODE_POS,
+	std::vector<std::vector<int>>& CONSTRUCTION_IDX,
+	std::vector<std::vector<int>>& INSERTION_IDX,
 	std::vector<std::vector<float>>& INSERTION_HEIGHT,
 	std::set<int>& anchorNodeIdx)
-	: m_sim(sim)
+	: f0(_f0),
+	m_sim(sim)
 	, m_parameter(param) {
 
 	// create extrinsic muscle nodes
@@ -42,7 +43,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(Simulation* sim, Parameter* param,
 		btRigidBody* node2 = m_nodes[CONSTRUCTION_IDX[i][1]];
 		Fiber* fiber = new Fiber(m_sim, 
 			node1, node2, createTransform(), createTransform(),
-			m_parameter->k_nasolabialis, 1 /*no damping*/, i);
+			f0, i);
 		getWorld()->addConstraint(fiber->getConstraint(), true);
 		m_musclePieces.push_back(fiber);
 	}
@@ -59,7 +60,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(Simulation* sim, Parameter* param,
 				btTransform trans = createTransform(btVector3(insertion_height, 0., 0.));
 				Tissue* tissue = new Tissue(m_sim, 
 					node, body, createTransform(), trans, 
-					m_parameter->k_nasolabialis, m_parameter->dmp_anchor);
+					m_parameter->k_layer, m_parameter->dmp_anchor);
 				getWorld()->addConstraint(tissue->getConstraint(), true);
 				m_insertionPieces.push_back(tissue);
 			}

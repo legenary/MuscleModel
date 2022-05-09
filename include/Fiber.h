@@ -12,9 +12,7 @@ class Fiber {
 protected:
 	Simulation* m_sim;
 
-	btScalar f0;
-	btScalar m_k;
-	btScalar m_damping;
+	btScalar m_f0;
 	int m_idx;
 
 	myGeneric6DofMuscleConstraint* m_constraint;
@@ -30,12 +28,9 @@ protected:
 	btScalar m_activation;			// activation level
 
 public:
-	//Tissue(btScalar k, btScalar damping);
 	Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 		btTransform& frameInA, btTransform& frameInB,
-		btScalar k, btScalar damping, int idx = 0);
-	Fiber(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
-		btScalar k, btScalar damping);
+		btScalar f0, int idx = 0);
 	// disable copy constructor (override if needed in the future)
 	Fiber(const Fiber&) = delete;
 	Fiber& operator=(Fiber const&) = delete;

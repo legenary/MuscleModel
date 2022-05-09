@@ -49,15 +49,13 @@ void Tissue::init() {
 	m_length = m_restLength;
 	m_restLengthDefault = m_restLength;
 
-
 	if (m_type == myTissueType::anchor) {
-		// torsional spring is needed for anchor, 
-		// and equilibrium point is easy to update
-		// so don't worry
+		// the effect torsional damping is to make the system more prune to stablility
+		// TODO: remove the damping effect from torsional anchor, to the follice body itself
 		for (int i = 3; i < 6; i++) {
 			m_constraint->enableSpring(i, true);
 			m_constraint->setStiffness(i, m_k / 10);
-			m_constraint->setDamping(i, m_damping);	// guess: damping [0, 1] like restitution coefficient?
+			m_constraint->setDamping(i, m_damping);
 			m_constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
 		}
 	}

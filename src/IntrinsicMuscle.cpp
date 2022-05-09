@@ -5,8 +5,8 @@
 #include "Follicle.h"
 
 
-IntrinsicSlingMuscle::IntrinsicSlingMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping)
-	:Fiber(sim, body1, body2, frameInParent, frameInChild, k, damping) {}
+IntrinsicSlingMuscle::IntrinsicSlingMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k)
+	:Fiber(sim, body1, body2, frameInParent, frameInChild, k) {}
 
 //void IntrinsicSlingMuscle::contractTo(btScalar ratio) {
 //	m_restLength = ratio * m_restLengthDefault;
@@ -15,8 +15,8 @@ IntrinsicSlingMuscle::IntrinsicSlingMuscle(Simulation* sim, btRigidBody* body1, 
 
 
 
-IntrinsicObliqueMuscle::IntrinsicObliqueMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping)
-	:Fiber(sim, body1, body2, frameInParent, frameInChild, k, damping) {}
+IntrinsicObliqueMuscle::IntrinsicObliqueMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k)
+	:Fiber(sim, body1, body2, frameInParent, frameInChild, k) {}
 
 
 void IntrinsicObliqueMuscle::contract() {

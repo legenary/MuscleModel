@@ -9,7 +9,7 @@ class IntrinsicSlingMuscle;
 class ExtrinsicMuscle;
 class Parameter;
 
-enum Muscle { INTRINSIC, N, M, NS, PMS, PMI, PIP, PMP };
+enum Muscle { INTRINSIC, N, M, NS, PMS, PMI, PIP, PM };
 
 class MystacialPad {
 private:
@@ -33,7 +33,7 @@ private:
 	ExtrinsicMuscle* m_PMS;
 	ExtrinsicMuscle* m_PMI;
 	ExtrinsicMuscle* m_PIP;
-	ExtrinsicMuscle* m_PMP;
+	ExtrinsicMuscle* m_PM;
 	std::vector<std::vector<float>> heightPlaceHolder;
 
 
@@ -54,7 +54,7 @@ public:
 	void createParsMediaSuperior();
 	void createParsMediaInferior();
 	void createParsInternaProfunda();
-	void createParsMaxillarisProfunda();
+	void createParsMaxillaris();
 
 	void contractMuscle(Muscle mus, btScalar ratio);
 

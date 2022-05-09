@@ -6,26 +6,13 @@
 
 // constructor
 Fiber::Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB, 
-	btTransform& frameInA, btTransform& frameInB, btScalar k, btScalar damping, int idx) 
+	btTransform& frameInA, btTransform& frameInB, btScalar f0, int idx) 
 	: m_sim(sim)
-	, f0(100)
-	, m_k(k)
-	, m_damping(damping)
+	, m_f0(f0)
 	, m_idx(idx)
 	, m_velocity(0)
 	, m_activation(0) {
-	//myGeneric6DofMuscleConstraint temp_constraint(*rbA, *rbB, frameInA, frameInB, true);
-	//m_constraint = &temp_constraint;
 	m_constraint = new myGeneric6DofMuscleConstraint(*rbA, *rbB, frameInA, frameInB, true);
-	init();
-};
-
-Fiber::Fiber(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
-	btScalar k, btScalar damping) 
-	: m_sim(sim), m_k(k), m_damping(damping){
-	//myGeneric6DofMuscleConstraint temp_constraint(*rbB, frameInB, true);
-	//m_constraint = &temp_constraint;
-	m_constraint = new myGeneric6DofMuscleConstraint(*rbB, frameInB, true);
 	init();
 };
 
@@ -42,9 +29,8 @@ void Fiber::init() {
 	for (int i = 0; i < 3; i++) {
 		m_constraint->enableSpring(i, true);
 		// stiffness is practically useless because we're directly updating forces?
-		m_constraint->setStiffness(i, m_k);
-		// not sure how damping coefficient is defined
-		m_constraint->setDamping(i, m_damping);
+		m_constraint->setStiffness(i, 0 /*spring stiffness is not used*/);
+		m_constraint->setDamping(i, 1 /*no dmaping, and not used either*/);
 		// set m_equilibriumPoint[index] = distance from A to B
 		m_constraint->setEquilibriumPoint(i);
 	}
@@ -90,7 +76,7 @@ void Fiber::update() {
 	btVector3 dir = (m_constraint->getCalculatedLinearDiff() - eq_in_p);
 	dir = (dir.length() > 0.02) ? dir / dir.length() : btVector3(0, 0, 0);
 	// force = (fPE + a*fL*fV)
-	btVector3 force = f0 * (
+	btVector3 force = m_f0 * (
 					interp1(fPE[0], fPE[1], m_length / m_restLength) +
 					m_activation * interp1(fL[0], fL[1], m_length / m_restLength)
 								 * interp1(fV[0], fV[1], vLength)

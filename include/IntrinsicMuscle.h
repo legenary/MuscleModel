@@ -15,7 +15,7 @@ private:
 
 
 public:
-	IntrinsicSlingMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping=0.01);
+	IntrinsicSlingMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar f0);
 	virtual ~IntrinsicSlingMuscle() {};
 
 	//void contractTo(btScalar ratio);
@@ -28,7 +28,7 @@ class IntrinsicObliqueMuscle : public Fiber {
 private:
 
 public:
-	IntrinsicObliqueMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar k, btScalar damping=0.01);
+	IntrinsicObliqueMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar f0);
 	virtual ~IntrinsicObliqueMuscle() {}
 
 	void contract();
