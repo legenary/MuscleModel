@@ -32,7 +32,7 @@ void Simulation::stepSimulation(float deltaTime) {
 			double color[4] = { 1, 0.3, 0.3, 1 };
 			m_guiHelper->changeRGBAColor(m_mystacialPad->getFollicleByIndex(fol_idx)
 				->getBody()->getUserIndex(), color);
-			m_mystacialPad->output(output, fol_idx);
+			m_mystacialPad->output(output_fol_pos);
 		}
 		
 
@@ -82,7 +82,7 @@ void Simulation::stepSimulation(float deltaTime) {
 
 	}
 	else {
-		write_csv_float("../output", param->output_file_name, output);
+		internalOutput();
 
 		// timeout -> set exit flag
 		exitSim = true;
@@ -102,6 +102,17 @@ void Simulation::zeroFrameSetup() {
 	for (int i = 0; i < 31; i++) {
 		m_guiHelper->changeRGBAColor(m_mystacialPad->getFollicleByIndex(i)->getBody()->getUserIndex(), color);
 	}
+}
+
+void Simulation::internalOutput() {
+	int nFol = m_mystacialPad->getNumFollicles();
+	char filename[50];
+	for (int i = 0; i < nFol; i++) {
+		sprintf(filename, "fol_pos/fol_%02d.csv\0", i);
+		//std::cout << filename << std::endl;
+		write_csv_float(param->output_path, filename, output_fol_pos[i]);
+	}
+	
 }
 
 void Simulation::initParameter(Parameter *parameter) {
@@ -235,6 +246,17 @@ void Simulation::initPhysics() {
 	zeroFrameSetup();
 	resetCamera();
 
+	//output
+	int nFollicle = m_mystacialPad->getNumFollicles();
+	output_fol_pos.reserve(nFollicle);
+	std::vector<std::vector<btScalar>> vec;
+	for (int i = 0; i < nFollicle; i++) {
+		output_fol_pos.push_back(vec);
+		output_fol_pos[i].reserve((int)param->m_fps*param->m_time_stop);
+		std::cout << (int)param->m_fps*param->m_time_stop << std::endl;
+	}
+	
+
 	// set exit flag to zero
 	exitSim = false;
 
@@ -308,7 +330,7 @@ void Simulation::stepSimulation_test(float deltaTime) {
 		//box1->applyCentralImpulse(force * param->m_time_step);
 		btVector3 box1pos = box1->getCenterOfMassPosition();
 		std::vector<float> vect{ box1pos[0], box1pos[1], box1pos[2] };
-		output.push_back(vect);
+		
 
 		fiber->update();
 		
@@ -322,7 +344,7 @@ void Simulation::stepSimulation_test(float deltaTime) {
 		}
 	}
 	else {
-		write_csv_float("../output", "test_output.csv", output);
+		//write_csv_float("../output", "test_output.csv", output);
 		// timeout -> set exit flag
 		exitSim = true;
 	}

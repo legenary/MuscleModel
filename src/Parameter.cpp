@@ -94,6 +94,6 @@ Parameter::Parameter() {
 
 	// output;
 	video_file_name = "../output/output_video.mp4";
-	output_file_name = "test_output.csv";
+	output_path = "../output";
 
 }

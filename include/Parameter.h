@@ -117,7 +117,7 @@ public:
 
 	// output
 	const char* video_file_name;
-	std::string output_file_name;
+	char* output_path;
 
 	// getters
 	inline int getFPS() const { return m_fps; }

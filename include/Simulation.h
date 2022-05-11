@@ -22,13 +22,15 @@ private:
 	btRigidBody* box2;
 	Fiber* fiber;
 
-	Parameter *param; 
+	Parameter* param; 
 	MystacialPad* m_mystacialPad;
+	std::vector<std::vector<std::vector<btScalar>>> output_fol_pos;
 
-	std::vector<std::vector<float>> output;
+	//std::vector<std::vector<float>> output;
 	std::map<const btCollisionObject*, std::vector<btManifoldPoint*>> objectsCollisions;
 
 	void zeroFrameSetup();
+	void internalOutput();
 
 public:
 	Simulation(struct GUIHelperInterface* helper)

@@ -59,7 +59,7 @@ public:
 	void contractMuscle(Muscle mus, btScalar ratio);
 
 	void update();
-	void output(std::vector<std::vector<float>>& output, int fol_idx);
+	void output(std::vector<std::vector<std::vector<btScalar>>>& output);
 	
 	int getNumFollicles() const;
 	Follicle* getFollicleByIndex(int idx);
