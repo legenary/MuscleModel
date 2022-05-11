@@ -43,6 +43,8 @@ public:
 		return m_pad->getCollisionShapes();
 	}
 
+	btVector3 getTopLocation() const;
+	btVector3 getBotLocation() const;
 
 };
 

@@ -237,9 +237,12 @@ void MystacialPad::update() {
 }
 
 void MystacialPad::output(std::vector<std::vector<float>>& output, int fol_idx) {
-	// output is already updated, passing up
-	btVector3 pos = m_follicleArray[fol_idx]->getBody()->getCenterOfMassPosition();
-	std::vector<btScalar> posVec{ pos[0], pos[1], pos[2] };
+	// output follicle center
+	//btVector3 pos = m_follicleArray[fol_idx]->getBody()->getCenterOfMassPosition();
+	btVector3 pos_top = m_follicleArray[fol_idx]->getTopLocation();
+	btVector3 pos_bot = m_follicleArray[fol_idx]->getBotLocation();
+	std::vector<btScalar> posVec{ pos_top[0], pos_top[1], pos_top[2], 
+								  pos_bot[0], pos_bot[1], pos_bot[2], };
 	output.push_back(posVec);
 }
 

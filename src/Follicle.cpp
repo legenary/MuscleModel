@@ -40,3 +40,13 @@ void* Follicle::getUserPointer() const {
 void Follicle::setUserPointer(void* userPointer) {
 	m_body->setUserPointer(userPointer);
 }
+
+btVector3 Follicle::getTopLocation() const {
+	btVector3 Vb = btVector3(m_length / 2, 0, 0);
+	return m_body->getCenterOfMassTransform() * Vb;
+}
+
+btVector3 Follicle::getBotLocation() const {
+	btVector3 Vb = btVector3(-m_length /2, 0, 0);
+	return m_body->getCenterOfMassTransform() * Vb;
+}
