@@ -26,11 +26,12 @@ private:
 	MystacialPad* m_mystacialPad;
 	std::vector<std::vector<std::vector<btScalar>>> output_fol_pos;
 
-	//std::vector<std::vector<float>> output;
 	std::map<const btCollisionObject*, std::vector<btManifoldPoint*>> objectsCollisions;
 
 	void zeroFrameSetup();
-	void internalOutput();
+	void internalWriteOutput();
+
+	char parameter_string[512];
 
 public:
 	Simulation(struct GUIHelperInterface* helper)

@@ -236,7 +236,7 @@ void MystacialPad::update() {
 	
 }
 
-void MystacialPad::output(std::vector<std::vector<std::vector<btScalar>>>& fol_pos) {
+void MystacialPad::readOutput(std::vector<std::vector<std::vector<btScalar>>>& output) {
 	// output all follicle top/bottom pos
 	for (int i = 0; i < nFollicle; i++) {
 		btVector3 pos_top = m_follicleArray[i]->getTopLocation();
@@ -244,7 +244,7 @@ void MystacialPad::output(std::vector<std::vector<std::vector<btScalar>>>& fol_p
 		std::vector<btScalar> posVec{ pos_top[0], pos_top[1], pos_top[2],
 									  pos_bot[0], pos_bot[1], pos_bot[2], };
 
-		fol_pos[i].push_back(posVec);
+		output[i].push_back(posVec);
 	}
 }
 
@@ -257,19 +257,19 @@ void MystacialPad::debugDraw() {
 	//	m_layer2[i]->debugDraw(btVector3(1., 0., 0.), true);
 	//}
 	for (int i = 0; i < m_anchor.size(); i++) {
-		m_anchor[i]->debugDraw(btVector3(1., 0., 0.), true);
+		m_anchor[i]->debugDraw(RED, true);
 	}
 
 	for (int i = 0; i < m_ISMArray.size(); i++) {
-		m_ISMArray[i]->debugDraw(btVector3(0., 0., 1.), false);
+		m_ISMArray[i]->debugDraw(RED, false);
 	}
-	//m_nasolabialis->debugDraw(btVector3(0., 0., 1.));
-	//m_maxillolabialis->debugDraw(btVector3(0., 0., 1.));
-	//m_NS->debugDraw(btVector3(0., 0., 1.));
-	//m_PMS->debugDraw(btVector3(0., 0., 1.));
-	//m_PMI->debugDraw(btVector3(0., 0., 1.));
-	//m_PIP->debugDraw(btVector3(0., 1., 0.));
-	//m_PMP->debugDraw(btVector3(0., 1., 0.));
+	//m_nasolabialis->debugDraw(BLUE);
+	//m_maxillolabialis->debugDraw(BLUE);
+	//m_NS->debugDraw(BLUE);
+	//m_PMS->debugDraw(BLUE);
+	//m_PMI->debugDraw(BLUE);
+	//m_PIP->debugDraw(GREEN);
+	//m_PM->debugDraw(GREEN);
 }
 
 int MystacialPad::getNumFollicles() const {

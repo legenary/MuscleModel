@@ -25,7 +25,8 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 	for (int i = 0; i < nNodes; i++) {
 		btTransform t = createTransform(btVector3(NODE_POS[i][0], NODE_POS[i][1], NODE_POS[i][2]));
 		btCollisionShape* s = new btSphereShape((anchorNodeIdx.count(i)) ? 0.1 : 0.01);
-		btRigidBody* b = createDynamicBody(0.1, t, s);
+		btScalar mass = (anchorNodeIdx.count(i)) ? 0. : 0.1;
+		btRigidBody* b = createDynamicBody(mass, t, s);
 		m_nodes.push_back(b);
 		getWorld()->addRigidBody(b, COL_EXT_MUS, extMusCollideWith);
 		b->setActivationState(DISABLE_DEACTIVATION);

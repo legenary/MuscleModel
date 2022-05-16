@@ -1,0 +1,4 @@
+FPS: 60Hz
+k_layer=300
+k_anchor=500
+f0_intrinsic=160

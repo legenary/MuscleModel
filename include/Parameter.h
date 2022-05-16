@@ -116,7 +116,9 @@ public:
 	btScalar f0_PM;
 
 	// output
+	bool VIDEO;
 	const char* video_file_name;
+	bool OUTPUT;
 	char* output_path;
 
 	// getters

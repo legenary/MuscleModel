@@ -13,14 +13,15 @@ btRigidBody* createDynamicBody(const float mass, const btTransform& startTransfo
 	}
 	//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-
 	btRigidBody::btRigidBodyConstructionInfo cInfo(mass, myMotionState, shape, localInertia);
-	//cInfo.m_restitution = restitution;
-	//cInfo.m_friction = friction;
-
-	cInfo.m_linearDamping = damping; // 0 by default, no damping
-	//TODO: add damping differently for follicle and muscle nodes
-
+	
+	if (isDynamic) {
+		//cInfo.m_restitution = restitution;
+		//cInfo.m_friction = friction;
+		cInfo.m_linearDamping = damping; // 0 by default, no damping
+		//TODO: add damping differently for follicle and muscle nodes
+	}
+	
 	btRigidBody* body = new btRigidBody(cInfo);
 	
 	return body;
@@ -102,6 +103,19 @@ void write_csv_float(const std::string& folderName, const std::string& fileName,
 		std::cout << "-saving csv float failed." << std::endl;
 	}
 }
+
+void write_txt(const std::string& folderName, const std::string& fileName, const std::string& text) {
+	try {
+		std::ofstream out(folderName + "/" + fileName);
+		out.clear();
+		out << text;
+		out.close();
+	}
+	catch (...) {
+		std::cout << "-saving text file failed." << std::endl;
+	}
+}
+
 
 bool isPathExist(const std::string& s)
 {

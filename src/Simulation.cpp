@@ -27,12 +27,9 @@ void Simulation::stepSimulation(float deltaTime) {
 		m_mystacialPad->update();
 
 		// set up output options
+		if (param->OUTPUT)
 		{
-			int fol_idx = 13;
-			double color[4] = { 1, 0.3, 0.3, 1 };
-			m_guiHelper->changeRGBAColor(m_mystacialPad->getFollicleByIndex(fol_idx)
-				->getBody()->getUserIndex(), color);
-			m_mystacialPad->output(output_fol_pos);
+			m_mystacialPad->readOutput(output_fol_pos);
 		}
 		
 
@@ -82,7 +79,10 @@ void Simulation::stepSimulation(float deltaTime) {
 
 	}
 	else {
-		internalOutput();
+		if (param->OUTPUT) {
+			internalWriteOutput();
+		}
+		
 
 		// timeout -> set exit flag
 		exitSim = true;
@@ -104,7 +104,8 @@ void Simulation::zeroFrameSetup() {
 	}
 }
 
-void Simulation::internalOutput() {
+void Simulation::internalWriteOutput() {
+	std::cout << "Generating output csv file...\n";
 	int nFol = m_mystacialPad->getNumFollicles();
 	char filename[50];
 	for (int i = 0; i < nFol; i++) {
@@ -113,6 +114,7 @@ void Simulation::internalOutput() {
 		write_csv_float(param->output_path, filename, output_fol_pos[i]);
 	}
 	
+	write_txt(param->output_path, "parameter.txt", parameter_string);
 }
 
 void Simulation::initParameter(Parameter *parameter) {
@@ -236,8 +238,8 @@ void Simulation::initPhysics() {
 	read_csv_int(param->dir_pars_maxillaris_construction_idx, param->PARS_MAXILLARIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_pars_maxillaris_insertion_idx, param->PARS_MAXILLARIS_INSERTION_IDX);
 	read_csv_float(param->dir_pars_maxillaris_insertion_height, param->PARS_MAXILLARIS_INSERTION_HEIGHT);
-	//m_mystacialPad->createParsMaxillarisProfunda();
-	//m_mystacialPad->contractMuscle(PMP, 0.8);
+	//m_mystacialPad->createParsMaxillaris();
+	//m_mystacialPad->contractMuscle(PM, 0.8);
 
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -247,16 +249,22 @@ void Simulation::initPhysics() {
 	resetCamera();
 
 	//output
-	int nFollicle = m_mystacialPad->getNumFollicles();
-	output_fol_pos.reserve(nFollicle);
-	std::vector<std::vector<btScalar>> vec;
-	for (int i = 0; i < nFollicle; i++) {
-		output_fol_pos.push_back(vec);
-		output_fol_pos[i].reserve((int)param->m_fps*param->m_time_stop);
-		std::cout << (int)param->m_fps*param->m_time_stop << std::endl;
+	if (param->OUTPUT) {
+		int nFollicle = m_mystacialPad->getNumFollicles();
+		output_fol_pos.reserve(nFollicle);
+		std::vector<std::vector<btScalar>> vec;
+		for (int i = 0; i < nFollicle; i++) {
+			output_fol_pos.push_back(vec);
+			output_fol_pos[i].reserve((int)param->m_fps*param->m_time_stop);
+		}
 	}
-	
+	sprintf(parameter_string, "FPS: %dHz\nk_layer=%.0f\nk_anchor=%.0f\nf0_intrinsic=%.0f\n\
+		f0_nasolabialis(N)=%.0f\nf0_maxillolabialis(M)=%.0f\n",
+		param->getFPS(), param->k_layer, param->k_anchor, param->f0_ISM, param->f0_nasolabialis,
+		param->f0_maxillolabialis
+	);
 
+	
 	// set exit flag to zero
 	exitSim = false;
 

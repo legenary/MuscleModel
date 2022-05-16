@@ -17,6 +17,8 @@ Parameter::Parameter() {
 				// 2: wire frame added
 				// 3: axis aligned bound box added
 
+	
+
 	//camera position
 	camPos[0] = 0;
 	camPos[1] = 0;
@@ -81,7 +83,7 @@ Parameter::Parameter() {
 	dir_pars_interna_profunda_construction_idx = "../resources/pars_interna_profunda_construction_idx.csv";
 	dir_pars_interna_profunda_insertion_idx = "../resources/pars_interna_profunda_insertion_idx.csv";
 	dir_pars_interna_profunda_insertion_height = "../resources/pars_interna_profunda_insertion_height.csv";
-	f0_PIP = 4*f0;
+	f0_PIP = 40*f0;
 
 	// Pars maxillaris superficialis of M. Nasolabialis profundus
 	// Pars maxillaris profunda of M. Nasolabialis profundus
@@ -90,10 +92,12 @@ Parameter::Parameter() {
 	dir_pars_maxillaris_construction_idx = "../resources/pars_maxillaris_construction_idx.csv";
 	dir_pars_maxillaris_insertion_idx = "../resources/pars_maxillaris_insertion_idx.csv";
 	dir_pars_maxillaris_insertion_height = "../resources/pars_maxillaris_insertion_height.csv";
-	f0_PM = 4*f0;
+	f0_PM = 40*f0;
 
 	// output;
+	VIDEO = false;
 	video_file_name = "../output/output_video.mp4";
+	OUTPUT = true;
 	output_path = "../output";
 
 }
