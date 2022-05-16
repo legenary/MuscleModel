@@ -145,28 +145,36 @@ void MystacialPad::createMaxillolabialis() {
 void MystacialPad::contractMuscle(Muscle mus, btScalar ratio) {
 	switch (mus) {
 	case INTRINSIC:
+		std::cout << "Contracting intrinsic muscle...\n";
 		for (int s = 0; s < nISM; s++)
 			m_ISMArray[s]->contractTo(ratio);
 		break;
 	case N:
+		std::cout << "Contracting nasolabialis (N)...\n";
 		m_nasolabialis->contractTo(ratio);
 		break;
 	case M:
+		std::cout << "Contracting maxillolabialis (M)...\n";
 		m_maxillolabialis->contractTo(ratio);
 		break;
 	case NS:
+		std::cout << "Contracting nasolabialis superficialis (NS)...\n";
 		m_NS->contractTo(ratio);
 		break;
 	case PMS:
+		std::cout << "Contracting pars media superior (PMS)...\n";
 		m_PMS->contractTo(ratio);
 		break;
 	case PMI:
+		std::cout << "Contracting pars media inferior (PMI)...\n";
 		m_PMI->contractTo(ratio);
 		break;
 	case PIP:
+		std::cout << "Contracting pars interna produnda (PIP)...\n";
 		m_PIP->contractTo(ratio);
 		break;
 	case PM:
+		std::cout << "Contracting pars maxilloris (PM)...\n";
 		m_PM->contractTo(ratio);
 		break;
 	}
@@ -263,13 +271,27 @@ void MystacialPad::debugDraw() {
 	for (int i = 0; i < m_ISMArray.size(); i++) {
 		m_ISMArray[i]->debugDraw(RED, false);
 	}
-	m_nasolabialis->debugDraw(BLUE);
-	m_maxillolabialis->debugDraw(BLUE);
-	m_NS->debugDraw(BLUE);
-	m_PMS->debugDraw(BLUE);
-	m_PMI->debugDraw(BLUE);
-	m_PIP->debugDraw(GREEN);
-	m_PM->debugDraw(GREEN);
+	if (m_nasolabialis) {
+		m_nasolabialis->debugDraw(BLUE);
+	}
+	if (m_maxillolabialis) {
+		m_maxillolabialis->debugDraw(BLUE);
+	}
+	if (m_NS) {
+		m_NS->debugDraw(BLUE);
+	}
+	if (m_PMS) {
+		m_PMS->debugDraw(BLUE);
+	}
+	if (m_PMI) {
+		m_PMI->debugDraw(BLUE);
+	}
+	if (m_PIP) {
+		m_PIP->debugDraw(GREEN);
+	}
+	if (m_PM) {
+		m_PM->debugDraw(GREEN);
+	}
 }
 
 int MystacialPad::getNumFollicles() const {

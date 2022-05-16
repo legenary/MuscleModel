@@ -21,7 +21,6 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 
 	// create extrinsic muscle nodes
 	nNodes = NODE_POS.size();
-	std::cout << nNodes << std::endl;
 	for (int i = 0; i < nNodes; i++) {
 		btTransform t = createTransform(btVector3(NODE_POS[i][0], NODE_POS[i][1], NODE_POS[i][2]));
 		btCollisionShape* s = new btSphereShape((anchorNodeIdx.count(i)) ? 0.1 : 0.01);

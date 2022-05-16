@@ -6,7 +6,7 @@
 Parameter::Parameter() {
 	m_fps = 60;
 	m_time_step = 1./ m_fps;
-	m_num_internal_step = 20;	// for constraint solver
+	m_num_internal_step = 100;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / m_num_internal_step;
@@ -29,20 +29,20 @@ Parameter::Parameter() {
 
 	// foillicle parameter
 	dir_follicle_pos_orient_len_vol = "../resources/follicle_pos_ypr_len_vol.csv";
-	fol_radius = 0.2;		// unit: mm
-	fol_density = 1;	// unit: g/mm^3
+	fol_radius = 0.15;		// unit: mm
+	fol_density = 0.001;	// unit: g/mm^3
 
 	// layer tissue parameter
 	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";
 	E_skin = 8000000;		// unit: Pa
 							// Skin's Young's Modulus is ~8MPa (Karimi and Navidbakhsh, 2015)
-	k_layer = 300;			// TODO: fix unit: 1e-3(N/m)
+	k_layer = 300000;		// unit: 1e-3 (N/m)
 	dmp_anchor = 0.0001;	// This is the damping ratio set for (1) tissue anchor, (2) extrinsic muscle anchor, (3) extrinsic muscle insertion
 
-	k_anchor = 500;			// k = 0 : hard anchor, no linear displacement, free angular movement
+	k_anchor = 500000;		// k = 0 : hard anchor, no linear displacement, free angular movement
 							// k > 0 : soft anchor, springy linear and angular movement
 
-	btScalar f0 = 4;
+	btScalar f0 = 6000;		// TODO: fix unit: 1e-6 (N)
 	// instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
 	f0_ISM = 20*f0;
@@ -96,7 +96,7 @@ Parameter::Parameter() {
 	f0_PM = 4*f0;
 
 	// output;
-	VIDEO = false;
+	VIDEO = true;
 	video_file_name = "../output/output_video.mp4";
 	OUTPUT = true;
 	output_path = "../output";
