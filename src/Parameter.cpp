@@ -29,19 +29,20 @@ Parameter::Parameter() {
 
 	// foillicle parameter
 	dir_follicle_pos_orient_len_vol = "../resources/follicle_pos_ypr_len_vol.csv";
-	fol_radius = 0.1;
-	fol_density = 1;		// unit:g/mm^3
+	fol_radius = 0.2;		// unit: mm
+	fol_density = 1;	// unit: g/mm^3
 
 	// layer tissue parameter
 	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";
-	E_skin = 8000000;		// Skin's Young's Modulus is ~8MPa (Karimi and Navidbakhsh, 2015)
-	k_layer = 300;
+	E_skin = 8000000;		// unit: Pa
+							// Skin's Young's Modulus is ~8MPa (Karimi and Navidbakhsh, 2015)
+	k_layer = 300;			// TODO: fix unit: 1e-3(N/m)
 	dmp_anchor = 0.0001;	// This is the damping ratio set for (1) tissue anchor, (2) extrinsic muscle anchor, (3) extrinsic muscle insertion
-							/// TODO: still need to figure out critical damping (1 == no damping)
+
 	k_anchor = 500;			// k = 0 : hard anchor, no linear displacement, free angular movement
 							// k > 0 : soft anchor, springy linear and angular movement
 
-	btScalar f0 = 8;
+	btScalar f0 = 4;
 	// instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
 	f0_ISM = 20*f0;
@@ -83,7 +84,7 @@ Parameter::Parameter() {
 	dir_pars_interna_profunda_construction_idx = "../resources/pars_interna_profunda_construction_idx.csv";
 	dir_pars_interna_profunda_insertion_idx = "../resources/pars_interna_profunda_insertion_idx.csv";
 	dir_pars_interna_profunda_insertion_height = "../resources/pars_interna_profunda_insertion_height.csv";
-	f0_PIP = 40*f0;
+	f0_PIP = 4*f0;
 
 	// Pars maxillaris superficialis of M. Nasolabialis profundus
 	// Pars maxillaris profunda of M. Nasolabialis profundus
@@ -92,7 +93,7 @@ Parameter::Parameter() {
 	dir_pars_maxillaris_construction_idx = "../resources/pars_maxillaris_construction_idx.csv";
 	dir_pars_maxillaris_insertion_idx = "../resources/pars_maxillaris_insertion_idx.csv";
 	dir_pars_maxillaris_insertion_height = "../resources/pars_maxillaris_insertion_height.csv";
-	f0_PM = 40*f0;
+	f0_PM = 4*f0;
 
 	// output;
 	VIDEO = false;

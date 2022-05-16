@@ -1,4 +1,11 @@
 FPS: 60Hz
-k_layer=300
-k_anchor=500
-f0_intrinsic=160
+k_layer=3000000
+k_anchor=5000000
+f0_intrinsic=800000
+f0_nasolabialis(N)=1000000
+f0_maxillolabialis(M)=1000000
+f0_nasolabialis_superficialis(NS)=40000
+f0_pars_media_superior=40000
+f0_pars_media_inferior=40000
+f0_pars_interna_profunda=160000
+f0_pars_maxillaris=160000

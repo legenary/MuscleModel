@@ -263,13 +263,13 @@ void MystacialPad::debugDraw() {
 	for (int i = 0; i < m_ISMArray.size(); i++) {
 		m_ISMArray[i]->debugDraw(RED, false);
 	}
-	//m_nasolabialis->debugDraw(BLUE);
-	//m_maxillolabialis->debugDraw(BLUE);
-	//m_NS->debugDraw(BLUE);
-	//m_PMS->debugDraw(BLUE);
-	//m_PMI->debugDraw(BLUE);
-	//m_PIP->debugDraw(GREEN);
-	//m_PM->debugDraw(GREEN);
+	m_nasolabialis->debugDraw(BLUE);
+	m_maxillolabialis->debugDraw(BLUE);
+	m_NS->debugDraw(BLUE);
+	m_PMS->debugDraw(BLUE);
+	m_PMI->debugDraw(BLUE);
+	m_PIP->debugDraw(GREEN);
+	m_PM->debugDraw(GREEN);
 }
 
 int MystacialPad::getNumFollicles() const {

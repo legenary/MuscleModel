@@ -1,5 +1,7 @@
 #pragma once
 
+#define BT_USE_DOUBLE_PRECISION
+
 #include <iostream>
 #include <algorithm>
 #include <functional>

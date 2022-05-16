@@ -188,21 +188,21 @@ void Simulation::initPhysics() {
 	read_csv_float(param->dir_nasolabialis_node_pos, param->NASOLABIALIS_NODE_POS);
 	read_csv_int(param->dir_nasolabialis_construction_idx, param->NASOLABIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_nasolabialis_insertion_idx, param->NASOLABIALIS_INSERTION_IDX);
-	//m_mystacialPad->createNasolabialis();
+	m_mystacialPad->createNasolabialis();
 	//m_mystacialPad->contractMuscle(N, 0.8);
 
 	// extrinsic: maxillolabialis muscle
 	read_csv_float(param->dir_maxillolabialis_node_pos, param->MAXILLOLABIALIS_NODE_POS);
 	read_csv_int(param->dir_maxillolabialis_construction_idx, param->MAXILLOLABIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_maxillolabialis_insertion_idx, param->MAXILLOLABIALIS_INSERTION_IDX);
-	//m_mystacialPad->createMaxillolabialis();
+	m_mystacialPad->createMaxillolabialis();
 	//m_mystacialPad->contractMuscle(M, 0.8);
 
 	//// extrinsic: nasolabialis superficialis
 	read_csv_float(param->dir_nasolabialis_superficialis_node_pos, param->NASOLABIALIS_SUPERFICIALIS_NODE_POS);
 	read_csv_int(param->dir_nasolabialis_superficialis_construction_idx, param->NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_nasolabialis_superficialis_insertion_idx, param->NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX);
-	//m_mystacialPad->createNasolabialisSuperficialis();
+	m_mystacialPad->createNasolabialisSuperficialis();
 	//m_mystacialPad->contractMuscle(NS, 0.8);
 
 	//// extrinsic: pars media superior of M. Nasolabialis profundus
@@ -211,7 +211,7 @@ void Simulation::initPhysics() {
 	read_csv_int(param->dir_pars_media_superior_construction_idx, param->PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_pars_media_superior_insertion_idx, param->PARS_MEDIA_SUPERIOR_INSERTION_IDX);
 	read_csv_float(param->dir_pars_media_superior_insertion_height, param->PARS_MEDIA_SUPERIOR_INSERTION_HEIGHT);
-	//m_mystacialPad->createParsMediaSuperior();
+	m_mystacialPad->createParsMediaSuperior();
 	//m_mystacialPad->contractMuscle(PMS, 0.8);
 
 	//// extrinsic: pars media inferior of M. Nasolabialis profundus
@@ -220,7 +220,7 @@ void Simulation::initPhysics() {
 	read_csv_int(param->dir_pars_media_inferior_construction_idx, param->PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_pars_media_inferior_insertion_idx, param->PARS_MEDIA_INFERIOR_INSERTION_IDX);
 	read_csv_float(param->dir_pars_media_inferior_insertion_height, param->PARS_MEDIA_INFERIOR_INSERTION_HEIGHT);
-	//m_mystacialPad->createParsMediaInferior();
+	m_mystacialPad->createParsMediaInferior();
 	//m_mystacialPad->contractMuscle(PMI, 0.8);
 
 	//// extrinsic: pars interna profunda of M. Nasolabialis profundus
@@ -229,7 +229,7 @@ void Simulation::initPhysics() {
 	read_csv_int(param->dir_pars_interna_profunda_construction_idx, param->PARS_INTERNA_PROFUNDA_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_pars_interna_profunda_insertion_idx, param->PARS_INTERNA_PROFUNDA_INSERTION_IDX);
 	read_csv_float(param->dir_pars_interna_profunda_insertion_height, param->PARS_INTERNA_PROFUNDA_INSERTION_HEIGHT);
-	//m_mystacialPad->createParsInternaProfunda();
+	m_mystacialPad->createParsInternaProfunda();
 	//m_mystacialPad->contractMuscle(PIP, 0.8);
 
 	//// extrinsic: pars maxillaris & profunda of M. Nasolabialis profundus
@@ -238,7 +238,7 @@ void Simulation::initPhysics() {
 	read_csv_int(param->dir_pars_maxillaris_construction_idx, param->PARS_MAXILLARIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_pars_maxillaris_insertion_idx, param->PARS_MAXILLARIS_INSERTION_IDX);
 	read_csv_float(param->dir_pars_maxillaris_insertion_height, param->PARS_MAXILLARIS_INSERTION_HEIGHT);
-	//m_mystacialPad->createParsMaxillaris();
+	m_mystacialPad->createParsMaxillaris();
 	//m_mystacialPad->contractMuscle(PM, 0.8);
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -258,10 +258,15 @@ void Simulation::initPhysics() {
 			output_fol_pos[i].reserve((int)param->m_fps*param->m_time_stop);
 		}
 	}
-	sprintf(parameter_string, "FPS: %dHz\nk_layer=%.0f\nk_anchor=%.0f\nf0_intrinsic=%.0f\n\
-		f0_nasolabialis(N)=%.0f\nf0_maxillolabialis(M)=%.0f\n",
-		param->getFPS(), param->k_layer, param->k_anchor, param->f0_ISM, param->f0_nasolabialis,
-		param->f0_maxillolabialis
+	sprintf(parameter_string, 
+		"FPS: %dHz\nk_layer=%.0f\nk_anchor=%.0f\nf0_intrinsic=%.0f\n"
+		"f0_nasolabialis(N)=%.0f\nf0_maxillolabialis(M)=%.0f\n"
+		"f0_nasolabialis_superficialis(NS)=%.0f\n"
+		"f0_pars_media_superior=%.0f\nf0_pars_media_inferior=%.0f\n"
+		"f0_pars_interna_profunda=%.0f\nf0_pars_maxillaris=%.0f\n",
+		param->getFPS(), param->k_layer, param->k_anchor, param->f0_ISM, 
+		param->f0_nasolabialis, param->f0_maxillolabialis,
+		param->f0_NS, param->f0_PMS, param->f0_PMI, param->f0_PIP, param->f0_PM
 	);
 
 	
@@ -337,7 +342,7 @@ void Simulation::stepSimulation_test(float deltaTime) {
 		//box1->applyTorque(btVector3(0, 0, 1));
 		//box1->applyCentralImpulse(force * param->m_time_step);
 		btVector3 box1pos = box1->getCenterOfMassPosition();
-		std::vector<float> vect{ box1pos[0], box1pos[1], box1pos[2] };
+		std::vector<double> vect{ box1pos[0], box1pos[1], box1pos[2] };
 		
 
 		fiber->update();

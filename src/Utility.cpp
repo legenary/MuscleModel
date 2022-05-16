@@ -80,7 +80,7 @@ void read_csv_int(const std::string& fileName, std::vector<std::vector<int>>& da
 
 }
 
-void write_csv_float(const std::string& folderName, const std::string& fileName, std::vector<std::vector<float>>& dataList) {
+void write_csv_float(const std::string& folderName, const std::string& fileName, std::vector<std::vector<double>>& dataList) {
 	try {
 		if (!isPathExist(folderName)) {	// create folder if not exist
 			mkdir(folderName.c_str());

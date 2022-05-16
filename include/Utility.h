@@ -48,7 +48,7 @@ float getCriticalDampingRatio(const float m1, const float m2, const float k);
 
 void read_csv_float(const std::string& fileName, std::vector<std::vector<float>>& dataList);
 void read_csv_int(const std::string& fileName, std::vector<std::vector<int>>& dataList);
-void write_csv_float(const std::string& folderName, const std::string& fileName, std::vector<std::vector<float>>& dataList);
+void write_csv_float(const std::string& folderName, const std::string& fileName, std::vector<std::vector<double>>& dataList);
 void write_txt(const std::string& folderName, const std::string& fileName, const std::string& text);
 
 bool isPathExist(const std::string& s);
