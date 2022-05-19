@@ -1,0 +1,72 @@
+
+
+dworld::internalSingleStepSimulation
+	dworld::predictTransform
+		rb::applyDamping
+
+	dworld::createPredictiveContacts
+		?world::releasePredictiveContacts
+		?world::createPredictiveContactsInternal
+
+	dworld::performDiscreteCollisionDetection
+		cworld::updateAABBs
+		cworld::computeOverlappingPairs
+			m_broadphasePairCache->calculateOverlappingPairs(m_dispatcher1)
+
+	dworld::calculateSimulationIslands	//based on manifolds and constraints
+		dworld::getSimulationIslandManager->updateActivationState
+		for(m_predictiveManifolds) {unite}
+		for(m_constraints) {unite}
+
+	dworld::solveConstraints
+		m_sortedConstraints.quickSort
+		m_solverIslandCallback->setup
+		m_constraintSolver->prepareSolve //virtual?
+		m_islandManager->buildAndProcessIslands
+			buildIslands //determine activation/sleeping state
+			processIslands // call solver for each island
+				InplaceSolverIslandCallback::processIsland
+					InplaceSolverIslandCallback::processConstraints
+						btSequentialImpulseConstraintSolver::solveGroup
+							solveGroupCacheFriendlySetup
+								convertBodies
+								convertJoints
+									btGeneric6DofConstraint::buildJacobian***
+									btGeneric6DofConstraint::getInfo1***
+									convertJoint
+										btGeneric6DofSpringConstraint::getInfo2 // tissue
+											internalUpdateSprings
+											btGeneric6DofConstraint::getInfo2
+									solverConstraint.m_rhs = penetrationImpulse+velocityImpulse
+								convertContacts
+									convertContact
+										setupContactConstraint
+							solveGroupCacheFriendlyIterations
+								solveSingleIteration
+									resolveSingleConstraintRowGeneric(bodyA, bodyB, solverConstraint)***
+										gResolveSingleConstraintRowGeneric_sse4_1_fma3
+										// constraint.m_rhs, m_cfm, m_appliedImpulse, m_jacDiagABInv, m_lowerLimit, m_upperLimit is used to calculate deltaImpulse, and then delta linear and angular vel
+										// rhs: right hand side of a constraint
+										// cfm: constraint force mixing
+
+
+							solveGroupCacheFriendlyFinish
+								writeBackJoints (constr->internalSetAppliedImpulse)
+								writeBackBodies
+		m_solverIslandCallback->processConstraints  // why do it twice? 
+													// this process does not have any constraint to update
+
+	dworld::integrateTransforms // not implemented
+
+	dworld::updateActivationState // nothing much here
+
+dworld::synchronizeMotionStates
+	dworld::synchronizeSingleMotionState
+
+
+
+
+
+
+
+
