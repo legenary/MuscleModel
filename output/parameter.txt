@@ -1,11 +1,11 @@
 FPS: 60Hz
-k_layer=300000
-k_anchor=500000
-f0_intrinsic=120000
-f0_nasolabialis(N)=150000
-f0_maxillolabialis(M)=150000
-f0_nasolabialis_superficialis(NS)=6000
-f0_pars_media_superior=6000
-f0_pars_media_inferior=6000
-f0_pars_interna_profunda=24000
-f0_pars_maxillaris=24000
+k_layer=300N/m
+k_anchor=500N/m
+f0_intrinsic=0.16N
+f0_nasolabialis(N)=0.20N
+f0_maxillolabialis(M)=0.20N
+f0_nasolabialis_superficialis(NS)=0.01N
+f0_pars_media_superior=0.01N
+f0_pars_media_inferior=0.01N
+f0_pars_interna_profunda=0.03N
+f0_pars_maxillaris=0.03N

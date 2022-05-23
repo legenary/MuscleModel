@@ -259,14 +259,15 @@ void Simulation::initPhysics() {
 		}
 	}
 	sprintf(parameter_string, 
-		"FPS: %dHz\nk_layer=%.0f\nk_anchor=%.0f\nf0_intrinsic=%.0f\n"
-		"f0_nasolabialis(N)=%.0f\nf0_maxillolabialis(M)=%.0f\n"
-		"f0_nasolabialis_superficialis(NS)=%.0f\n"
-		"f0_pars_media_superior=%.0f\nf0_pars_media_inferior=%.0f\n"
-		"f0_pars_interna_profunda=%.0f\nf0_pars_maxillaris=%.0f\n",
-		param->getFPS(), param->k_layer, param->k_anchor, param->f0_ISM, 
-		param->f0_nasolabialis, param->f0_maxillolabialis,
-		param->f0_NS, param->f0_PMS, param->f0_PMI, param->f0_PIP, param->f0_PM
+		"FPS: %dHz\nk_layer=%.0fN/m\nk_anchor=%.0fN/m\nf0_intrinsic=%.2fN\n"
+		"f0_nasolabialis(N)=%.2fN\nf0_maxillolabialis(M)=%.2fN\n"
+		"f0_nasolabialis_superficialis(NS)=%.2fN\n"
+		"f0_pars_media_superior=%.2fN\nf0_pars_media_inferior=%.2fN\n"
+		"f0_pars_interna_profunda=%.2fN\nf0_pars_maxillaris=%.2fN\n",
+		param->getFPS(), param->k_layer * 0.001, param->k_anchor * 0.001, param->f0_ISM * 0.000001, 
+		param->f0_nasolabialis * 0.000001, param->f0_maxillolabialis * 0.000001,
+		param->f0_NS * 0.000001, param->f0_PMS * 0.000001, 
+		param->f0_PMI * 0.000001, param->f0_PIP * 0.000001, param->f0_PM * 0.000001
 	);
 
 	

@@ -42,7 +42,7 @@ Parameter::Parameter() {
 	k_anchor = 500000;		// k = 0 : hard anchor, no linear displacement, free angular movement
 							// k > 0 : soft anchor, springy linear and angular movement
 
-	btScalar f0 = 6000;		// TODO: fix unit: 1e-6 (N)
+	btScalar f0 = 8000;		// Fix unit: 1e-6 (N)
 	// instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
 	f0_ISM = 20*f0;

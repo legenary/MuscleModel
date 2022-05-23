@@ -41,9 +41,10 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 	for (int i = 0; i < nMusclePieces; i++) {
 		btRigidBody* node1 = m_nodes[CONSTRUCTION_IDX[i][0]];
 		btRigidBody* node2 = m_nodes[CONSTRUCTION_IDX[i][1]];
-		Fiber* fiber = new Fiber(m_sim, 
-			node1, node2, createTransform(), createTransform(),
-			f0, i);
+		btScalar eq_factor = CONSTRUCTION_IDX[i][2];
+		Fiber* fiber = new Fiber(m_sim, node1, node2, 
+			createTransform(), createTransform(),
+			f0 * eq_factor, i);
 		getWorld()->addConstraint(fiber->getConstraint(), true);
 		m_musclePieces.push_back(fiber);
 	}
