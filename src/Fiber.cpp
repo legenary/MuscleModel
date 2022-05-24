@@ -113,6 +113,7 @@ void Fiber::contractTo(btScalar ratio) {
 }
 
 btScalar Fiber::ratio2activation(btScalar ratio) {
+	if (ratio == 1) { return 0; }
 	return (1.0 - ratio) / 0.5;
 }
 

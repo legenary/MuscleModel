@@ -1,7 +1,8 @@
 clear;
 close all;
 
-fol_traj = zeros(31, 120, 6);
+steps = 60 * 4;
+fol_traj = zeros(31, steps, 6);
 for fol = 1:31
     filename = sprintf("../fol_pos/fol_%02d.csv", fol-1);
     fol_traj(fol, :, :) = load(filename);
@@ -21,8 +22,8 @@ axis equal
 figure('Color', 'w'); hold on;
 for i = 1:31
     this_fol_orientation = squeeze(fol_traj(i, :, 1:3)-fol_traj(i, :, 4:6));
-    this_theta = zeros(120, 1);
-    for frame = 1:120
+    this_theta = zeros(steps, 1);
+    for frame = 1:steps
         temp = dot(this_fol_orientation(1,:), this_fol_orientation(frame,:))...
             /norm(this_fol_orientation(1,:))/norm(this_fol_orientation(frame,:));
         if temp>1

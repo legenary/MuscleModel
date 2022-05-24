@@ -14,6 +14,8 @@ public:
 	btScalar m_time_stop;
 	int DEBUG;
 
+	btScalar contract_range;
+
 	btScalar camPos[3];
 	btScalar camDist;
 	btScalar camPitch;
