@@ -62,7 +62,7 @@ void MystacialPad::createLayer1() {
 		btTransform frameLayer1fol1 = createTransform(btVector3(m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->SPRING_HEX_MESH_IDX[s][0]][6] / 2, 0., 0.));
 		btTransform frameLayer1fol2 = createTransform(btVector3(m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->SPRING_HEX_MESH_IDX[s][1]][6] / 2, 0., 0.));
 
-		btScalar k_eq = m_parameter->k_layer;
+		btScalar k_eq = m_parameter->k_layer1;
 		btScalar k_this = k_eq / 2;
 		btScalar damping_this = getCriticalDampingRatio(fol1->getMass(), fol2->getMass(), k_eq) * 2;
 		Tissue* springLayer1 = new Tissue(m_sim, fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2, k_this, damping_this);
@@ -83,7 +83,7 @@ void MystacialPad::createLayer2() {
 		btTransform frameLayer2fol1 = createTransform(btVector3(-m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->SPRING_HEX_MESH_IDX[s][0]][6] / 2, 0., 0.));
 		btTransform frameLayer2fol2 = createTransform(btVector3(-m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->SPRING_HEX_MESH_IDX[s][1]][6] / 2, 0., 0.));
 
-		btScalar k_eq = m_parameter->k_layer;
+		btScalar k_eq = m_parameter->k_layer2;
 		btScalar k_this = k_eq / 2;
 		btScalar damping_this = getCriticalDampingRatio(fol1->getMass(), fol2->getMass(), k_eq) * 2;
 		Tissue* springLayer2 = new Tissue(m_sim, fol1->getBody(), fol2->getBody(), frameLayer2fol1, frameLayer2fol2, k_this, damping_this);

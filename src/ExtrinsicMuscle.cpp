@@ -61,7 +61,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 				btTransform trans = createTransform(btVector3(insertion_height, 0., 0.));
 				Tissue* tissue = new Tissue(m_sim, 
 					node, body, createTransform(), trans, 
-					m_parameter->k_layer, m_parameter->dmp_anchor);
+					m_parameter->k_layer1, m_parameter->dmp_anchor);
 				getWorld()->addConstraint(tissue->getConstraint(), true);
 				m_insertionPieces.push_back(tissue);
 			}

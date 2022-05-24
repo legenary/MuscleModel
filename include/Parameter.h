@@ -31,7 +31,8 @@ public:
 	std::string dir_spring_hex_mesh_idx;
 	std::vector<std::vector<int>> SPRING_HEX_MESH_IDX;
 	btScalar E_skin;
-	btScalar k_layer;
+	btScalar k_layer1;
+	btScalar k_layer2;
 	btScalar dmp_anchor;
 	btScalar k_anchor;
 

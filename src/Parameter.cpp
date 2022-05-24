@@ -37,13 +37,13 @@ Parameter::Parameter() {
 
 	// layer tissue parameter
 	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";
-	E_skin = 8000000;		// unit: Pa
+	E_skin = 8000000;		// unit: Pa, do not change
 							// Skin's Young's Modulus is ~8MPa (Karimi and Navidbakhsh, 2015)
-	k_layer = 300000;		// unit: 1e-3 (N/m)
-	dmp_anchor = 0.0001;	// This is the damping ratio set for (1) tissue anchor, (2) extrinsic muscle anchor, (3) extrinsic muscle insertion
-
-	k_anchor = 500000;		// k = 0 : hard anchor, no linear displacement, free angular movement
+	k_layer1 = 250000;		// unit: 1e-3 (N/m)
+	k_layer2 = 500000;
+	k_anchor = 250000;		// k = 0 : hard anchor, no linear displacement, free angular movement
 							// k > 0 : soft anchor, springy linear and angular movement
+	dmp_anchor = 0.0001;	// This is the damping ratio set for (1) tissue anchor, (2) extrinsic muscle anchor, (3) extrinsic muscle insertion
 
 	btScalar f0 = 8000;		// Fix unit: 1e-6 (N)
 	// instrinsic sling muscle parameter
