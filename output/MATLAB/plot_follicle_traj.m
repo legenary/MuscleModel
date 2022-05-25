@@ -19,7 +19,7 @@ end
 axis equal
 
 %% plot angle
-figure('Color', 'w'); hold on;
+figure('Color', 'w', 'Position', [300, 300, 900, 350]); hold on;
 for i = 1:31
     this_fol_orientation = squeeze(fol_traj(i, :, 1:3)-fol_traj(i, :, 4:6));
     this_theta = zeros(steps, 1);
@@ -36,5 +36,6 @@ for i = 1:31
 end
 xlabel('frame (fps:60)')
 ylabel('change of orientation');
+grid on
 
 

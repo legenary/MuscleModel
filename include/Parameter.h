@@ -26,6 +26,7 @@ public:
 	std::vector<std::vector<float>> FOLLICLE_POS_ORIENT_LEN_VOL;
 	btScalar fol_radius;
 	btScalar fol_density;
+	btScalar fol_damping;
 
 	// layer/spring parameter
 	std::string dir_spring_hex_mesh_idx;

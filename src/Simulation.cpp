@@ -129,6 +129,7 @@ void Simulation::internalWriteOutput() {
 	}
 	
 	write_txt(param->output_path, "parameter.txt", parameter_string);
+	std::cout << "Files saved.\n";
 }
 
 void Simulation::initParameter(Parameter *parameter) {
@@ -275,7 +276,8 @@ void Simulation::initPhysics() {
 	}
 	sprintf(parameter_string,
 		"FPS: %dHz\nSimulation internal step: %.0f\n"
-		"Contraction ratio: %.1f\n"
+		"Contraction ratio: %.2f\n"
+		"Follicle damping = %.2f\n"
 		"k_layer1=%.0fN/m\nk_layer2=%.0fN/m\nk_anchor=%.0fN/m\nf0_intrinsic=%.2fN\n"
 		"f0_nasolabialis(N)=%.2fN\nf0_maxillolabialis(M)=%.2fN\n"
 		"f0_nasolabialis_superficialis(NS)=%.2fN\n"
@@ -283,6 +285,7 @@ void Simulation::initPhysics() {
 		"f0_pars_interna_profunda=%.2fN\nf0_pars_maxillaris=%.2fN\n",
 		param->getFPS(), param->m_num_internal_step,
 		param->contract_range,
+		param->fol_damping,
 		param->k_layer1 * 0.001, param->k_layer2 * 0.001, param->k_anchor * 0.001, param->f0_ISM * 0.000001,
 		param->f0_nasolabialis * 0.000001, param->f0_maxillolabialis * 0.000001,
 		param->f0_NS * 0.000001, param->f0_PMS * 0.000001, 

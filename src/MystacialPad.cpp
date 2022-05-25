@@ -28,9 +28,11 @@ MystacialPad::MystacialPad(Simulation* sim, Parameter* param)
 		btScalar this_len = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6];	// length already in mm
 		btScalar this_mass = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][7];	// volume already in mm^3
 		btTransform this_trans = createTransform(this_pos, this_ypr);
-		Follicle* follicle = new Follicle(this, this_trans, param->fol_radius, this_len/2, this_mass, f);
+		Follicle* follicle = new Follicle(this, this_trans, param->fol_radius, this_len/2, this_mass, param->fol_damping, f);
 		follicle->setUserPointer(follicle->getInfo());
 		m_follicleArray.push_back(follicle);
+
+		std::cout << follicle->getBody()->getLinearDamping() << std::endl;
 	}
 	std::cout << "Done.\n";
 }
@@ -42,7 +44,6 @@ MystacialPad::~MystacialPad() {
 	freeAlignedObjectArray(m_layer3);
 	freeAlignedObjectArray(m_anchor);
 	freeAlignedObjectArray(m_ISMArray);
-	freeAlignedObjectArray(m_ISM_nodes);
 
 	delete m_nasolabialis;
 	delete m_maxillolabialis;

@@ -17,13 +17,14 @@ private:
 
 	btScalar m_mass;
 	btScalar m_length;
+	btScalar m_damping;
 	
 	btRigidBody* m_body;
 	btCollisionShape* m_shape;
 	Follicle_info* m_info;
 
 public:
-	Follicle(MystacialPad* pad, btTransform trans, btScalar radius, btScalar half_height, btScalar mass, int f);
+	Follicle(MystacialPad* pad, btTransform trans, btScalar radius, btScalar half_height, btScalar mass, btScalar damping, int f);
 	// disable copy constructor (override if needed in the future)
 	Follicle(const Follicle&) = delete;
 	Follicle& operator=(Follicle const&) = delete;

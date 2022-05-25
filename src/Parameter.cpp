@@ -34,6 +34,7 @@ Parameter::Parameter() {
 	dir_follicle_pos_orient_len_vol = "../resources/follicle_pos_ypr_len_vol.csv";
 	fol_radius = 0.15;		// unit: mm
 	fol_density = 0.001;	// unit: g/mm^3
+	fol_damping = 0;		// damping for rigid body is clamped between 0 and 1
 
 	// layer tissue parameter
 	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";
@@ -103,6 +104,6 @@ Parameter::Parameter() {
 	VIDEO = true;
 	video_file_name = "../output/output_video.mp4";
 	OUTPUT = true;
-	output_path = "../output";
+	output_path = "../output/";
 
 }
