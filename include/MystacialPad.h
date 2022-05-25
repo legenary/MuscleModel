@@ -22,6 +22,7 @@ private:
 	btAlignedObjectArray<Tissue*> m_layer3;
 	btAlignedObjectArray<Tissue*> m_anchor;
 	btAlignedObjectArray<IntrinsicSlingMuscle*> m_ISMArray;
+	btAlignedObjectArray<btRigidBody*> m_ISM_nodes;
 	int nFollicle;
 	int nTissueLayer1;
 	int nTissueLayer2;

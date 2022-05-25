@@ -39,6 +39,8 @@ public:
 	// instrinsic sling muscle parameter
 	std::string dir_intrinsic_sling_muscle_idx;
 	std::vector<std::vector<int>>INTRINSIC_SLING_MUSCLE_IDX;
+	std::string dir_intrinsic_sling_muscle_greek;
+	std::vector<std::vector<float>>INTRINSIC_SLING_MUSCLE_GREEK;
 	btScalar f0_ISM;
 	// contraction
 	bool contractISM;

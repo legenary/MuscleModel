@@ -195,6 +195,7 @@ void Simulation::initPhysics() {
 
 	//// intrinsic sling muscles
 	read_csv_int(param->dir_intrinsic_sling_muscle_idx, param->INTRINSIC_SLING_MUSCLE_IDX);
+	read_csv_float(param->dir_intrinsic_sling_muscle_greek, param->INTRINSIC_SLING_MUSCLE_GREEK);
 	m_mystacialPad->createIntrinsicSlingMuscle();
 
 	

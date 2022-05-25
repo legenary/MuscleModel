@@ -42,6 +42,7 @@ MystacialPad::~MystacialPad() {
 	freeAlignedObjectArray(m_layer3);
 	freeAlignedObjectArray(m_anchor);
 	freeAlignedObjectArray(m_ISMArray);
+	freeAlignedObjectArray(m_ISM_nodes);
 
 	delete m_nasolabialis;
 	delete m_maxillolabialis;
@@ -114,7 +115,6 @@ void MystacialPad::createAnchor() {
 void MystacialPad::createIntrinsicSlingMuscle() {
 	std::cout << "Creating intrinsic sling muscles...";
 	nISM = m_parameter->INTRINSIC_SLING_MUSCLE_IDX.size();
-
 	for (int s = 0; s < nISM; s++) {
 		Follicle* folC = m_follicleArray[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][0]];
 		Follicle* folR = m_follicleArray[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][1]];
@@ -124,6 +124,26 @@ void MystacialPad::createIntrinsicSlingMuscle() {
 		getWorld()->addConstraint(muscle->getConstraint(), true); // disable collision
 		m_ISMArray.push_back(muscle);
 	}
+	// greek muscles
+	for (int g = 0; g < m_parameter->INTRINSIC_SLING_MUSCLE_GREEK.size(); g++) {
+		// constract nodes
+		btTransform t = createTransform(btVector3(m_parameter->INTRINSIC_SLING_MUSCLE_GREEK[g][1],
+			m_parameter->INTRINSIC_SLING_MUSCLE_GREEK[g][2], m_parameter->INTRINSIC_SLING_MUSCLE_GREEK[g][3]));
+		btCollisionShape* s = new btSphereShape(0.1);
+		btRigidBody* b = createDynamicBody(0 /*mass*/, t, s);
+		m_ISM_nodes.push_back(b);
+		getWorld()->addRigidBody(b, COL_EXT_MUS, extMusCollideWith);
+		b->setActivationState(DISABLE_DEACTIVATION);
+
+		// construct intrinsic muscle
+		Follicle* folC = m_follicleArray[m_parameter->INTRINSIC_SLING_MUSCLE_GREEK[g][0]];
+		btTransform frameC = createTransform(btVector3(-m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[g][0]][6] / 2 * 0.4, 0., 0.));
+		IntrinsicSlingMuscle* muscle = new IntrinsicSlingMuscle(m_sim, folC->getBody(), b, frameC, createTransform(), m_parameter->f0_ISM);
+		getWorld()->addConstraint(muscle->getConstraint(), true); // disable collision
+		m_ISMArray.push_back(muscle);
+		nISM++;
+	}
+
 	std::cout << "Done.\n";
 }
 
@@ -264,11 +284,11 @@ void MystacialPad::debugDraw() {
 	//for (int i = 0; i < m_layer2.size(); i++) {
 	//	m_layer2[i]->debugDraw(btVector3(1., 0., 0.), true);
 	//}
-	for (int i = 0; i < m_anchor.size(); i++) {
+	for (int i = 0; i < nTissueAnchor; i++) {
 		m_anchor[i]->debugDraw(RED, true);
 	}
 
-	for (int i = 0; i < m_ISMArray.size(); i++) {
+	for (int i = 0; i < nISM; i++) {
 		m_ISMArray[i]->debugDraw(RED, false);
 	}
 	if (m_nasolabialis) {

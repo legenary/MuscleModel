@@ -48,6 +48,7 @@ Parameter::Parameter() {
 	btScalar f0 = 8000;		// Fix unit: 1e-6 (N)
 	// instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
+	dir_intrinsic_sling_muscle_greek = "../resources/intrinsic_sling_muscle_greek.csv";
 	f0_ISM = 20*f0;
 
 	// M.Nasolabialis

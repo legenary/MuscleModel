@@ -63,8 +63,30 @@ axis equal
 
 
 %% now create greek insertion
+intrinsicSlingMuscleGreek = zeros(4, 4);
+intrinsicSlingMuscleGreek(:,1) = [0; 5; 10; 16];
 
+tempNode = ((vec_top2D(1,:)*2-vec_top2D(2,:))...
+           +(vec_top2D(1,:)*2-vec_top2D(7,:)))...
+           /2;
+intrinsicSlingMuscleGreek(1, 2:4) = tempNode;
 
+tempNode = ((vec_top2D(6,:)*2-vec_top2D(7,:))...
+           +(vec_top2D(6,:)*2-vec_top2D(12,:)))...
+           /2;
+intrinsicSlingMuscleGreek(2, 2:4) = tempNode;
 
+tempNode = ((vec_top2D(11,:)*2-vec_top2D(12,:))...
+           +(vec_top2D(11,:)*2-vec_top2D(18,:)))...
+           /2;
+intrinsicSlingMuscleGreek(3, 2:4) = tempNode;
 
+tempNode = ((vec_top2D(17,:)*2-vec_top2D(18,:))...
+           +(vec_top2D(17,:)*2-vec_top2D(25,:)))...
+           /2;
+intrinsicSlingMuscleGreek(4, 2:4) = tempNode;
+
+plot3d(intrinsicSlingMuscleGreek(:, 2:4), 'ro');
+
+writematrix(intrinsicSlingMuscleGreek, '../../intrinsic_sling_muscle_greek.csv')
 
