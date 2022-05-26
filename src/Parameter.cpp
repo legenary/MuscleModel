@@ -35,6 +35,7 @@ Parameter::Parameter() {
 	fol_radius = 0.15;		// unit: mm
 	fol_density = 0.001;	// unit: g/mm^3
 	fol_damping = 0;		// damping for rigid body is clamped between 0 and 1
+							// default: 0, no damping
 
 	// layer tissue parameter
 	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";
@@ -45,6 +46,7 @@ Parameter::Parameter() {
 	k_anchor = 250000;		// k = 0 : hard anchor, no linear displacement, free angular movement
 							// k > 0 : soft anchor, springy linear and angular movement
 	dmp_anchor = 0.0001;	// This is the damping ratio set for (1) tissue anchor, (2) extrinsic muscle anchor, (3) extrinsic muscle insertion
+							// default: 1, no damping
 
 	btScalar f0 = 8000;		// Fix unit: 1e-6 (N)
 	// instrinsic sling muscle parameter
@@ -101,9 +103,9 @@ Parameter::Parameter() {
 	f0_PM = 4*f0;
 
 	// output;
-	VIDEO = true;
+	VIDEO = false;
 	video_file_name = "../output/output_video.mp4";
-	OUTPUT = true;
+	OUTPUT = false;
 	output_path = "../output/";
 
 }

@@ -88,5 +88,5 @@ intrinsicSlingMuscleGreek(4, 2:4) = tempNode;
 
 plot3d(intrinsicSlingMuscleGreek(:, 2:4), 'ro');
 
-writematrix(intrinsicSlingMuscleGreek, '../../intrinsic_sling_muscle_greek.csv')
+% writematrix(intrinsicSlingMuscleGreek, '../../intrinsic_sling_muscle_greek.csv')
 

@@ -32,7 +32,6 @@ MystacialPad::MystacialPad(Simulation* sim, Parameter* param)
 		follicle->setUserPointer(follicle->getInfo());
 		m_follicleArray.push_back(follicle);
 
-		std::cout << follicle->getBody()->getLinearDamping() << std::endl;
 	}
 	std::cout << "Done.\n";
 }
