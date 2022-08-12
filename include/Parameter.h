@@ -9,7 +9,7 @@ public:
 
 	int m_fps;
 	btScalar m_time_step;
-	btScalar m_num_internal_step;
+	int m_num_internal_step;
 	btScalar m_internal_time_step;
 	btScalar m_time_stop;
 	int DEBUG;

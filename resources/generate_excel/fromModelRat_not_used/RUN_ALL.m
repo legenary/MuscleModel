@@ -1,0 +1,12 @@
+clear;
+getFolliclePosYPRLenVol
+getSpringHexMeshIndex
+getIntrinsicSlingMuscleIndex
+getMuscleContractionTrajectory
+getNasolabialis
+getMaxillolabialis
+getNasolabialisSuperficialis
+getParsMediaSuperior
+getParsMediaInferior
+getParsInternaProfunda
+getParsMaxillaris

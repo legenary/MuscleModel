@@ -51,7 +51,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 	// construct muscle insertion tissue to follicle
 	int nInsertionGroups = INSERTION_IDX.size();
 	for (int i = 0; i < nInsertionGroups; i++) {
-		btRigidBody* node = m_nodes[INSERTION_IDX[i][0]];\
+		btRigidBody* node = m_nodes[INSERTION_IDX[i][0]];
 		// Insertion height: the height of point where the follicle is inserted by the muscle, range [-1, 1]*fol_half_height
 		for (int f = 1; f < 3; f++) {
 			if (INSERTION_IDX[i][f] >= 0) {

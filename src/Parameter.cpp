@@ -5,7 +5,7 @@
 
 Parameter::Parameter() {
 	m_fps = 60;
-	m_time_step = 1./ m_fps;
+	m_time_step = 1.0f / m_fps;
 	m_num_internal_step = 120;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
@@ -45,7 +45,10 @@ Parameter::Parameter() {
 	k_layer2 = 500000;
 	k_anchor = 250000;		// k = 0 : hard anchor, no linear displacement, free angular movement
 							// k > 0 : soft anchor, springy linear and angular movement
-	dmp_anchor = 0.0001;	// This is the damping ratio set for (1) tissue anchor, (2) extrinsic muscle anchor, (3) extrinsic muscle insertion
+	dmp_anchor = 0.0001;	// This is the damping ratio set for:
+								// (1) tissue anchor,
+								// (2) extrinsic muscle anchor
+								// (3) extrinsic muscle insertion (this is treated as tissue)
 							// default: 1, no damping
 
 	btScalar f0 = 8000;		// Fix unit: 1e-6 (N)
@@ -103,9 +106,9 @@ Parameter::Parameter() {
 	f0_PM = 4*f0;
 
 	// output;
-	VIDEO = false;
+	VIDEO = true;
 	video_file_name = "../output/output_video.mp4";
-	OUTPUT = false;
+	OUTPUT = true;
 	output_path = "../output/";
 
 }

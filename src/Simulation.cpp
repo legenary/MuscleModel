@@ -19,7 +19,7 @@ Simulation::~Simulation() {
 
 void Simulation::stepSimulation(float deltaTime) {
 	auto start = std::chrono::high_resolution_clock::now();
-	m_time += param->m_time_step; 						// increase time
+	m_time += deltaTime; 								// increase time
 	m_step += 1;										// increase step
 
 	if (param->m_time_stop == 0 || m_time < param->m_time_stop) {
@@ -33,8 +33,10 @@ void Simulation::stepSimulation(float deltaTime) {
 		}
 
 		// contraction/retraction
-		int every_steps = 25;
-		static btScalar range = param->contract_range;
+		static int every_steps =						// half period
+			(int)(25.0f / 60.0f * param->getFPS());		// 50 frames for 60 fps
+														// 100 frames for 120 fps		
+		static btScalar range = param->contract_range;		
 		if ((m_step-1) % every_steps == 0) {
 			range = -range;
 			m_mystacialPad->contractMuscle(INTRINSIC,  1.0 - param->contract_range /2 + range / 2);
