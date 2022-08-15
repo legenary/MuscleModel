@@ -16,7 +16,7 @@ protected:
 	btScalar m_damping;
 	myTissueType m_type;
 
-	btGeneric6DofSpringConstraint* m_constraint;
+	btGeneric6DofSpring2Constraint* m_constraint;
 	btTransform TsP;
 	btTransform TsQ;
 	btVector3 m_eq;	// equilibrium point that is restLength from body 1 frame
@@ -25,6 +25,8 @@ protected:
 	btScalar m_restLength;
 	btScalar m_restLengthDefault;
 	btScalar m_length;
+
+	btRigidBody* m_rbA, * m_rbB;
 
 public:
 	//Tissue(btScalar k, btScalar damping);
@@ -45,7 +47,7 @@ public:
 	void update();
 	void init();
 
-	btGeneric6DofSpringConstraint* getConstraint() const;
+	btGeneric6DofSpring2Constraint* getConstraint() const;
 	btScalar getRestLength() const;
 	void setRestLength(const btScalar ratio);
 	btScalar getLength() const;

@@ -40,13 +40,13 @@ void Simulation::stepSimulation(float deltaTime) {
 		if ((m_step-1) % every_steps == 0) {
 			range = -range;
 			m_mystacialPad->contractMuscle(INTRINSIC,  1.0 - param->contract_range /2 + range / 2);
-			//m_mystacialPad->contractMuscle(N, 0.8);
-			//m_mystacialPad->contractMuscle(M, 0.8);
+			//m_mystacialPad->contractMuscle(N, 1.0 - param->contract_range / 2 + range / 2);
+			//m_mystacialPad->contractMuscle(M, 1.0 - param->contract_range / 2 + range / 2);
 			//m_mystacialPad->contractMuscle(NS, 0.8);
-			//m_mystacialPad->contractMuscle(PMS, 0.8);
-			//m_mystacialPad->contractMuscle(PMI, 0.8);
-			//m_mystacialPad->contractMuscle(PIP, 0.8);
-			//m_mystacialPad->contractMuscle(PM, 0.8);
+			m_mystacialPad->contractMuscle(PMS, 1.0 - param->contract_range / 2 + range / 2);
+			m_mystacialPad->contractMuscle(PMI, 1.0 - param->contract_range / 2 + range / 2);
+			m_mystacialPad->contractMuscle(PIP, 1.0 - param->contract_range / 2 + range / 2);
+			m_mystacialPad->contractMuscle(PM, 1.0 - param->contract_range / 2 + range / 2);
 		}
 
 		// last step: step simulation
@@ -277,18 +277,19 @@ void Simulation::initPhysics() {
 		}
 	}
 	sprintf(parameter_string,
-		"FPS: %dHz\nSimulation internal step: %.0f\n"
+		"FPS: %dHz\nSimulation internal step: %d\n"
 		"Contraction ratio: %.2f\n"
-		"Follicle damping = %.2f\n"
-		"k_layer1=%.0fN/m\nk_layer2=%.0fN/m\nk_anchor=%.0fN/m\nf0_intrinsic=%.2fN\n"
-		"f0_nasolabialis(N)=%.2fN\nf0_maxillolabialis(M)=%.2fN\n"
-		"f0_nasolabialis_superficialis(NS)=%.2fN\n"
-		"f0_pars_media_superior=%.2fN\nf0_pars_media_inferior=%.2fN\n"
-		"f0_pars_interna_profunda=%.2fN\nf0_pars_maxillaris=%.2fN\n",
+		"Follicle damping = %.6f\n"
+		"k_layer1=%.6fN/m\nk_layer2=%.6fN/m\nk_anchor=%.6fN/m\nf0_intrinsic=%.6fN\n"
+		"f0_nasolabialis(N)=%.6fN\nf0_maxillolabialis(M)=%.6fN\n"
+		"f0_nasolabialis_superficialis(NS)=%.6fN\n"
+		"f0_pars_media_superior=%.6fN\nf0_pars_media_inferior=%.6fN\n"
+		"f0_pars_interna_profunda=%.6fN\nf0_pars_maxillaris=%.6fN\n",
 		param->getFPS(), param->m_num_internal_step,
 		param->contract_range,
 		param->fol_damping,
-		param->k_layer1 * 0.001, param->k_layer2 * 0.001, param->k_anchor * 0.001, param->f0_ISM * 0.000001,
+		param->k_layer1 * 0.001, param->k_layer2 * 0.001, param->k_anchor * 0.001,
+		param->f0_ISM * 0.000001,
 		param->f0_nasolabialis * 0.000001, param->f0_maxillolabialis * 0.000001,
 		param->f0_NS * 0.000001, param->f0_PMS * 0.000001, 
 		param->f0_PMI * 0.000001, param->f0_PIP * 0.000001, param->f0_PM * 0.000001

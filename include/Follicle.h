@@ -31,6 +31,7 @@ public:
 	virtual ~Follicle();
 
 	btRigidBody* getBody() const;
+	btRigidBody* getBody();
 	btScalar getLength() const;
 	btScalar getMass() const;
 	void* getUserPointer() const;

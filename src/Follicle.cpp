@@ -25,6 +25,10 @@ btRigidBody* Follicle::getBody() const {
 	return m_body;
 }
 
+btRigidBody* Follicle::getBody() {
+	return m_body;
+}
+
 btScalar Follicle::getLength() const {
 	return m_length;
 }

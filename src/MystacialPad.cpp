@@ -25,8 +25,8 @@ MystacialPad::MystacialPad(Simulation* sim, Parameter* param)
 		btVector3 this_ypr = btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[f][3],
 									   -param->FOLLICLE_POS_ORIENT_LEN_VOL[f][4],
 									   param->FOLLICLE_POS_ORIENT_LEN_VOL[f][5]);
-		btScalar this_len = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6];	// length already in mm
-		btScalar this_mass = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][7];	// volume already in mm^3
+		btScalar this_len = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6]; /*length already in mm*/
+		btScalar this_mass = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][7] /*volume already in mm^3*/ * param->fol_density;
 		btTransform this_trans = createTransform(this_pos, this_ypr);
 		Follicle* follicle = new Follicle(this, this_trans, param->fol_radius, this_len/2, this_mass, param->fol_damping, f);
 		follicle->setUserPointer(follicle->getInfo());

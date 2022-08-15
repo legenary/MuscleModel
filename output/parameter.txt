@@ -1,15 +1,15 @@
-FPS: 120Hz
-Simulation internal step: 0
-Contraction ratio: 0.25
-Follicle damping = 0.00
-k_layer1=250N/m
-k_layer2=500N/m
-k_anchor=250N/m
-f0_intrinsic=0.16N
-f0_nasolabialis(N)=0.20N
-f0_maxillolabialis(M)=0.20N
-f0_nasolabialis_superficialis(NS)=0.01N
-f0_pars_media_superior=0.01N
-f0_pars_media_inferior=0.01N
-f0_pars_interna_profunda=0.03N
-f0_pars_maxillaris=0.03N
+FPS: 60Hz
+Simulation internal step: 120
+Contraction ratio: 0.250000
+Follicle damping = 0.000000
+k_layer1=0.250000N/m
+k_layer2=0.500000N/m
+k_anchor=0.250000N/m
+f0_intrinsic=0.000160N
+f0_nasolabialis(N)=0.000200N
+f0_maxillolabialis(M)=0.000200N
+f0_nasolabialis_superficialis(NS)=0.000008N
+f0_pars_media_superior=0.000008N
+f0_pars_media_inferior=0.000008N
+f0_pars_interna_profunda=0.000032N
+f0_pars_maxillaris=0.000032N

@@ -6,25 +6,33 @@
 Tissue::Tissue(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 	btTransform& frameInA, btTransform& frameInB, 
 	btScalar k, btScalar damping)
-	: m_sim(sim), m_k(k), m_damping(damping), m_type(myTissueType::between) {
+	: m_sim(sim), m_k(k), m_damping(damping), m_type(myTissueType::between), m_rbA(rbA), m_rbB(rbB) {
 
-	m_constraint = new btGeneric6DofSpringConstraint(*rbA, *rbB, frameInA, frameInB, true);
+	//m_constraint = new btGeneric6DofSpringConstraint(*rbA, *rbB, frameInA, frameInB, true);
+	m_constraint = new btGeneric6DofSpring2Constraint(*rbA, *rbB, frameInA, frameInB);	// btGeneric6DofSpring2Constraint is preferred for engineering solution
 	init();
 };
 
 Tissue::Tissue(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
 	btScalar k, btScalar damping)
-	: m_sim(sim), m_k(k), m_damping(damping), m_type(myTissueType::anchor) {
+	: m_sim(sim), m_k(k), m_damping(damping), m_type(myTissueType::anchor), m_rbB(rbB) {
 
-	m_constraint = new btGeneric6DofSpringConstraint(*rbB, frameInB, true);
+	//m_constraint = new btGeneric6DofSpringConstraint(*rbB, frameInB, true);
+	m_constraint = new btGeneric6DofSpring2Constraint(*rbB, frameInB);	// btGeneric6DofSpring2Constraint is preferred for engineering solution
 	init();
 };
 
 Tissue::~Tissue() {
 	delete m_constraint;
+	m_constraint = nullptr;
+	m_rbA = nullptr;
+	m_rbB = nullptr;
 }
 
 void Tissue::init() {
+	//m_k = m_k / 1000;
+	m_damping = 2 * sqrt(m_rbB->getMass() * m_k) / 10;
+
 	m_constraint->setLinearLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
 	m_constraint->setLinearUpperLimit(btVector3(0, 0, 0));
 	m_constraint->setAngularLowerLimit(btVector3(1, 1, 1));	
@@ -40,11 +48,16 @@ void Tissue::init() {
 		m_constraint->setEquilibriumPoint(i);
 	}
 
-	m_restLength = btVector3(
-		m_constraint->getEquilibriumPoint(0),
-		m_constraint->getEquilibriumPoint(1),
-		m_constraint->getEquilibriumPoint(2)
-	).length();
+	// This function only works for btGeneric6DofSpringConstraint
+	//m_restLength = btVector3(
+	//	m_constraint->getEquilibriumPoint(0),
+	//	m_constraint->getEquilibriumPoint(1),
+	//	m_constraint->getEquilibriumPoint(2)
+	//).length();
+
+	btVector3 p = m_constraint->getCalculatedTransformA().getOrigin();
+	btVector3 q = m_constraint->getCalculatedTransformB().getOrigin();
+	m_restLength = (p - q).length();
 
 	m_length = m_restLength;
 	m_restLengthDefault = m_restLength;
@@ -117,7 +130,7 @@ btScalar Tissue::getLength() const {
 	return m_length;
 }
 
-btGeneric6DofSpringConstraint* Tissue::getConstraint() const {
+btGeneric6DofSpring2Constraint* Tissue::getConstraint() const {
 	return m_constraint;
 }
 

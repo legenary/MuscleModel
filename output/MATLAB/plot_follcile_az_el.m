@@ -11,7 +11,7 @@ close all;
 
 %determine time step
 steps = size(load("../fol_pos/fol_00.csv"), 1);
-fps = 120;
+fps = 60;
 
 fol_traj = zeros(31, steps, 6);
 for fol = 1:31
