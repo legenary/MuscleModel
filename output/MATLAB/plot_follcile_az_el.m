@@ -111,6 +111,7 @@ figure('Color', 'w'); hold on;
 color = lines(5);
 for r = 1:5
     plot(az(:, Row==r), 'Color', color(r,:));
+    % plot(az(:, 5));
 end
 xlabel('frames');
 ylabel('angles');
@@ -127,26 +128,26 @@ while(loc < (steps+fps))
 end
 
 
-% % Calculate del/daz 
+% Calculate del/daz 
 % (for 60Hz data)
-% % print out delta changes 
-% 
-% figure('Color', 'w'); hold on;
-% frames = 102:126;
-% % frames = 152:176;
-% % frames = 202:226;
-% fprintf("Frame: %d to %d\n", frames(1), frames(end));
-% for r = 1:5
-%     daz = az(frames(2:end), Row==r) - az(frames(1:end-1), Row==r);
-%     del = el(frames(2:end), Row==r) - el(frames(1:end-1), Row==r);
-%     delta = del./daz;
-%     
-%     plot(daz(:), del(:), 'o', 'Color', color(r,:));
-%     
-%     fprintf("Row %d: del/daz = %.2f +/- %.2f\n", ...
-%         r, mean(delta(:)), std(delta(:)));
-% 
-% end
+% print out delta changes 
+
+figure('Color', 'w'); hold on;
+frames = 102:126;
+% frames = 152:176;
+% frames = 202:226;
+fprintf("Frame: %d to %d\n", frames(1), frames(end));
+for r = 1:5
+    daz = az(frames(2:end), Row==r) - az(frames(1:end-1), Row==r);
+    del = el(frames(2:end), Row==r) - el(frames(1:end-1), Row==r);
+    delta = del./daz;
+    
+    plot(daz(:), del(:), 'o', 'Color', color(r,:));
+    
+    fprintf("Row %d: del/daz = %.2f +/- %.2f\n", ...
+        r, mean(delta(:)), std(delta(:)));
+
+end
 
 
 

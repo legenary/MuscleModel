@@ -44,7 +44,7 @@ struct Timer {
 
 btRigidBody* createDynamicBody(const float mass, const btTransform& startTransform, btCollisionShape* shape, btScalar damping = 1.f);
 btTransform createTransform(const btVector3& origin = btVector3(0., 0., 0.), const btVector3& rotation = btVector3(0., 0., 0.));
-float getCriticalDampingRatio(const float m1, const float m2, const float k);
+//float getCriticalDampingRatio(const float m1, const float m2, const float k);
 
 void read_csv_float(const std::string& fileName, std::vector<std::vector<float>>& dataList);
 void read_csv_int(const std::string& fileName, std::vector<std::vector<int>>& dataList);

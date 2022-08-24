@@ -35,13 +35,16 @@ void Fiber::init() {
 		m_constraint->setEquilibriumPoint(i);
 	}
 
-	m_length = btVector3(
-		m_constraint->getEquilibriumPoint(0),
-		m_constraint->getEquilibriumPoint(1),
-		m_constraint->getEquilibriumPoint(2)
-	).length();
+	//m_length = btVector3(
+	//	m_constraint->getEquilibriumPoint(0),
+	//	m_constraint->getEquilibriumPoint(1),
+	//	m_constraint->getEquilibriumPoint(2)
+	//).length();
+	btVector3 p = m_constraint->getCalculatedTransformA().getOrigin();
+	btVector3 q = m_constraint->getCalculatedTransformB().getOrigin();
+	m_restLength = (p - q).length();
 
-	m_restLength= m_length;
+	m_length = m_restLength;
 	m_restLengthNoAvtivation = m_length;
 
 }

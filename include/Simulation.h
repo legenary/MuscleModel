@@ -29,7 +29,6 @@ private:
 	std::map<const btCollisionObject*, std::vector<btManifoldPoint*>> objectsCollisions;
 
 	void zeroFrameSetup();
-	void internalWriteOutput();
 
 	char parameter_string[512];
 
@@ -47,6 +46,7 @@ public:
 	void initParameter(Parameter* parameter);
 	virtual void initPhysics() override;
 	virtual void stepSimulation(float deltaTime) override;
+	void internalWriteOutput();
 
 	void initPhysics_test();
 	void stepSimulation_test(float deltaTime);

@@ -5,18 +5,20 @@
 
 Tissue::Tissue(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 	btTransform& frameInA, btTransform& frameInB, 
-	btScalar k, btScalar damping)
-	: m_sim(sim), m_k(k), m_damping(damping), m_type(myTissueType::between), m_rbA(rbA), m_rbB(rbB) {
+	btScalar k, btScalar zeta)
+	: m_sim(sim), m_k(k), m_type(myTissueType::between), m_rbA(rbA), m_rbB(rbB) {
 
+	m_damping = 2 * sqrt(m_rbB->getMass() * m_k) * zeta;
 	//m_constraint = new btGeneric6DofSpringConstraint(*rbA, *rbB, frameInA, frameInB, true);
 	m_constraint = new btGeneric6DofSpring2Constraint(*rbA, *rbB, frameInA, frameInB);	// btGeneric6DofSpring2Constraint is preferred for engineering solution
 	init();
 };
 
 Tissue::Tissue(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
-	btScalar k, btScalar damping)
-	: m_sim(sim), m_k(k), m_damping(damping), m_type(myTissueType::anchor), m_rbB(rbB) {
+	btScalar k, btScalar zeta)
+	: m_sim(sim), m_k(k), m_type(myTissueType::anchor), m_rbB(rbB) {
 
+	m_damping = 2 * sqrt(m_rbB->getMass() * m_k) * zeta;
 	//m_constraint = new btGeneric6DofSpringConstraint(*rbB, frameInB, true);
 	m_constraint = new btGeneric6DofSpring2Constraint(*rbB, frameInB);	// btGeneric6DofSpring2Constraint is preferred for engineering solution
 	init();
@@ -30,9 +32,6 @@ Tissue::~Tissue() {
 }
 
 void Tissue::init() {
-	//m_k = m_k / 1000;
-	m_damping = 2 * sqrt(m_rbB->getMass() * m_k) / 10;
-
 	m_constraint->setLinearLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
 	m_constraint->setLinearUpperLimit(btVector3(0, 0, 0));
 	m_constraint->setAngularLowerLimit(btVector3(1, 1, 1));	
@@ -41,8 +40,7 @@ void Tissue::init() {
 	for (int i = 0; i < 3; i++) {
 		m_constraint->enableSpring(i, true);
 		m_constraint->setStiffness(i, m_k);
-		// not sure how damping coefficient is defined
-		// guess: damping [0, 1] like restitution coefficient?
+		// viscous damping: m_damping = zeta * 2 * sqrt(m * k)
 		m_constraint->setDamping(i, m_damping);
 		// set m_equilibriumPoint[index] = distance from A to B
 		m_constraint->setEquilibriumPoint(i);

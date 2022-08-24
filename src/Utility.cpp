@@ -37,14 +37,14 @@ btTransform createTransform(const btVector3& origin, const btVector3& YPR) {
 	return trans;
 }
 
-float getCriticalDampingRatio(const float m1, const float m2, const float k) {
-	// get damping ratio (in Bullet)
-	// when m1 = m2 = 1, k = 1, the critical damping ratio is 0.0465
-	// damping ratio ~ sqrt( (m1 + m2) / (m1 * m2  * k) )
-	float fold = std::sqrt((m1 + m2) / m1 / m2 / k);
-	return 0.0465 * fold / std::sqrt(2);
-
-}
+//float getCriticalDampingRatio(const float m1, const float m2, const float k) {
+//	// get damping ratio (in Bullet)
+//	// when m1 = m2 = 1, k = 1, the critical damping ratio is 0.0465
+//	// damping ratio ~ sqrt( (m1 + m2) / (m1 * m2  * k) )
+//	float fold = std::sqrt((m1 + m2) / m1 / m2 / k);
+//	return 0.0465 * fold / std::sqrt(2);
+//
+//}
 
 void read_csv_float(const std::string& fileName, std::vector<std::vector<float>>& dataList){
 

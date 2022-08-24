@@ -4,7 +4,7 @@
 #include "BulletDynamics/ConstraintSolver/btGeneric6DofSpringConstraint.h"
 
 //ATTRIBUTE_ALIGNED16(class) myGeneric6DofMuscleConstraint : public btGeneric6DofSpringConstraint{ myGeneric6DofMuscleConstraint : public btGeneric6DofSpringConstraint {
-class myGeneric6DofMuscleConstraint : public btGeneric6DofSpringConstraint{
+class myGeneric6DofMuscleConstraint : public btGeneric6DofSpringConstraint {
 protected:
 	void m_internalUpdateMuscles(btConstraintInfo2* info);
 	btVector3 m_force;

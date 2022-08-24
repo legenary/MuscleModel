@@ -16,19 +16,15 @@ myGeneric6DofMuscleConstraint::myGeneric6DofMuscleConstraint(btRigidBody& rbA, b
 myGeneric6DofMuscleConstraint::myGeneric6DofMuscleConstraint(btRigidBody& rbB, const btTransform& frameInB, bool useLinearReferenceFrameB)
 	: btGeneric6DofSpringConstraint(rbB, frameInB, useLinearReferenceFrameB) {}
 
-
-// currently it is the same as btGeneric6DofSpringConstraint::internalUpdateSprings
+// update forces calculated outside
 void myGeneric6DofMuscleConstraint::m_internalUpdateMuscles(btConstraintInfo2* info)
 {
 // it is assumed that calculateTransforms() have been called before this call
 	int i;
-//btVector3 relVel = m_rbB.getLinearVelocity() - m_rbA.getLinearVelocity();
 	for (i = 0; i < 3; i++) {
-		if (m_springEnabled[i]) {
-			// muscle force is calculated outside of the constraint (not Hooke's law)
-			m_linearLimits.m_targetVelocity[i] = info->fps / btScalar(info->m_numIterations) * m_force[i];
-			m_linearLimits.m_maxMotorForce[i] = btFabs(m_force[i]); // absolute value
-		}
+		// muscle force is calculated outside of the constraint (not Hooke's law)
+		m_linearLimits.m_targetVelocity[i] = info->fps / btScalar(info->m_numIterations) * m_force[i];
+		m_linearLimits.m_maxMotorForce[i] = btFabs(m_force[i]); // absolute value
 	}
 }
 

@@ -4,13 +4,13 @@
 #include "Utility.h"
 
 Parameter::Parameter() {
-	m_fps = 60;
+	m_fps = 120;
 	m_time_step = 1.0f / m_fps;
 	m_num_internal_step = 120;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / m_num_internal_step;
-	m_time_stop = 4;
+	m_time_stop = 15;
 
 	DEBUG = 1;	// 0: no debug
 				// 1: specified inline debug drawing only
@@ -32,8 +32,8 @@ Parameter::Parameter() {
 
 	// foillicle parameter
 	dir_follicle_pos_orient_len_vol = "../resources/follicle_pos_ypr_len_vol.csv";
-	fol_radius = 0.15;		// unit: mm
-	fol_density = 0.001;	// unit: g/mm^3
+	fol_radius = 0.15;		// Bullet unit: mm
+	fol_density = 0.001;	// Bullet unit: g/mm^3
 	fol_damping = 0;		// damping for rigid body is clamped between 0 and 1
 							// default: 0, no damping
 
@@ -41,18 +41,24 @@ Parameter::Parameter() {
 	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";
 	E_skin = 8000000;		// unit: Pa, do not change
 							// Skin's Young's Modulus is ~8MPa (Karimi and Navidbakhsh, 2015)
-	btScalar factor = 0.001;
-	k_layer1 = 250000 * factor;		// unit: 1e-3 (N/m)
-	k_layer2 = 500000 * factor;
-	k_anchor = 250000 * factor;		// k = 0 : hard anchor, no linear displacement, free angular movement
-							// k > 0 : soft anchor, springy linear and angular movement
-	dmp_anchor = 0.0001;	// This is the damping ratio set for:
-	// Note:						// (1) tissue anchor,
-	// This entrance is not used	// (2) extrinsic muscle anchor
-	// This parameter is set inside	// (3) extrinsic muscle insertion (this is treated as tissue)						
+
+	k_layer1 = 250;			// Bullet unit: 1e-3 (N/m)
+	k_layer2 = 500;
+	k_anchor = 250;			// k > 0 : soft anchor, springy linear and angular movement
+							// k = 0 : hard anchor, no linear displacement, free angular movement
+
+	zeta_tissue = 0.1;		// This sets the damping ratio for: 
+							// (1) tissue anchor,
+							// (2) extrinsic muscle anchor
+							// (3) extrinsic muscle insertion (this is treated as tissue)
+							// F = -m * x - c* v
+							// where c = zeta * (2 * sqrt(m * k))
+							// zeta > 1: overdamped
+							// zeta = 1: critically damped
+							// zeta < 1: underdamped
 
 	// muscle parameter
-	btScalar f0 = 8000 * factor;		// Fix unit: 1e-6 (N)
+	btScalar f0 = 8;		// Bullet unit: 1e-6 (N)
 	// instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
 	dir_intrinsic_sling_muscle_greek = "../resources/intrinsic_sling_muscle_greek.csv";

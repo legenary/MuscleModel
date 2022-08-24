@@ -34,7 +34,7 @@ void Simulation::stepSimulation(float deltaTime) {
 
 		// contraction/retraction
 		static int every_steps =						// half period
-			(int)(25.0f / 60.0f * param->getFPS());		// 50 frames for 60 fps
+			(int)(40.0f / 60.0f * param->getFPS());		// 50 frames for 60 fps
 														// 100 frames for 120 fps		
 		static btScalar range = param->contract_range;		
 		if ((m_step-1) % every_steps == 0) {
@@ -43,10 +43,10 @@ void Simulation::stepSimulation(float deltaTime) {
 			//m_mystacialPad->contractMuscle(N, 1.0 - param->contract_range / 2 + range / 2);
 			//m_mystacialPad->contractMuscle(M, 1.0 - param->contract_range / 2 + range / 2);
 			//m_mystacialPad->contractMuscle(NS, 0.8);
-			m_mystacialPad->contractMuscle(PMS, 1.0 - param->contract_range / 2 + range / 2);
-			m_mystacialPad->contractMuscle(PMI, 1.0 - param->contract_range / 2 + range / 2);
-			m_mystacialPad->contractMuscle(PIP, 1.0 - param->contract_range / 2 + range / 2);
-			m_mystacialPad->contractMuscle(PM, 1.0 - param->contract_range / 2 + range / 2);
+			//m_mystacialPad->contractMuscle(PMS, 1.0 - param->contract_range / 2 + range / 2);
+			//m_mystacialPad->contractMuscle(PMI, 1.0 - param->contract_range / 2 + range / 2);
+			//m_mystacialPad->contractMuscle(PIP, 1.0 - param->contract_range / 2 + range / 2);
+			//m_mystacialPad->contractMuscle(PM, 1.0 - param->contract_range / 2 + range / 2);
 		}
 
 		// last step: step simulation
@@ -95,9 +95,9 @@ void Simulation::stepSimulation(float deltaTime) {
 
 	}
 	else {
-		if (param->OUTPUT) {
-			internalWriteOutput();
-		}
+		//if (param->OUTPUT) {
+		//	internalWriteOutput();
+		//}
 		
 
 		// timeout -> set exit flag
@@ -147,7 +147,7 @@ void Simulation::initPhysics() {
 	m_collisionConfiguration = new btDefaultCollisionConfiguration();
 	m_dispatcher = new	btCollisionDispatcher(m_collisionConfiguration);
 
-	// broadphase algorithm
+	// broadphase algorithm: dynamic bounding volume tree (DBVT)
 	m_broadphase = new btDbvtBroadphase();
 
 	// select solver
@@ -156,7 +156,8 @@ void Simulation::initPhysics() {
 
 	m_dynamicsWorld = new btDiscreteDynamicsWorld(m_dispatcher, m_broadphase, m_solver, m_collisionConfiguration);
 
-	// set number of iterations
+	// set number of iterations for contact solver
+	m_dynamicsWorld->getSolverInfo().m_timeStep = btScalar(1.0f / param->getFPS());
 	m_dynamicsWorld->getSolverInfo().m_numIterations = 20;
 	m_dynamicsWorld->getSolverInfo().m_solverMode = SOLVER_SIMD |
 		SOLVER_USE_WARMSTARTING |

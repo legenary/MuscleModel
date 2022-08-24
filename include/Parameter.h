@@ -34,7 +34,7 @@ public:
 	btScalar E_skin;
 	btScalar k_layer1;
 	btScalar k_layer2;
-	btScalar dmp_anchor;
+	btScalar zeta_tissue;
 	btScalar k_anchor;
 
 	// instrinsic sling muscle parameter
