@@ -14,8 +14,7 @@ One side of rat facial muscles contract and retract rhythmically under proper bi
 
 Gray cylinders represent follicles for each whisker under the skin. Lines represent facial collagenous network and muscle attachments.
 
-https://user-images.githubusercontent.com/38062004/186508406-d91ac489-6f73-4b13-89c3-fa2c3dfacda7.mp4
-
+https://user-images.githubusercontent.com/38062004/186511644-aa9d36b3-dd33-41c1-a901-e550ea49ac9f.mp4
 
 
 ## Build using CMake (Windows OS):
