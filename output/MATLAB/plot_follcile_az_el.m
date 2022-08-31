@@ -11,13 +11,13 @@ close all;
 
 %determine time step
 steps = size(load("../fol_pos/fol_00.csv"), 1);
-fps = 60;
+fps = 120;
 
 fol_traj = zeros(31, steps, 6);
 for fol = 1:31
     filename = sprintf("../fol_pos/fol_%02d.csv", fol-1);
     fol_traj(fol, :, :) = load(filename);
-    
+
 end
 
 %% First, adjust to average row plane
@@ -107,6 +107,8 @@ ylabel('angles');
 title('Elevation angle by row');
 
 % azimuth angles
+% az = smoothdata(az, 'gaussian', 20);
+% el = smoothdata(el, 'gaussian', 20);
 figure('Color', 'w'); hold on;
 color = lines(5);
 for r = 1:5
@@ -133,7 +135,7 @@ end
 % print out delta changes 
 
 figure('Color', 'w'); hold on;
-frames = 102:126;
+frames = 1290:1350;
 % frames = 152:176;
 % frames = 202:226;
 fprintf("Frame: %d to %d\n", frames(1), frames(end));

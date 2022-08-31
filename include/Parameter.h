@@ -15,6 +15,7 @@ public:
 	int DEBUG;
 
 	btScalar contract_range;
+	btScalar contract_frequency;
 
 	btScalar camPos[3];
 	btScalar camDist;

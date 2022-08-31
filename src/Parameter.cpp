@@ -4,9 +4,9 @@
 #include "Utility.h"
 
 Parameter::Parameter() {
-	m_fps = 120;
+	m_fps = 200;
 	m_time_step = 1.0f / m_fps;
-	m_num_internal_step = 120;	// for constraint solver
+	m_num_internal_step = 1000;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / m_num_internal_step;
@@ -17,11 +17,10 @@ Parameter::Parameter() {
 				// 2: wire frame added
 				// 3: axis aligned bound box added
 
-
 	// contract
 	contract_range = 0.25;
+	contract_frequency = 1; // Hz
 	
-
 	//camera position
 	camPos[0] = 0;
 	camPos[1] = 0;

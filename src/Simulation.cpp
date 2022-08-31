@@ -33,9 +33,8 @@ void Simulation::stepSimulation(float deltaTime) {
 		}
 
 		// contraction/retraction
-		static int every_steps =						// half period
-			(int)(40.0f / 60.0f * param->getFPS());		// 50 frames for 60 fps
-														// 100 frames for 120 fps		
+		int every_steps = param->getFPS() / param->contract_frequency / 2.0f;
+
 		static btScalar range = param->contract_range;		
 		if ((m_step-1) % every_steps == 0) {
 			range = -range;
