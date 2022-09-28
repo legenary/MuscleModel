@@ -61,8 +61,6 @@ for i = 1:31
     
 end
 
-
-
 %% Then, adjust to eye-nose plane (Knutsen et al 2008) from avg row plane
 % calculate eye-nose plane
 eyes = [-9.721020847417353,-19.067448129825216,3.891614295391962;
@@ -106,6 +104,16 @@ xlabel('frames');
 ylabel('angles');
 title('Elevation angle by row');
 
+% plot a vertical line every 1 second
+loc = fps;
+yl = ylim;
+while(loc < (steps+fps))
+    vline(loc, 'k:');
+    text(loc, yl(1)+3, sprintf('%ds', loc/fps));
+    loc = loc + fps;
+    
+end
+
 % azimuth angles
 % az = smoothdata(az, 'gaussian', 20);
 % el = smoothdata(el, 'gaussian', 20);
@@ -123,7 +131,7 @@ title('Azimuthal angle by row');
 loc = fps;
 yl = ylim;
 while(loc < (steps+fps))
-    vline(loc, 'k-');
+    vline(loc, 'k:');
     text(loc, yl(1)+3, sprintf('%ds', loc/fps));
     loc = loc + fps;
     
@@ -135,13 +143,15 @@ end
 % print out delta changes 
 
 figure('Color', 'w'); hold on;
-frames = 1290:1350;
+frames = 482:541;
 % frames = 152:176;
 % frames = 202:226;
 fprintf("Frame: %d to %d\n", frames(1), frames(end));
 for r = 1:5
     daz = az(frames(2:end), Row==r) - az(frames(1:end-1), Row==r);
     del = el(frames(2:end), Row==r) - el(frames(1:end-1), Row==r);
+    daz = smoothdata(daz);
+    del = smoothdata(del);
     delta = del./daz;
     
     plot(daz(:), del(:), 'o', 'Color', color(r,:));

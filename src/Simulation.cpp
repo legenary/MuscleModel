@@ -162,6 +162,9 @@ void Simulation::initPhysics() {
 		SOLVER_USE_WARMSTARTING |
 		SOLVER_RANDMIZE_ORDER |
 		0;
+	//m_dynamicsWorld->getSolverInfo().m_solverMode = SOLVER_SIMD |
+	//	SOLVER_RANDMIZE_ORDER |
+	//	0;
 	m_dynamicsWorld->getSolverInfo().m_splitImpulse = true;
 	m_dynamicsWorld->getSolverInfo().m_erp = 0.8f;
 

@@ -4,13 +4,13 @@
 #include "Utility.h"
 
 Parameter::Parameter() {
-	m_fps = 200;
+	m_fps = 120;
 	m_time_step = 1.0f / m_fps;
-	m_num_internal_step = 1000;	// for constraint solver
+	m_num_internal_step = 60;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / m_num_internal_step;
-	m_time_stop = 15;
+	m_time_stop = 5;
 
 	DEBUG = 1;	// 0: no debug
 				// 1: specified inline debug drawing only
@@ -35,6 +35,7 @@ Parameter::Parameter() {
 	fol_density = 0.001;	// Bullet unit: g/mm^3
 	fol_damping = 0;		// damping for rigid body is clamped between 0 and 1
 							// default: 0, no damping
+							// dampnig is implemented in tissue
 
 	// layer tissue parameter
 	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";
@@ -46,11 +47,11 @@ Parameter::Parameter() {
 	k_anchor = 250;			// k > 0 : soft anchor, springy linear and angular movement
 							// k = 0 : hard anchor, no linear displacement, free angular movement
 
-	zeta_tissue = 0.1;		// This sets the damping ratio for: 
+	zeta_tissue = 0.01;		// This sets the damping ratio for: 
 							// (1) tissue anchor,
 							// (2) extrinsic muscle anchor
 							// (3) extrinsic muscle insertion (this is treated as tissue)
-							// F = -m * x - c* v
+							// F = -k * x - c* v
 							// where c = zeta * (2 * sqrt(m * k))
 							// zeta > 1: overdamped
 							// zeta = 1: critically damped
