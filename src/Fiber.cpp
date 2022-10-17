@@ -99,7 +99,7 @@ btScalar Fiber::getRestLength() const {
 }
 
 void Fiber::contractTo(btScalar ratio) {
-	if (ratio < 0.6 || ratio > 1.0) {
+	if (ratio < 0.5 || ratio > 1.0) {
 		std::cerr << "Invalid muscle contraction ratio. Should be between 0.6 and 1.0.\n";
 	}
 	m_activation = ratio2activation(ratio);

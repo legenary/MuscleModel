@@ -9,7 +9,7 @@ Parameter::Parameter() {
 	m_num_internal_step = 60;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
-	m_internal_time_step = m_time_step / m_num_internal_step;
+	m_internal_time_step = m_time_step / (btScalar) m_num_internal_step;
 	m_time_stop = 5;
 
 	DEBUG = 1;	// 0: no debug
@@ -33,7 +33,7 @@ Parameter::Parameter() {
 	dir_follicle_pos_orient_len_vol = "../resources/follicle_pos_ypr_len_vol.csv";
 	fol_radius = 0.15;		// Bullet unit: mm
 	fol_density = 0.001;	// Bullet unit: g/mm^3
-	fol_damping = 0;		// damping for rigid body is clamped between 0 and 1
+	fol_damping = 1;		// damping for rigid body is clamped between 0 and 1
 							// default: 0, no damping
 							// dampnig is implemented in tissue
 

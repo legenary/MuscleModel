@@ -8,7 +8,7 @@ Tissue::Tissue(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 	btScalar k, btScalar zeta)
 	: m_sim(sim), m_k(k), m_type(myTissueType::between), m_rbA(rbA), m_rbB(rbB) {
 
-	m_damping = 2 * sqrt(m_rbB->getMass() * m_k) * zeta;
+	m_damping = 2 * sqrt((m_rbB->getMass() + m_rbA->getMass())/2 * m_k) * zeta;
 	//m_constraint = new btGeneric6DofSpringConstraint(*rbA, *rbB, frameInA, frameInB, true);
 	m_constraint = new btGeneric6DofSpring2Constraint(*rbA, *rbB, frameInA, frameInB);	// btGeneric6DofSpring2Constraint is preferred for engineering solution
 	init();
