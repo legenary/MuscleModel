@@ -79,16 +79,18 @@ void Fiber::update() {
 	dir = (dir.length() > 0.02) ? dir / dir.length() : btVector3(0, 0, 0);
 	// force = (fPE + a*fL*fV)
 	// split it up for debugging
+	btScalar this_fPE = interp1(fPE[0], fPE[1], m_length / m_restLength);
+	btScalar this_fL = interp1(fL[0], fL[1], m_length / m_restLength);
+	btScalar this_fV = interp1(fV[0], fV[1], vLength);
 	btVector3 force = m_f0 * (
-					interp1(fPE[0], fPE[1], m_length / m_restLength) +
-					m_activation * interp1(fL[0], fL[1], m_length / m_restLength)
-								 * interp1(fV[0], fV[1], vLength)
+					this_fPE + m_activation * this_fL * this_fV
 					) * dir;
 	m_constraint->updateForce(force);
 
 	// debug
 	if (m_idx == 1) {
-		int a = 1;
+		S_output::GetInstance()->fiber_length[0].push_back(m_restLength);
+		S_output::GetInstance()->fiber_length[1].push_back(m_length);
 	}
 
 }

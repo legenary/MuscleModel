@@ -148,4 +148,6 @@ btScalar interp1(std::vector<btScalar>& xData, std::vector<btScalar>& yData, btS
 	return yL + (yR - yL) / (xR - xL)*(x - xL);
 }
 
+S_output* S_output::m_output;
+std::vector<std::vector<btScalar>> S_output::fiber_length;
 

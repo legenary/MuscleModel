@@ -6,7 +6,7 @@
 Parameter::Parameter() {
 	m_fps = 120;
 	m_time_step = 1.0f / m_fps;
-	m_num_internal_step = 500;	// for constraint solver
+	m_num_internal_step = 100;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / (btScalar) m_num_internal_step;
@@ -56,6 +56,7 @@ Parameter::Parameter() {
 							// zeta > 1: overdamped
 							// zeta = 1: critically damped
 							// zeta < 1: underdamped
+							// reference value: 0.01
 
 	// muscle parameter
 	btScalar f0 = 8;		// Bullet unit: 1e-6 (N)
@@ -114,8 +115,8 @@ Parameter::Parameter() {
 
 	// output;
 	VIDEO = true;
-	video_file_name = "../output/output_video.mp4";
+	video_file_name = "../output/bundle/output_video.mp4";
 	OUTPUT = true;
-	output_path = "../output/";
+	output_path = "../output/bundle/";
 
 }

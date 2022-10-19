@@ -121,20 +121,71 @@ void Simulation::zeroFrameSetup() {
 
 void Simulation::internalWriteOutput() {
 	std::cout << "Generating output csv file...\n";
+
 	int nFol = m_mystacialPad->getNumFollicles();
 	char filename[50];
 	for (int i = 0; i < nFol; i++) {
-		sprintf(filename, "fol_pos/fol_%02d.csv\0", i);
+		sprintf(filename, "fol_%02d.csv\0", i);
 		//std::cout << filename << std::endl;
 		write_csv_float(param->output_path, filename, output_fol_pos[i]);
 	}
-	
 	write_txt(param->output_path, "parameter.txt", parameter_string);
+
+	write_csv_float(param->output_path, "fiber_length.csv", S_output::GetInstance()->fiber_length);
+	
+
 	std::cout << "Files saved.\n";
 }
 
-void Simulation::initParameter(Parameter *parameter) {
+void Simulation::initParameter(Parameter* parameter) {
 	param = parameter;
+	if (!isPathExist(param->output_path)) {	// create folder if not exist
+		mkdir(param->output_path);
+		std::cout << "Creating output folder..." << std::endl;
+	}
+
+	int total_frame = (int)param->m_fps * param->m_time_stop;
+	{
+		//output
+		if (param->OUTPUT) {
+			output_fol_pos.reserve(31);
+			std::vector<std::vector<btScalar>> vec;
+			for (int i = 0; i < 31; i++) {
+				output_fol_pos.push_back(vec);
+				output_fol_pos[i].reserve(total_frame);
+			}
+		}
+	}
+
+	sprintf(parameter_string,
+		"FPS: %dHz\nSimulation internal step: %d\n"
+		"Contraction ratio: %.2f\n"
+		"Follicle damping = %.6f\n"
+		"k_layer1=%.6fN/m\nk_layer2=%.6fN/m\nk_anchor=%.6fN/m\nf0_intrinsic=%.6fN\n"
+		"f0_nasolabialis(N)=%.6fN\nf0_maxillolabialis(M)=%.6fN\n"
+		"f0_nasolabialis_superficialis(NS)=%.6fN\n"
+		"f0_pars_media_superior=%.6fN\nf0_pars_media_inferior=%.6fN\n"
+		"f0_pars_interna_profunda=%.6fN\nf0_pars_maxillaris=%.6fN\n",
+		param->getFPS(), param->m_num_internal_step,
+		param->contract_range,
+		param->fol_damping,
+		param->k_layer1 * 0.001, param->k_layer2 * 0.001, param->k_anchor * 0.001,
+		param->f0_ISM * 0.000001,
+		param->f0_nasolabialis * 0.000001, param->f0_maxillolabialis * 0.000001,
+		param->f0_NS * 0.000001, param->f0_PMS * 0.000001,
+		param->f0_PMI * 0.000001, param->f0_PIP * 0.000001, param->f0_PM * 0.000001
+	);
+
+	// initialize Singleton data member
+	{
+		std::vector<btScalar> vec;
+		S_output::GetInstance()->fiber_length.reserve(2);
+		for (int i = 0; i < 2; i++) {
+			S_output::GetInstance()->fiber_length.push_back(vec);
+			S_output::GetInstance()->fiber_length[i].reserve(total_frame);
+		}
+		
+	}
 }
 
 void Simulation::initPhysics() {
@@ -268,35 +319,6 @@ void Simulation::initPhysics() {
 	m_guiHelper->autogenerateGraphicsObjects(m_dynamicsWorld);
 	zeroFrameSetup();
 	resetCamera();
-
-	//output
-	if (param->OUTPUT) {
-		int nFollicle = m_mystacialPad->getNumFollicles();
-		output_fol_pos.reserve(nFollicle);
-		std::vector<std::vector<btScalar>> vec;
-		for (int i = 0; i < nFollicle; i++) {
-			output_fol_pos.push_back(vec);
-			output_fol_pos[i].reserve((int)param->m_fps*param->m_time_stop);
-		}
-	}
-	sprintf(parameter_string,
-		"FPS: %dHz\nSimulation internal step: %d\n"
-		"Contraction ratio: %.2f\n"
-		"Follicle damping = %.6f\n"
-		"k_layer1=%.6fN/m\nk_layer2=%.6fN/m\nk_anchor=%.6fN/m\nf0_intrinsic=%.6fN\n"
-		"f0_nasolabialis(N)=%.6fN\nf0_maxillolabialis(M)=%.6fN\n"
-		"f0_nasolabialis_superficialis(NS)=%.6fN\n"
-		"f0_pars_media_superior=%.6fN\nf0_pars_media_inferior=%.6fN\n"
-		"f0_pars_interna_profunda=%.6fN\nf0_pars_maxillaris=%.6fN\n",
-		param->getFPS(), param->m_num_internal_step,
-		param->contract_range,
-		param->fol_damping,
-		param->k_layer1 * 0.001, param->k_layer2 * 0.001, param->k_anchor * 0.001,
-		param->f0_ISM * 0.000001,
-		param->f0_nasolabialis * 0.000001, param->f0_maxillolabialis * 0.000001,
-		param->f0_NS * 0.000001, param->f0_PMS * 0.000001, 
-		param->f0_PMI * 0.000001, param->f0_PIP * 0.000001, param->f0_PM * 0.000001
-	);
 
 	
 	// set exit flag to zero

@@ -64,6 +64,28 @@ void freeAlignedObjectArray(btAlignedObjectArray<T*>& arr) {
 
 btScalar interp1(std::vector<btScalar>& xData, std::vector<btScalar>& yData, btScalar x);
 
+// test outputer singelton
+class S_output {
+private:
+	S_output() {}
+	static S_output* m_output;
+
+public:
+	S_output(S_output const&) = delete;
+	void operator=(S_output const&) = delete;
+
+	static S_output* GetInstance() {
+		if (m_output == nullptr) {
+			m_output = new S_output();
+		}
+		return m_output;
+	}
+
+	static std::vector<std::vector<btScalar>> fiber_length;
+
+};
+
+
 
 
 
