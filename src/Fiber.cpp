@@ -78,12 +78,19 @@ void Fiber::update() {
 	btVector3 dir = (m_constraint->getCalculatedLinearDiff() - eq_in_p);
 	dir = (dir.length() > 0.02) ? dir / dir.length() : btVector3(0, 0, 0);
 	// force = (fPE + a*fL*fV)
+	// split it up for debugging
 	btVector3 force = m_f0 * (
 					interp1(fPE[0], fPE[1], m_length / m_restLength) +
 					m_activation * interp1(fL[0], fL[1], m_length / m_restLength)
 								 * interp1(fV[0], fV[1], vLength)
 					) * dir;
 	m_constraint->updateForce(force);
+
+	// debug
+	if (m_idx == 1) {
+		int a = 1;
+	}
+
 }
 
 

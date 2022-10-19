@@ -16,6 +16,7 @@ private:
 
 public:
 	IntrinsicSlingMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar f0);
+	IntrinsicSlingMuscle(Simulation* sim, btRigidBody* body1, btRigidBody* body2, btTransform& frameInParent, btTransform& frameInChild, btScalar f0, int idx);
 	virtual ~IntrinsicSlingMuscle() {};
 
 	//void contractTo(btScalar ratio);

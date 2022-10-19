@@ -1,7 +1,7 @@
 FPS: 120Hz
-Simulation internal step: 60
+Simulation internal step: 500
 Contraction ratio: 0.25
-Follicle damping = 0.000000
+Follicle damping = 1.000000
 k_layer1=0.250000N/m
 k_layer2=0.500000N/m
 k_anchor=0.250000N/m

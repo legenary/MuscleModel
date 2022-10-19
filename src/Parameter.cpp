@@ -6,7 +6,7 @@
 Parameter::Parameter() {
 	m_fps = 120;
 	m_time_step = 1.0f / m_fps;
-	m_num_internal_step = 60;	// for constraint solver
+	m_num_internal_step = 500;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / (btScalar) m_num_internal_step;
