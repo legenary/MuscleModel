@@ -23,8 +23,6 @@ void Simulation::stepSimulation(float deltaTime) {
 	m_step += 1;										// increase step
 
 	if (param->m_time_stop == 0 || m_time < param->m_time_stop) {
-		// update constraint physics options
-		m_mystacialPad->update();
 
 		// set up output options
 		if (param->OUTPUT)
@@ -49,9 +47,12 @@ void Simulation::stepSimulation(float deltaTime) {
 		}
 
 		// last step: step simulation
-		m_dynamicsWorld->stepSimulation(deltaTime, 
-			param->m_num_internal_step,
-			param->m_internal_time_step);
+		m_dynamicsWorld->stepSimulation(deltaTime,	// rendering time step
+			param->m_num_internal_step * 100,		// max sub step
+			param->m_internal_time_step);			// fixed simulation sub time step
+
+		// update constraint physics options
+		m_mystacialPad->update();
 
 		// collision listener
 		{
@@ -131,7 +132,7 @@ void Simulation::internalWriteOutput() {
 	}
 	write_txt(param->output_path, "parameter.txt", parameter_string);
 
-	write_csv_float(param->output_path, "fiber_length.csv", S_output::GetInstance()->fiber_length);
+	write_csv_float(param->output_path, "fiber_info.csv", S_dumpster::Get()->fiber_info);
 	
 
 	std::cout << "Files saved.\n";
@@ -179,10 +180,11 @@ void Simulation::initParameter(Parameter* parameter) {
 	// initialize Singleton data member
 	{
 		std::vector<btScalar> vec;
-		S_output::GetInstance()->fiber_length.reserve(2);
-		for (int i = 0; i < 2; i++) {
-			S_output::GetInstance()->fiber_length.push_back(vec);
-			S_output::GetInstance()->fiber_length[i].reserve(total_frame);
+		int n = 7;
+		S_dumpster::Get()->fiber_info.reserve(n);
+		for (int i = 0; i < n; i++) {
+			S_dumpster::Get()->fiber_info.push_back(vec);
+			S_dumpster::Get()->fiber_info[i].reserve(total_frame);
 		}
 		
 	}
@@ -207,15 +209,13 @@ void Simulation::initPhysics() {
 	m_dynamicsWorld = new btDiscreteDynamicsWorld(m_dispatcher, m_broadphase, m_solver, m_collisionConfiguration);
 
 	// set number of iterations for contact solver
-	m_dynamicsWorld->getSolverInfo().m_timeStep = btScalar(1.0f / param->getFPS());
-	m_dynamicsWorld->getSolverInfo().m_numIterations = 20;
+	/* this is for contact solver, has very limited effect on dynamics solver */
+	m_dynamicsWorld->getSolverInfo().m_timeStep = 1 / 10;	// btScalar(1.0f / param->getFPS());
+	m_dynamicsWorld->getSolverInfo().m_numIterations = 5;	// param->m_num_internal_steps
 	m_dynamicsWorld->getSolverInfo().m_solverMode = SOLVER_SIMD |
 		SOLVER_USE_WARMSTARTING |
 		SOLVER_RANDMIZE_ORDER |
 		0;
-	//m_dynamicsWorld->getSolverInfo().m_solverMode = SOLVER_SIMD |
-	//	SOLVER_RANDMIZE_ORDER |
-	//	0;
 	m_dynamicsWorld->getSolverInfo().m_splitImpulse = true;
 	m_dynamicsWorld->getSolverInfo().m_erp = 0.8f;
 

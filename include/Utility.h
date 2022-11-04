@@ -65,23 +65,23 @@ void freeAlignedObjectArray(btAlignedObjectArray<T*>& arr) {
 btScalar interp1(std::vector<btScalar>& xData, std::vector<btScalar>& yData, btScalar x);
 
 // test outputer singelton
-class S_output {
+class S_dumpster {
 private:
-	S_output() {}
-	static S_output* m_output;
+	S_dumpster() {}
+	static S_dumpster* s_dumpster;
 
 public:
-	S_output(S_output const&) = delete;
-	void operator=(S_output const&) = delete;
+	S_dumpster(S_dumpster const&) = delete;
+	void operator=(S_dumpster const&) = delete;
 
-	static S_output* GetInstance() {
-		if (m_output == nullptr) {
-			m_output = new S_output();
+	static S_dumpster* Get() {
+		if (s_dumpster == nullptr) {
+			s_dumpster = new S_dumpster();
 		}
-		return m_output;
+		return s_dumpster;
 	}
 
-	static std::vector<std::vector<btScalar>> fiber_length;
+	static std::vector<std::vector<btScalar>> fiber_info;
 
 };
 

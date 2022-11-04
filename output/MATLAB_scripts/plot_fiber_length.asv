@@ -1,0 +1,14 @@
+clear; close all;
+
+fps = 120;
+
+fl_120_100 = load('../bundle_120Hz_100/fiber_length.csv');
+
+steps = size(fl_120_100, 2);
+
+figure('Color', 'w'); hold on;
+h0 = plot(fl_120_100(1,:), 'r-');
+
+h1 = plot(fl_120_100(2,:), 'k-');
+
+legend([h0, h1], {'Intruction', ''})
