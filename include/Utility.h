@@ -83,6 +83,8 @@ public:
 
 	static std::vector<std::vector<btScalar>> fiber_info;
 
+	static std::vector<std::vector<btScalar>> test_info;
+
 };
 
 

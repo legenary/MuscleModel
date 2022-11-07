@@ -8,7 +8,7 @@ Tissue::Tissue(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 	btScalar k, btScalar zeta)
 	: m_sim(sim), m_k(k), m_type(myTissueType::between), m_rbA(rbA), m_rbB(rbB) {
 
-	m_damping = 2 * sqrt((m_rbB->getMass() + m_rbA->getMass())/2 * m_k) * zeta;
+	m_damping = 2.0f * btSqrt((m_rbB->getMass() + m_rbA->getMass())/2.0f * m_k) * zeta;
 	//m_constraint = new btGeneric6DofSpringConstraint(*rbA, *rbB, frameInA, frameInB, true);
 	m_constraint = new btGeneric6DofSpring2Constraint(*rbA, *rbB, frameInA, frameInB);	// btGeneric6DofSpring2Constraint is preferred for engineering solution
 	init();
@@ -18,7 +18,7 @@ Tissue::Tissue(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
 	btScalar k, btScalar zeta)
 	: m_sim(sim), m_k(k), m_type(myTissueType::anchor), m_rbB(rbB) {
 
-	m_damping = 2 * sqrt(m_rbB->getMass() * m_k) * zeta;
+	m_damping = 2.0f * btSqrt(m_rbB->getMass() * m_k) * zeta;
 	//m_constraint = new btGeneric6DofSpringConstraint(*rbB, frameInB, true);
 	m_constraint = new btGeneric6DofSpring2Constraint(*rbB, frameInB);	// btGeneric6DofSpring2Constraint is preferred for engineering solution
 	init();
@@ -45,6 +45,10 @@ void Tissue::init() {
 		// set m_equilibriumPoint[index] = distance from A to B
 		m_constraint->setEquilibriumPoint(i);
 	}
+	for (int i = 3; i < 6; i++) {
+		m_constraint->enableSpring(i, false);
+	}
+
 
 	// This function only works for btGeneric6DofSpringConstraint
 	//m_restLength = btVector3(

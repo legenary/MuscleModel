@@ -4,7 +4,7 @@
 #include "Utility.h"
 
 Parameter::Parameter() {
-	m_fps = 105;
+	m_fps = 90;
 	m_time_step = 1.0f / m_fps;
 	m_num_internal_step = 80;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
@@ -119,4 +119,6 @@ Parameter::Parameter() {
 	OUTPUT = true;
 	output_path = "../output/bundle/";
 
+	// testing case
+	TEST = true;
 }

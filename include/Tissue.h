@@ -32,9 +32,9 @@ public:
 	//Tissue(btScalar k, btScalar damping);
 	Tissue(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 		btTransform& frameInA, btTransform& frameInB,
-		btScalar k, btScalar damping);
+		btScalar k, btScalar zeta);
 	Tissue(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
-		btScalar k, btScalar damping);
+		btScalar k, btScalar zeta);
 	// disable copy constructor (override if needed in the future)
 	Tissue(const Tissue&) = delete;
 	Tissue& operator=(Tissue const&) = delete;

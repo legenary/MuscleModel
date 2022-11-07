@@ -4,6 +4,7 @@
 class Parameter;
 class MystacialPad;
 class Fiber;
+class Tissue;
 
 #include "CommonInterfaces/CommonRigidBodyBase.h"
 
@@ -17,10 +18,6 @@ private:
 	btScalar m_time_elapsed;
 	btScalar m_time;
 	int m_step;
-
-	btRigidBody* box1;
-	btRigidBody* box2;
-	Fiber* fiber;
 
 	Parameter* param; 
 	MystacialPad* m_mystacialPad;
@@ -55,6 +52,14 @@ public:
 	bool exitSim = false;
 
 	inline Parameter* getParameter() const { return param; }
+
+// test
+private:
+	btRigidBody* box1;
+	btRigidBody* box2;
+	Tissue* t1 = nullptr;
+	Tissue* t2 = nullptr;
+	Fiber* f = nullptr;
 
 };
 

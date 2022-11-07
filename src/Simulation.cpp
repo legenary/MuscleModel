@@ -5,6 +5,7 @@
 #include "Utility.h"
 #include "MystacialPad.h"
 #include "Fiber.h"
+#include "Tissue.h"
 #include "Follicle.h"
 
 #include "CommonInterfaces/CommonGUIHelperInterface.h"
@@ -14,7 +15,6 @@
 
 
 Simulation::~Simulation() {
-	delete m_mystacialPad;
 }
 
 void Simulation::stepSimulation(float deltaTime) {
@@ -186,7 +186,13 @@ void Simulation::initParameter(Parameter* parameter) {
 			S_dumpster::Get()->fiber_info.push_back(vec);
 			S_dumpster::Get()->fiber_info[i].reserve(total_frame);
 		}
-		
+
+		int m = 1;
+		S_dumpster::Get()->fiber_info.reserve(m);
+		for (int i = 0; i < m; i++) {
+			S_dumpster::Get()->test_info.push_back(vec);
+			S_dumpster::Get()->test_info[i].reserve(total_frame);
+		}
 	}
 }
 
@@ -211,7 +217,7 @@ void Simulation::initPhysics() {
 	// set number of iterations for contact solver
 	/* this is for contact solver, has very limited effect on dynamics solver */
 	m_dynamicsWorld->getSolverInfo().m_timeStep = 1 / 10;	// btScalar(1.0f / param->getFPS());
-	m_dynamicsWorld->getSolverInfo().m_numIterations = 5;	// param->m_num_internal_steps
+	m_dynamicsWorld->getSolverInfo().m_numIterations = param->m_num_internal_step;
 	m_dynamicsWorld->getSolverInfo().m_solverMode = SOLVER_SIMD |
 		SOLVER_USE_WARMSTARTING |
 		SOLVER_RANDMIZE_ORDER |
@@ -353,7 +359,10 @@ void Simulation::initPhysics_test() {
 
 	m_dynamicsWorld = new btDiscreteDynamicsWorld(m_dispatcher, m_broadphase, m_solver, m_collisionConfiguration);
 
-	// set number of iterations
+
+	// set number of iterations for contact solver
+	/* this is for contact solver, has very limited effect on dynamics solver */
+	m_dynamicsWorld->getSolverInfo().m_timeStep = btScalar(1.0f / param->getFPS());
 	m_dynamicsWorld->getSolverInfo().m_numIterations = param->m_num_internal_step;
 	m_dynamicsWorld->getSolverInfo().m_solverMode = SOLVER_SIMD |
 		SOLVER_USE_WARMSTARTING |
@@ -365,6 +374,7 @@ void Simulation::initPhysics_test() {
 	// set gravity
 	m_dynamicsWorld->setGravity(btVector3(0, 0, 0));
 
+	// add boxes
 	btCollisionShape* boxShape = new btBoxShape(btVector3(1, 1, 1));
 	m_collisionShapes.push_back(boxShape);
 	box1 = createDynamicBody(1, createTransform(btVector3(0, 0, 0)), boxShape);
@@ -374,8 +384,15 @@ void Simulation::initPhysics_test() {
 	box1->setActivationState(DISABLE_DEACTIVATION);
 	box2->setActivationState(DISABLE_DEACTIVATION);
 
-	fiber = new Fiber(this, box1, box2, createTransform(), createTransform(), 10, 1);
-	m_dynamicsWorld->addConstraint(fiber->getConstraint(), true);
+	// add constraints
+	t1 = new Tissue(this, box1, 
+		createTransform(btVector3(5, 0, 0)), 1, 0); // critical damping ratio is 1 for 1 mass	
+	t2 = new Tissue(this, box2, 
+		createTransform(btVector3(-5, 0, 0)), 1, 0); // critical damping ratio is 1 for 1 mass
+
+	m_dynamicsWorld->addConstraint(t1->getConstraint(), true);
+	m_dynamicsWorld->addConstraint(t2->getConstraint(), true);
+	//box1->setCenterOfMassTransform(createTransform(btVector3(5, 0, 0)));
 
 	m_guiHelper->autogenerateGraphicsObjects(m_dynamicsWorld);
 	resetCamera();
@@ -389,26 +406,30 @@ void Simulation::stepSimulation_test(float deltaTime) {
 	if (param->m_time_stop == 0 || m_time <= param->m_time_stop) {
 		// update everything here:
 		btVector3 force(1, 0, 0);
-		box1->applyCentralForce(force);
+		//box1->applyCentralForce(force);
+		//box1->applyForce(force, btVector3(0, 0, 0.5));
 		//box1->applyTorque(btVector3(0, 0, 1));
-		//box1->applyCentralImpulse(force * param->m_time_step);
+		box1->applyCentralImpulse(force * param->m_time_step);
+		//box1->applyImpulse(force * param->m_time_step, btVector3(0, 0, 0.5));
+		
+		if (t1) t1->update();
+		if (t2) t2->update();
+		if (f) f->update();
+
 		btVector3 box1pos = box1->getCenterOfMassPosition();
-		std::vector<double> vect{ box1pos[0], box1pos[1], box1pos[2] };
-		
+		S_dumpster::Get()->test_info[0].push_back(box1pos[0]);
 
-		fiber->update();
-		
-
-		// ask world to step simulation
-		m_dynamicsWorld->stepSimulation(deltaTime, param->m_num_internal_step,
-			param->m_time_step / param->m_num_internal_step);
+		// last step: step simulation
+		m_dynamicsWorld->stepSimulation(deltaTime,	// rendering time step
+			param->m_num_internal_step * 100,		// max sub step
+			param->m_internal_time_step);			// fixed simulation sub time step
 
 		if (param->DEBUG) {
 			m_dynamicsWorld->debugDrawWorld();
 		}
 	}
 	else {
-		//write_csv_float("../output", "test_output.csv", output);
+		write_csv_float("../output", "test.csv", S_dumpster::Get()->test_info);
 		// timeout -> set exit flag
 		exitSim = true;
 	}

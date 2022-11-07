@@ -131,6 +131,8 @@ public:
 	// getters
 	inline int getFPS() const { return m_fps; }
 
+	// testing
+	bool TEST;
 };
 
 
