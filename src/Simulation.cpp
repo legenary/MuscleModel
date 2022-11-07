@@ -36,14 +36,14 @@ void Simulation::stepSimulation(float deltaTime) {
 		static btScalar range = param->contract_range;		
 		if ((m_step-1) % every_steps == 0) {
 			range = -range;
-			m_mystacialPad->contractMuscle(INTRINSIC,  1.0 - param->contract_range /2 + range / 2);
-			//m_mystacialPad->contractMuscle(N, 1.0 - param->contract_range / 2 + range / 2);
-			//m_mystacialPad->contractMuscle(M, 1.0 - param->contract_range / 2 + range / 2);
-			//m_mystacialPad->contractMuscle(NS, 0.8);
-			//m_mystacialPad->contractMuscle(PMS, 1.0 - param->contract_range / 2 + range / 2);
-			//m_mystacialPad->contractMuscle(PMI, 1.0 - param->contract_range / 2 + range / 2);
-			//m_mystacialPad->contractMuscle(PIP, 1.0 - param->contract_range / 2 + range / 2);
-			//m_mystacialPad->contractMuscle(PM, 1.0 - param->contract_range / 2 + range / 2);
+			m_mystacialPad->contractMuscle(Muscle::INTRINSIC,  1.0 - param->contract_range /2 + range / 2);
+			//m_mystacialPad->contractMuscle(Muscle::N, 1.0 - param->contract_range / 2 + range / 2);
+			//m_mystacialPad->contractMuscle(Muscle::M, 1.0 - param->contract_range / 2 + range / 2);
+			//m_mystacialPad->contractMuscle(Muscle::NS, 0.8);
+			//m_mystacialPad->contractMuscle(Muscle::PMS, 1.0 - param->contract_range / 2 + range / 2);
+			//m_mystacialPad->contractMuscle(Muscle::PMI, 1.0 - param->contract_range / 2 + range / 2);
+			//m_mystacialPad->contractMuscle(Muscle::PIP, 1.0 - param->contract_range / 2 + range / 2);
+			//m_mystacialPad->contractMuscle(Muscle::PM, 1.0 - param->contract_range / 2 + range / 2);
 		}
 
 		// last step: step simulation
@@ -386,12 +386,14 @@ void Simulation::initPhysics_test() {
 
 	// add constraints
 	t1 = new Tissue(this, box1, 
-		createTransform(btVector3(5, 0, 0)), 1, 0); // critical damping ratio is 1 for 1 mass	
+		createTransform(btVector3(5, 0, 0)), 1, 3); // critical damping ratio is 1 for 1 mass	
 	t2 = new Tissue(this, box2, 
-		createTransform(btVector3(-5, 0, 0)), 1, 0); // critical damping ratio is 1 for 1 mass
+		createTransform(btVector3(-5, 0, 0)), 1, 3); // critical damping ratio is 1 for 1 mass
+	f = new Fiber(this, box1, box2, createTransform(), createTransform(), 5);
 
 	m_dynamicsWorld->addConstraint(t1->getConstraint(), true);
 	m_dynamicsWorld->addConstraint(t2->getConstraint(), true);
+	m_dynamicsWorld->addConstraint(f->getConstraint(), true);
 	//box1->setCenterOfMassTransform(createTransform(btVector3(5, 0, 0)));
 
 	m_guiHelper->autogenerateGraphicsObjects(m_dynamicsWorld);
@@ -400,8 +402,6 @@ void Simulation::initPhysics_test() {
 
 void Simulation::stepSimulation_test(float deltaTime) {
 	auto start = std::chrono::high_resolution_clock::now();
-	m_time += param->m_time_step; 						// increase time
-	m_step += 1;										// increase step
 
 	if (param->m_time_stop == 0 || m_time <= param->m_time_stop) {
 		// update everything here:
@@ -409,12 +409,23 @@ void Simulation::stepSimulation_test(float deltaTime) {
 		//box1->applyCentralForce(force);
 		//box1->applyForce(force, btVector3(0, 0, 0.5));
 		//box1->applyTorque(btVector3(0, 0, 1));
-		box1->applyCentralImpulse(force * param->m_time_step);
+		//box1->applyCentralImpulse(force * param->m_time_step);
 		//box1->applyImpulse(force * param->m_time_step, btVector3(0, 0, 0.5));
 		
 		if (t1) t1->update();
 		if (t2) t2->update();
-		if (f) f->update();
+		if (f) {
+			//// contraction/retraction
+			//int every_steps = param->getFPS() / param->contract_frequency / 2.0f;
+			//static btScalar range = 0.6; // contract_range;
+			//if ((m_step - 1) % every_steps == 0) {
+			//	range = -range;
+			//	f->contractTo(1.0 - param->contract_range / 2 + range / 2);
+			//}
+			f->contractTo(0.8);
+			f->update();
+		}
+
 
 		btVector3 box1pos = box1->getCenterOfMassPosition();
 		S_dumpster::Get()->test_info[0].push_back(box1pos[0]);
@@ -429,10 +440,13 @@ void Simulation::stepSimulation_test(float deltaTime) {
 		}
 	}
 	else {
-		write_csv_float("../output", "test.csv", S_dumpster::Get()->test_info);
+		write_csv_float("../output", "test_60.csv", S_dumpster::Get()->test_info);
 		// timeout -> set exit flag
 		exitSim = true;
 	}
+
+	m_time += param->m_time_step; 						// increase time
+	m_step += 1;										// increase step
 
 	auto stop = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);

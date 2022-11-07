@@ -162,36 +162,36 @@ void MystacialPad::createMaxillolabialis() {
 
 void MystacialPad::contractMuscle(Muscle mus, btScalar ratio) {
 	switch (mus) {
-	case INTRINSIC:
+	case Muscle::INTRINSIC:
 		std::cout << "Contracting intrinsic muscle...\n";
 		for (int s = 0; s < nISM; s++)
 			m_ISMArray[s]->contractTo(ratio);
 		break;
-	case N:
+	case Muscle::N:
 		std::cout << "Contracting nasolabialis (N)...\n";
 		m_nasolabialis->contractTo(ratio);
 		break;
-	case M:
+	case Muscle::M:
 		std::cout << "Contracting maxillolabialis (M)...\n";
 		m_maxillolabialis->contractTo(ratio);
 		break;
-	case NS:
+	case Muscle::NS:
 		std::cout << "Contracting nasolabialis superficialis (NS)...\n";
 		m_NS->contractTo(ratio);
 		break;
-	case PMS:
+	case Muscle::PMS:
 		std::cout << "Contracting pars media superior (PMS)...\n";
 		m_PMS->contractTo(ratio);
 		break;
-	case PMI:
+	case Muscle::PMI:
 		std::cout << "Contracting pars media inferior (PMI)...\n";
 		m_PMI->contractTo(ratio);
 		break;
-	case PIP:
+	case Muscle::PIP:
 		std::cout << "Contracting pars interna produnda (PIP)...\n";
 		m_PIP->contractTo(ratio);
 		break;
-	case PM:
+	case Muscle::PM:
 		std::cout << "Contracting pars maxilloris (PM)...\n";
 		m_PM->contractTo(ratio);
 		break;

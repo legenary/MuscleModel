@@ -9,7 +9,7 @@ class IntrinsicSlingMuscle;
 class ExtrinsicMuscle;
 class Parameter;
 
-enum Muscle { INTRINSIC, N, M, NS, PMS, PMI, PIP, PM };
+enum class Muscle { INTRINSIC, N, M, NS, PMS, PMI, PIP, PM };
 
 class MystacialPad {
 private:

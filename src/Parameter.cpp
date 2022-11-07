@@ -4,7 +4,7 @@
 #include "Utility.h"
 
 Parameter::Parameter() {
-	m_fps = 90;
+	m_fps = 60;
 	m_time_step = 1.0f / m_fps;
 	m_num_internal_step = 80;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
