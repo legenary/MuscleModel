@@ -217,7 +217,7 @@ void Simulation::initPhysics() {
 	// set number of iterations for contact solver
 	/* this is for contact solver, has very limited effect on dynamics solver */
 	m_dynamicsWorld->getSolverInfo().m_timeStep = 1 / 10;	// btScalar(1.0f / param->getFPS());
-	m_dynamicsWorld->getSolverInfo().m_numIterations = param->m_num_internal_step;
+	m_dynamicsWorld->getSolverInfo().m_numIterations = 20;  //param->m_num_internal_step;
 	m_dynamicsWorld->getSolverInfo().m_solverMode = SOLVER_SIMD |
 		SOLVER_USE_WARMSTARTING |
 		SOLVER_RANDMIZE_ORDER |
@@ -377,24 +377,31 @@ void Simulation::initPhysics_test() {
 	// add boxes
 	btCollisionShape* boxShape = new btBoxShape(btVector3(1, 1, 1));
 	m_collisionShapes.push_back(boxShape);
+
 	box1 = createDynamicBody(1, createTransform(btVector3(0, 0, 0)), boxShape);
-	box2 = createDynamicBody(1, createTransform(btVector3(-5, 0, 0)), boxShape);
 	m_dynamicsWorld->addRigidBody(box1, COL_FOLLICLE, follicleCollideWith);
-	m_dynamicsWorld->addRigidBody(box2, COL_FOLLICLE, follicleCollideWith);
 	box1->setActivationState(DISABLE_DEACTIVATION);
+
+	box2 = createDynamicBody(1, createTransform(btVector3(-5, 0, 0)), boxShape);
+	m_dynamicsWorld->addRigidBody(box2, COL_FOLLICLE, follicleCollideWith);
 	box2->setActivationState(DISABLE_DEACTIVATION);
 
 	// add constraints
+	btScalar k = 1;
+	btScalar f0 = 500;
+	btScalar zeta = 100;
 	t1 = new Tissue(this, box1, 
-		createTransform(btVector3(5, 0, 0)), 1, 3); // critical damping ratio is 1 for 1 mass	
-	t2 = new Tissue(this, box2, 
-		createTransform(btVector3(-5, 0, 0)), 1, 3); // critical damping ratio is 1 for 1 mass
-	f = new Fiber(this, box1, box2, createTransform(), createTransform(), 5);
-
+		createTransform(btVector3(5, 0, 0)), k, zeta); // critical damping ratio is 1 for 1 mass
 	m_dynamicsWorld->addConstraint(t1->getConstraint(), true);
+
+	t2 = new Tissue(this, box2, 
+		createTransform(btVector3(-5, 0, 0)), k, zeta); // critical damping ratio is 1 for 1 mass
 	m_dynamicsWorld->addConstraint(t2->getConstraint(), true);
+
+	f = new Fiber(this, box1, box2, createTransform(), createTransform(), f0);
 	m_dynamicsWorld->addConstraint(f->getConstraint(), true);
-	//box1->setCenterOfMassTransform(createTransform(btVector3(5, 0, 0)));
+	
+	//box1->setCenterOfMassTransform(createTransform(btVector3(-5, 0, 0)));
 
 	m_guiHelper->autogenerateGraphicsObjects(m_dynamicsWorld);
 	resetCamera();
@@ -440,7 +447,10 @@ void Simulation::stepSimulation_test(float deltaTime) {
 		}
 	}
 	else {
-		write_csv_float("../output", "test_60.csv", S_dumpster::Get().test_info);
+		char buffer[32];
+		sprintf(buffer, "test_%d.csv", param->m_fps);
+		write_csv_float("../output", buffer, S_dumpster::Get().test_info);
+
 		// timeout -> set exit flag
 		exitSim = true;
 	}
