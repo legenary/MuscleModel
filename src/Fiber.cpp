@@ -90,16 +90,16 @@ void Fiber::update() {
 
 	// debug, output the 12th intrinsic muscle info
 	if (m_idx == 12) {
-		S_dumpster::Get()->fiber_info[0].push_back(m_restLength);
-		S_dumpster::Get()->fiber_info[1].push_back(m_length);
-		S_dumpster::Get()->fiber_info[2].push_back(force.length());		// instructed force
-		S_dumpster::Get()->fiber_info[3].push_back(this_fPE);
-		S_dumpster::Get()->fiber_info[4].push_back(this_fL);
-		S_dumpster::Get()->fiber_info[5].push_back(this_fV);
+		S_dumpster::Get().fiber_info[0].push_back(m_restLength);
+		S_dumpster::Get().fiber_info[1].push_back(m_length);
+		S_dumpster::Get().fiber_info[2].push_back(force.length());		// instructed force
+		S_dumpster::Get().fiber_info[3].push_back(this_fPE);
+		S_dumpster::Get().fiber_info[4].push_back(this_fL);
+		S_dumpster::Get().fiber_info[5].push_back(this_fV);
 
 		btScalar internalImpusle = m_constraint->getAppliedImpulse();	// actual impulse applied for each internal step
 		btScalar fixedTimeStep = getWorld()->getSolverInfo().m_timeStep;
-		S_dumpster::Get()->fiber_info[6].push_back(internalImpusle / fixedTimeStep);	// actual force
+		S_dumpster::Get().fiber_info[6].push_back(internalImpusle / fixedTimeStep);	// actual force
 
 		//btScalar b = getWorld()->getDispatchInfo().m_stepCount;
 		//btJointFeedback* jfb = m_constraint->getJointFeedback();

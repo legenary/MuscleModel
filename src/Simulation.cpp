@@ -132,7 +132,7 @@ void Simulation::internalWriteOutput() {
 	}
 	write_txt(param->output_path, "parameter.txt", parameter_string);
 
-	write_csv_float(param->output_path, "fiber_info.csv", S_dumpster::Get()->fiber_info);
+	write_csv_float(param->output_path, "fiber_info.csv", S_dumpster::Get().fiber_info);
 	
 
 	std::cout << "Files saved.\n";
@@ -181,17 +181,17 @@ void Simulation::initParameter(Parameter* parameter) {
 	{
 		std::vector<btScalar> vec;
 		int n = 7;
-		S_dumpster::Get()->fiber_info.reserve(n);
+		S_dumpster::Get().fiber_info.reserve(n);
 		for (int i = 0; i < n; i++) {
-			S_dumpster::Get()->fiber_info.push_back(vec);
-			S_dumpster::Get()->fiber_info[i].reserve(total_frame);
+			S_dumpster::Get().fiber_info.push_back(vec);
+			S_dumpster::Get().fiber_info[i].reserve(total_frame);
 		}
 
 		int m = 1;
-		S_dumpster::Get()->fiber_info.reserve(m);
+		S_dumpster::Get().fiber_info.reserve(m);
 		for (int i = 0; i < m; i++) {
-			S_dumpster::Get()->test_info.push_back(vec);
-			S_dumpster::Get()->test_info[i].reserve(total_frame);
+			S_dumpster::Get().test_info.push_back(vec);
+			S_dumpster::Get().test_info[i].reserve(total_frame);
 		}
 	}
 }
@@ -428,7 +428,7 @@ void Simulation::stepSimulation_test(float deltaTime) {
 
 
 		btVector3 box1pos = box1->getCenterOfMassPosition();
-		S_dumpster::Get()->test_info[0].push_back(box1pos[0]);
+		S_dumpster::Get().test_info[0].push_back(box1pos[0]);
 
 		// last step: step simulation
 		m_dynamicsWorld->stepSimulation(deltaTime,	// rendering time step
@@ -440,7 +440,7 @@ void Simulation::stepSimulation_test(float deltaTime) {
 		}
 	}
 	else {
-		write_csv_float("../output", "test_60.csv", S_dumpster::Get()->test_info);
+		write_csv_float("../output", "test_60.csv", S_dumpster::Get().test_info);
 		// timeout -> set exit flag
 		exitSim = true;
 	}

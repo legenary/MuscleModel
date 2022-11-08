@@ -68,21 +68,17 @@ btScalar interp1(std::vector<btScalar>& xData, std::vector<btScalar>& yData, btS
 class S_dumpster {
 private:
 	S_dumpster() {}
-	static S_dumpster* s_dumpster;
 
 public:
 	S_dumpster(S_dumpster const&) = delete;
 	void operator=(S_dumpster const&) = delete;
 
-	static S_dumpster* Get() {
-		if (s_dumpster == nullptr) {
-			s_dumpster = new S_dumpster();
-		}
-		return s_dumpster;
+	static S_dumpster& Get() {
+		static S_dumpster* s_dumpster = new S_dumpster();
+		return *s_dumpster;
 	}
 
 	static std::vector<std::vector<btScalar>> fiber_info;
-
 	static std::vector<std::vector<btScalar>> test_info;
 
 };

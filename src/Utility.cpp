@@ -148,7 +148,6 @@ btScalar interp1(std::vector<btScalar>& xData, std::vector<btScalar>& yData, btS
 	return yL + (yR - yL) / (xR - xL)*(x - xL);
 }
 
-S_dumpster* S_dumpster::s_dumpster;
 std::vector<std::vector<btScalar>> S_dumpster::fiber_info;
 std::vector<std::vector<btScalar>> S_dumpster::test_info;
 
