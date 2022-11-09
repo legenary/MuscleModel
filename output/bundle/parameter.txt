@@ -1,5 +1,5 @@
 FPS: 120Hz
-Simulation internal step: 100
+Simulation internal step: 500
 Contraction ratio: 0.25
 Follicle damping = 1.000000
 k_layer1=0.250000N/m

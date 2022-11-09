@@ -6,7 +6,7 @@
 Parameter::Parameter() {
 	m_fps = 120;
 	m_time_step = 1.0f / m_fps;
-	m_num_internal_step = 100;	// for constraint solver
+	m_num_internal_step = 500;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / (btScalar) m_num_internal_step;
@@ -47,7 +47,7 @@ Parameter::Parameter() {
 	k_anchor = 250;			// k > 0 : soft anchor, springy linear and angular movement
 							// k = 0 : hard anchor, no linear displacement, free angular movement
 
-	zeta_tissue = 20;		// This sets the damping ratio for: 
+	zeta_tissue = 50;		// This sets the damping ratio for: 
 							// (1) tissue anchor,
 							// (2) extrinsic muscle anchor
 							// (3) extrinsic muscle insertion (this is treated as tissue)

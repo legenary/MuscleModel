@@ -11,7 +11,7 @@ close all;
 
 T = 5;
 fps = 120;
-stepPerFrame = 100;
+stepPerFrame = 500;
 % determine time step, usually stepTotal = T*step - 1
 % path = sprintf('../bundle_%dHz_%d', fps, stepPerFrame);
 path = sprintf('../bundle', fps, stepPerFrame);
@@ -54,11 +54,11 @@ Col = [1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5,6,7, 1,2,3,4,5,6,7, 1,2,3,4,5,6];
 % 2. azimuth angles
 % az = smoothdata(az, 'gaussian', 20);
 % el = smoothdata(el, 'gaussian', 20);
-figure('Position', [200, 200, 600, 300], 'Color', 'w'); hold on;
+figure('Position', [200, 200, 400, 250], 'Color', 'w'); hold on;
 color = lines(5);
 for r = 1:5
 %     plot(az(:, Row==r), 'Color', color(r,:));
-    plot(az(:, 1), 'Color', 'c');
+    plot(az(:, 1), 'Color', [0.9290 0.6940 0.1250]);
 end
 title({'Azimuthal angle by row', sprintf('%dHz, %d steps', fps, stepPerFrame)});
 ylim([-55, -30])
