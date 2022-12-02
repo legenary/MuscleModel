@@ -234,7 +234,15 @@ void MystacialPad::createParsMaxillaris() {
 	std::cout << "Done.\n";
 }
 
-void MystacialPad::update() {
+void MystacialPad::update(btScalar dt) {
+	static btScalar timeElapsed = 0.0f;
+	timeElapsed += dt;
+	bool queryFiberFlag = false;
+	if (timeElapsed >= m_parameter->inverse_fiber_query_rate) {
+		queryFiberFlag = true;
+		timeElapsed -= m_parameter->inverse_fiber_query_rate;
+	}
+
 	// only linear springs need update
 	// torsional springs don't
 	for (int i = 0; i < nTissueLayer1; i++) {
@@ -247,17 +255,19 @@ void MystacialPad::update() {
 		m_anchor[i]->update();
 	}
 
-	for (int i = 0; i < nISM; i++) {
-		m_ISMArray[i]->update();
+	if (queryFiberFlag) {
+		for (int i = 0; i < nISM; i++) {
+			m_ISMArray[i]->update();
+		}
 	}
 
-	if (m_nasolabialis != nullptr)		m_nasolabialis->update();
-	if (m_maxillolabialis != nullptr)	m_maxillolabialis->update();
-	if (m_NS != nullptr)				m_NS->update();
-	if (m_PMS != nullptr)				m_PMS->update();
-	if (m_PMI != nullptr)				m_PMI->update();
-	if (m_PIP != nullptr)				m_PIP->update();
-	if (m_PM != nullptr)				m_PM->update();
+	if (m_nasolabialis)		m_nasolabialis->update(queryFiberFlag);
+	if (m_maxillolabialis)	m_maxillolabialis->update(queryFiberFlag);
+	if (m_NS)				m_NS->update(queryFiberFlag);
+	if (m_PMS)				m_PMS->update(queryFiberFlag);
+	if (m_PMI)				m_PMI->update(queryFiberFlag);
+	if (m_PIP)				m_PIP->update(queryFiberFlag);
+	if (m_PM)				m_PM->update(queryFiberFlag);
 
 	
 }

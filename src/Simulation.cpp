@@ -52,7 +52,7 @@ void Simulation::stepSimulation(float deltaTime) {
 			param->m_internal_time_step);			// fixed simulation sub time step
 
 		// update constraint physics options
-		m_mystacialPad->update();
+		m_mystacialPad->update(deltaTime);
 
 		// collision listener
 		{
@@ -388,10 +388,10 @@ void Simulation::initPhysics_test() {
 
 	// add constraints
 	btScalar k = 1;
-	btScalar f0 = 500;
-	btScalar zeta = 100;
+	btScalar f0 = 50;
+	btScalar zeta = 11;
 	t1 = new Tissue(this, box1, 
-		createTransform(btVector3(5, 0, 0)), k, zeta); // critical damping ratio is 1 for 1 mass
+		createTransform(btVector3(0, 0, 0)), k, zeta); // critical damping ratio is 1 for 1 mass
 	m_dynamicsWorld->addConstraint(t1->getConstraint(), true);
 
 	t2 = new Tissue(this, box2, 
@@ -409,6 +409,17 @@ void Simulation::initPhysics_test() {
 
 void Simulation::stepSimulation_test(float deltaTime) {
 	auto start = std::chrono::high_resolution_clock::now();
+
+	static int frame = 0;
+	frame++;
+	static int updates = 0;
+	static btScalar timeElapsed = 0.0f;
+	timeElapsed += deltaTime;
+	bool updateFiber = false;
+	if (timeElapsed >= (1.0f / 30.0f)) {
+		updateFiber = true;
+		timeElapsed -= (1.0f / 30.0f);
+	}
 
 	if (param->m_time_stop == 0 || m_time <= param->m_time_stop) {
 		// update everything here:
@@ -430,7 +441,15 @@ void Simulation::stepSimulation_test(float deltaTime) {
 			//	f->contractTo(1.0 - param->contract_range / 2 + range / 2);
 			//}
 			f->contractTo(0.8);
-			f->update();
+			if (updateFiber) {
+				f->update();
+				updates++;
+			}
+		}
+		else {
+			btVector3 fVal = { 5.0f, 0.0f, 0.0f };
+			box1->applyCentralForce(-fVal);
+			//box2->applyCentralForce(fVal);
 		}
 
 

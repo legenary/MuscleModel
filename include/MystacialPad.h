@@ -59,7 +59,7 @@ public:
 
 	void contractMuscle(Muscle mus, btScalar ratio);
 
-	void update();
+	void update(btScalar dt);
 	void readOutput(std::vector<std::vector<std::vector<btScalar>>>& output);
 	
 	int getNumFollicles() const;

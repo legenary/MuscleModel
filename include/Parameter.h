@@ -12,6 +12,7 @@ public:
 	int m_num_internal_step;
 	btScalar m_internal_time_step;
 	btScalar m_time_stop;
+	btScalar inverse_fiber_query_rate;
 	int DEBUG;
 
 	btScalar contract_range;

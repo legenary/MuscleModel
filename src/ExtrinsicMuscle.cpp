@@ -87,12 +87,14 @@ void ExtrinsicMuscle::contractTo(btScalar ratio) {
 	}
 }
 
-void ExtrinsicMuscle::update() {
-	for (int i = 0; i < nMusclePieces; i++) {
-		m_musclePieces[i]->update();
-	}
+void ExtrinsicMuscle::update(bool updateFiber) {
 	for (int i = 0; i < nInsertionPieces; i++) {
 		m_insertionPieces[i]->update();
+	}
+	if (updateFiber) {
+		for (int i = 0; i < nMusclePieces; i++) {
+			m_musclePieces[i]->update();
+		}
 	}
 }
 
