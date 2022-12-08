@@ -160,17 +160,21 @@ void Simulation::initParameter(Parameter* parameter) {
 
 	sprintf(parameter_string,
 		"FPS: %dHz\nSimulation internal step: %d\n"
+		"Muscle query rate: %.1fHz\n"
 		"Contraction ratio: %.2f\n"
-		"Follicle damping = %.6f\n"
-		"k_layer1=%.6fN/m\nk_layer2=%.6fN/m\nk_anchor=%.6fN/m\nf0_intrinsic=%.6fN\n"
+		"Tissue damping ratio = %.3f\n"
+		"k_layer1=%.6fN/m\nk_layer2=%.6fN/m\nk_anchor=%.6fN/m\n\n"
+		"fo unit: %.6fN\nf0_intrinsic = %.6fN\n"
 		"f0_nasolabialis(N)=%.6fN\nf0_maxillolabialis(M)=%.6fN\n"
 		"f0_nasolabialis_superficialis(NS)=%.6fN\n"
 		"f0_pars_media_superior=%.6fN\nf0_pars_media_inferior=%.6fN\n"
 		"f0_pars_interna_profunda=%.6fN\nf0_pars_maxillaris=%.6fN\n",
 		param->getFPS(), param->m_num_internal_step,
+		1 / param->inverse_fiber_query_rate,
 		param->contract_range,
-		param->fol_damping,
+		param->zeta_tissue,
 		param->k_layer1 * 0.001, param->k_layer2 * 0.001, param->k_anchor * 0.001,
+		param->f0_ISM * 0.000001 / 20,
 		param->f0_ISM * 0.000001,
 		param->f0_nasolabialis * 0.000001, param->f0_maxillolabialis * 0.000001,
 		param->f0_NS * 0.000001, param->f0_PMS * 0.000001,
@@ -388,8 +392,8 @@ void Simulation::initPhysics_test() {
 
 	// add constraints
 	btScalar k = 1;
-	btScalar f0 = 50;
-	btScalar zeta = 11;
+	btScalar f0 = 10;
+	btScalar zeta = 2;
 	t1 = new Tissue(this, box1, 
 		createTransform(btVector3(0, 0, 0)), k, zeta); // critical damping ratio is 1 for 1 mass
 	m_dynamicsWorld->addConstraint(t1->getConstraint(), true);

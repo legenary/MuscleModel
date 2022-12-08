@@ -237,9 +237,9 @@ void MystacialPad::createParsMaxillaris() {
 void MystacialPad::update(btScalar dt) {
 	static btScalar timeElapsed = 0.0f;
 	timeElapsed += dt;
-	bool queryFiberFlag = false;
+	bool fiberQueryFlag = false;
 	if (timeElapsed >= m_parameter->inverse_fiber_query_rate) {
-		queryFiberFlag = true;
+		fiberQueryFlag = true;
 		timeElapsed -= m_parameter->inverse_fiber_query_rate;
 	}
 
@@ -255,19 +255,19 @@ void MystacialPad::update(btScalar dt) {
 		m_anchor[i]->update();
 	}
 
-	if (queryFiberFlag) {
+	if (fiberQueryFlag) {
 		for (int i = 0; i < nISM; i++) {
 			m_ISMArray[i]->update();
 		}
 	}
 
-	if (m_nasolabialis)		m_nasolabialis->update(queryFiberFlag);
-	if (m_maxillolabialis)	m_maxillolabialis->update(queryFiberFlag);
-	if (m_NS)				m_NS->update(queryFiberFlag);
-	if (m_PMS)				m_PMS->update(queryFiberFlag);
-	if (m_PMI)				m_PMI->update(queryFiberFlag);
-	if (m_PIP)				m_PIP->update(queryFiberFlag);
-	if (m_PM)				m_PM->update(queryFiberFlag);
+	if (m_nasolabialis)		m_nasolabialis->update(fiberQueryFlag);
+	if (m_maxillolabialis)	m_maxillolabialis->update(fiberQueryFlag);
+	if (m_NS)				m_NS->update(fiberQueryFlag);
+	if (m_PMS)				m_PMS->update(fiberQueryFlag);
+	if (m_PMI)				m_PMI->update(fiberQueryFlag);
+	if (m_PIP)				m_PIP->update(fiberQueryFlag);
+	if (m_PM)				m_PM->update(fiberQueryFlag);
 
 	
 }

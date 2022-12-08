@@ -11,10 +11,13 @@ close all;
 
 T = 5;
 fps = 120;
-stepPerFrame = 500;
+stepPerFrame = 300;
+queryRate = 60;
+dampingRatio = 5;
+
 % determine time step, usually stepTotal = T*step - 1
 % path = sprintf('../bundle_%dHz_%d', fps, stepPerFrame);
-path = sprintf('../bundle', fps, stepPerFrame);
+path = sprintf('../bundle_%dHz_%dis_%dquery_%szeta', fps, stepPerFrame, queryRate, num2str(dampingRatio));
 stepTotal = size(load([path, '/fol_00.csv']), 1);
 
 
@@ -57,11 +60,11 @@ Col = [1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5,6,7, 1,2,3,4,5,6,7, 1,2,3,4,5,6];
 figure('Position', [200, 200, 400, 250], 'Color', 'w'); hold on;
 color = lines(5);
 for r = 1:5
-%     plot(az(:, Row==r), 'Color', color(r,:));
-    plot(az(:, 1), 'Color', [0.9290 0.6940 0.1250]);
+    plot(az(:, Row==r), 'Color', color(r,:));
+%     plot(az(:, 1), 'Color', [0.9290 0.6940 0.1250]);
 end
 title({'Azimuthal angle by row', sprintf('%dHz, %d steps', fps, stepPerFrame)});
-ylim([-55, -30])
+ylim([-60, 60])
 
 % plot a vertical line every 1 second
 loc = fps;
