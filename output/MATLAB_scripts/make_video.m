@@ -2,9 +2,9 @@ clear; close all;
 warning off;
 
 %% load data
-fps = 90;
-is = 80;
-path = sprintf('../bundle_%dHz_%d/', fps, is);
+fps = 120;
+is = 100;
+path = sprintf('../OLD_varying_fiber_query_rate/bundle_%dHz_%d/', fps, is);
 nFol = 31;
 fol_pos = nan(nFol, 6, 1000);
 for i = 1:nFol
@@ -27,7 +27,7 @@ muscle_pair_idx = [
 ] + 1;
 
 %% draw frame
-figure;
+figure('Position', [200, 200, 800, 600], 'Color', 'w');
 F(totalFrame) = getframe(gcf);  
 F(totalFrame).cdata = [];
 ax = gca;
