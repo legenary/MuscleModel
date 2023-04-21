@@ -22,32 +22,39 @@ private:
 	Parameter* param; 
 	MystacialPad* m_mystacialPad;
 	std::vector<std::vector<std::vector<btScalar>>> output_fol_pos;
-
-	std::map<const btCollisionObject*, std::vector<btManifoldPoint*>> objectsCollisions;
+	char parameter_string[512];
 
 	void zeroFrameSetup();
 
-	char parameter_string[512];
+	void preInitPhysics();
+	void postInitPhysics();
+
+	void updateCollisionListener();
 
 public:
 	Simulation(struct GUIHelperInterface* helper)
-		: CommonRigidBodyBase(helper), m_time_elapsed(0.), m_time(0.), m_step(0) {}
+		: CommonRigidBodyBase(helper), m_time_elapsed(0.), m_time(0.), m_step(0) {
+		m_mystacialPad = nullptr;
+	}
 	Simulation(const Simulation&) = delete;
 	Simulation& operator=(Simulation const&) = delete;
 	virtual ~Simulation();
+
 	// override new and delete operator to make sure object is aligned 16 on the heap
 	void* operator new(size_t i) { return _mm_malloc(i, 16); }
 	void operator delete(void* p) { _mm_free(p); }
 
-
 	void initParameter(Parameter* parameter);
-	virtual void initPhysics() override;
-	virtual void stepSimulation(float deltaTime) override;
-	void internalWriteOutput();
 
+	virtual void initPhysics() final;
+	virtual void stepSimulation(float deltaTime) final;
+	
 	void initPhysics_test();
 	void stepSimulation_test(float deltaTime);
+
+	void initPhysics_reduced();
 	
+	void internalWriteOutput();
 	void resetCamera();
 	bool exitSim = false;
 

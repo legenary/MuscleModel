@@ -61,11 +61,11 @@ Parameter::Parameter() {
 							// reference value: 0.01
 
 	// muscle parameter
-	btScalar f0 = 8;		// Bullet unit: 1e-6 (N)
+	btScalar f0 = 8;		// Bullet unit: 1e-6 (N), uN
 	// instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
 	dir_intrinsic_sling_muscle_greek = "../resources/intrinsic_sling_muscle_greek.csv";
-	f0_ISM = 20*f0;
+	f0_ISM = 20*f0; 
 
 	// M.Nasolabialis
 	dir_nasolabialis_node_pos = "../resources/nasolabialis_node_pos.csv";
@@ -109,7 +109,6 @@ Parameter::Parameter() {
 	// Pars maxillaris superficialis of M. Nasolabialis profundus
 	// Pars maxillaris profunda of M. Nasolabialis profundus
 	dir_pars_maxillaris_node_pos = "../resources/pars_maxillaris_node_pos.csv";
-	dir_pars_maxillaris_node_pos = "../resources/pars_maxillaris_node_pos.csv";
 	dir_pars_maxillaris_construction_idx = "../resources/pars_maxillaris_construction_idx.csv";
 	dir_pars_maxillaris_insertion_idx = "../resources/pars_maxillaris_insertion_idx.csv";
 	dir_pars_maxillaris_insertion_height = "../resources/pars_maxillaris_insertion_height.csv";
@@ -123,4 +122,5 @@ Parameter::Parameter() {
 
 	// testing case
 	TEST = false;
+	FULL_ARRAY = false;
 }

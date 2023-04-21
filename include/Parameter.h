@@ -134,6 +134,7 @@ public:
 
 	// testing
 	bool TEST;
+	bool FULL_ARRAY;
 };
 
 
