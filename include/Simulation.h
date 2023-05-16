@@ -53,6 +53,7 @@ public:
 	void stepSimulation_test(float deltaTime);
 
 	void initPhysics_reduced();
+	void stepSimulation_reduced(float deltaTime);
 	
 	void internalWriteOutput();
 	void resetCamera();

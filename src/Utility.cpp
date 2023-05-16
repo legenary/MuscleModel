@@ -89,7 +89,7 @@ void write_csv_float(const std::string& folderName, const std::string& fileName,
 		// outputing...
 		std::ofstream outputFile;
 		outputFile.open(folderName + "/" + fileName);
-		int m = dataList.size(), n = dataList[0].size();
+		int m = dataList.size(), n = m > 0 ? dataList[0].size() : 0;
 		for (int row = 0; row < m; row++) {
 			for (int col = 0; col < n; col++) {
 				outputFile << dataList[row][col] << ",";

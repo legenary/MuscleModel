@@ -90,27 +90,21 @@ plot3d(node_pos(34:39, :), 'ro');
 axis equal
 
 node_pos_output = node_pos([39, 1:38], :);
-% writematrix(node_pos_output, '../../nasolabialis_node_pos.csv')
+node_pos_output_reduced = node_pos([39 4 5 8 9 12 13 19 20 35 36 37], :);
+writematrix(node_pos_output_reduced, '../../nasolabialis_node_pos_reduced.csv')
 
 
 %%
-constrcution_index = [
-    0 34; 34 1; 1 2; 2 3; 34 4; 4 5; 5 6; 6 7;
-    0 35; 35 8; 8 9; 9 10; 10 11; 11 33; 
-    0 36; 36 12; 12 13; 13 14; 14 15; 15 16; 16 17; 17 18;
-    0 37; 37 19; 19 20; 20 21; 21 22; 22 23; 23 24; 24 25;
-    0 38; 38 26; 26 27; 27 28; 28 29; 29 30; 30 31; 31 32;
+constrcution_index_reduced = [
+    0 9 2; 9 1 2; 1 2 2; 9 3 2; 3 4 2; 
+    0 10 2; 10 5 4; 5 6 4;
+    0 11 2; 11 7 4; 7 8 4
 ];
-% writematrix(constrcution_index, '../../nasolabialis_construction_idx.csv')
+writematrix(constrcution_index_reduced, '../../nasolabialis_construction_idx_reduced.csv')
 
 %%
-insertion_index = [
+insertion_index_reduced = [
     % mus node, follicle1 idx, follicle2 idx (-1 if none)
-    34 0 1; 1 2 -1; 2 3 -1; 3 4 -1;
-    4 1 6; 5 2 7; 6 3 8; 7 4 9;
-    35 0 5; 8 6 11; 9 7 12; 10 8 13; 11 9 14; 33 15 -1;
-    36 5 10; 12 11 17; 13 12 18; 14 13 19; 15 14 20; 16 15 21; 17 22 -1; 18 23 -1;
-    37 10 16; 19 17 24; 20 18 25; 21 19 26; 22 20 27; 23 21 28; 24 22 29; 25 23 30;
-    38 16 -1; 26 24 -1; 27 25 -1; 28 26 -1; 29 27 -1; 30 28 -1; 31 29 -1; 32 30 -1;
+    2 2 -1; 1 1 -1; 9 0 -1; 4 2 5; 3 1 4; 10 0 3; 5 4 6; 6 5 7; 11 3 -1; 7 6 -1; 8 7 -1
 ];
-% writematrix(insertion_index, '../../nasolabialis_insertion_idx.csv')
+writematrix(insertion_index_reduced, '../../nasolabialis_insertion_idx_reduced.csv')

@@ -33,14 +33,18 @@ Parameter::Parameter() {
 
 	// foillicle parameter
 	dir_follicle_pos_orient_len_vol = "../resources/follicle_pos_ypr_len_vol.csv";
+	dir_follicle_pos_orient_len_vol_reduced = "../resources/follicle_pos_ypr_len_vol_reduced.csv";
 	fol_radius = 0.15;		// Bullet unit: mm
 	fol_density = 0.001;	// Bullet unit: g/mm^3
 	fol_damping = 1;		// damping for rigid body is clamped between 0 and 1
 							// default: 0, no damping
 							// dampnig is implemented in tissue
+	fol_idx_reduced = { 12, 13, 19, 20 };
+
 
 	// layer tissue parameter
 	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";
+	dir_spring_hex_mesh_idx_reduced = "../resources/spring_hex_mesh_idx_reduced.csv";
 	E_skin = 8000000;		// unit: Pa, do not change
 							// Skin's Young's Modulus is ~8MPa (Karimi and Navidbakhsh, 2015)
 
@@ -64,19 +68,27 @@ Parameter::Parameter() {
 	btScalar f0 = 8;		// Bullet unit: 1e-6 (N), uN
 	// instrinsic sling muscle parameter
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
+	dir_intrinsic_sling_muscle_idx_reduced = "../resources/intrinsic_sling_muscle_idx_reduced.csv";
 	dir_intrinsic_sling_muscle_greek = "../resources/intrinsic_sling_muscle_greek.csv";
+	dir_intrinsic_sling_muscle_greek_reduced = "../resources/intrinsic_sling_muscle_greek_reduced.csv";
 	f0_ISM = 20*f0; 
 
 	// M.Nasolabialis
 	dir_nasolabialis_node_pos = "../resources/nasolabialis_node_pos.csv";
+	dir_nasolabialis_node_pos_reduced = "../resources/nasolabialis_node_pos_reduced.csv";
 	dir_nasolabialis_construction_idx = "../resources/nasolabialis_construction_idx.csv";
+	dir_nasolabialis_construction_idx_reduced = "../resources/nasolabialis_construction_idx_reduced.csv";
 	dir_nasolabialis_insertion_idx = "../resources/nasolabialis_insertion_idx.csv";
+	dir_nasolabialis_insertion_idx_reduced = "../resources/nasolabialis_insertion_idx_reduced.csv";
 	f0_nasolabialis = 25*f0;
 
 	// M.Maxillolabialis
 	dir_maxillolabialis_node_pos = "../resources/maxillolabialis_node_pos.csv";
+	dir_maxillolabialis_node_pos_reduced = "../resources/maxillolabialis_node_pos_reduced.csv";
 	dir_maxillolabialis_construction_idx = "../resources/maxillolabialis_construction_idx.csv";
+	dir_maxillolabialis_construction_idx_reduced = "../resources/maxillolabialis_construction_idx_reduced.csv";
 	dir_maxillolabialis_insertion_idx = "../resources/maxillolabialis_insertion_idx.csv";
+	dir_maxillolabialis_insertion_idx_reduced = "../resources/maxillolabialis_insertion_idx_reduced.csv";
 	f0_maxillolabialis = 25*f0;
 
 	// M.Nasolabialis superficialis
@@ -120,7 +132,6 @@ Parameter::Parameter() {
 	OUTPUT = true;
 	output_path = "../output/bundle/";
 
-	// testing case
-	TEST = false;
-	FULL_ARRAY = false;
+	// mode
+	m_mode = MODE::REDUCED;
 }

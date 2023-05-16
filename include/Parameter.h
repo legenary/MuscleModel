@@ -1,6 +1,12 @@
 #ifndef PARAMETER_H
 #define PARAMETER_H
 
+enum class MODE {
+	TEST,
+	FULL,
+	REDUCED
+};
+
 class Parameter {
 
 public:
@@ -25,13 +31,16 @@ public:
 
 	// follicle parameter
 	std::string dir_follicle_pos_orient_len_vol;
+	std::string dir_follicle_pos_orient_len_vol_reduced;
 	std::vector<std::vector<float>> FOLLICLE_POS_ORIENT_LEN_VOL;
 	btScalar fol_radius;
 	btScalar fol_density;
 	btScalar fol_damping;
+	std::vector<int> fol_idx_reduced; // reduced
 
 	// layer/spring parameter
 	std::string dir_spring_hex_mesh_idx;
+	std::string dir_spring_hex_mesh_idx_reduced;
 	std::vector<std::vector<int>> SPRING_HEX_MESH_IDX;
 	btScalar E_skin;
 	btScalar k_layer1;
@@ -41,8 +50,10 @@ public:
 
 	// instrinsic sling muscle parameter
 	std::string dir_intrinsic_sling_muscle_idx;
+	std::string dir_intrinsic_sling_muscle_idx_reduced;
 	std::vector<std::vector<int>>INTRINSIC_SLING_MUSCLE_IDX;
 	std::string dir_intrinsic_sling_muscle_greek;
+	std::string dir_intrinsic_sling_muscle_greek_reduced;
 	std::vector<std::vector<float>>INTRINSIC_SLING_MUSCLE_GREEK;
 	btScalar f0_ISM;
 	// contraction
@@ -52,20 +63,26 @@ public:
 
 	// M.nasolabialis
 	std::string dir_nasolabialis_node_pos;
+	std::string dir_nasolabialis_node_pos_reduced;
 	std::vector<std::vector<float>> NASOLABIALIS_NODE_POS;
 	std::string dir_nasolabialis_construction_idx;
+	std::string dir_nasolabialis_construction_idx_reduced;
 	std::vector<std::vector<int>> NASOLABIALIS_CONSTRUCTION_IDX;
 	std::string dir_nasolabialis_insertion_idx;
+	std::string dir_nasolabialis_insertion_idx_reduced;
 	std::vector<std::vector<int>> NASOLABIALIS_INSERTION_IDX;
 	btScalar f0_nasolabialis;
 
 
 	// M.maxillolabialis
 	std::string dir_maxillolabialis_node_pos;
+	std::string dir_maxillolabialis_node_pos_reduced;
 	std::vector<std::vector<float>> MAXILLOLABIALIS_NODE_POS;
 	std::string dir_maxillolabialis_construction_idx;
+	std::string dir_maxillolabialis_construction_idx_reduced;
 	std::vector<std::vector<int>> MAXILLOLABIALIS_CONSTRUCTION_IDX;
 	std::string dir_maxillolabialis_insertion_idx;
+	std::string dir_maxillolabialis_insertion_idx_reduced;
 	std::vector<std::vector<int>> MAXILLOLABIALIS_INSERTION_IDX;
 	btScalar f0_maxillolabialis;
 
@@ -133,8 +150,8 @@ public:
 	inline int getFPS() const { return m_fps; }
 
 	// testing
-	bool TEST;
-	bool FULL_ARRAY;
+	MODE m_mode;
+	MODE getMode() const { return m_mode; }
 };
 
 

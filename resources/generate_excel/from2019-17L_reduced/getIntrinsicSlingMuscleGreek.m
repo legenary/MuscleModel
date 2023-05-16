@@ -4,17 +4,17 @@ load('follicle_pos');
 
 figure; hold on;
 plot3d(vec_top2D, 'ko');
-plot3d(vec_top2D([1, 6, 11, 17], :), 'ro');
 
 plot3d(vec_bot2D, 'ko');
-plot3d(vec_bot2D([1, 6, 11, 17], :), 'ro');
 
 for i = 1:31
     plot3d([vec_bot2D(i,:); vec_top2D(i,:)], 'k-');
 end
 
-for i = [1, 6, 11, 17]
+for i = [5 6 7 10 11 12 17 18]+1
     plot3d([vec_bot2D(i,:); vec_top2D(i,:)], 'r-');
+    plot3d(vec_bot2D(i, :), 'ro');
+    plot3d(vec_top2D(i, :), 'ro');
 end
 
 % intrinsic muslce is 70%
