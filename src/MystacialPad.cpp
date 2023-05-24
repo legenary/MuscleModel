@@ -234,6 +234,7 @@ void MystacialPad::createParsMaxillaris() {
 }
 
 void MystacialPad::update(btScalar dt) {
+	PROFILE_FUNCTION();
 	static btScalar timeElapsed = 0.0f;
 	timeElapsed += dt;
 	bool fiberQueryFlag = false;

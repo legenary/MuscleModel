@@ -6,11 +6,11 @@
 Parameter::Parameter() {
 	m_fps = 120;
 	m_time_step = 1.0f / m_fps;
-	m_num_internal_step = 300;	// for constraint solver
+	m_num_internal_step = 30;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / (btScalar) m_num_internal_step;
-	m_time_stop = 5;
+	m_time_stop = 1;
 
 	inverse_fiber_query_rate = 1.0f / 60.0f;
 

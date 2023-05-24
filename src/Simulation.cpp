@@ -2,6 +2,7 @@
 #include "Simulation.h"
 
 #include "Parameter.h"
+#include "Instrumentor.h"
 #include "Utility.h"
 #include "MystacialPad.h"
 #include "Fiber.h"
@@ -79,6 +80,7 @@ void Simulation::stepSimulation(float deltaTime) {
 
 
 void Simulation::stepSimulation_reduced(float deltaTime) {
+	//PROFILE_FUNCTION();
 	auto start = std::chrono::high_resolution_clock::now();
 	m_time += deltaTime; 								// increase time
 	m_step += 1;										// increase step
@@ -108,9 +110,12 @@ void Simulation::stepSimulation_reduced(float deltaTime) {
 		//}
 
 		// last step: step simulation
-		m_dynamicsWorld->stepSimulation(deltaTime,	// rendering time step
-			param->m_num_internal_step * 100,		// max sub step
-			param->m_internal_time_step);			// fixed simulation sub time step
+		{
+			PROFILE_SCOPE("m_dynamicsWorld->StepSimulation()");
+			m_dynamicsWorld->stepSimulation(deltaTime,	// rendering time step
+				param->m_num_internal_step * 100,		// max sub step
+				param->m_internal_time_step);			// fixed simulation sub time step
+		}
 
 		// update constraint physics options
 		m_mystacialPad->update(deltaTime);
@@ -120,6 +125,7 @@ void Simulation::stepSimulation_reduced(float deltaTime) {
 
 		// debug draw
 		if (param->DEBUG) {
+			PROFILE_SCOPE("DebugDraw()");
 			m_mystacialPad->debugDraw();
 			m_dynamicsWorld->debugDrawWorld();
 		}
@@ -218,6 +224,7 @@ void Simulation::initPhysics() {
 }
 
 void Simulation::initPhysics_reduced() {
+	PROFILE_FUNCTION();
 	preInitPhysics();
 
 	// Initializing physics world

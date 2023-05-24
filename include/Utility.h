@@ -1,6 +1,8 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
+#include "Instrumentor.h"
+
 #define PI 3.14159265358979323846
 #define BIT(x) (1<<(x))
 

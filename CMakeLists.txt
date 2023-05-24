@@ -230,6 +230,7 @@ SET(HEADERS
  	include/IntrinsicMuscle.h
  	include/ExtrinsicMuscle.h
  	include/myGeneric6DofMuscleConstraint.h
+ 	include/Instrumentor.h
 )
 
 ADD_EXECUTABLE(MuscleModel

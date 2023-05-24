@@ -1,5 +1,5 @@
 FPS: 120Hz
-Simulation internal step: 300
+Simulation internal step: 30
 Muscle query rate: 60.0Hz
 Contraction ratio: 0.25
 Tissue damping ratio = 10.000
