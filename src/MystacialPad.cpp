@@ -163,8 +163,9 @@ void MystacialPad::contractMuscle(Muscle mus, btScalar ratio) {
 	switch (mus) {
 	case Muscle::INTRINSIC:
 		std::cout << "Contracting intrinsic muscle...\n";
-		for (int s = 0; s < nISM; s++)
+		for (int s = 0; s < nISM; s++) {
 			m_ISMArray[s]->contractTo(ratio);
+		}
 		break;
 	case Muscle::N:
 		std::cout << "Contracting nasolabialis (N)...\n";
@@ -278,7 +279,7 @@ void MystacialPad::readOutput(std::vector<std::vector<std::vector<btScalar>>>& o
 		btVector3 pos_top = m_follicleArray[i]->getTopLocation();
 		btVector3 pos_bot = m_follicleArray[i]->getBotLocation();
 		std::vector<btScalar> posVec{ pos_top[0], pos_top[1], pos_top[2],
-									  pos_bot[0], pos_bot[1], pos_bot[2], };
+									  pos_bot[0], pos_bot[1], pos_bot[2] };
 
 		output[i].push_back(posVec);
 	}

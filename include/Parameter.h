@@ -36,7 +36,6 @@ public:
 	btScalar fol_radius;
 	btScalar fol_density;
 	btScalar fol_damping;
-	std::vector<int> fol_idx_reduced; // reduced
 
 	// layer/spring parameter
 	std::string dir_spring_hex_mesh_idx;
@@ -160,7 +159,7 @@ public:
 	bool VIDEO;
 	const char* video_file_name;
 	bool OUTPUT;
-	char* output_path;
+	char output_path[32];
 
 	// getters
 	inline int getFPS() const { return m_fps; }

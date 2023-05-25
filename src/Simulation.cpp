@@ -87,11 +87,11 @@ void Simulation::stepSimulation_reduced(float deltaTime) {
 
 	if (m_mystacialPad && param->m_time_stop == 0 || m_time < param->m_time_stop) {
 
-		//// set up output options
-		//if (param->OUTPUT)
-		//{
-		//	m_mystacialPad->readOutput(output_fol_pos);
-		//}
+		// set up output options
+		if (param->OUTPUT)
+		{
+			m_mystacialPad->readOutput(output_fol_pos);
+		}
 
 		//// contraction/retraction
 		//int every_steps = param->getFPS() / param->contract_frequency / 2.0f;

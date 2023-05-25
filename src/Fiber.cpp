@@ -90,8 +90,9 @@ void Fiber::update() {
 					* dir;
 	m_constraint->updateForce(force);
 
-	// debug, output the 12th intrinsic muscle info
-	if (m_idx == 12) {
+	// debug, output the 12th intrinsic muscle info (full array)
+	//					 2nd  intrinsic muscle info (reduced array)
+	if (m_idx == 2) {
 		S_dumpster::Get().fiber_info[0].push_back(m_restLength);
 		S_dumpster::Get().fiber_info[1].push_back(m_length);
 		S_dumpster::Get().fiber_info[2].push_back(force.length());		// instructed force

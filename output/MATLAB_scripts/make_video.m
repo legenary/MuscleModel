@@ -1,6 +1,26 @@
 clear; close all;
 warning off;
 
+obj = readObj('resources/NewRatHead.obj');
+figure; 
+% idx = obj.v(:,1) > 0;
+pts = obj.v(:,1:3)*roty(90, 'deg')*rotz(-90, 'deg')*roty(-20, 'deg');
+pts = pts(pts(:,3) > 5, :);
+
+% stem3(pts(:,1), pts(:,2), pts(:,3));
+x = pts(:,1); y = pts(:,2); z = pts(:,3);
+xv = linspace(min(x), max(x), 2000);
+yv = linspace(min(y), max(y), 2000);
+[X,Y] = meshgrid(xv, yv);
+Z = griddata(x,y,z,X,Y);
+sl = surfl(X, Y, Z);
+sl.EdgeColor = 'none';
+sl.FaceAlpha = 0.5;
+% plot3d(pts, 'k.')
+axis equal
+xlabel('x'); ylabel('y');
+
+
 %% load data
 fps = 120;
 is = 100;
@@ -39,7 +59,7 @@ ax.View = [15, 22];
 % ax.View = [0, 90];
 vpm = viewmtx(ax.View(1), ax.View(2)); % camera view projection matrix
 whiskerLen = 3;
-for f = 1:totalFrame
+for f = 1%:totalFrame
     delete(findobj('Type', 'Line'));
     delete(findobj('Type', 'Patch'));
     hold on;
@@ -103,13 +123,13 @@ for f = 1:totalFrame
 end
 
 %% output video
-writerObj = VideoWriter('myVideo');
-writerObj.FrameRate = fps/1.5;
-open(writerObj);
-for i=1:length(F)
-    writeVideo(writerObj, F(i));
-end
-close(writerObj);
+% writerObj = VideoWriter('myVideo');
+% writerObj.FrameRate = fps/1.5;
+% open(writerObj);
+% for i=1:length(F)
+%     writeVideo(writerObj, F(i));
+% end
+% close(writerObj);
 
 
 
