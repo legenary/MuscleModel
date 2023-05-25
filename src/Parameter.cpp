@@ -10,7 +10,7 @@ Parameter::Parameter() {
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / (btScalar) m_num_internal_step;
-	m_time_stop = 1;
+	m_time_stop = 0;
 
 	inverse_fiber_query_rate = 1.0f / 60.0f;
 
@@ -24,7 +24,7 @@ Parameter::Parameter() {
 	contract_frequency = 1; // Hz
 	
 	//camera position
-	camPos[0] = 0;
+	camPos[0] = 8;
 	camPos[1] = 0;
 	camPos[2] = 0;
 	camDist = 8;

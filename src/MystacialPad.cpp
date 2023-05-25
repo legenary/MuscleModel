@@ -286,18 +286,18 @@ void MystacialPad::readOutput(std::vector<std::vector<std::vector<btScalar>>>& o
 
 void MystacialPad::debugDraw() {
 
-	//for (int i = 0; i < m_layer1.size(); i++) {
-	//	m_layer1[i]->debugDraw(btVector3(1., 0., 0.), false);
-	//}
-	//for (int i = 0; i < m_layer2.size(); i++) {
-	//	m_layer2[i]->debugDraw(btVector3(1., 0., 0.), false);
-	//}
-	//for (int i = 0; i < nTissueAnchor; i++) {
-	//	m_anchor[i]->debugDraw(RED, true);
-	//}
-	//for (int i = 0; i < nISM; i++) {
-	//	m_ISMArray[i]->debugDraw(RED, false);
-	//}
+	for (int i = 0; i < m_layer1.size(); i++) {
+		m_layer1[i]->debugDraw(btVector3(1., 0., 0.), false);
+	}
+	for (int i = 0; i < m_layer2.size(); i++) {
+		m_layer2[i]->debugDraw(btVector3(1., 0., 0.), false);
+	}
+	for (int i = 0; i < nTissueAnchor; i++) {
+		m_anchor[i]->debugDraw(RED, true);
+	}
+	for (int i = 0; i < nISM; i++) {
+		m_ISMArray[i]->debugDraw(RED, false);
+	}
 
 	if (m_nasolabialis) {
 		m_nasolabialis->debugDraw(BLUE);

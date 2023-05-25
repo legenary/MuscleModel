@@ -9,5 +9,10 @@ springHexMeshIdx = [0 1;  1 2;  2 3;  3 4;   % A row
                   24 17; 17 25; 25 18; 18 26; 26 19; 19 27; 27 20; 20 28; 28 21; 21 29; 29 22; 22 30; 30 23; % between D and E row
                   16 24; 24 25; 25 26; 26 27; 27 28; 28 29; 29 30]; % E row
                   
+springHexMeshIdx_reduced = [
+    0 1; 1 2; 3 4; 4 5; 6 7; 7 8; 0 3; 1 4; 2 5; 3 6; 4 7; 5 8;
+    0 4; 1 5; 3 7; 4 8
+];
 
+writematrix(springHexMeshIdx_reduced, '../../spring_hex_mesh_idx_reduced.csv')
 writematrix(springHexMeshIdx, '../../spring_hex_mesh_idx.csv')

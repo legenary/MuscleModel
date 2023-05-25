@@ -85,24 +85,21 @@ plot3d(node_pos(34:39, :), 'ro');
 axis equal
 
 node_pos_output = node_pos([39, 1:38], :);
-node_pos_output_reduced = node_pos([39 8 5 12 9 19 13 26 20 35 36 37], :);
+node_pos_output_reduced = node_pos([39 8 5 6 12 9 10 19 13 14 26 20 21], :);
 writematrix(node_pos_output_reduced, '../../maxillolabialis_node_pos_reduced.csv')
 
 %%
 constrcution_index_reduced = [
-    0 9 2; 9 1 4; 1 2 4;
-    0 10 2; 10 3 4; 3 4 4;
-    0 11 2; 11 5 2; 5 6 2; 11 7 2; 7 8 2
+    0 1 2; 1 2 4; 2 3 4; 0 4 2; 4 5 4; 5 6 4;
+    0 7 2; 7 8 4; 8 9 4; 0 10 2; 10 11 4; 11 12 4
 ];
 writematrix(constrcution_index_reduced, '../../maxillolabialis_construction_idx_reduced.csv')
 
 %%
 insertion_index_reduced = [
     % mus node, follicle1 idx, follicle2 idx (-1 if none)
-    2 2 -1; 1 1 -1; 9 0 -1;
-    4 2 5; 3 1 4; 10 0 3;
-    6 5 7; 5 4 6; 11 3 -1;
-    8 7 -1; 7 6 -1
+    3 2 -1; 2 1 -1; 1 0 -1; 6 2 5; 5 1 4; 4 0 3;
+    9 5 8; 8 4 7; 7 3 6; 12 8 -1; 11 7 -1; 10 6 -1
 ];
 writematrix(insertion_index_reduced, '../../maxillolabialis_insertion_idx_reduced.csv')
 
