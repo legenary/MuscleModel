@@ -67,9 +67,13 @@ axis equal
 
 
 node_pos_output = node_pos([16, 1:15], :);
-
-
 writematrix(node_pos_output, '../../pars_interna_profunda_node_pos.csv')
+
+% potential adjustment for reduced array, not sure whether apply to full
+% array or not
+node_pos(16, :) = node_pos(16, :) + [-1, 0, 0];
+node_pos_output_reduced = node_pos([16 7 8 9 12 13 14], :);
+writematrix(node_pos_output_reduced, '../../pars_interna_profunda_node_pos_reduced.csv')
 
 
 %%
@@ -98,7 +102,26 @@ insertion_height = [
 writematrix(insertion_index, '../../pars_interna_profunda_insertion_idx.csv')
 writematrix(insertion_height, '../../pars_interna_profunda_insertion_height.csv')
 
+%% reduced
+constrcution_index_reduced = [
+    0 3 2; 3 2 4; 2 1 4; 0 6 2; 6 5 4; 5 4 4
+];
+writematrix(constrcution_index_reduced, '../../pars_interna_profunda_construction_idx_reduced.csv')
 
+%%
+insertion_index_reduced = [
+    % mus node, follicle1 idx, follicle2 idx (-1 if none)
+    1 0 -1; 2 1 -1; 3 2 -1;
+    4 0 3; 5 1 4; 6 2 5;
+];
+
+insertion_height_reduced = [
+     1 subcapsular_level; 2 subcapsular_level; 3 subcapsular_level; 
+     4 subcapsular_level; 5 subcapsular_level; 6 subcapsular_level; 
+];
+
+writematrix(insertion_index_reduced, '../../pars_interna_profunda_insertion_idx_reduced.csv')
+writematrix(insertion_height_reduced, '../../pars_interna_profunda_insertion_height_reduced.csv')
 
 
 

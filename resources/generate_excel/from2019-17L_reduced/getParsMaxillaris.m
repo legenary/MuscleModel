@@ -73,6 +73,19 @@ node_pos(27, 1) = node_pos(27, 1) - 3;
 for i = 1:27, node_pos(i, 1) = node_pos(i, 1) - 0.5; end
 
 
+node_pos_output = node_pos([27, 1:26], :);
+% potential adjustment for reduced array, not sure whether apply to full
+% array or not
+node_pos(1, :) = node_pos(1, :) + [0, 0, 0.1];
+node_pos(7, :) = node_pos(7, :) + [0.2, 0, 0.2];
+node_pos(7, :) = node_pos(7, :) + [0, 0, 0.1];
+node_pos(16, :) = node_pos(16, :) + [0.2, -0.2, 0.2];
+node_pos(15, :) = node_pos(15, :) + [0.3, -0.3, 0.3];
+node_pos(14, :) = node_pos(14, :) + [0.7, -0.5, 0.4];
+node_pos_output_reduced = node_pos([27 1 2 3 7 8 9 14 15 16], :);
+writematrix(node_pos_output_reduced, '../../pars_maxillaris_node_pos_reduced.csv')
+writematrix(node_pos_output, '../../pars_maxillaris_node_pos.csv')
+
 figure; hold on;
 plot3d(vec_bot2D, 'ro');
 plot3d(vec_top2D, 'bo');
@@ -80,9 +93,6 @@ for i = 1:31, plot3d([vec_top2D(i,:); vec_bot2D(i,:)], 'r-'); end
 plot3d(node_pos(1:27, :), 'k*');
 plot3d(node_pos([5], :), 'ro');
 axis equal
-
-node_pos_output = node_pos([27, 1:26], :);
-writematrix(node_pos_output, '../../pars_maxillaris_node_pos.csv')
 
 %%
 constrcution_index = [
@@ -93,7 +103,6 @@ constrcution_index = [
 ];
 writematrix(constrcution_index, '../../pars_maxillaris_construction_idx.csv')
 
-%%
 insertion_index = [
     % mus node, follicle1 idx, follicle2 idx (-1 if none)
     0 23 30;
@@ -113,6 +122,28 @@ insertion_height = [
 
 writematrix(insertion_index, '../../pars_maxillaris_insertion_idx.csv')
 writematrix(insertion_height, '../../pars_maxillaris_insertion_height.csv')
+
+%% reduced array
+constrcution_index_reduced = [
+    0 3 2; 3 2 4; 2 1 4; 0 6 2; 6 5 4; 5 4 4
+    0 9 2; 9 8 4; 8 7 4
+];
+writematrix(constrcution_index_reduced, '../../pars_maxillaris_construction_idx_reduced.csv')
+
+insertion_index_reduced = [
+    % mus node, follicle1 idx, follicle2 idx (-1 if none)
+    3 2 5; 2 1 4; 1 0 3; 6 5 8; 5 4 7; 4 3 6;
+    9 8 -1; 8 7 -1; 7 6 -1
+];
+
+insertion_height_reduced = [
+    1 subcapsular_level; 2 subcapsular_level; 3 subcapsular_level; 
+    4 subcapsular_level; 5 subcapsular_level; 6 subcapsular_level; 
+    7 subcapsular_level; 8 subcapsular_level; 9 subcapsular_level
+];
+
+writematrix(insertion_index_reduced, '../../pars_maxillaris_insertion_idx_reduced.csv')
+writematrix(insertion_height_reduced, '../../pars_maxillaris_insertion_height_reduced.csv')
 
 
 

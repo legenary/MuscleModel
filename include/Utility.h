@@ -2,14 +2,16 @@
 #define UTILITY_H
 
 #include "Instrumentor.h"
+#define ensure(x, ...) {if(!(x)) {__debugbreak();}}
 
 #define PI 3.14159265358979323846
 #define BIT(x) (1<<(x))
 
 #define RED btVector3(1., 0., 0.)
-#define GREEN btVector3(0., 1., 0.)
-#define BLUE btVector3(0., 0., 1.)
-
+#define ORANGE btVector3(255./255., 69./255., 0./255.)
+#define GREEN btVector3(60./255., 179./255., 113./255.)
+#define BLUE btVector3(65./255., 105./255., 225./255.)
+#define YELLOW btVector3(255./255., 215./255., 0./255.)
 
 template <typename>
 class btAlignedObjectArray;
@@ -26,23 +28,6 @@ enum collisiontypes {
 static int follicleCollideWith = COL_FOLLICLE;
 static int intMusCollideWith = COL_INT_MUS;
 static int extMusCollideWith = COL_FOLLICLE;
-
-// scoped timer
-struct Timer {
-	std::chrono::time_point<std::chrono::steady_clock> start, end;
-	std::chrono::duration<float> duration;
-	std::string message = "no msg";
-
-	Timer() : start(std::chrono::high_resolution_clock::now()) {}
-	Timer(std::string msg) : start(std::chrono::high_resolution_clock::now()), message(msg) {}
-
-	~Timer() {
-		end = std::chrono::high_resolution_clock::now();
-		duration = end - start;
-		float ms = duration.count() * 1000.f;
-		std::cout << "(" << message << ") Timer took: " << ms << "ms\n";
-	}
-};
 
 btRigidBody* createDynamicBody(const float mass, const btTransform& startTransform, btCollisionShape* shape, btScalar damping = 0.f);
 btTransform createTransform(const btVector3& origin = btVector3(0., 0., 0.), const btVector3& rotation = btVector3(0., 0., 0.));

@@ -38,6 +38,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 	}
 	// construct muscle structural fibers
 	nMusclePieces = CONSTRUCTION_IDX.size();
+	ensure(nMusclePieces > 0 && CONSTRUCTION_IDX[0].size() == 3);
 	for (int i = 0; i < nMusclePieces; i++) {
 		btRigidBody* node1 = m_nodes[CONSTRUCTION_IDX[i][0]];
 		btRigidBody* node2 = m_nodes[CONSTRUCTION_IDX[i][1]];

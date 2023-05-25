@@ -57,13 +57,13 @@ node_pos(11, 3) = node_pos(11, 3) - 1;
 node_pos(14, 3) = node_pos(14, 3) + 0.2;
 node_pos(15, 3) = node_pos(15, 3) - 0.2;
 
-
 % node 16
 s1 = node_pos(4, :); e1 = node_pos(5, :); 
 s2 = node_pos(14, :); e2 = node_pos(15, :); 
 [foot1, foot2] = getCommonFootOfPerpendicularLine(s1, e1, s2, e2);
 node_pos(16, :) = mean([foot1; foot2]);
 node_pos(16, 1) = node_pos(16, 1) + 3;
+
 
 figure; hold on;
 plot3d(vec_bot2D, 'ro');
@@ -73,7 +73,15 @@ plot3d(node_pos([4,5,14,15,16], :), 'ro');
 axis equal
 
 node_pos_output = node_pos([16, 1:15], :);
-writematrix(node_pos_output, '../../pars_media_superior_node_pos.csv')
+
+% potential adjustment for reduced array, not sure whether apply to full
+% array or not
+node_pos(12, 3) = node_pos(12, 3) - 0.8; 
+node_pos(13, 3) = node_pos(13, 3) - 0.5;
+node_pos(14, 3) = node_pos(14, 3) - 0.5;
+node_pos(16, :) = node_pos(16, :) + [0, 3, -3];
+node_pos_output_reduced = node_pos([16 7 8 9 12 13 14], :);
+writematrix(node_pos_output_reduced, '../../pars_media_superior_node_pos_reduced.csv')
 
 
 %%
@@ -101,6 +109,28 @@ insertion_height = [
 
 writematrix(insertion_index, '../../pars_media_superior_insertion_idx.csv')
 writematrix(insertion_height, '../../pars_media_superior_insertion_height.csv')
+
+%% reduced
+constrcution_index_reduced = [
+    0 3 2; 3 2 4; 2 1 4; 0 6 2; 6 5 4; 5 4 4
+];
+writematrix(constrcution_index_reduced, '../../pars_media_superior_construction_idx_reduced.csv')
+
+%% reduced
+insertion_index_reduced = [
+    % mus node, follicle1 idx, follicle2 idx (-1 if none)
+    1 0 -1; 2 1 -1; 3 2 -1;
+    4 0 3; 5 1 4; 6 2 5;
+];
+
+insertion_height_reduced = [
+     1 0.5; 2 0; 3 -0.5; 
+     4 0.5; 5 0; 6 -0.5;
+
+];
+
+writematrix(insertion_index_reduced, '../../pars_media_superior_insertion_idx_reduced.csv')
+writematrix(insertion_height_reduced, '../../pars_media_superior_insertion_height_reduced.csv')
 
 
 

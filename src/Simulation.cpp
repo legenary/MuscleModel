@@ -255,6 +255,38 @@ void Simulation::initPhysics_reduced() {
 	read_csv_int(param->dir_maxillolabialis_insertion_idx_reduced, param->MAXILLOLABIALIS_INSERTION_IDX);
 	m_mystacialPad->createMaxillolabialis();
 
+	//// extrinsic: pars media superior of M. Nasolabialis profundus
+	// corium
+	read_csv_float(param->dir_pars_media_superior_node_pos_reduced, param->PARS_MEDIA_SUPERIOR_NODE_POS);
+	read_csv_int(param->dir_pars_media_superior_construction_idx_reduced, param->PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_media_superior_insertion_idx_reduced, param->PARS_MEDIA_SUPERIOR_INSERTION_IDX);
+	read_csv_float(param->dir_pars_media_superior_insertion_height_reduced, param->PARS_MEDIA_SUPERIOR_INSERTION_HEIGHT);
+	m_mystacialPad->createParsMediaSuperior();
+
+	//// extrinsic: pars interna profunda of M. Nasolabialis profundus
+	// subcapsular
+	read_csv_float(param->dir_pars_interna_profunda_node_pos_reduced, param->PARS_INTERNA_PROFUNDA_NODE_POS);
+	read_csv_int(param->dir_pars_interna_profunda_construction_idx_reduced, param->PARS_INTERNA_PROFUNDA_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_interna_profunda_insertion_idx_reduced, param->PARS_INTERNA_PROFUNDA_INSERTION_IDX);
+	read_csv_float(param->dir_pars_interna_profunda_insertion_height_reduced, param->PARS_INTERNA_PROFUNDA_INSERTION_HEIGHT);
+	m_mystacialPad->createParsInternaProfunda();
+
+	//// extrinsic: pars media inferior of M. Nasolabialis profundus
+	// corium
+	read_csv_float(param->dir_pars_media_inferior_node_pos_reduced, param->PARS_MEDIA_INFERIOR_NODE_POS);
+	read_csv_int(param->dir_pars_media_inferior_construction_idx_reduced, param->PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_media_inferior_insertion_idx_reduced, param->PARS_MEDIA_INFERIOR_INSERTION_IDX);
+	read_csv_float(param->dir_pars_media_inferior_insertion_height_reduced, param->PARS_MEDIA_INFERIOR_INSERTION_HEIGHT);
+	m_mystacialPad->createParsMediaInferior();
+
+	//// extrinsic: pars maxillaris & profunda of M. Nasolabialis profundus
+	// subcapsular
+	read_csv_float(param->dir_pars_maxillaris_node_pos_reduced, param->PARS_MAXILLARIS_NODE_POS);
+	read_csv_int(param->dir_pars_maxillaris_construction_idx_reduced, param->PARS_MAXILLARIS_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_maxillaris_insertion_idx_reduced, param->PARS_MAXILLARIS_INSERTION_IDX);
+	read_csv_float(param->dir_pars_maxillaris_insertion_height_reduced, param->PARS_MAXILLARIS_INSERTION_HEIGHT);
+	m_mystacialPad->createParsMaxillaris();
+
 	postInitPhysics();
 };
 

@@ -82,6 +82,13 @@ axis equal
 node_pos_output = node_pos([26, 1:25], :);
 writematrix(node_pos_output, '../../pars_media_inferior_node_pos.csv')
 
+% potential adjustment for reduced array, not sure whether apply to full
+% array or not
+node_pos(26, :) = node_pos(26, :) + [4, 0, 0];
+node_pos_output_reduced = node_pos([26 1 2 3 7 8 9 14 15 16], :);
+writematrix(node_pos_output_reduced, '../../pars_media_inferior_node_pos_reduced.csv')
+
+
 %%
 constrcution_index = [
     0 5; 5 4; 4 3; 3 2; 2 1;
@@ -91,7 +98,6 @@ constrcution_index = [
 ];
 writematrix(constrcution_index, '../../pars_media_inferior_construction_idx.csv')
 
-%%
 insertion_index = [
     % mus node, follicle1 idx, follicle2 idx (-1 if none)
     0 23 30;
@@ -111,6 +117,34 @@ insertion_height = [
 
 writematrix(insertion_index, '../../pars_media_inferior_insertion_idx.csv')
 writematrix(insertion_height, '../../pars_media_inferior_insertion_height.csv')
+
+%% reduced array
+constrcution_index_reduced = [
+    0 3 2; 3 2 4; 2 1 4; 0 6 2; 6 5 4; 5 4 4
+    0 9 2; 9 8 4; 8 7 4
+];
+writematrix(constrcution_index_reduced, '../../pars_media_inferior_construction_idx_reduced.csv')
+
+insertion_index_reduced = [
+    % mus node, follicle1 idx, follicle2 idx (-1 if none)
+    3 2 5; 2 1 4; 1 0 3; 6 5 8; 5 4 7; 4 3 6;
+    9 8 -1; 8 7 -1; 7 6 -1
+];
+
+% insertion_height_reduced = [
+%     1 0.9; 2 0.6; 3 0.3; 
+%     4 0.9; 5 0.6; 6 0.3; 
+%     7 0.9; 8 0.6; 9 0.3
+% ];
+insertion_height_reduced = [
+    1 0.3; 2 0.6; 3 0.9; 
+    4 0.3; 5 0.6; 6 0.9; 
+    7 0.3; 8 0.6; 9 0.9
+];
+
+writematrix(insertion_index_reduced, '../../pars_media_inferior_insertion_idx_reduced.csv')
+writematrix(insertion_height_reduced, '../../pars_media_inferior_insertion_height_reduced.csv')
+
 
 
 

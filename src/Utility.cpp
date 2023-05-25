@@ -49,6 +49,8 @@ btTransform createTransform(const btVector3& origin, const btVector3& YPR) {
 void read_csv_float(const std::string& fileName, std::vector<std::vector<float>>& dataList){
 
 	std::fstream data(fileName);
+	ensure(data.is_open());
+	
 	std::string line;
 	while (std::getline(data, line)) {
 		std::stringstream linestream(line);
@@ -60,12 +62,13 @@ void read_csv_float(const std::string& fileName, std::vector<std::vector<float>>
 		}
 		dataList.push_back(parsedRow);
 	}
-	
 }
 
 void read_csv_int(const std::string& fileName, std::vector<std::vector<int>>& dataList) {
 
 	std::fstream data(fileName);
+	ensure(data.is_open());
+
 	std::string line;
 	while (std::getline(data, line)) {
 		std::stringstream linestream(line);

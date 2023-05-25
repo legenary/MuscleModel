@@ -97,46 +97,62 @@ public:
 
 	// Pars media superior of M. Nasolabialis profundus
 	std::string dir_pars_media_superior_node_pos;
+	std::string dir_pars_media_superior_node_pos_reduced;
 	std::vector<std::vector<float>> PARS_MEDIA_SUPERIOR_NODE_POS;
 	std::string dir_pars_media_superior_construction_idx;
+	std::string dir_pars_media_superior_construction_idx_reduced;
 	std::vector<std::vector<int>> PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX;
 	std::string dir_pars_media_superior_insertion_idx;
+	std::string dir_pars_media_superior_insertion_idx_reduced;
 	std::vector<std::vector<int>> PARS_MEDIA_SUPERIOR_INSERTION_IDX;
 	std::string dir_pars_media_superior_insertion_height;
+	std::string dir_pars_media_superior_insertion_height_reduced;
 	std::vector<std::vector<float>> PARS_MEDIA_SUPERIOR_INSERTION_HEIGHT;
 	btScalar f0_PMS;
 
-	// Pars media inferior of M. Nasolabialis profundus
-	std::string dir_pars_media_inferior_node_pos;
-	std::vector<std::vector<float>> PARS_MEDIA_INFERIOR_NODE_POS;
-	std::string dir_pars_media_inferior_construction_idx;
-	std::vector<std::vector<int>> PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX;
-	std::string dir_pars_media_inferior_insertion_idx;
-	std::vector<std::vector<int>> PARS_MEDIA_INFERIOR_INSERTION_IDX;
-	std::string dir_pars_media_inferior_insertion_height;
-	std::vector<std::vector<float>> PARS_MEDIA_INFERIOR_INSERTION_HEIGHT;
-	btScalar f0_PMI;
-
 	// Pars interna profunda of M. Nasolabialis profundus
 	std::string dir_pars_interna_profunda_node_pos;
+	std::string dir_pars_interna_profunda_node_pos_reduced;
 	std::vector<std::vector<float>> PARS_INTERNA_PROFUNDA_NODE_POS;
 	std::string dir_pars_interna_profunda_construction_idx;
+	std::string dir_pars_interna_profunda_construction_idx_reduced;
 	std::vector<std::vector<int>> PARS_INTERNA_PROFUNDA_CONSTRUCTION_IDX;
 	std::string dir_pars_interna_profunda_insertion_idx;
+	std::string dir_pars_interna_profunda_insertion_idx_reduced;
 	std::vector<std::vector<int>> PARS_INTERNA_PROFUNDA_INSERTION_IDX;
 	std::string dir_pars_interna_profunda_insertion_height;
+	std::string dir_pars_interna_profunda_insertion_height_reduced;
 	std::vector<std::vector<float>> PARS_INTERNA_PROFUNDA_INSERTION_HEIGHT;
 	btScalar f0_PIP;
+
+	// Pars media inferior of M. Nasolabialis profundus
+	std::string dir_pars_media_inferior_node_pos;
+	std::string dir_pars_media_inferior_node_pos_reduced;
+	std::vector<std::vector<float>> PARS_MEDIA_INFERIOR_NODE_POS;
+	std::string dir_pars_media_inferior_construction_idx;
+	std::string dir_pars_media_inferior_construction_idx_reduced;
+	std::vector<std::vector<int>> PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX;
+	std::string dir_pars_media_inferior_insertion_idx;
+	std::string dir_pars_media_inferior_insertion_idx_reduced;
+	std::vector<std::vector<int>> PARS_MEDIA_INFERIOR_INSERTION_IDX;
+	std::string dir_pars_media_inferior_insertion_height;
+	std::string dir_pars_media_inferior_insertion_height_reduced;
+	std::vector<std::vector<float>> PARS_MEDIA_INFERIOR_INSERTION_HEIGHT;
+	btScalar f0_PMI;
 
 	// Pars maxillaris superficialis of M. Nasolabialis profundus
 	// Pars maxillaris profunda of M. Nasolabialis profundus
 	std::string dir_pars_maxillaris_node_pos;
+	std::string dir_pars_maxillaris_node_pos_reduced;
 	std::vector<std::vector<float>> PARS_MAXILLARIS_NODE_POS;
 	std::string dir_pars_maxillaris_construction_idx;
+	std::string dir_pars_maxillaris_construction_idx_reduced;
 	std::vector<std::vector<int>> PARS_MAXILLARIS_CONSTRUCTION_IDX;
 	std::string dir_pars_maxillaris_insertion_idx;
+	std::string dir_pars_maxillaris_insertion_idx_reduced;
 	std::vector<std::vector<int>> PARS_MAXILLARIS_INSERTION_IDX;
 	std::string dir_pars_maxillaris_insertion_height;
+	std::string dir_pars_maxillaris_insertion_height_reduced;
 	std::vector<std::vector<float>> PARS_MAXILLARIS_INSERTION_HEIGHT;
 	btScalar f0_PM;
 
