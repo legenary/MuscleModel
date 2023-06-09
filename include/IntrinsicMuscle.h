@@ -10,7 +10,6 @@ class Follicle;
 // Intrinsic sling muscle
 class IntrinsicSlingMuscle : public Fiber {
 private:
-
 	// parameters for muscle contraction
 
 

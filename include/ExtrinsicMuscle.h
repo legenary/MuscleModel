@@ -1,7 +1,6 @@
 #ifndef EXTRINSIC_MUSCLE_H
 #define EXTRINSIC_MUSCLE_H
 
-//#include "LinearMath/btAlignedObjectArray.h"
 #include "Simulation.h"
 
 class Tissue;
@@ -22,6 +21,7 @@ private:
 	btAlignedObjectArray<Fiber*> m_musclePieces;
 	btAlignedObjectArray<Tissue*> m_insertionPieces;
 	
+	btScalar m_Hamiltonian;
 
 public:
 	// remember to add: a slider constraint (or point-to-point anchor) at the end of the extrinsic muscle bundle
@@ -51,6 +51,7 @@ public:
 	inline btAlignedObjectArray<btCollisionShape*>* getCollisionShapes() {
 		return &(m_sim->m_collisionShapes);
 	}
+	btScalar getHamiltonian() const { return m_Hamiltonian; }
 };
 
 

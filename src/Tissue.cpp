@@ -110,6 +110,10 @@ void Tissue::update() {
 		m_eq = TsP.getOrigin();
 	}
 
+	// calculate Hamiltonian as potential energy
+	btScalar dx = m_length - m_restLength;
+	m_Hamiltonian = 0.5 * m_k * dx * dx;
+
 }
 
 

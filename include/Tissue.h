@@ -27,6 +27,7 @@ protected:
 	btScalar m_length;
 
 	btRigidBody* m_rbA, * m_rbB;
+	btScalar m_Hamiltonian;
 
 public:
 	//Tissue(btScalar k, btScalar damping);
@@ -56,6 +57,7 @@ public:
 	inline btDynamicsWorld* getWorld() {
 		return m_sim->getDynamicsWorld();
 	}
+	btScalar getHamiltonian() const { return m_Hamiltonian; }
 	
 };
 

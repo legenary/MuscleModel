@@ -1,8 +1,9 @@
 #include "my_pch.h"
 #include "Fiber.h"
 
-#include "myGeneric6DofMuscleConstraint.h"
+#include "Parameter.h"
 #include "Utility.h"
+#include "Simulation.h"
 
 // constructor
 Fiber::Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB, 
@@ -45,12 +46,13 @@ void Fiber::init() {
 	m_restLength = (p - q).length();
 
 	m_length = m_restLength;
+	m_prev_length = m_length;
 	m_restLengthNoAvtivation = m_length;
 
 	m_constraint->enableFeedback(true);
 }
 
-//*This is run per fiber query
+//*This is run per fiber query (60Hz)
 void Fiber::update() {
 
 	// for Fiber: eq points are used to calculate the force direction
@@ -65,6 +67,7 @@ void Fiber::update() {
 		// First, get two attachment points location in world reference frame
 	btVector3 p = TsP.getOrigin();
 	btVector3 q = TsQ.getOrigin();
+
 		// Second, get the equilibrium point location in world reference frame
 	btScalar vLength = (q - p).length()/m_length - 1.0; // muscle velocity? double-check
 														// muscle velocity needs to be normalized to v_max
@@ -82,20 +85,28 @@ void Fiber::update() {
 	dir = (dir.length() > 0.02) ? dir / dir.length() : btVector3(0, 0, 0);
 	// force = (fPE + a*fL*fV)
 	// split it up for debugging
-	btScalar this_fPE = interp1(fPE[0], fPE[1], m_length / m_restLength);
-	btScalar this_fL = interp1(fL[0], fL[1], m_length / m_restLength);
+		// Method 1: use current frame length
+	//btScalar this_fPE = interp1(fPE[0], fPE[1], m_length / m_restLength);
+	//btScalar this_fL = interp1(fL[0], fL[1], m_length / m_restLength);
+	//btScalar this_fV = interp1(fV[0], fV[1], vLength);
+		// Method 2: use midpoint of current frame length and future frame length (projected from prev)
+	btScalar future_length = 2 * m_length - m_prev_length;
+	btScalar mid_length = (m_length + future_length) / 2;
+	btScalar this_fPE = interp1(fPE[0], fPE[1], mid_length / m_restLength);
+	btScalar this_fL = interp1(fL[0], fL[1], mid_length / m_restLength);
 	btScalar this_fV = interp1(fV[0], fV[1], vLength);
-	btVector3 force = m_f0
-					* (this_fPE + m_activation * this_fL * this_fV)
-					* dir;
-	m_constraint->updateForce(force);
+
+	m_force = m_f0
+			* (this_fPE + m_activation * this_fL * this_fV)
+			* dir;
+	m_constraint->updateForce(m_force);
 
 	// debug, output the 12th intrinsic muscle info (full array)
 	//					 2nd  intrinsic muscle info (reduced array)
 	if (m_idx == 2) {
 		S_dumpster::Get().fiber_info[0].push_back(m_restLength);
 		S_dumpster::Get().fiber_info[1].push_back(m_length);
-		S_dumpster::Get().fiber_info[2].push_back(force.length());		// instructed force
+		S_dumpster::Get().fiber_info[2].push_back(m_force.length());		// instructed force
 		S_dumpster::Get().fiber_info[3].push_back(this_fPE);
 		S_dumpster::Get().fiber_info[4].push_back(this_fL);
 		S_dumpster::Get().fiber_info[5].push_back(this_fV);
@@ -110,7 +121,15 @@ void Fiber::update() {
 		//S_dumpster::Get()->fiber_info[6].push_back(forceA.length());
 	}
 	
+	// update hamiltonian as the potential energy, the potential enery is calcualted as the work done by the force
+	// the potential enery is cleared every contraction half cycle
+	if (m_sim->muscleContractionStateChanged) {
+		m_Hamiltonian = 0;
+	}
+	m_Hamiltonian += m_prev_force.length() * (m_length - m_prev_length);
 
+	m_prev_length = m_length;
+	m_prev_force = m_force;
 }
 
 
@@ -155,6 +174,11 @@ btScalar Fiber::getLength() const {
 	return m_length;
 }
 
-btGeneric6DofSpringConstraint* Fiber::getConstraint() const {
+myGeneric6DofMuscleConstraint* Fiber::getConstraint() const {
 	return m_constraint;
 }
+
+btDynamicsWorld* Fiber::getWorld() {
+	return m_sim->getDynamicsWorld();
+}
+

@@ -47,19 +47,19 @@ public:
 	void initParameter(Parameter* parameter);
 
 	virtual void initPhysics() final;
-	virtual void stepSimulation(float deltaTime) final;
-	
-	void initPhysics_test();
-	void stepSimulation_test(float deltaTime);
-
 	void initPhysics_reduced();
-	void stepSimulation_reduced(float deltaTime);
+	void initPhysics_test();
+
+	virtual void stepSimulation(float deltaTime) final;
+	void stepSimulation_test(float deltaTime);
 	
 	void internalWriteOutput();
 	void resetCamera();
 	bool exitSim = false;
 
 	inline Parameter* getParameter() const { return param; }
+
+	bool muscleContractionStateChanged;
 
 // test
 private:

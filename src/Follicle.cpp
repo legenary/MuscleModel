@@ -54,3 +54,21 @@ btVector3 Follicle::getBotLocation() const {
 	btVector3 Vb = btVector3(-m_length /2, 0, 0);
 	return m_body->getCenterOfMassTransform() * Vb;
 }
+
+btScalar Follicle::getHamiltonian() {
+	// calculate the Hamiltonian as the sum of kinetic and potential energy
+	btTransform Trans = m_body->getCenterOfMassTransform();
+	btMatrix3x3 R = Trans.getBasis();
+	btVector3 Ibody = m_body->getLocalInertia();
+	btMatrix3x3 Ibody3x3(Ibody[0], 0, 0, 0, Ibody[1], 0, 0, 0, Ibody[2]);
+	btMatrix3x3 I = R * Ibody3x3 * R.transpose();
+
+	btVector3 AngularVel = m_body->getAngularVelocity();
+	btScalar RotKineticEnergy = btVector3(I.tdotx(AngularVel), I.tdoty(AngularVel), I.tdotz(AngularVel)).dot(AngularVel) * 0.5;
+
+	btVector3 LinearVel = m_body->getLinearVelocity();
+	btScalar LinearKineticEnergy = LinearVel.length2() * m_body->getMass() * 0.5;
+
+	m_Hamiltonian = RotKineticEnergy + LinearKineticEnergy;
+	return m_Hamiltonian;
+}

@@ -37,6 +37,7 @@ private:
 	ExtrinsicMuscle* m_PM;
 	std::vector<std::vector<float>> heightPlaceHolder;
 
+	btScalar m_Hamiltonian;
 
 public:
 	MystacialPad(Simulation* sim, Parameter* param);

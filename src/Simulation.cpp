@@ -8,6 +8,7 @@
 #include "Fiber.h"
 #include "Tissue.h"
 #include "Follicle.h"
+#include "myGeneric6DofMuscleConstraint.h"
 
 #include "CommonInterfaces/CommonGUIHelperInterface.h"
 #include "CommonInterfaces/CommonParameterInterface.h"
@@ -18,68 +19,8 @@
 Simulation::~Simulation() {
 }
 
+
 void Simulation::stepSimulation(float deltaTime) {
-	auto start = std::chrono::high_resolution_clock::now();
-	m_time += deltaTime; 								// increase time
-	m_step += 1;										// increase step
-
-	if (m_mystacialPad && param->m_time_stop == 0 || m_time < param->m_time_stop) {
-
-		// set up output options
-		if (param->OUTPUT)
-		{
-			m_mystacialPad->readOutput(output_fol_pos);
-		}
-
-		// contraction/retraction
-		int every_steps = param->getFPS() / param->contract_frequency / 2.0f;
-
-		static btScalar range = param->contract_range;		
-		if ((m_step-1) % every_steps == 0) {
-			range = -range;
-			m_mystacialPad->contractMuscle(Muscle::INTRINSIC,  1.0 - param->contract_range /2 + range / 2);
-			//m_mystacialPad->contractMuscle(Muscle::N, 1.0 - param->contract_range / 2 + range / 2);
-			//m_mystacialPad->contractMuscle(Muscle::M, 1.0 - param->contract_range / 2 + range / 2);
-			//m_mystacialPad->contractMuscle(Muscle::NS, 0.8);
-			//m_mystacialPad->contractMuscle(Muscle::PMS, 1.0 - param->contract_range / 2 + range / 2);
-			//m_mystacialPad->contractMuscle(Muscle::PMI, 1.0 - param->contract_range / 2 + range / 2);
-			//m_mystacialPad->contractMuscle(Muscle::PIP, 1.0 - param->contract_range / 2 + range / 2);
-			//m_mystacialPad->contractMuscle(Muscle::PM, 1.0 - param->contract_range / 2 + range / 2);
-		}
-
-		// last step: step simulation
-		m_dynamicsWorld->stepSimulation(deltaTime,	// rendering time step
-			param->m_num_internal_step * 100,		// max sub step
-			param->m_internal_time_step);			// fixed simulation sub time step
-
-		// update constraint physics options
-		m_mystacialPad->update(deltaTime);
-
-		// collision listener
-		updateCollisionListener();
-
-		// debug draw
-		if (param->DEBUG) {
-			m_mystacialPad->debugDraw();
-			m_dynamicsWorld->debugDrawWorld();
-		}
-
-	}
-	else {
-		// timeout -> set exit flag
-		exitSim = true;
-	}
-
-	auto stop = std::chrono::high_resolution_clock::now();
-	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-	m_time_elapsed += duration.count() / 1000.f;
-	auto factor = m_time_elapsed / m_time;
-	auto time_remaining = (int)((param->m_time_stop - m_time) * (factor));
-
-}
-
-
-void Simulation::stepSimulation_reduced(float deltaTime) {
 	//PROFILE_FUNCTION();
 	auto start = std::chrono::high_resolution_clock::now();
 	m_time += deltaTime; 								// increase time
@@ -93,21 +34,22 @@ void Simulation::stepSimulation_reduced(float deltaTime) {
 			m_mystacialPad->readOutput(output_fol_pos);
 		}
 
-		//// contraction/retraction
-		//int every_steps = param->getFPS() / param->contract_frequency / 2.0f;
+		// contraction/retraction
+		int numStepToChangeState = param->getFPS() / param->contract_frequency / 2.0f;
+		muscleContractionStateChanged = (m_step - 1) % numStepToChangeState == 0;
 
-		//static btScalar range = param->contract_range;
-		//if ((m_step - 1) % every_steps == 0) {
-		//	range = -range;
-		//	m_mystacialPad->contractMuscle(Muscle::INTRINSIC, 1.0 - param->contract_range / 2 + range / 2);
-		//	//m_mystacialPad->contractMuscle(Muscle::N, 1.0 - param->contract_range / 2 + range / 2);
-		//	//m_mystacialPad->contractMuscle(Muscle::M, 1.0 - param->contract_range / 2 + range / 2);
-		//	//m_mystacialPad->contractMuscle(Muscle::NS, 0.8);
-		//	//m_mystacialPad->contractMuscle(Muscle::PMS, 1.0 - param->contract_range / 2 + range / 2);
-		//	//m_mystacialPad->contractMuscle(Muscle::PMI, 1.0 - param->contract_range / 2 + range / 2);
-		//	//m_mystacialPad->contractMuscle(Muscle::PIP, 1.0 - param->contract_range / 2 + range / 2);
-		//	//m_mystacialPad->contractMuscle(Muscle::PM, 1.0 - param->contract_range / 2 + range / 2);
-		//}
+		static btScalar contractTo = 1 - param->contract_range;
+		if (muscleContractionStateChanged) {
+			m_mystacialPad->contractMuscle(Muscle::INTRINSIC, contractTo);
+			//m_mystacialPad->contractMuscle(Muscle::N, contractTo);
+			//m_mystacialPad->contractMuscle(Muscle::M, contractTo);
+			//m_mystacialPad->contractMuscle(Muscle::NS, contractTo);
+			//m_mystacialPad->contractMuscle(Muscle::PMS, contractTo);
+			//m_mystacialPad->contractMuscle(Muscle::PMI, contractTo);
+			//m_mystacialPad->contractMuscle(Muscle::PIP, contractTo);
+			//m_mystacialPad->contractMuscle(Muscle::PM, contractTo);
+			contractTo = 2 - param->contract_range - contractTo;
+		}
 
 		// last step: step simulation
 		{
@@ -121,7 +63,7 @@ void Simulation::stepSimulation_reduced(float deltaTime) {
 		m_mystacialPad->update(deltaTime);
 
 		//// collision listener
-		//updateCollisionListener();
+		updateCollisionListener();
 
 		// debug draw
 		if (param->DEBUG) {

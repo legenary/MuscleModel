@@ -244,31 +244,60 @@ void MystacialPad::update(btScalar dt) {
 		timeElapsed -= m_parameter->inverse_fiber_query_rate;
 	}
 
+	m_Hamiltonian = 0;
+	for (int i = 0; i < nFollicle; i++) {
+		m_Hamiltonian += m_follicleArray[i]->getHamiltonian();
+	}
 	// only linear springs need update
 	// torsional springs don't
 	for (int i = 0; i < nTissueLayer1; i++) {
 		m_layer1[i]->update();
+		m_Hamiltonian += m_layer1[i]->getHamiltonian();
 	}
 	for (int i = 0; i < nTissueLayer2; i++) {
 		m_layer2[i]->update();
+		m_Hamiltonian += m_layer2[i]->getHamiltonian();
 	}
 	for (int i = 0; i < nTissueAnchor; i++) {
 		m_anchor[i]->update();
+		m_Hamiltonian += m_anchor[i]->getHamiltonian();
 	}
 
 	if (fiberQueryFlag) {
 		for (int i = 0; i < nISM; i++) {
 			m_ISMArray[i]->update();
+			m_Hamiltonian += m_ISMArray[i]->getHamiltonian();
 		}
 	}
-
-	if (m_nasolabialis)		m_nasolabialis->update(fiberQueryFlag);
-	if (m_maxillolabialis)	m_maxillolabialis->update(fiberQueryFlag);
-	if (m_NS)				m_NS->update(fiberQueryFlag);
-	if (m_PMS)				m_PMS->update(fiberQueryFlag);
-	if (m_PMI)				m_PMI->update(fiberQueryFlag);
-	if (m_PIP)				m_PIP->update(fiberQueryFlag);
-	if (m_PM)				m_PM->update(fiberQueryFlag);
+		
+	if (m_nasolabialis) { 
+		m_nasolabialis->update(fiberQueryFlag);		
+		m_Hamiltonian += m_nasolabialis->getHamiltonian(); 
+	}
+	if (m_maxillolabialis) { 
+		m_maxillolabialis->update(fiberQueryFlag);	
+		m_Hamiltonian += m_maxillolabialis->getHamiltonian(); 
+	}
+	if (m_NS) { 
+		m_NS->update(fiberQueryFlag);					
+		m_Hamiltonian += m_NS->getHamiltonian(); 
+	}
+	if (m_PMS) { 
+		m_PMS->update(fiberQueryFlag);				
+		m_Hamiltonian += m_PMS->getHamiltonian(); 
+	}
+	if (m_PMI) { 
+		m_PMI->update(fiberQueryFlag);				
+		m_Hamiltonian += m_PMI->getHamiltonian(); 
+	}
+	if (m_PIP) { 
+		m_PIP->update(fiberQueryFlag);				
+		m_Hamiltonian += m_PIP->getHamiltonian(); 
+	}
+	if (m_PM) { 
+		m_PM->update(fiberQueryFlag);					
+		m_Hamiltonian += m_PM->getHamiltonian(); 
+	}
 
 	
 }

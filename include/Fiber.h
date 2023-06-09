@@ -4,9 +4,10 @@
 #ifndef FIBER_H
 #define FIBER_H
 
-#include "Simulation.h"
+#include "myGeneric6DofMuscleConstraint.h"
 
-class myGeneric6DofMuscleConstraint;
+
+class Simulation;
 
 class Fiber {
 protected:
@@ -23,9 +24,13 @@ protected:
 
 	btScalar m_restLength;	
 	btScalar m_restLengthNoAvtivation;
-	btScalar m_length;				// fiber length
-	btScalar m_velocity;			// fiber lengthening/shortening velocity
-	btScalar m_activation;			// activation level
+	btScalar m_length, m_prev_length;		// fiber length
+	btScalar m_velocity;					// fiber lengthening/shortening velocity
+	btScalar m_activation;					// activation level
+
+	btVector3 m_force, m_prev_force;
+
+	btScalar m_Hamiltonian;
 
 public:
 	Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
@@ -45,13 +50,13 @@ public:
 	void update();
 	void debugDraw(btVector3 clr = btVector3(0., 0., 0.), bool dynamic = false);
 
-	btGeneric6DofSpringConstraint* getConstraint() const;
+	myGeneric6DofMuscleConstraint* getConstraint() const;
 	btScalar getRestLength() const;
 	btScalar getLength() const;
-	inline btDynamicsWorld* getWorld() { return m_sim->getDynamicsWorld(); }
+	btDynamicsWorld* getWorld();
 
 	void contractTo(btScalar ratio);
-
+	btScalar getHamiltonian() const { return m_Hamiltonian; }
 
 	
 private:

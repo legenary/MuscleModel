@@ -22,6 +22,7 @@ private:
 	btRigidBody* m_body;
 	btCollisionShape* m_shape;
 	Follicle_info* m_info;
+	btScalar m_Hamiltonian;
 
 public:
 	Follicle(MystacialPad* pad, btTransform trans, btScalar radius, btScalar half_height, btScalar mass, btScalar damping, int f);
@@ -47,6 +48,7 @@ public:
 
 	btVector3 getTopLocation() const;
 	btVector3 getBotLocation() const;
+	btScalar getHamiltonian();
 
 };
 

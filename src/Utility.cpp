@@ -19,7 +19,7 @@ btRigidBody* createDynamicBody(const float mass, const btTransform& startTransfo
 		//cInfo.m_restitution = restitution;
 		//cInfo.m_friction = friction;
 		cInfo.m_linearDamping = damping; // 0 by default, no damping
-		//TODO: add damping differently for follicle and muscle nodes
+										 // proportional of velocity lost per second
 	}
 	
 	btRigidBody* body = new btRigidBody(cInfo);

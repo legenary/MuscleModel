@@ -1,5 +1,6 @@
 #include "my_pch.h"
 #include "ExtrinsicMuscle.h"
+#include "myGeneric6DofMuscleConstraint.h"
 
 #include "Utility.h"
 #include "Parameter.h"
@@ -24,8 +25,8 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 	for (int i = 0; i < nNodes; i++) {
 		btTransform t = createTransform(btVector3(NODE_POS[i][0], NODE_POS[i][1], NODE_POS[i][2]));
 		btCollisionShape* s = new btSphereShape((anchorNodeIdx.count(i)) ? 0.1 : 0.01);
-		btScalar mass = (anchorNodeIdx.count(i)) ? 0. : 0.0001;
-		btRigidBody* b = createDynamicBody(mass, t, s);
+		btScalar mass = (anchorNodeIdx.count(i)) ? 0. : 0.001 /*node mass*/;
+		btRigidBody* b = createDynamicBody(mass, t, s, 0 /*no damping*/);
 		m_nodes.push_back(b);
 		getWorld()->addRigidBody(b, COL_EXT_MUS, extMusCollideWith);
 		b->setActivationState(DISABLE_DEACTIVATION);
@@ -89,13 +90,22 @@ void ExtrinsicMuscle::contractTo(btScalar ratio) {
 }
 
 void ExtrinsicMuscle::update(bool updateFiber) {
+	m_Hamiltonian = 0;
 	for (int i = 0; i < nInsertionPieces; i++) {
 		m_insertionPieces[i]->update();
+		m_Hamiltonian += m_insertionPieces[i]->getHamiltonian();
 	}
 	if (updateFiber) {
 		for (int i = 0; i < nMusclePieces; i++) {
 			m_musclePieces[i]->update();
+			m_Hamiltonian += m_musclePieces[i]->getHamiltonian();
 		}
+	}
+	for (int i = 0; i < nNodes; i++) {
+		btScalar mass = m_nodes[i]->getMass();
+		btVector3 vel = m_nodes[i]->getLinearVelocity();
+		m_Hamiltonian += 0.5 * mass * vel.length2();
+		// remark: ignore node rotation. Theoretically, there shouldn't be any rotation.
 	}
 }
 

@@ -157,9 +157,9 @@ public:
 
 	// output
 	bool VIDEO;
-	const char* video_file_name;
+	char video_file_name[64];
 	bool OUTPUT;
-	char output_path[32];
+	char output_path[64];
 
 	// getters
 	inline int getFPS() const { return m_fps; }
