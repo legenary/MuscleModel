@@ -5,6 +5,7 @@
 
 class Follicle;
 class Tissue;
+class Layer;
 class IntrinsicSlingMuscle;
 class ExtrinsicMuscle;
 class Parameter;
@@ -17,16 +18,11 @@ private:
 	Parameter* m_parameter;
 
 	btAlignedObjectArray<Follicle*> m_follicleArray;
-	btAlignedObjectArray<Tissue*> m_layer1;
-	btAlignedObjectArray<Tissue*> m_layer2;
-	btAlignedObjectArray<Tissue*> m_layer3;
-	btAlignedObjectArray<Tissue*> m_anchor;
+	Layer* m_layer1;
+	Layer* m_layer2;
 	btAlignedObjectArray<IntrinsicSlingMuscle*> m_ISMArray;
 	btAlignedObjectArray<btRigidBody*> m_ISM_nodes;
 	int nFollicle;
-	int nTissueLayer1;
-	int nTissueLayer2;
-	int nTissueAnchor;
 	int nISM;
 	ExtrinsicMuscle* m_nasolabialis;
 	ExtrinsicMuscle* m_maxillolabialis;
@@ -48,7 +44,6 @@ public:
 
 	void createLayer1();
 	void createLayer2();
-	void createAnchor();
 	void createIntrinsicSlingMuscle();
 	void createNasolabialis();
 	void createMaxillolabialis();
@@ -65,6 +60,9 @@ public:
 	
 	int getNumFollicles() const;
 	Follicle* getFollicleByIndex(int idx);
+
+	//int getLayer1Tissue() const;
+	//int getLayer2Tissue() const;
 
 	void debugDraw();
 	inline btDynamicsWorld* getWorld() {

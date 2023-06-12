@@ -53,7 +53,7 @@ public:
 	void setRestLength(const btScalar ratio);
 	btScalar getLength() const;
 
-	void debugDraw(btVector3 clr = btVector3(0., 0., 0.), bool dynamic = false);
+	void debugDraw(const btVector3 clr = btVector3(0., 0., 0.), bool dynamic = false);
 	inline btDynamicsWorld* getWorld() {
 		return m_sim->getDynamicsWorld();
 	}

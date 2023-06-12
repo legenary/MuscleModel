@@ -38,10 +38,12 @@ Parameter::Parameter() {
 	fol_density = 0.001;	// Bullet unit: g/mm^3
 
 	// mode
-	m_mode = MODE::REDUCED;
+	m_model = MODEL::REDUCED;
+	m_bending_model = BENDING_MODEL::SPRING;
 
-	switch (m_mode) {
-	case MODE::FULL: {
+
+	switch (m_model) {
+	case MODEL::FULL: {
 		// layer tissue parameter
 		E_skin = 8000000;		// unit: Pa, do not change
 								// Skin's Young's Modulus is ~8MPa (Karimi and Navidbakhsh, 2015)
@@ -74,7 +76,7 @@ Parameter::Parameter() {
 		f0_PM = 4*f0;
 		break;
 	}
-	case MODE::REDUCED: {
+	case MODEL::REDUCED: {
 		// layer tissue parameter
 		E_skin = 8000000;		// unit: Pa, do not change
 		k_layer1 = 25;			// Bullet unit: 1e-3 (N/m)
@@ -101,6 +103,8 @@ Parameter::Parameter() {
 	// Layers mesh connection
 	dir_spring_hex_mesh_idx = "../resources/spring_hex_mesh_idx.csv";
 	dir_spring_hex_mesh_idx_reduced = "../resources/spring_hex_mesh_idx_reduced.csv";
+	dir_spring_bending_idx = "../resources/spring_bending_idx.csv";
+	dir_spring_bending_idx_reduced = "../resources/spring_bending_idx_reduced.csv";
 
 	// Instrinsic Sling Muscle
 	dir_intrinsic_sling_muscle_idx = "../resources/intrinsic_sling_muscle_idx.csv";
@@ -172,8 +176,8 @@ Parameter::Parameter() {
 
 	// output;
 	VIDEO = true;
-	sprintf(video_file_name, "../output/bundle%s/output_video.mp4", m_mode == MODE::REDUCED ? "_reduced" : "_full");
+	sprintf(video_file_name, "../output/bundle%s/output_video.mp4", m_model == MODEL::REDUCED ? "_reduced" : "_full");
 	OUTPUT = true;
 	//output_path = "../output/bundle/";
-	sprintf(output_path, "../output/bundle%s/", m_mode == MODE::REDUCED ? "_reduced" : "_full");
+	sprintf(output_path, "../output/bundle%s/", m_model == MODEL::REDUCED ? "_reduced" : "_full");
 }

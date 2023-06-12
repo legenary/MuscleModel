@@ -212,6 +212,7 @@ SET(SOURCE
 	src/my_pch.cpp
 	src/Fiber.cpp
 	src/Tissue.cpp
+	src/Layer.cpp
 	src/IntrinsicMuscle.cpp
 	src/ExtrinsicMuscle.cpp
 	src/myGeneric6DofMuscleConstraint.cpp
@@ -225,6 +226,7 @@ SET(HEADERS
  	include/MystacialPad.h
  	include/Follicle.h
  	include/Fiber.h
+ 	include/Tissue.h
  	include/Tissue.h
  	include/my_pch.h
  	include/IntrinsicMuscle.h

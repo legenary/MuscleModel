@@ -5,15 +5,20 @@
 #include "Parameter.h"
 #include "Follicle.h"
 #include "Tissue.h"
+#include "Layer.h"
 #include "IntrinsicMuscle.h"
 #include "ExtrinsicMuscle.h"
 
 
 MystacialPad::MystacialPad(Simulation* sim, Parameter* param)
 	: m_sim(sim), m_parameter(param)
-	, nFollicle(0), nTissueLayer1(0), nTissueLayer2(0), nTissueAnchor(0), nISM(0)
+	, nFollicle(0), nISM(0)
 	, m_nasolabialis(nullptr), m_maxillolabialis(nullptr), m_NS(nullptr)
-	, m_PMS(nullptr), m_PMI(nullptr), m_PIP(nullptr), m_PM(nullptr) {
+	, m_PMS(nullptr), m_PMI(nullptr), m_PIP(nullptr), m_PM(nullptr), m_Hamiltonian() {
+
+	m_layer1 = new Layer(sim, param, this);
+	m_layer2 = new Layer(sim, param, this);
+
 	std::cout << "Creating follicles...";
 	// create follicles
 	nFollicle = param->FOLLICLE_POS_ORIENT_LEN_VOL.size();
@@ -37,10 +42,8 @@ MystacialPad::MystacialPad(Simulation* sim, Parameter* param)
 
 MystacialPad::~MystacialPad() {
 	freeAlignedObjectArray(m_follicleArray);
-	freeAlignedObjectArray(m_layer1);
-	freeAlignedObjectArray(m_layer2);
-	freeAlignedObjectArray(m_layer3);
-	freeAlignedObjectArray(m_anchor);
+	delete m_layer1;
+	delete m_layer2;
 	freeAlignedObjectArray(m_ISMArray);
 
 	delete m_nasolabialis;
@@ -54,60 +57,29 @@ MystacialPad::~MystacialPad() {
 
 void MystacialPad::createLayer1() {
 	std::cout << "Creating Layer1...";
-	nTissueLayer1 = m_parameter->SPRING_HEX_MESH_IDX.size();
 
-	for (int s = 0; s < nTissueLayer1; s++) {
-		Follicle* fol1 = m_follicleArray[m_parameter->SPRING_HEX_MESH_IDX[s][0]];
-		Follicle* fol2 = m_follicleArray[m_parameter->SPRING_HEX_MESH_IDX[s][1]];
-		btTransform frameLayer1fol1 = createTransform(btVector3(m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->SPRING_HEX_MESH_IDX[s][0]][6] / 2, 0., 0.));
-		btTransform frameLayer1fol2 = createTransform(btVector3(m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->SPRING_HEX_MESH_IDX[s][1]][6] / 2, 0., 0.));
+	m_layer1->initEdges(true);
+	m_layer1->initAnchors(true);
 
-		btScalar k_eq = m_parameter->k_layer1;
-		btScalar k_this = k_eq / 2;
-		Tissue* springLayer1 = new Tissue(m_sim, fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2, k_this, m_parameter->zeta_tissue);
+	if (m_parameter->getBendingModel() == BENDING_MODEL::SPRING) {
+		m_layer1->initBendings(true);
 
-		getWorld()->addConstraint(springLayer1->getConstraint(), true); // disable collision
-		m_layer1.push_back(springLayer1);
 	}
 	std::cout << "Done.\n";
 }
 
 void MystacialPad::createLayer2() {
 	std::cout << "Creating Layer2...";
-	nTissueLayer2 = m_parameter->SPRING_HEX_MESH_IDX.size();
 
-	for (int s = 0; s < nTissueLayer2; s++) {
-		Follicle* fol1 = m_follicleArray[m_parameter->SPRING_HEX_MESH_IDX[s][0]];
-		Follicle* fol2 = m_follicleArray[m_parameter->SPRING_HEX_MESH_IDX[s][1]];
-		btTransform frameLayer2fol1 = createTransform(btVector3(-m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->SPRING_HEX_MESH_IDX[s][0]][6] / 2, 0., 0.));
-		btTransform frameLayer2fol2 = createTransform(btVector3(-m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->SPRING_HEX_MESH_IDX[s][1]][6] / 2, 0., 0.));
+	m_layer2->initEdges(false);
 
-		btScalar k_eq = m_parameter->k_layer2;
-		btScalar k_this = k_eq / 2;
-		Tissue* springLayer2 = new Tissue(m_sim, fol1->getBody(), fol2->getBody(), frameLayer2fol1, frameLayer2fol2, k_this, m_parameter->zeta_tissue);
-
-		getWorld()->addConstraint(springLayer2->getConstraint(), true); // disable collision
-		m_layer2.push_back(springLayer2);
+	if (m_parameter->getBendingModel() == BENDING_MODEL::SPRING) {
+		m_layer2->initBendings(false);
 
 	}
 	std::cout << "Done.\n";
 }
 
-void MystacialPad::createAnchor() {
-	std::cout << "Creating Follicle Anchoring...";
-
-	nTissueAnchor = nFollicle;
-	for (int f = 0; f < nTissueAnchor; f++) {
-		Follicle* fol = m_follicleArray[f];
-		btTransform frameAnchor = createTransform(btVector3(m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[f][6] / 2, 0., 0.));
-		Tissue* tissueAnchor = new Tissue(m_sim, fol->getBody(), frameAnchor, m_parameter->k_anchor, m_parameter->zeta_tissue);	// this is a linear + torsional spring
-																										
-		getWorld()->addConstraint(tissueAnchor->getConstraint(), true); // disable collision
-		m_anchor.push_back(tissueAnchor);
-	}
-
-	std::cout << "Done.\n";
-}
 
 void MystacialPad::createIntrinsicSlingMuscle() {
 	std::cout << "Creating intrinsic sling muscles...";
@@ -250,17 +222,11 @@ void MystacialPad::update(btScalar dt) {
 	}
 	// only linear springs need update
 	// torsional springs don't
-	for (int i = 0; i < nTissueLayer1; i++) {
-		m_layer1[i]->update();
-		m_Hamiltonian += m_layer1[i]->getHamiltonian();
+	if (m_layer1) {
+		m_layer1->update();
 	}
-	for (int i = 0; i < nTissueLayer2; i++) {
-		m_layer2[i]->update();
-		m_Hamiltonian += m_layer2[i]->getHamiltonian();
-	}
-	for (int i = 0; i < nTissueAnchor; i++) {
-		m_anchor[i]->update();
-		m_Hamiltonian += m_anchor[i]->getHamiltonian();
+	if (m_layer2) {
+		m_layer2->update();
 	}
 
 	if (fiberQueryFlag) {
@@ -315,10 +281,13 @@ void MystacialPad::readOutput(std::vector<std::vector<std::vector<btScalar>>>& o
 }
 
 void MystacialPad::debugDraw() {
+	if (m_layer1) {
+		m_layer1->debugDraw(btVector3(1., 0., 0.), false);
+	}
+	if (m_layer2) {
+		m_layer2->debugDraw(btVector3(1., 0., 0.), false);
+	}
 
-	//for (int i = 0; i < m_layer1.size(); i++) {
-	//	m_layer1[i]->debugDraw(btVector3(1., 0., 0.), false);
-	//}
 	//for (int i = 0; i < m_layer2.size(); i++) {
 	//	m_layer2[i]->debugDraw(btVector3(1., 0., 0.), false);
 	//}
@@ -329,27 +298,27 @@ void MystacialPad::debugDraw() {
 	//	m_ISMArray[i]->debugDraw(RED, false);
 	//}
 
-	if (m_nasolabialis) {
-		m_nasolabialis->debugDraw(GREEN);
-	}
-	if (m_maxillolabialis) {
-		m_maxillolabialis->debugDraw(BLUE);
-	}
-	if (m_NS) {
-		m_NS->debugDraw(BLUE);
-	}
-	if (m_PMS) {
-		m_PMS->debugDraw(ORANGE);
-	}
-	if (m_PIP) {
-		m_PIP->debugDraw(ORANGE);
-	}
-	if (m_PMI) {
-		m_PMI->debugDraw(YELLOW);
-	}
-	if (m_PM) {
-		m_PM->debugDraw(YELLOW);
-	}
+	//if (m_nasolabialis) {
+	//	m_nasolabialis->debugDraw(GREEN);
+	//}
+	//if (m_maxillolabialis) {
+	//	m_maxillolabialis->debugDraw(BLUE);
+	//}
+	//if (m_NS) {
+	//	m_NS->debugDraw(BLUE);
+	//}
+	//if (m_PMS) {
+	//	m_PMS->debugDraw(ORANGE);
+	//}
+	//if (m_PIP) {
+	//	m_PIP->debugDraw(ORANGE);
+	//}
+	//if (m_PMI) {
+	//	m_PMI->debugDraw(YELLOW);
+	//}
+	//if (m_PM) {
+	//	m_PM->debugDraw(YELLOW);
+	//}
 }
 
 int MystacialPad::getNumFollicles() const {
@@ -359,6 +328,14 @@ int MystacialPad::getNumFollicles() const {
 Follicle* MystacialPad::getFollicleByIndex(int idx) {
 	return m_follicleArray[idx];
 }
+
+//int MystacialPad::getLayer1Tissue() const {
+//	return m_layer1->getNumTissue();
+//}
+//
+//int MystacialPad::getLayer2Tissue() const {
+//	return m_layer2->getNumTissue();
+//}
 
 
 

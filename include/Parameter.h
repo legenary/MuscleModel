@@ -1,10 +1,15 @@
 #ifndef PARAMETER_H
 #define PARAMETER_H
 
-enum class MODE {
+enum class MODEL {
 	TEST,
 	FULL,
 	REDUCED
+};
+
+enum class BENDING_MODEL {
+	SPRING,
+	DIHEDRAL_ANGLE
 };
 
 class Parameter {
@@ -12,6 +17,12 @@ class Parameter {
 public:
 	Parameter();
 	virtual ~Parameter() {}
+
+	MODEL m_model;
+	MODEL getArrayModel() const { return m_model; }
+	BENDING_MODEL m_bending_model;
+	BENDING_MODEL getBendingModel() const { return m_bending_model; }
+
 
 	int m_fps;
 	btScalar m_time_step;
@@ -41,6 +52,9 @@ public:
 	std::string dir_spring_hex_mesh_idx;
 	std::string dir_spring_hex_mesh_idx_reduced;
 	std::vector<std::vector<int>> SPRING_HEX_MESH_IDX;
+	std::string dir_spring_bending_idx;
+	std::string dir_spring_bending_idx_reduced;
+	std::vector<std::vector<int>> SPRING_BENDING_IDX;
 	btScalar E_skin;
 	btScalar k_layer1;
 	btScalar k_layer2;
@@ -163,10 +177,6 @@ public:
 
 	// getters
 	inline int getFPS() const { return m_fps; }
-
-	// testing
-	MODE m_mode;
-	MODE getMode() const { return m_mode; }
 };
 
 

@@ -117,7 +117,7 @@ void Tissue::update() {
 }
 
 
-void Tissue::debugDraw(btVector3 clr, bool dynamic) {
+void Tissue::debugDraw(const btVector3 clr, bool dynamic) {
 	if (dynamic)
 		getWorld()->getDebugDrawer()->drawLine(TsQ.getOrigin(), m_eq, clr);
 	else

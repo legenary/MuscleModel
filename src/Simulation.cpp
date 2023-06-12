@@ -98,9 +98,9 @@ void Simulation::initPhysics() {
 
 	// layers
 	read_csv_int(param->dir_spring_hex_mesh_idx, param->SPRING_HEX_MESH_IDX);
+	read_csv_int(param->dir_spring_bending_idx, param->SPRING_BENDING_IDX);
 	m_mystacialPad->createLayer1();
 	m_mystacialPad->createLayer2();
-	m_mystacialPad->createAnchor();
 
 	//// intrinsic sling muscles
 	read_csv_int(param->dir_intrinsic_sling_muscle_idx, param->INTRINSIC_SLING_MUSCLE_IDX);
@@ -173,12 +173,12 @@ void Simulation::initPhysics_reduced() {
 	// create and contract muscles
 	////////////////////////////////////////////////////////////////////////////////
 	read_csv_float(param->dir_follicle_pos_orient_len_vol_reduced, param->FOLLICLE_POS_ORIENT_LEN_VOL);
+	read_csv_int(param->dir_spring_bending_idx_reduced, param->SPRING_BENDING_IDX);
 	m_mystacialPad = new MystacialPad(this, param);
 
 	read_csv_int(param->dir_spring_hex_mesh_idx_reduced, param->SPRING_HEX_MESH_IDX);
 	m_mystacialPad->createLayer1();
 	m_mystacialPad->createLayer2();
-	m_mystacialPad->createAnchor();
 
 	//// intrinsic sling muscles
 	read_csv_int(param->dir_intrinsic_sling_muscle_idx_reduced, param->INTRINSIC_SLING_MUSCLE_IDX);
@@ -414,7 +414,7 @@ void Simulation::postInitPhysics() {
 
 	// generate graphics
 	m_guiHelper->autogenerateGraphicsObjects(m_dynamicsWorld);
-	if (param->getMode() != MODE::TEST) {
+	if (param->getArrayModel() != MODEL::TEST) {
 		zeroFrameSetup();
 	}
 	resetCamera();
@@ -521,7 +521,7 @@ void Simulation::initParameter(Parameter* parameter) {
 }
 
 void Simulation::internalWriteOutput() {
-	if (m_mystacialPad && param->getMode() != MODE::TEST) {
+	if (m_mystacialPad && param->getArrayModel() != MODEL::TEST) {
 		std::cout << "Generating output csv file...\n";
 
 		int nFol = m_mystacialPad->getNumFollicles();
