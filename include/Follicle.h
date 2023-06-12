@@ -24,12 +24,17 @@ private:
 	Follicle_info* m_info;
 	btScalar m_Hamiltonian;
 
+	btVector3 topVec3;
+	btVector3 botVec3;
+
 public:
 	Follicle(MystacialPad* pad, btTransform trans, btScalar radius, btScalar half_height, btScalar mass, btScalar damping, int f);
 	// disable copy constructor (override if needed in the future)
 	Follicle(const Follicle&) = delete;
 	Follicle& operator=(Follicle const&) = delete;
 	virtual ~Follicle();
+
+	void update();
 
 	btRigidBody* getBody() const;
 	btRigidBody* getBody();
@@ -48,6 +53,8 @@ public:
 
 	btVector3 getTopLocation() const;
 	btVector3 getBotLocation() const;
+	btVector3& getTopLocation();
+	btVector3& getBotLocation();
 	btScalar getHamiltonian();
 
 };

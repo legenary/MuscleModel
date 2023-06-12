@@ -13,12 +13,22 @@ Follicle::Follicle(MystacialPad* pad, btTransform trans, btScalar radius, btScal
 	getWorld()->addRigidBody(m_body, COL_FOLLICLE, follicleCollideWith);
 	m_body->setActivationState(DISABLE_DEACTIVATION);
 	m_info = new Follicle_info(f);
+
+	btVector3 Vb = btVector3(-m_length / 2, 0, 0);
+	topVec3 = m_body->getCenterOfMassTransform() * Vb;
+	botVec3 = m_body->getCenterOfMassTransform() * (Vb * -1);
 }
 
 Follicle::~Follicle() {
 	// m_shape gets deleted with m_collishonShapes so no deletion here.
 	// m_body gets deleted with m_dynamicsworld so no deletion here.
 	delete m_info;
+}
+
+void Follicle::update() {
+	btVector3 Vb = btVector3(-m_length / 2, 0, 0);
+	topVec3 = m_body->getCenterOfMassTransform() * Vb;
+	botVec3 = m_body->getCenterOfMassTransform() * (Vb * -1);
 }
 
 btRigidBody* Follicle::getBody() const {
@@ -46,13 +56,19 @@ void Follicle::setUserPointer(void* userPointer) {
 }
 
 btVector3 Follicle::getTopLocation() const {
-	btVector3 Vb = btVector3(m_length / 2, 0, 0);
-	return m_body->getCenterOfMassTransform() * Vb;
+	return topVec3;
 }
 
 btVector3 Follicle::getBotLocation() const {
-	btVector3 Vb = btVector3(-m_length /2, 0, 0);
-	return m_body->getCenterOfMassTransform() * Vb;
+	return botVec3;
+}
+
+btVector3& Follicle::getTopLocation() {
+	return topVec3;
+}
+
+btVector3& Follicle::getBotLocation() {
+	return botVec3;
 }
 
 btScalar Follicle::getHamiltonian() {

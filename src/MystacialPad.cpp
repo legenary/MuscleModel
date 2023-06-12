@@ -54,7 +54,7 @@ void MystacialPad::createLayer1() {
 	case BENDING_MODEL::DIHEDRAL_ANGLE: {
 		// only works for reduced model now
 		ensure(m_parameter->getArrayModel() == MODEL::REDUCED);
-
+		m_layer1->initDihedralPairs(true);
 		break;
 	}
 	}
@@ -79,7 +79,7 @@ void MystacialPad::createLayer2() {
 	case BENDING_MODEL::DIHEDRAL_ANGLE: {
 		// only works for reduced model now
 		ensure(m_parameter->getArrayModel() == MODEL::REDUCED);
-
+		m_layer2->initDihedralPairs(false);
 		break;
 	}
 	}
@@ -223,6 +223,7 @@ void MystacialPad::update(btScalar dt) {
 
 	m_Hamiltonian = 0;
 	for (int i = 0; i < nFollicle; i++) {
+		m_follicleArray[i]->update();
 		m_Hamiltonian += m_follicleArray[i]->getHamiltonian();
 	}
 	// only linear springs need update

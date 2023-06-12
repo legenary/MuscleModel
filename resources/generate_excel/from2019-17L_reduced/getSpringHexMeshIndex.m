@@ -21,8 +21,11 @@ springHexMeshIdx_reduced = [
     0 4; 1 5; 3 7; 4 8
 ];
 springBendingIdx_reduced = [
-    2 4; 1 3; 5 7; 4 6;
-    0 5; 3 8; 1 8; 0 7
+    % the first 2 indices are from-index and to-index of the bending spring
+    % the last 2 indices are the indices of the edges it crossed, it's used
+    % in the dihedral model
+    2 4 1 5; 1 3 0 4; 5 7 4 8; 4 6 3 7;
+    0 5 1 4; 3 8 4 7; 1 8 4 5; 0 7 3 4
 ];
 
 writematrix(springHexMeshIdx, '../../spring_hex_mesh_idx.csv')

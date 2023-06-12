@@ -10,7 +10,7 @@ Parameter::Parameter() {
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / (btScalar) m_num_internal_step;
-	m_time_stop = 3;
+	m_time_stop = 0;
 
 	inverse_fiber_query_rate = 1.0f / 60.0f;
 
@@ -39,7 +39,7 @@ Parameter::Parameter() {
 
 	// mode
 	m_model = MODEL::REDUCED;
-	m_bending_model = BENDING_MODEL::SPRING;
+	m_bending_model = BENDING_MODEL::DIHEDRAL_ANGLE;
 
 
 	switch (m_model) {
@@ -76,6 +76,7 @@ Parameter::Parameter() {
 		f0_PM = 4*f0;
 		break;
 	}
+	case MODEL::TEST:
 	case MODEL::REDUCED: {
 		// layer tissue parameter
 		E_skin = 8000000;		// unit: Pa, do not change
