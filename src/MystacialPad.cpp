@@ -16,8 +16,8 @@ MystacialPad::MystacialPad(Simulation* sim, Parameter* param)
 	, m_nasolabialis(nullptr), m_maxillolabialis(nullptr), m_NS(nullptr)
 	, m_PMS(nullptr), m_PMI(nullptr), m_PIP(nullptr), m_PM(nullptr), m_Hamiltonian() {
 
-	m_layer1 = new Layer(sim, param, this);
-	m_layer2 = new Layer(sim, param, this);
+	m_layer1 = std::make_unique<Layer>(sim, param, this);
+	m_layer2 = std::make_unique<Layer>(sim, param, this);
 
 	std::cout << "Creating follicles...";
 	// create follicles
@@ -33,26 +33,11 @@ MystacialPad::MystacialPad(Simulation* sim, Parameter* param)
 		btScalar this_len = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6]; /*length already in mm*/
 		btScalar this_mass = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][7] /*volume already in mm^3*/ * param->fol_density;
 		btTransform this_trans = createTransform(this_pos, this_ypr);
-		Follicle* follicle = new Follicle(this, this_trans, param->fol_radius, this_len/2, this_mass, param->fol_damping, f);
+		std::unique_ptr<Follicle> follicle = std::make_unique<Follicle>(this, this_trans, param->fol_radius, this_len/2, this_mass, param->fol_damping, f);
 		follicle->setUserPointer(follicle->getInfo());
-		m_follicleArray.push_back(follicle);
+		m_follicleArray.push_back(std::move(follicle));
 	}
 	std::cout << "Done.\n";
-}
-
-MystacialPad::~MystacialPad() {
-	freeAlignedObjectArray(m_follicleArray);
-	delete m_layer1;
-	delete m_layer2;
-	freeAlignedObjectArray(m_ISMArray);
-
-	delete m_nasolabialis;
-	delete m_maxillolabialis;
-	delete m_NS;
-	delete m_PMS;
-	delete m_PMI;
-	delete m_PIP;
-	delete m_PM;
 }
 
 void MystacialPad::createLayer1() {
@@ -61,8 +46,21 @@ void MystacialPad::createLayer1() {
 	m_layer1->initEdges(true);
 	m_layer1->initAnchors(true);
 
-	if (m_parameter->getBendingModel() == BENDING_MODEL::SPRING) {
+	switch (m_parameter->getBendingModel()) {
+	case BENDING_MODEL::SPRING: {
 		m_layer1->initBendings(true);
+		break;
+	}
+	case BENDING_MODEL::DIHEDRAL_ANGLE: {
+		// only works for reduced model now
+		ensure(m_parameter->getArrayModel() == MODEL::REDUCED);
+
+		break;
+	}
+	}
+
+	if (m_parameter->getBendingModel() == BENDING_MODEL::SPRING) {
+		
 
 	}
 	std::cout << "Done.\n";
@@ -73,9 +71,17 @@ void MystacialPad::createLayer2() {
 
 	m_layer2->initEdges(false);
 
-	if (m_parameter->getBendingModel() == BENDING_MODEL::SPRING) {
+	switch (m_parameter->getBendingModel()) {
+	case BENDING_MODEL::SPRING: {
 		m_layer2->initBendings(false);
+		break;
+	}
+	case BENDING_MODEL::DIHEDRAL_ANGLE: {
+		// only works for reduced model now
+		ensure(m_parameter->getArrayModel() == MODEL::REDUCED);
 
+		break;
+	}
 	}
 	std::cout << "Done.\n";
 }
@@ -85,13 +91,13 @@ void MystacialPad::createIntrinsicSlingMuscle() {
 	std::cout << "Creating intrinsic sling muscles...";
 	nISM = m_parameter->INTRINSIC_SLING_MUSCLE_IDX.size();
 	for (int s = 0; s < nISM; s++) {
-		Follicle* folC = m_follicleArray[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][0]];
-		Follicle* folR = m_follicleArray[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][1]];
+		auto& folC = m_follicleArray[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][0]];
+		auto& folR = m_follicleArray[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][1]];
 		btTransform frameC = createTransform(btVector3(m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][0]][6] / 2, 0., 0.));
 		btTransform frameR = createTransform(btVector3(-m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][1]][6] / 2 * 0.4, 0., 0.)); // 70% of rostral member
-		IntrinsicSlingMuscle* muscle = new IntrinsicSlingMuscle(m_sim, folC->getBody(), folR->getBody(), frameC, frameR, m_parameter->f0_ISM, s /*userIndex*/);
+		std::unique_ptr<IntrinsicSlingMuscle> muscle = std::make_unique<IntrinsicSlingMuscle>(m_sim, folC->getBody(), folR->getBody(), frameC, frameR, m_parameter->f0_ISM, s /*userIndex*/);
 		getWorld()->addConstraint(muscle->getConstraint(), true); // disable collision
-		m_ISMArray.push_back(muscle);
+		m_ISMArray.push_back(std::move(muscle));
 	}
 	// greek muscles
 	for (int g = 0; g < m_parameter->INTRINSIC_SLING_MUSCLE_GREEK.size(); g++) {
@@ -100,16 +106,15 @@ void MystacialPad::createIntrinsicSlingMuscle() {
 			m_parameter->INTRINSIC_SLING_MUSCLE_GREEK[g][2], m_parameter->INTRINSIC_SLING_MUSCLE_GREEK[g][3]));
 		btCollisionShape* s = new btSphereShape(0.1);
 		btRigidBody* b = createDynamicBody(0 /*mass*/, t, s);
-		m_ISM_nodes.push_back(b);
 		getWorld()->addRigidBody(b, COL_EXT_MUS, extMusCollideWith);
 		b->setActivationState(DISABLE_DEACTIVATION);
 
 		// construct intrinsic muscle
-		Follicle* folC = m_follicleArray[m_parameter->INTRINSIC_SLING_MUSCLE_GREEK[g][0]];
+		auto& folC = m_follicleArray[m_parameter->INTRINSIC_SLING_MUSCLE_GREEK[g][0]];
 		btTransform frameC = createTransform(btVector3(-m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[g][0]][6] / 2 * 0.4, 0., 0.));
-		IntrinsicSlingMuscle* muscle = new IntrinsicSlingMuscle(m_sim, folC->getBody(), b, frameC, createTransform(), m_parameter->f0_ISM);
+		std::unique_ptr<IntrinsicSlingMuscle> muscle = std::make_unique<IntrinsicSlingMuscle>(m_sim, folC->getBody(), b, frameC, createTransform(), m_parameter->f0_ISM);
 		getWorld()->addConstraint(muscle->getConstraint(), true); // disable collision
-		m_ISMArray.push_back(muscle);
+		m_ISMArray.push_back(std::move(muscle));
 		nISM++;
 	}
 
@@ -118,7 +123,7 @@ void MystacialPad::createIntrinsicSlingMuscle() {
 
 void MystacialPad::createNasolabialis() {
 	std::cout << "Creating extrinsic muscles: M.Nasolabialis ...";
-	m_nasolabialis = new ExtrinsicMuscle(m_parameter->f0_nasolabialis, m_sim, m_parameter, m_follicleArray,
+	m_nasolabialis = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_nasolabialis, m_sim, m_parameter, this,
 		m_parameter->NASOLABIALIS_NODE_POS, m_parameter->NASOLABIALIS_CONSTRUCTION_IDX, m_parameter->NASOLABIALIS_INSERTION_IDX, heightPlaceHolder);
 	std::cout << "Done.\n";
 }
@@ -126,7 +131,7 @@ void MystacialPad::createNasolabialis() {
 
 void MystacialPad::createMaxillolabialis() {
 	std::cout << "Creating extrinsic muscles: M.Maxillolabialis ...";
-	m_maxillolabialis = new ExtrinsicMuscle(m_parameter->f0_maxillolabialis, m_sim, m_parameter, m_follicleArray,
+	m_maxillolabialis = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_maxillolabialis, m_sim, m_parameter, this,
 		m_parameter->MAXILLOLABIALIS_NODE_POS, m_parameter->MAXILLOLABIALIS_CONSTRUCTION_IDX, m_parameter->MAXILLOLABIALIS_INSERTION_IDX, heightPlaceHolder);
 	std::cout << "Done." << std::endl;
 }
@@ -172,7 +177,7 @@ void MystacialPad::contractMuscle(Muscle mus, btScalar ratio) {
 
 void MystacialPad::createNasolabialisSuperficialis() {
 	std::cout << "Creating extrinsic muscles: M.Nasolabialis superficialis ...";
-	m_NS = new ExtrinsicMuscle(m_parameter->f0_NS, m_sim, m_parameter, m_follicleArray,
+	m_NS = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_NS, m_sim, m_parameter, this,
 		m_parameter->NASOLABIALIS_SUPERFICIALIS_NODE_POS, m_parameter->NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX, m_parameter->NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX, heightPlaceHolder,
 		std::set<int>{ 0, 12, 13, 14, 15, 16 });
 	std::cout << "Done.\n";
@@ -180,28 +185,28 @@ void MystacialPad::createNasolabialisSuperficialis() {
 
 void MystacialPad::createParsMediaSuperior() {
 	std::cout << "Creating extrinsci muscles: Pars media superior of M. Nasolabialis profundus...";
-	m_PMS = new ExtrinsicMuscle(m_parameter->f0_PMS, m_sim, m_parameter, m_follicleArray, m_parameter->PARS_MEDIA_SUPERIOR_NODE_POS,
+	m_PMS = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_PMS, m_sim, m_parameter, this, m_parameter->PARS_MEDIA_SUPERIOR_NODE_POS,
 		m_parameter->PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX, m_parameter->PARS_MEDIA_SUPERIOR_INSERTION_IDX, m_parameter->PARS_MEDIA_SUPERIOR_INSERTION_HEIGHT);
 	std::cout << "Done.\n";
 }
 
 void MystacialPad::createParsMediaInferior() {
 	std::cout << "Creating extrinsci muscles: Pars media inferior of M. Nasolabialis profundus...";
-	m_PMI = new ExtrinsicMuscle(m_parameter->f0_PMI, m_sim, m_parameter, m_follicleArray, m_parameter->PARS_MEDIA_INFERIOR_NODE_POS,
+	m_PMI = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_PMI, m_sim, m_parameter, this, m_parameter->PARS_MEDIA_INFERIOR_NODE_POS,
 		m_parameter->PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX, m_parameter->PARS_MEDIA_INFERIOR_INSERTION_IDX, m_parameter->PARS_MEDIA_INFERIOR_INSERTION_HEIGHT);
 	std::cout << "Done.\n";
 }
 
 void MystacialPad::createParsInternaProfunda() {
 	std::cout << "Creating extrinsci muscles: Pars interna profunda of M. Nasolabialis profundus...";
-	m_PIP = new ExtrinsicMuscle(m_parameter->f0_PIP, m_sim, m_parameter, m_follicleArray, m_parameter->PARS_INTERNA_PROFUNDA_NODE_POS,
+	m_PIP = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_PIP, m_sim, m_parameter, this, m_parameter->PARS_INTERNA_PROFUNDA_NODE_POS,
 		m_parameter->PARS_INTERNA_PROFUNDA_CONSTRUCTION_IDX, m_parameter->PARS_INTERNA_PROFUNDA_INSERTION_IDX, m_parameter->PARS_INTERNA_PROFUNDA_INSERTION_HEIGHT);
 	std::cout << "Done.\n";
 }
 
 void MystacialPad::createParsMaxillaris() {
 	std::cout << "Creating extrinsci muscles: Pars maxillaris (superficialis and profunda combined) of M. Nasolabialis profundus...";
-	m_PM = new ExtrinsicMuscle(m_parameter->f0_PM, m_sim, m_parameter, m_follicleArray, m_parameter->PARS_MAXILLARIS_NODE_POS,
+	m_PM = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_PM, m_sim, m_parameter, this, m_parameter->PARS_MAXILLARIS_NODE_POS,
 		m_parameter->PARS_MAXILLARIS_CONSTRUCTION_IDX, m_parameter->PARS_MAXILLARIS_INSERTION_IDX, m_parameter->PARS_MAXILLARIS_INSERTION_HEIGHT);
 	std::cout << "Done.\n";
 }
@@ -325,7 +330,7 @@ int MystacialPad::getNumFollicles() const {
 	return nFollicle;
 }
 
-Follicle* MystacialPad::getFollicleByIndex(int idx) {
+std::unique_ptr<Follicle>& MystacialPad::getFollicleByIndex(int idx) {
 	return m_follicleArray[idx];
 }
 

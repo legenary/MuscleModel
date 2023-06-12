@@ -59,12 +59,12 @@ public:
 
 	inline Parameter* getParameter() const { return param; }
 
-	bool muscleContractionStateChanged;
+	bool muscleContractionStateChanged = false;
 
 // test
 private:
-	btRigidBody* box1;
-	btRigidBody* box2;
+	btRigidBody* box1 = nullptr;
+	btRigidBody* box2 = nullptr;
 	Tissue* t1 = nullptr;
 	Tissue* t2 = nullptr;
 	Fiber* f = nullptr;

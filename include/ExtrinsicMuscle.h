@@ -7,11 +7,13 @@ class Tissue;
 class Fiber;
 class Parameter;
 class Follicle;
+class MystacialPad;
 
 class ExtrinsicMuscle {
 private:
 	Simulation* m_sim;
 	Parameter* m_parameter;
+	MystacialPad* m_pad;
 	btScalar f0;
 
 	int nNodes;
@@ -25,8 +27,7 @@ private:
 
 public:
 	// remember to add: a slider constraint (or point-to-point anchor) at the end of the extrinsic muscle bundle
-	ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param,
-		btAlignedObjectArray<Follicle*>& follicleArray, 
+	ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param, MystacialPad* pad,
 		std::vector<std::vector<float>>& NODE_POS, 
 		std::vector<std::vector<int>>& CONSTRUCTION_IDX, 
 		std::vector<std::vector<int>>& INSERTION_IDX, 

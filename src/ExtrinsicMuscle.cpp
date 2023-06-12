@@ -9,16 +9,13 @@
 #include "Follicle.h"
 
 
-ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param,
-	btAlignedObjectArray<Follicle*>& m_follicleArray,
+ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param, MystacialPad* pad,
 	std::vector<std::vector<float>>& NODE_POS,
 	std::vector<std::vector<int>>& CONSTRUCTION_IDX,
 	std::vector<std::vector<int>>& INSERTION_IDX,
 	std::vector<std::vector<float>>& INSERTION_HEIGHT,
 	std::set<int>& anchorNodeIdx)
-	: f0(_f0),
-	m_sim(sim)
-	, m_parameter(param) {
+	: f0(_f0) , m_sim(sim) , m_parameter(param) , m_pad(pad) {
 
 	// create extrinsic muscle nodes
 	nNodes = NODE_POS.size();
@@ -57,7 +54,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 		// Insertion height: the height of point where the follicle is inserted by the muscle, range [-1, 1]*fol_half_height
 		for (int f : {1, 2}) {
 			if (INSERTION_IDX[i][f] >= 0) {
-				btRigidBody* body = m_follicleArray[INSERTION_IDX[i][f]]->getBody();
+				btRigidBody* body = m_pad->getFollicleByIndex(INSERTION_IDX[i][f])->getBody();
 				// Default insertion height: 1, otherwise check INSERTION HEIGHT
 				btScalar insertion_height = 
 					(INSERTION_HEIGHT.size() ? INSERTION_HEIGHT[i][1] : 1) * 

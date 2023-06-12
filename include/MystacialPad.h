@@ -17,20 +17,19 @@ private:
 	Simulation* m_sim;
 	Parameter* m_parameter;
 
-	btAlignedObjectArray<Follicle*> m_follicleArray;
-	Layer* m_layer1;
-	Layer* m_layer2;
-	btAlignedObjectArray<IntrinsicSlingMuscle*> m_ISMArray;
-	btAlignedObjectArray<btRigidBody*> m_ISM_nodes;
+	std::vector<std::unique_ptr<Follicle>> m_follicleArray;
 	int nFollicle;
+	std::unique_ptr<Layer> m_layer1;
+	std::unique_ptr<Layer> m_layer2;
+	std::vector<std::unique_ptr<IntrinsicSlingMuscle>> m_ISMArray;
 	int nISM;
-	ExtrinsicMuscle* m_nasolabialis;
-	ExtrinsicMuscle* m_maxillolabialis;
-	ExtrinsicMuscle* m_NS;
-	ExtrinsicMuscle* m_PMS;
-	ExtrinsicMuscle* m_PMI;
-	ExtrinsicMuscle* m_PIP;
-	ExtrinsicMuscle* m_PM;
+	std::unique_ptr<ExtrinsicMuscle> m_nasolabialis;
+	std::unique_ptr<ExtrinsicMuscle> m_maxillolabialis;
+	std::unique_ptr<ExtrinsicMuscle> m_NS;
+	std::unique_ptr<ExtrinsicMuscle> m_PMS;
+	std::unique_ptr<ExtrinsicMuscle> m_PMI;
+	std::unique_ptr<ExtrinsicMuscle> m_PIP;
+	std::unique_ptr<ExtrinsicMuscle> m_PM;
 	std::vector<std::vector<float>> heightPlaceHolder;
 
 	btScalar m_Hamiltonian;
@@ -40,7 +39,6 @@ public:
 	// disable copy constructor (override if needed in the future)
 	MystacialPad(const MystacialPad&) = delete;
 	MystacialPad& operator=(MystacialPad const&) = delete;
-	virtual ~MystacialPad();
 
 	void createLayer1();
 	void createLayer2();
@@ -59,7 +57,7 @@ public:
 	void readOutput(std::vector<std::vector<std::vector<btScalar>>>& output);
 	
 	int getNumFollicles() const;
-	Follicle* getFollicleByIndex(int idx);
+	std::unique_ptr<Follicle>& getFollicleByIndex(int idx);
 
 	//int getLayer1Tissue() const;
 	//int getLayer2Tissue() const;
@@ -70,9 +68,6 @@ public:
 	}
 	inline btAlignedObjectArray<btCollisionShape*>* getCollisionShapes() {
 		return &(m_sim->m_collisionShapes);
-	}
-	inline Follicle* getFollicleByIndex(int i) const {
-		return m_follicleArray[i];
 	}
 	
 };

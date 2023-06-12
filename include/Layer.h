@@ -16,9 +16,9 @@ private:
 	btDynamicsWorld* getWorld();
 
 protected:
-	btAlignedObjectArray<Tissue*> m_edges;
-	btAlignedObjectArray<Tissue*> m_bendings;
-	btAlignedObjectArray<Tissue*> m_anchors;
+	std::vector<std::unique_ptr<Tissue>> m_edges;
+	std::vector<std::unique_ptr<Tissue>> m_bendings;
+	std::vector<std::unique_ptr<Tissue>> m_anchors;
 
 	int nEdges, nBendings, nAnchors;
 	int nTissues;
@@ -27,7 +27,6 @@ public:
 	Layer(Simulation* sim, Parameter* param, MystacialPad* pad)
 		: m_sim(sim), m_param(param), m_pad(pad)
 		, nEdges(0), nBendings(0), nAnchors(0), nTissues(0) {}
-	~Layer();
 
 	void initEdges(bool isTop);
 	void initAnchors(bool isTop);
