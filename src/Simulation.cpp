@@ -29,27 +29,27 @@ void Simulation::stepSimulation(float deltaTime) {
 	if (m_mystacialPad && (param->m_time_stop == 0 || m_time < param->m_time_stop)) {
 
 		// set up output options
-		if (param->OUTPUT)
-		{
-			m_mystacialPad->readOutput(output_fol_pos);
+		if (param->OUTPUT) {
+			m_mystacialPad->bufferFolPos(output_fol_pos);
+			S_dumpster::Get().hamiltonian.push_back(m_mystacialPad->getHamiltonian());
 		}
 
-		//// contraction/retraction
-		//int numStepToChangeState = param->getFPS() / param->contract_frequency / 2.0f;
-		//muscleContractionStateChanged = (m_step - 1) % numStepToChangeState == 0;
+		// contraction/retraction
+		int numStepToChangeState = param->getFPS() / param->contract_frequency / 2.0f;
+		muscleContractionStateChanged = (m_step - 1) % numStepToChangeState == 0;
 
-		//static btScalar contractTo = 1 - param->contract_range;
-		//if (muscleContractionStateChanged) {
-		//	m_mystacialPad->contractMuscle(Muscle::INTRINSIC, contractTo);
-		//	//m_mystacialPad->contractMuscle(Muscle::N, contractTo);
-		//	//m_mystacialPad->contractMuscle(Muscle::M, contractTo);
-		//	//m_mystacialPad->contractMuscle(Muscle::NS, contractTo);
-		//	//m_mystacialPad->contractMuscle(Muscle::PMS, contractTo);
-		//	//m_mystacialPad->contractMuscle(Muscle::PMI, contractTo);
-		//	//m_mystacialPad->contractMuscle(Muscle::PIP, contractTo);
-		//	//m_mystacialPad->contractMuscle(Muscle::PM, contractTo);
-		//	contractTo = 2 - param->contract_range - contractTo;
-		//}
+		static btScalar contractTo = 1 - param->contract_range;
+		if (muscleContractionStateChanged) {
+			m_mystacialPad->contractMuscle(MUSCLE::ISM, contractTo);
+			m_mystacialPad->contractMuscle(MUSCLE::N, contractTo);
+			m_mystacialPad->contractMuscle(MUSCLE::M, contractTo);
+			m_mystacialPad->contractMuscle(MUSCLE::NS, contractTo);
+			m_mystacialPad->contractMuscle(MUSCLE::PMS, contractTo);
+			m_mystacialPad->contractMuscle(MUSCLE::PMI, contractTo);
+			m_mystacialPad->contractMuscle(MUSCLE::PIP, contractTo);
+			m_mystacialPad->contractMuscle(MUSCLE::PM, contractTo);
+			contractTo = 2 - param->contract_range - contractTo;
+		}
 
 		// last step: step simulation
 		{
@@ -180,54 +180,54 @@ void Simulation::initPhysics_reduced() {
 	m_mystacialPad->createLayer1();
 	m_mystacialPad->createLayer2();
 
-	////// intrinsic sling muscles
-	//read_csv_int(param->dir_intrinsic_sling_muscle_idx_reduced, param->INTRINSIC_SLING_MUSCLE_IDX);
-	//read_csv_float(param->dir_intrinsic_sling_muscle_greek_reduced, param->INTRINSIC_SLING_MUSCLE_GREEK);
-	//m_mystacialPad->createIntrinsicSlingMuscle();
+	//// intrinsic sling muscles
+	read_csv_int(param->dir_intrinsic_sling_muscle_idx_reduced, param->INTRINSIC_SLING_MUSCLE_IDX);
+	read_csv_float(param->dir_intrinsic_sling_muscle_greek_reduced, param->INTRINSIC_SLING_MUSCLE_GREEK);
+	m_mystacialPad->createIntrinsicSlingMuscle();
 
-	//// extrinsic: nasolabialis muscle
-	//read_csv_float(param->dir_nasolabialis_node_pos_reduced, param->NASOLABIALIS_NODE_POS);
-	//read_csv_int(param->dir_nasolabialis_construction_idx_reduced, param->NASOLABIALIS_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_nasolabialis_insertion_idx_reduced, param->NASOLABIALIS_INSERTION_IDX);
-	//m_mystacialPad->createNasolabialis();
+	// extrinsic: nasolabialis muscle
+	read_csv_float(param->dir_nasolabialis_node_pos_reduced, param->NASOLABIALIS_NODE_POS);
+	read_csv_int(param->dir_nasolabialis_construction_idx_reduced, param->NASOLABIALIS_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_nasolabialis_insertion_idx_reduced, param->NASOLABIALIS_INSERTION_IDX);
+	m_mystacialPad->createNasolabialis();
 
-	//// extrinsic: maxillolabialis muscle
-	//read_csv_float(param->dir_maxillolabialis_node_pos_reduced, param->MAXILLOLABIALIS_NODE_POS);
-	//read_csv_int(param->dir_maxillolabialis_construction_idx_reduced, param->MAXILLOLABIALIS_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_maxillolabialis_insertion_idx_reduced, param->MAXILLOLABIALIS_INSERTION_IDX);
-	//m_mystacialPad->createMaxillolabialis();
+	// extrinsic: maxillolabialis muscle
+	read_csv_float(param->dir_maxillolabialis_node_pos_reduced, param->MAXILLOLABIALIS_NODE_POS);
+	read_csv_int(param->dir_maxillolabialis_construction_idx_reduced, param->MAXILLOLABIALIS_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_maxillolabialis_insertion_idx_reduced, param->MAXILLOLABIALIS_INSERTION_IDX);
+	m_mystacialPad->createMaxillolabialis();
 
-	////// extrinsic: pars media superior of M. Nasolabialis profundus
-	//// corium
-	//read_csv_float(param->dir_pars_media_superior_node_pos_reduced, param->PARS_MEDIA_SUPERIOR_NODE_POS);
-	//read_csv_int(param->dir_pars_media_superior_construction_idx_reduced, param->PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_pars_media_superior_insertion_idx_reduced, param->PARS_MEDIA_SUPERIOR_INSERTION_IDX);
-	//read_csv_float(param->dir_pars_media_superior_insertion_height_reduced, param->PARS_MEDIA_SUPERIOR_INSERTION_HEIGHT);
-	//m_mystacialPad->createParsMediaSuperior();
+	//// extrinsic: pars media superior of M. Nasolabialis profundus
+	// corium
+	read_csv_float(param->dir_pars_media_superior_node_pos_reduced, param->PARS_MEDIA_SUPERIOR_NODE_POS);
+	read_csv_int(param->dir_pars_media_superior_construction_idx_reduced, param->PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_media_superior_insertion_idx_reduced, param->PARS_MEDIA_SUPERIOR_INSERTION_IDX);
+	read_csv_float(param->dir_pars_media_superior_insertion_height_reduced, param->PARS_MEDIA_SUPERIOR_INSERTION_HEIGHT);
+	m_mystacialPad->createParsMediaSuperior();
 
-	////// extrinsic: pars interna profunda of M. Nasolabialis profundus
-	//// subcapsular
-	//read_csv_float(param->dir_pars_interna_profunda_node_pos_reduced, param->PARS_INTERNA_PROFUNDA_NODE_POS);
-	//read_csv_int(param->dir_pars_interna_profunda_construction_idx_reduced, param->PARS_INTERNA_PROFUNDA_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_pars_interna_profunda_insertion_idx_reduced, param->PARS_INTERNA_PROFUNDA_INSERTION_IDX);
-	//read_csv_float(param->dir_pars_interna_profunda_insertion_height_reduced, param->PARS_INTERNA_PROFUNDA_INSERTION_HEIGHT);
-	//m_mystacialPad->createParsInternaProfunda();
+	//// extrinsic: pars interna profunda of M. Nasolabialis profundus
+	// subcapsular
+	read_csv_float(param->dir_pars_interna_profunda_node_pos_reduced, param->PARS_INTERNA_PROFUNDA_NODE_POS);
+	read_csv_int(param->dir_pars_interna_profunda_construction_idx_reduced, param->PARS_INTERNA_PROFUNDA_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_interna_profunda_insertion_idx_reduced, param->PARS_INTERNA_PROFUNDA_INSERTION_IDX);
+	read_csv_float(param->dir_pars_interna_profunda_insertion_height_reduced, param->PARS_INTERNA_PROFUNDA_INSERTION_HEIGHT);
+	m_mystacialPad->createParsInternaProfunda();
 
-	////// extrinsic: pars media inferior of M. Nasolabialis profundus
-	//// corium
-	//read_csv_float(param->dir_pars_media_inferior_node_pos_reduced, param->PARS_MEDIA_INFERIOR_NODE_POS);
-	//read_csv_int(param->dir_pars_media_inferior_construction_idx_reduced, param->PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_pars_media_inferior_insertion_idx_reduced, param->PARS_MEDIA_INFERIOR_INSERTION_IDX);
-	//read_csv_float(param->dir_pars_media_inferior_insertion_height_reduced, param->PARS_MEDIA_INFERIOR_INSERTION_HEIGHT);
-	//m_mystacialPad->createParsMediaInferior();
+	//// extrinsic: pars media inferior of M. Nasolabialis profundus
+	// corium
+	read_csv_float(param->dir_pars_media_inferior_node_pos_reduced, param->PARS_MEDIA_INFERIOR_NODE_POS);
+	read_csv_int(param->dir_pars_media_inferior_construction_idx_reduced, param->PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_media_inferior_insertion_idx_reduced, param->PARS_MEDIA_INFERIOR_INSERTION_IDX);
+	read_csv_float(param->dir_pars_media_inferior_insertion_height_reduced, param->PARS_MEDIA_INFERIOR_INSERTION_HEIGHT);
+	m_mystacialPad->createParsMediaInferior();
 
-	////// extrinsic: pars maxillaris & profunda of M. Nasolabialis profundus
-	//// subcapsular
-	//read_csv_float(param->dir_pars_maxillaris_node_pos_reduced, param->PARS_MAXILLARIS_NODE_POS);
-	//read_csv_int(param->dir_pars_maxillaris_construction_idx_reduced, param->PARS_MAXILLARIS_CONSTRUCTION_IDX);
-	//read_csv_int(param->dir_pars_maxillaris_insertion_idx_reduced, param->PARS_MAXILLARIS_INSERTION_IDX);
-	//read_csv_float(param->dir_pars_maxillaris_insertion_height_reduced, param->PARS_MAXILLARIS_INSERTION_HEIGHT);
-	//m_mystacialPad->createParsMaxillaris();
+	//// extrinsic: pars maxillaris & profunda of M. Nasolabialis profundus
+	// subcapsular
+	read_csv_float(param->dir_pars_maxillaris_node_pos_reduced, param->PARS_MAXILLARIS_NODE_POS);
+	read_csv_int(param->dir_pars_maxillaris_construction_idx_reduced, param->PARS_MAXILLARIS_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_maxillaris_insertion_idx_reduced, param->PARS_MAXILLARIS_INSERTION_IDX);
+	read_csv_float(param->dir_pars_maxillaris_insertion_height_reduced, param->PARS_MAXILLARIS_INSERTION_HEIGHT);
+	m_mystacialPad->createParsMaxillaris();
 
 	postInitPhysics();
 };
@@ -246,13 +246,15 @@ void Simulation::initPhysics_test() {
 	btCollisionShape* boxShape = new btBoxShape(btVector3(1, 1, 1));
 	m_collisionShapes.push_back(boxShape);
 
-	box1 = createDynamicBody(1, createTransform(btVector3(0, 0, 0)), boxShape);
+	box1 = createDynamicBody(1, createTransform(btVector3(5, 0, 0)), boxShape);
 	m_dynamicsWorld->addRigidBody(box1, COL_FOLLICLE, follicleCollideWith);
 	box1->setActivationState(DISABLE_DEACTIVATION);
 
 	box2 = createDynamicBody(1, createTransform(btVector3(-5, 0, 0)), boxShape);
 	m_dynamicsWorld->addRigidBody(box2, COL_FOLLICLE, follicleCollideWith);
 	box2->setActivationState(DISABLE_DEACTIVATION);
+
+	box1->setAngularVelocity(btVector3(0, 0, 2));
 
 	//// add constraints
 	//btScalar k = 1;
@@ -296,6 +298,11 @@ void Simulation::stepSimulation_test(float deltaTime) {
 		//box1->applyTorque(btVector3(0, 0, 1));
 		//box1->applyCentralImpulse(force * param->m_time_step);
 		//box1->applyImpulse(force * param->m_time_step, btVector3(0, 0, 0.5));
+
+		btVector3 box1_LinearVelocity = box1->getLinearVelocity();
+		btVector3 box1_AngularVelocity = box1->getAngularVelocity();
+		btVector3 box1_PointVelocity = box1_LinearVelocity +
+			box1_AngularVelocity.cross(box1->getCenterOfMassTransform().getBasis() * btVector3(1, 1, 1));
 
 		//if (t1) t1->update();
 		//if (t2) t2->update();
@@ -402,10 +409,28 @@ void Simulation::preInitPhysics() {
 }
 
 void Simulation::postInitPhysics() {
-	// output
+	int total_frame = (int)param->m_fps * param->m_time_stop;
+	// initialize Singleton data member for output
+	{
+		std::vector<btScalar> vec;
+		int n = 7;
+		S_dumpster::Get().fiber_info.reserve(n);
+		for (int i = 0; i < n; i++) {
+			S_dumpster::Get().fiber_info.push_back(vec);
+			S_dumpster::Get().fiber_info[i].reserve(total_frame);
+		}
+
+		int m = 1;
+		S_dumpster::Get().fiber_info.reserve(m);
+		for (int i = 0; i < m; i++) {
+			S_dumpster::Get().test_info.push_back(vec);
+			S_dumpster::Get().test_info[i].reserve(total_frame);
+		}
+		S_dumpster::Get().hamiltonian.reserve(total_frame);
+	}
+
 	if (m_mystacialPad) {
 		int nFol = m_mystacialPad->getNumFollicles();
-		int total_frame = (int)param->m_fps * param->m_time_stop;
 		output_fol_pos.reserve(nFol);
 		std::vector<std::vector<btScalar>> vec;
 		for (int i = 0; i < nFol; i++) {
@@ -478,8 +503,6 @@ void Simulation::initParameter(Parameter* parameter) {
 		std::cout << "Creating output folder..." << std::endl;
 	}
 
-	int total_frame = (int)param->m_fps * param->m_time_stop;
-
 	sprintf(parameter_string,
 		"FPS: %dHz\nSimulation internal step: %d\n"
 		"Muscle query rate: %.1fHz\n"
@@ -502,24 +525,6 @@ void Simulation::initParameter(Parameter* parameter) {
 		param->f0_NS * 0.000001, param->f0_PMS * 0.000001,
 		param->f0_PMI * 0.000001, param->f0_PIP * 0.000001, param->f0_PM * 0.000001
 	);
-
-	// initialize Singleton data member
-	{
-		std::vector<btScalar> vec;
-		int n = 7;
-		S_dumpster::Get().fiber_info.reserve(n);
-		for (int i = 0; i < n; i++) {
-			S_dumpster::Get().fiber_info.push_back(vec);
-			S_dumpster::Get().fiber_info[i].reserve(total_frame);
-		}
-
-		int m = 1;
-		S_dumpster::Get().fiber_info.reserve(m);
-		for (int i = 0; i < m; i++) {
-			S_dumpster::Get().test_info.push_back(vec);
-			S_dumpster::Get().test_info[i].reserve(total_frame);
-		}
-	}
 }
 
 void Simulation::internalWriteOutput() {
@@ -536,6 +541,7 @@ void Simulation::internalWriteOutput() {
 		}
 		write_txt(param->output_path, "parameter.txt", parameter_string);
 
+		write_csv_float(param->output_path, "Hamiltonian.csv", S_dumpster::Get().hamiltonian);
 		write_csv_float(param->output_path, "fiber_info.csv", S_dumpster::Get().fiber_info);
 
 		std::cout << "Files saved.\n";

@@ -12,7 +12,8 @@ Fiber::Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 	, m_f0(f0)
 	, m_idx(idx)
 	, m_velocity(0)
-	, m_activation(0) {
+	, m_activation(0)
+	, m_Hamiltonian(0) {
 	m_constraint = new myGeneric6DofMuscleConstraint(*rbA, *rbB, frameInA, frameInB, true);
 	init();
 };
@@ -48,6 +49,7 @@ void Fiber::init() {
 	m_length = m_restLength;
 	m_prev_length = m_length;
 	m_restLengthNoAvtivation = m_length;
+	m_prev_force = btVector3(0., 0., 0.);
 
 	m_constraint->enableFeedback(true);
 }
@@ -122,11 +124,11 @@ void Fiber::update() {
 	}
 	
 	// update hamiltonian as the potential energy, the potential enery is calcualted as the work done by the force
-	// the potential enery is cleared every contraction half cycle
+	// the potential enery is cleared every contraction and relaxation
 	if (m_sim->muscleContractionStateChanged) {
 		m_Hamiltonian = 0;
 	}
-	m_Hamiltonian += m_prev_force.length() * (m_length - m_prev_length);
+	m_Hamiltonian += (m_prev_force.length() + m_force.length()) * 0.5 * btFabs(m_length - m_prev_length);
 
 	m_prev_length = m_length;
 	m_prev_force = m_force;

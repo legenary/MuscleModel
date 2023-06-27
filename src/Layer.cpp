@@ -71,27 +71,39 @@ void Layer::initDihedralPairs(bool isTop) {
 			btVector3& p2 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][1])->getTopLocation();
 			btVector3& p3 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][2])->getTopLocation();
 			btVector3& p4 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][3])->getTopLocation();
-			m_dihedral_pairs.emplace_back(&p1, &p2, &p3, &p4, isTop);
+			btVector3& v1 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][0])->getTopVelocity();
+			btVector3& v2 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][1])->getTopVelocity();
+			btVector3& v3 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][2])->getTopVelocity();
+			btVector3& v4 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][3])->getTopVelocity();
+			m_dihedral_pairs.emplace_back(&p1, &p2, &p3, &p4, &v1, &v2, &v3, &v4, isTop);
 		}
 		else {
 			btVector3& p1 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][0])->getBotLocation();
 			btVector3& p2 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][1])->getBotLocation();
 			btVector3& p3 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][2])->getBotLocation();
 			btVector3& p4 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][3])->getBotLocation();
-			m_dihedral_pairs.emplace_back(&p1, &p2, &p3, &p4, isTop);
+			btVector3& v1 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][0])->getBotVelocity();
+			btVector3& v2 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][1])->getBotVelocity();
+			btVector3& v3 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][2])->getBotVelocity();
+			btVector3& v4 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][3])->getBotVelocity();
+			m_dihedral_pairs.emplace_back(&p1, &p2, &p3, &p4, &v1, &v2, &v3, &v4, isTop);
 		}
 	}
 }
 
 void Layer::update() {
+	m_Hamiltonian = 0;
 	for (int i = 0; i < nEdges; i++) {
 		m_edges[i]->update();
+		m_Hamiltonian += m_edges[i]->getHamiltonian();
 	}
 	for (int i = 0; i < nAnchors; i++) {
 		m_anchors[i]->update();
+		m_Hamiltonian += m_anchors[i]->getHamiltonian();
 	}
 	for (int i = 0; i < nBendings; i++) {
 		m_bendings[i]->update();
+		m_Hamiltonian += m_bendings[i]->getHamiltonian();
 	}
 	for (int i = 0; i < nDihedralPairs; i++) {
 		m_dihedral_pairs[i].calculate();
@@ -101,6 +113,7 @@ void Layer::update() {
 			m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][2])->getBody(),
 			m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][3])->getBody()
 		});
+		m_Hamiltonian += m_dihedral_pairs[i].work_acc;
 	}
 }
 
@@ -122,9 +135,10 @@ void Layer::debugDraw(const btVector3& clr, bool dynamic) {
 
 void DihedralPair::calculate(bool init) {
 	// calculate e, n1, n2, u1, u2, u3, u4
+	// Bridson et al 2005
 	btVector3 p41(*p1-*p4), p42(*p2-*p4), p31(*p1-*p3), p32(*p2-*p3);
-	btVector3 n1 = (p41.cross(p31));	
-	btVector3 n2 = (p32.cross(p42));	
+	btVector3 n1 = (p31.cross(p41));	
+	btVector3 n2 = (p42.cross(p32));	
 	btVector3 e(*p4 - *p3);
 
 	btScalar n1_norm_inv = 1.f / n1.norm();
@@ -141,10 +155,13 @@ void DihedralPair::calculate(bool init) {
 	angle = n1.angle(n2);	// radians
 	if (init) {
 		angle0 = n1.angle(n2);
+		work_acc = 0;
 	}
 
 	f = k * e.norm() * e.norm() / (n1.norm() + n2.norm())
 		* (btSin((PI - angle) * 0.5) - btSin((PI - angle0) * 0.5));
+
+	work_acc += f * (u1.dot(*v1) + u2.dot(*v2) + u3.dot(*v3) + u4.dot(*v4));
 }
 
 void DihedralPair::applyForce(std::vector<btRigidBody*> bodies) {

@@ -36,6 +36,7 @@ btTransform createTransform(const btVector3& origin = btVector3(0., 0., 0.), con
 void read_csv_float(const std::string& fileName, std::vector<std::vector<float>>& dataList);
 void read_csv_int(const std::string& fileName, std::vector<std::vector<int>>& dataList);
 void write_csv_float(const std::string& folderName, const std::string& fileName, std::vector<std::vector<double>>& dataList);
+void write_csv_float(const std::string& folderName, const std::string& fileName, std::vector<double>& dataList);
 void write_txt(const std::string& folderName, const std::string& fileName, const std::string& text);
 
 bool isPathExist(const std::string& s);
@@ -66,6 +67,7 @@ public:
 	}
 
 	static std::vector<std::vector<btScalar>> fiber_info;
+	static std::vector<btScalar> hamiltonian;
 	static std::vector<std::vector<btScalar>> test_info;
 
 };

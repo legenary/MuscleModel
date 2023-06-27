@@ -16,10 +16,11 @@ btRigidBody* createDynamicBody(const float mass, const btTransform& startTransfo
 	btRigidBody::btRigidBodyConstructionInfo cInfo(mass, myMotionState, shape, localInertia);
 	
 	if (isDynamic) {
-		//cInfo.m_restitution = restitution;
-		//cInfo.m_friction = friction;
+		cInfo.m_restitution = 0.0f;
+		cInfo.m_friction = 0.0f;
 		cInfo.m_linearDamping = damping; // 0 by default, no damping
 										 // proportional of velocity lost per second
+		cInfo.m_angularDamping = damping;
 	}
 	
 	btRigidBody* body = new btRigidBody(cInfo);
@@ -107,6 +108,27 @@ void write_csv_float(const std::string& folderName, const std::string& fileName,
 	}
 }
 
+void write_csv_float(const std::string& folderName, const std::string& fileName, std::vector<double>& dataList) {
+	try {
+		if (!isPathExist(folderName)) {	// create folder if not exist
+			mkdir(folderName.c_str());
+			std::cout << "Creating output folder..." << std::endl;
+		}
+		// outputing...
+		std::ofstream outputFile;
+		outputFile.open(folderName + "/" + fileName);
+		int m = dataList.size();
+		for (int row = 0; row < m; row++) {
+			outputFile << dataList[row] << ",";
+			outputFile << std::endl;
+		}
+		outputFile.close();
+	}
+	catch (...) {
+		std::cout << "-saving csv float failed." << std::endl;
+	}
+}
+
 void write_txt(const std::string& folderName, const std::string& fileName, const std::string& text) {
 	try {
 		std::ofstream out(folderName + "/" + fileName);
@@ -152,5 +174,6 @@ btScalar interp1(std::vector<btScalar>& xData, std::vector<btScalar>& yData, btS
 }
 
 std::vector<std::vector<btScalar>> S_dumpster::fiber_info;
+std::vector<btScalar> S_dumpster::hamiltonian;
 std::vector<std::vector<btScalar>> S_dumpster::test_info;
 

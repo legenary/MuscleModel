@@ -102,7 +102,7 @@ void ExtrinsicMuscle::update(bool updateFiber) {
 		btScalar mass = m_nodes[i]->getMass();
 		btVector3 vel = m_nodes[i]->getLinearVelocity();
 		m_Hamiltonian += 0.5 * mass * vel.length2();
-		// remark: ignore node rotation. Theoretically, there shouldn't be any rotation.
+		// remark: ignore node rotation for calculating total energy. Theoretically, there shouldn't be any rotation.
 	}
 }
 

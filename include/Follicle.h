@@ -24,8 +24,8 @@ private:
 	Follicle_info* m_info;
 	btScalar m_Hamiltonian;
 
-	btVector3 topVec3;
-	btVector3 botVec3;
+	btVector3 topLoc, botLoc;
+	btVector3 topVel, botVel;
 
 public:
 	Follicle(MystacialPad* pad, btTransform trans, btScalar radius, btScalar half_height, btScalar mass, btScalar damping, int f);
@@ -55,6 +55,12 @@ public:
 	btVector3 getBotLocation() const;
 	btVector3& getTopLocation();
 	btVector3& getBotLocation();
+
+	btVector3 getTopVelocity() const;
+	btVector3 getBotVelocity() const;
+	btVector3& getTopVelocity();
+	btVector3& getBotVelocity();
+
 	btScalar getHamiltonian();
 
 };

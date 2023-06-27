@@ -9,8 +9,7 @@ class Layer;
 class IntrinsicSlingMuscle;
 class ExtrinsicMuscle;
 class Parameter;
-
-enum class Muscle { INTRINSIC, N, M, NS, PMS, PMI, PIP, PM };
+enum MUSCLE;
 
 class MystacialPad {
 private:
@@ -34,6 +33,8 @@ private:
 
 	btScalar m_Hamiltonian;
 
+	bool checkCreateMuscleFlag(MUSCLE mus) const;
+
 public:
 	MystacialPad(Simulation* sim, Parameter* param);
 	// disable copy constructor (override if needed in the future)
@@ -51,13 +52,15 @@ public:
 	void createParsInternaProfunda();
 	void createParsMaxillaris();
 
-	void contractMuscle(Muscle mus, btScalar ratio);
+	void contractMuscle(MUSCLE mus, btScalar ratio);
 
 	void update(btScalar dt);
-	void readOutput(std::vector<std::vector<std::vector<btScalar>>>& output);
+	void bufferFolPos(std::vector<std::vector<std::vector<btScalar>>>& output);
 	
 	int getNumFollicles() const;
 	std::unique_ptr<Follicle>& getFollicleByIndex(int idx);
+
+	btScalar getHamiltonian() const { return m_Hamiltonian; }
 
 	//int getLayer1Tissue() const;
 	//int getLayer2Tissue() const;
@@ -70,6 +73,8 @@ public:
 		return &(m_sim->m_collisionShapes);
 	}
 	
+	
+
 };
 
 

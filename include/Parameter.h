@@ -1,6 +1,8 @@
 #ifndef PARAMETER_H
 #define PARAMETER_H
 
+#include "Utility.h"
+
 enum class MODEL {
 	TEST,
 	FULL,
@@ -10,6 +12,18 @@ enum class MODEL {
 enum class BENDING_MODEL {
 	SPRING,
 	DIHEDRAL_ANGLE
+};
+
+enum MUSCLE {
+	NONE = 0,
+	ISM = BIT(0),
+	N = BIT(1),
+	M = BIT(2),
+	NS = BIT(3),
+	PMS = BIT(4),
+	PIP = BIT(5),
+	PMI = BIT(6),
+	PM = BIT(7)
 };
 
 class Parameter {
@@ -32,6 +46,7 @@ public:
 	btScalar inverse_fiber_query_rate;
 	int DEBUG;
 
+	uint8_t FlagContractMuscle;
 	btScalar contract_range;
 	btScalar contract_frequency;
 
@@ -61,6 +76,8 @@ public:
 	btScalar zeta_tissue;
 	btScalar k_anchor;
 
+	uint8_t FlagCreateMuscles;
+
 	// instrinsic sling muscle parameter
 	std::string dir_intrinsic_sling_muscle_idx;
 	std::string dir_intrinsic_sling_muscle_idx_reduced;
@@ -70,7 +87,6 @@ public:
 	std::vector<std::vector<float>>INTRINSIC_SLING_MUSCLE_GREEK;
 	btScalar f0_ISM;
 	// contraction
-	bool contractISM;
 	std::string dir_intrinsic_sling_muscle_contraction_trajectory;
 	std::vector<std::vector<float>> INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY;
 

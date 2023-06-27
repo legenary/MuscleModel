@@ -1,4 +1,4 @@
-function [az, el] = getAzElEyenose(fol_traj)
+function [az, el, top_bot_avgrow, top_bot_eyenose] = getAzElEyenose(fol_traj)
 
 stepTotal = size(fol_traj, 2);
 
@@ -8,8 +8,8 @@ R = [0.9092,0.3570,0.2142;
     -0.3598,0.9326,-0.0270;
     -0.2094,-0.0525,0.9764];
 
-top_bot = cell(31, 2);
-for i = 1:31
+top_bot = cell(size(fol_traj, 1), 2);
+for i = 1:size(fol_traj, 1)
     top_bot{i, 1} = squeeze(fol_traj(i, :, 1:3))*rotz(pi/2)*roty(-pi/2);
     top_bot{i, 2} = squeeze(fol_traj(i, :, 4:6))*rotz(pi/2)*roty(-pi/2);
     top_bot{i, 1}(:,3) = -top_bot{i, 1}(:,3);
@@ -34,12 +34,12 @@ angle = atand(eye2nose(3)/eye2nose(2));
 
 top_bot_eyenose = cellfun(@(x) x*rotx(angle, 'deg'), top_bot_avgrow, 'uni', 0);
 
-az_eyenose = zeros(stepTotal, 31);
-el_eyenose = zeros(stepTotal, 31);
-for i = 1:31
+az_eyenose = zeros(stepTotal, size(fol_traj, 1));
+el_eyenose = zeros(stepTotal, size(fol_traj, 1));
+for i = 1:size(fol_traj, 1)
     dir = top_bot_eyenose{i, 1} - top_bot_eyenose{i, 2};
     [th, phi, ~] = cart2sph(dir(:,1), dir(:,2), dir(:,3));
-    az_eyenose(:, i) = rad2deg(th);
+    az_eyenose(:, i) = rad2deg(th) + 90;
     el_eyenose(:, i) = rad2deg(phi);
 end
 

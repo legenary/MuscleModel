@@ -14,9 +14,7 @@ Follicle::Follicle(MystacialPad* pad, btTransform trans, btScalar radius, btScal
 	m_body->setActivationState(DISABLE_DEACTIVATION);
 	m_info = new Follicle_info(f);
 
-	btVector3 Vb = btVector3(-m_length / 2, 0, 0);
-	topVec3 = m_body->getCenterOfMassTransform() * Vb;
-	botVec3 = m_body->getCenterOfMassTransform() * (Vb * -1);
+	update();
 }
 
 Follicle::~Follicle() {
@@ -26,9 +24,13 @@ Follicle::~Follicle() {
 }
 
 void Follicle::update() {
-	btVector3 Vb = btVector3(-m_length / 2, 0, 0);
-	topVec3 = m_body->getCenterOfMassTransform() * Vb;
-	botVec3 = m_body->getCenterOfMassTransform() * (Vb * -1);
+	topLoc = m_body->getCenterOfMassTransform() * btVector3(m_length * 0.5, 0, 0);
+	botLoc = m_body->getCenterOfMassTransform() * btVector3(-m_length * 0.5, 0, 0);
+	//calculate velocity: V + Omega x R
+	btVector3 topR = m_body->getCenterOfMassTransform().getBasis() * btVector3(m_length * 0.5, 0, 0);
+	btVector3 botR = m_body->getCenterOfMassTransform().getBasis() * btVector3(-m_length * 0.5, 0, 0);
+	topVel = m_body->getLinearVelocity() + m_body->getAngularVelocity().cross(topR);
+	botVel = m_body->getLinearVelocity() + m_body->getAngularVelocity().cross(botR);
 }
 
 btRigidBody* Follicle::getBody() const {
@@ -56,19 +58,35 @@ void Follicle::setUserPointer(void* userPointer) {
 }
 
 btVector3 Follicle::getTopLocation() const {
-	return topVec3;
+	return topLoc;
 }
 
 btVector3 Follicle::getBotLocation() const {
-	return botVec3;
+	return botLoc;
 }
 
 btVector3& Follicle::getTopLocation() {
-	return topVec3;
+	return topLoc;
 }
 
 btVector3& Follicle::getBotLocation() {
-	return botVec3;
+	return botLoc;
+}
+
+btVector3 Follicle::getTopVelocity() const {
+	return topVel;
+}
+
+btVector3 Follicle::getBotVelocity() const {
+	return botVel;
+}
+
+btVector3& Follicle::getTopVelocity() {
+	return topVel;
+}
+
+btVector3& Follicle::getBotVelocity() {
+	return botVel;
 }
 
 btScalar Follicle::getHamiltonian() {
@@ -82,8 +100,7 @@ btScalar Follicle::getHamiltonian() {
 	btVector3 AngularVel = m_body->getAngularVelocity();
 	btScalar RotKineticEnergy = btVector3(I.tdotx(AngularVel), I.tdoty(AngularVel), I.tdotz(AngularVel)).dot(AngularVel) * 0.5;
 
-	btVector3 LinearVel = m_body->getLinearVelocity();
-	btScalar LinearKineticEnergy = LinearVel.length2() * m_body->getMass() * 0.5;
+	btScalar LinearKineticEnergy = m_body->getLinearVelocity().length2() * m_body->getMass() * 0.5;
 
 	m_Hamiltonian = RotKineticEnergy + LinearKineticEnergy;
 	return m_Hamiltonian;

@@ -1,8 +1,6 @@
 #include "my_pch.h"
 #include "Parameter.h"
 
-#include "Utility.h"
-
 Parameter::Parameter() {
 	m_fps = 120;
 	m_time_step = 1.0f / m_fps;
@@ -10,7 +8,7 @@ Parameter::Parameter() {
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / (btScalar) m_num_internal_step;
-	m_time_stop = 0;
+	m_time_stop = 5.f;
 
 	inverse_fiber_query_rate = 1.0f / 60.0f;
 
@@ -20,6 +18,7 @@ Parameter::Parameter() {
 				// 3: axis aligned bound box added
 
 	// contract
+	FlagContractMuscle = MUSCLE::ISM;
 	contract_range = 0.25;
 	contract_frequency = 1; // Hz
 	
@@ -40,7 +39,7 @@ Parameter::Parameter() {
 	// mode
 	m_model = MODEL::REDUCED;
 	m_bending_model = BENDING_MODEL::DIHEDRAL_ANGLE;
-
+	FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M;
 
 	switch (m_model) {
 	case MODEL::FULL: {
@@ -83,7 +82,7 @@ Parameter::Parameter() {
 		k_layer1 = 25;			// Bullet unit: 1e-3 (N/m)
 		k_layer2 = 50;
 		k_anchor = 25;
-		zeta_tissue = 1;
+		zeta_tissue = 1.0;		// 1 = critically damped
 		fol_damping = 0.;
 
 		// muscle parameter reduced

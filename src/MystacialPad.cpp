@@ -88,6 +88,10 @@ void MystacialPad::createLayer2() {
 
 
 void MystacialPad::createIntrinsicSlingMuscle() {
+	if (!checkCreateMuscleFlag(MUSCLE::ISM)) {
+		return;
+	}
+
 	std::cout << "Creating intrinsic sling muscles...";
 	nISM = m_parameter->INTRINSIC_SLING_MUSCLE_IDX.size();
 	for (int s = 0; s < nISM; s++) {
@@ -122,6 +126,9 @@ void MystacialPad::createIntrinsicSlingMuscle() {
 }
 
 void MystacialPad::createNasolabialis() {
+	if (!checkCreateMuscleFlag(MUSCLE::N)) {
+		return;
+	}
 	std::cout << "Creating extrinsic muscles: M.Nasolabialis ...";
 	m_nasolabialis = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_nasolabialis, m_sim, m_parameter, this,
 		m_parameter->NASOLABIALIS_NODE_POS, m_parameter->NASOLABIALIS_CONSTRUCTION_IDX, m_parameter->NASOLABIALIS_INSERTION_IDX, heightPlaceHolder);
@@ -130,45 +137,48 @@ void MystacialPad::createNasolabialis() {
 
 
 void MystacialPad::createMaxillolabialis() {
+	if (!checkCreateMuscleFlag(MUSCLE::M)) {
+		return;
+	}
 	std::cout << "Creating extrinsic muscles: M.Maxillolabialis ...";
 	m_maxillolabialis = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_maxillolabialis, m_sim, m_parameter, this,
 		m_parameter->MAXILLOLABIALIS_NODE_POS, m_parameter->MAXILLOLABIALIS_CONSTRUCTION_IDX, m_parameter->MAXILLOLABIALIS_INSERTION_IDX, heightPlaceHolder);
 	std::cout << "Done." << std::endl;
 }
 
-void MystacialPad::contractMuscle(Muscle mus, btScalar ratio) {
-	switch (mus) {
-	case Muscle::INTRINSIC:
+void MystacialPad::contractMuscle(MUSCLE mus, btScalar ratio) {
+	switch (m_parameter->FlagContractMuscle & mus) {
+	case MUSCLE::ISM:
 		std::cout << "Contracting intrinsic muscle...\n";
 		for (int s = 0; s < nISM; s++) {
 			m_ISMArray[s]->contractTo(ratio);
 		}
 		break;
-	case Muscle::N:
+	case MUSCLE::N:
 		std::cout << "Contracting nasolabialis (N)...\n";
 		m_nasolabialis->contractTo(ratio);
 		break;
-	case Muscle::M:
+	case MUSCLE::M:
 		std::cout << "Contracting maxillolabialis (M)...\n";
 		m_maxillolabialis->contractTo(ratio);
 		break;
-	case Muscle::NS:
+	case MUSCLE::NS:
 		std::cout << "Contracting nasolabialis superficialis (NS)...\n";
 		m_NS->contractTo(ratio);
 		break;
-	case Muscle::PMS:
+	case MUSCLE::PMS:
 		std::cout << "Contracting pars media superior (PMS)...\n";
 		m_PMS->contractTo(ratio);
 		break;
-	case Muscle::PMI:
+	case MUSCLE::PMI:
 		std::cout << "Contracting pars media inferior (PMI)...\n";
 		m_PMI->contractTo(ratio);
 		break;
-	case Muscle::PIP:
+	case MUSCLE::PIP:
 		std::cout << "Contracting pars interna produnda (PIP)...\n";
 		m_PIP->contractTo(ratio);
 		break;
-	case Muscle::PM:
+	case MUSCLE::PM:
 		std::cout << "Contracting pars maxilloris (PM)...\n";
 		m_PM->contractTo(ratio);
 		break;
@@ -176,6 +186,9 @@ void MystacialPad::contractMuscle(Muscle mus, btScalar ratio) {
 }
 
 void MystacialPad::createNasolabialisSuperficialis() {
+	if (!checkCreateMuscleFlag(MUSCLE::NS)) {
+		return;
+	}
 	std::cout << "Creating extrinsic muscles: M.Nasolabialis superficialis ...";
 	m_NS = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_NS, m_sim, m_parameter, this,
 		m_parameter->NASOLABIALIS_SUPERFICIALIS_NODE_POS, m_parameter->NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX, m_parameter->NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX, heightPlaceHolder,
@@ -184,6 +197,9 @@ void MystacialPad::createNasolabialisSuperficialis() {
 }
 
 void MystacialPad::createParsMediaSuperior() {
+	if (!checkCreateMuscleFlag(MUSCLE::PMS)) {
+		return;
+	}
 	std::cout << "Creating extrinsci muscles: Pars media superior of M. Nasolabialis profundus...";
 	m_PMS = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_PMS, m_sim, m_parameter, this, m_parameter->PARS_MEDIA_SUPERIOR_NODE_POS,
 		m_parameter->PARS_MEDIA_SUPERIOR_CONSTRUCTION_IDX, m_parameter->PARS_MEDIA_SUPERIOR_INSERTION_IDX, m_parameter->PARS_MEDIA_SUPERIOR_INSERTION_HEIGHT);
@@ -191,6 +207,9 @@ void MystacialPad::createParsMediaSuperior() {
 }
 
 void MystacialPad::createParsMediaInferior() {
+	if (!checkCreateMuscleFlag(MUSCLE::PMI)) {
+		return;
+	}
 	std::cout << "Creating extrinsci muscles: Pars media inferior of M. Nasolabialis profundus...";
 	m_PMI = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_PMI, m_sim, m_parameter, this, m_parameter->PARS_MEDIA_INFERIOR_NODE_POS,
 		m_parameter->PARS_MEDIA_INFERIOR_CONSTRUCTION_IDX, m_parameter->PARS_MEDIA_INFERIOR_INSERTION_IDX, m_parameter->PARS_MEDIA_INFERIOR_INSERTION_HEIGHT);
@@ -198,6 +217,9 @@ void MystacialPad::createParsMediaInferior() {
 }
 
 void MystacialPad::createParsInternaProfunda() {
+	if (!checkCreateMuscleFlag(MUSCLE::PIP)) {
+		return;
+	}
 	std::cout << "Creating extrinsci muscles: Pars interna profunda of M. Nasolabialis profundus...";
 	m_PIP = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_PIP, m_sim, m_parameter, this, m_parameter->PARS_INTERNA_PROFUNDA_NODE_POS,
 		m_parameter->PARS_INTERNA_PROFUNDA_CONSTRUCTION_IDX, m_parameter->PARS_INTERNA_PROFUNDA_INSERTION_IDX, m_parameter->PARS_INTERNA_PROFUNDA_INSERTION_HEIGHT);
@@ -205,6 +227,9 @@ void MystacialPad::createParsInternaProfunda() {
 }
 
 void MystacialPad::createParsMaxillaris() {
+	if (!checkCreateMuscleFlag(MUSCLE::PM)) {
+		return;
+	}
 	std::cout << "Creating extrinsci muscles: Pars maxillaris (superficialis and profunda combined) of M. Nasolabialis profundus...";
 	m_PM = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_PM, m_sim, m_parameter, this, m_parameter->PARS_MAXILLARIS_NODE_POS,
 		m_parameter->PARS_MAXILLARIS_CONSTRUCTION_IDX, m_parameter->PARS_MAXILLARIS_INSERTION_IDX, m_parameter->PARS_MAXILLARIS_INSERTION_HEIGHT);
@@ -230,16 +255,19 @@ void MystacialPad::update(btScalar dt) {
 	// torsional springs don't
 	if (m_layer1) {
 		m_layer1->update();
+		m_Hamiltonian += m_layer1->getHamiltonian();
 	}
 	if (m_layer2) {
 		m_layer2->update();
+		m_Hamiltonian += m_layer2->getHamiltonian();
 	}
 
-	if (fiberQueryFlag) {
-		for (int i = 0; i < nISM; i++) {
+	
+	for (int i = 0; i < nISM; i++) {
+		if (fiberQueryFlag) {
 			m_ISMArray[i]->update();
-			m_Hamiltonian += m_ISMArray[i]->getHamiltonian();
 		}
+		m_Hamiltonian += m_ISMArray[i]->getHamiltonian();
 	}
 		
 	if (m_nasolabialis) { 
@@ -274,7 +302,7 @@ void MystacialPad::update(btScalar dt) {
 	
 }
 
-void MystacialPad::readOutput(std::vector<std::vector<std::vector<btScalar>>>& output) {
+void MystacialPad::bufferFolPos(std::vector<std::vector<std::vector<btScalar>>>& output) {
 	// output all follicle top/bottom pos
 	for (int i = 0; i < nFollicle; i++) {
 		btVector3 pos_top = m_follicleArray[i]->getTopLocation();
@@ -286,45 +314,40 @@ void MystacialPad::readOutput(std::vector<std::vector<std::vector<btScalar>>>& o
 	}
 }
 
+
 void MystacialPad::debugDraw() {
 	if (m_layer1) {
-		m_layer1->debugDraw(btVector3(1., 0., 0.), false);
+		m_layer1->debugDraw(btVector3(1., 0., 0.), true);
 	}
 	if (m_layer2) {
-		m_layer2->debugDraw(btVector3(1., 0., 0.), false);
+		m_layer2->debugDraw(btVector3(1., 0., 0.), true);
 	}
 
-	//for (int i = 0; i < m_layer2.size(); i++) {
-	//	m_layer2[i]->debugDraw(btVector3(1., 0., 0.), false);
-	//}
-	//for (int i = 0; i < nTissueAnchor; i++) {
-	//	m_anchor[i]->debugDraw(RED, true);
-	//}
-	//for (int i = 0; i < nISM; i++) {
-	//	m_ISMArray[i]->debugDraw(RED, false);
-	//}
+	for (int i = 0; i < nISM; i++) {
+		m_ISMArray[i]->debugDraw(RED, false);
+	}
 
-	//if (m_nasolabialis) {
-	//	m_nasolabialis->debugDraw(GREEN);
-	//}
-	//if (m_maxillolabialis) {
-	//	m_maxillolabialis->debugDraw(BLUE);
-	//}
-	//if (m_NS) {
-	//	m_NS->debugDraw(BLUE);
-	//}
-	//if (m_PMS) {
-	//	m_PMS->debugDraw(ORANGE);
-	//}
-	//if (m_PIP) {
-	//	m_PIP->debugDraw(ORANGE);
-	//}
-	//if (m_PMI) {
-	//	m_PMI->debugDraw(YELLOW);
-	//}
-	//if (m_PM) {
-	//	m_PM->debugDraw(YELLOW);
-	//}
+	if (m_nasolabialis) {
+		m_nasolabialis->debugDraw(GREEN);
+	}
+	if (m_maxillolabialis) {
+		m_maxillolabialis->debugDraw(BLUE);
+	}
+	if (m_NS) {
+		m_NS->debugDraw(BLUE);
+	}
+	if (m_PMS) {
+		m_PMS->debugDraw(ORANGE);
+	}
+	if (m_PIP) {
+		m_PIP->debugDraw(ORANGE);
+	}
+	if (m_PMI) {
+		m_PMI->debugDraw(YELLOW);
+	}
+	if (m_PM) {
+		m_PM->debugDraw(YELLOW);
+	}
 }
 
 int MystacialPad::getNumFollicles() const {
@@ -335,13 +358,6 @@ std::unique_ptr<Follicle>& MystacialPad::getFollicleByIndex(int idx) {
 	return m_follicleArray[idx];
 }
 
-//int MystacialPad::getLayer1Tissue() const {
-//	return m_layer1->getNumTissue();
-//}
-//
-//int MystacialPad::getLayer2Tissue() const {
-//	return m_layer2->getNumTissue();
-//}
-
-
-
+bool MystacialPad::checkCreateMuscleFlag(MUSCLE mus) const {
+	return (m_parameter->FlagCreateMuscles & mus) == mus;
+}
