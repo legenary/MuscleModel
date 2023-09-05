@@ -10,14 +10,14 @@ Row = [1,1,1,1,1, 2,2,2,2,2, 3,3,3,3,3,3,3, 4,4,4,4,4,4,4, 5,5,5,5,5,5];
 Col = [1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5,6,7, 1,2,3,4,5,6,7, 1,2,3,4,5,6];
 
 figure('Position', [200, 200, 600, 300], 'Color', 'w'); hold on;
-color = turbo(7);
+color = parula(7);
 
 n = 1;
 for fps = FPS
     for stepPerFrame = StepPerFrame
         
         % determine time step, usually stepTotal = T*step - 1
-        path = sprintf('../bundle_%dHz_%d', fps, stepPerFrame);
+        path = sprintf('../bundle_full', fps, stepPerFrame);
         stepTotal = size(load([path, '/fol_00.csv']), 1);
 
         fol_traj = zeros(31, stepTotal, 6);
@@ -26,7 +26,7 @@ for fps = FPS
             fol_traj(fol, :, :) = load(filename);
         end
 
-        [az, el] = getAzElEyenose(fol_traj);
+        [az, el] = getFolAzEl(fol_traj, 'eyenose');
 
         hdl(n) = plot(az(:, 1), 'Color', color(n, :));
         

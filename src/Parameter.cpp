@@ -39,7 +39,7 @@ Parameter::Parameter() {
 	// mode
 	m_model = MODEL::REDUCED;
 	m_bending_model = BENDING_MODEL::DIHEDRAL_ANGLE;
-	FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M;
+	FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS;
 
 	switch (m_model) {
 	case MODEL::FULL: {
