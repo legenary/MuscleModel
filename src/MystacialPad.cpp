@@ -358,6 +358,10 @@ std::unique_ptr<Follicle>& MystacialPad::getFollicleByIndex(int idx) {
 	return m_follicleArray[idx];
 }
 
+std::unique_ptr<IntrinsicSlingMuscle>& MystacialPad::getISMByIndex(int idx) {
+	return m_ISMArray[idx];
+}
+
 bool MystacialPad::checkCreateMuscleFlag(MUSCLE mus) const {
 	return (m_parameter->FlagCreateMuscles & mus) == mus;
 }

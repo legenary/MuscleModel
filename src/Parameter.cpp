@@ -8,7 +8,7 @@ Parameter::Parameter() {
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / (btScalar) m_num_internal_step;
-	m_time_stop = 5.f;
+	m_time_stop = 0.1f;
 
 	inverse_fiber_query_rate = 1.0f / 60.0f;
 
@@ -16,11 +16,6 @@ Parameter::Parameter() {
 				// 1: specified inline debug drawing only
 				// 2: wire frame added
 				// 3: axis aligned bound box added
-
-	// contract
-	FlagContractMuscle = MUSCLE::ISM;
-	contract_range = 0.25;
-	contract_frequency = 1; // Hz
 	
 	//camera position
 	camPos[0] = 0;
@@ -33,7 +28,7 @@ Parameter::Parameter() {
 	// foillicle parameter
 	dir_follicle_pos_orient_len_vol = "../resources/follicle_pos_ypr_len_vol.csv";
 	dir_follicle_pos_orient_len_vol_reduced = "../resources/follicle_pos_ypr_len_vol_reduced.csv";
-	fol_radius = 0.15;		// Bullet unit: mm
+	fol_radius = 0.32;		// Bullet unit: mm, value from ARP
 	fol_density = 0.001;	// Bullet unit: g/mm^3
 
 	// mode
@@ -41,11 +36,19 @@ Parameter::Parameter() {
 	m_bending_model = BENDING_MODEL::DIHEDRAL_ANGLE;
 	FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS;
 
+	// contract
+	FlagContractMuscle = MUSCLE::ISM;
+	//FlagContractMuscle = MUSCLE::N | MUSCLE::M;
+	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
+
+	contract_range = 0.25;
+	contract_frequency = 1; // Hz
+	contract_count = 1;
+	muslce_activation_tau = 0.1; // activation time constant
+
 	switch (m_model) {
 	case MODEL::FULL: {
 		// layer tissue parameter
-		E_skin = 8000000;		// unit: Pa, do not change
-								// Skin's Young's Modulus is ~8MPa (Karimi and Navidbakhsh, 2015)
 		k_layer1 = 250;			// Bullet unit: 1e-3 (N/m)
 		k_layer2 = 500;
 		k_anchor = 250;			// k > 0 : soft anchor, springy linear and angular movement
@@ -78,15 +81,14 @@ Parameter::Parameter() {
 	case MODEL::TEST:
 	case MODEL::REDUCED: {
 		// layer tissue parameter
-		E_skin = 8000000;		// unit: Pa, do not change
 		k_layer1 = 25;			// Bullet unit: 1e-3 (N/m)
 		k_layer2 = 50;
-		k_anchor = 25;
+		k_anchor = 5;
 		zeta_tissue = 1.0;		// 1 = critically damped
 		fol_damping = 0.;
 
 		// muscle parameter reduced
-		btScalar f0 = 0.08;		// Bullet unit: 1e-6 (N), uN
+		btScalar f0 = 0.1;		// Bullet unit: 1e-6 (N), uN
 		f0_ISM = 20 * f0;
 		f0_nasolabialis = 25 * f0;
 		f0_maxillolabialis = 25 * f0;
@@ -95,6 +97,24 @@ Parameter::Parameter() {
 		f0_PIP = 4 * f0;
 		f0_PMI = 1 * f0;
 		f0_PM = 4 * f0;
+
+		//// layer tissue parameter
+		//k_layer1 = 25;			// Bullet unit: 1e-3 (N/m)
+		//k_layer2 = 50;
+		//k_anchor = 5;
+		//zeta_tissue = 1.0;		// 1 = critically damped
+		//fol_damping = 0.;
+
+		//// muscle parameter reduced
+		//btScalar f0 = 0.08;		// Bullet unit: 1e-6 (N), uN
+		//f0_ISM = 20 * f0;
+		//f0_nasolabialis = 25 * f0;
+		//f0_maxillolabialis = 25 * f0;
+		//f0_NS = 1 * f0;
+		//f0_PMS = 1 * f0;
+		//f0_PIP = 4 * f0;
+		//f0_PMI = 1 * f0;
+		//f0_PM = 4 * f0;
 		break;
 	}
 	}

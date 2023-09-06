@@ -173,7 +173,41 @@ btScalar interp1(std::vector<btScalar>& xData, std::vector<btScalar>& yData, btS
 	return yL + (yR - yL) / (xR - xL)*(x - xL);
 }
 
-std::vector<std::vector<btScalar>> S_dumpster::fiber_info;
-std::vector<btScalar> S_dumpster::hamiltonian;
+void S_dumpster::Monitor(const void* address, int nData, const std::string& name, int nFrame) {
+	content_address.push_back(address);
+	content_element_count.push_back(nData);
+	content_filename.push_back(name);
+
+	std::vector<std::vector<btScalar>> vec;
+	vec.reserve(nFrame);
+	content_data.push_back(vec);
+
+	numContent++;
+}
+
+void S_dumpster::Update() {
+	for (int i = 0; i < numContent ; i++){
+		std::vector<btScalar> data;
+		data.reserve(content_element_count[i]);
+		for (int n = 0; n < content_element_count[i]; n++) {
+			data.push_back(*(static_cast<const btScalar*>(content_address[i]) + n));
+		}
+		content_data[i].push_back(data);
+	}
+}
+
+void S_dumpster::Output(const std::string& output_path) {
+	//write_csv_float(param->output_path, "Hamiltonian.csv", S_dumpster::Get().hamiltonian);
+	for (int i = 0; i < numContent; i++) {
+		write_csv_float(output_path, content_filename[i], content_data[i]);
+	}
+}
+
 std::vector<std::vector<btScalar>> S_dumpster::test_info;
+
+std::vector<const void*> S_dumpster::content_address;
+std::vector<int> S_dumpster::content_element_count;
+std::vector<std::string> S_dumpster::content_filename;
+std::vector<std::vector<std::vector<btScalar>>> S_dumpster::content_data;
+int S_dumpster::numContent = 0;
 

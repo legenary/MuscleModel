@@ -55,9 +55,14 @@ btScalar interp1(std::vector<btScalar>& xData, std::vector<btScalar>& yData, btS
 // test outputer singelton
 class S_dumpster {
 private:
-	S_dumpster() {}
+	static std::vector<const void*> content_address;
+	static std::vector<int> content_element_count;
+	static std::vector<std::string> content_filename;
+	static std::vector<std::vector<std::vector<btScalar>>> content_data;
+	static int numContent;
 
 public:
+	S_dumpster() {}
 	S_dumpster(S_dumpster const&) = delete;
 	void operator=(S_dumpster const&) = delete;
 
@@ -66,8 +71,19 @@ public:
 		return *s_dumpster;
 	}
 
-	static std::vector<std::vector<btScalar>> fiber_info;
-	static std::vector<btScalar> hamiltonian;
+	/* After physics is initialized, pass in the parameter address, number of parameters (if vector), 
+	 to be monitored in the Update() function. Also pass in the output file name*/
+	static void Monitor(const void* address, int nData, const std::string& name, int nFrame);
+
+	/* Each frame, fill content with data stored in the address. */
+	static void Update();
+
+	/* Output filled content to specified path and filenames. */
+	static void Output(const std::string& output_path);
+	
+
+	//static std::vector<std::vector<btScalar>> fiber_info;
+	//static std::vector<btScalar> hamiltonian;
 	static std::vector<std::vector<btScalar>> test_info;
 
 };

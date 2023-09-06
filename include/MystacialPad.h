@@ -59,8 +59,10 @@ public:
 	
 	int getNumFollicles() const;
 	std::unique_ptr<Follicle>& getFollicleByIndex(int idx);
+	std::unique_ptr<IntrinsicSlingMuscle>& getISMByIndex(int idx);
 
 	btScalar getHamiltonian() const { return m_Hamiltonian; }
+	btScalar& getHamiltonian() { return m_Hamiltonian; }
 
 	//int getLayer1Tissue() const;
 	//int getLayer2Tissue() const;

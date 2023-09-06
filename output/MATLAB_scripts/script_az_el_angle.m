@@ -9,4 +9,4 @@ path = GetFullPath('../bundle_reduced');
 figure; hold on;
 plot(az);
 
-plot(el);
+% plot(el);

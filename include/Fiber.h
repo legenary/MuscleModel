@@ -26,7 +26,9 @@ protected:
 	btScalar m_restLengthNoAvtivation;
 	btScalar m_length, m_prev_length;		// fiber length
 	btScalar m_velocity;					// fiber lengthening/shortening velocity
-	btScalar m_activation;					// activation level
+	btScalar m_excitation;					// neural excitation, between 0 and 1
+	btScalar m_activation;					// muscle activation level
+	btScalar m_activation_tau;
 
 	btVector3 m_force, m_prev_force;
 
@@ -51,8 +53,8 @@ public:
 	void debugDraw(btVector3 clr = btVector3(0., 0., 0.), bool dynamic = false);
 
 	myGeneric6DofMuscleConstraint* getConstraint() const;
-	btScalar getRestLength() const;
-	btScalar getLength() const;
+	const btScalar& getRestLength() const;
+	const btScalar& getLength() const;
 	btDynamicsWorld* getWorld();
 
 	void contractTo(btScalar ratio);
@@ -73,7 +75,7 @@ private:
 		{-1.0,	-0.8,	-0.6,	-0.5,	-0.4,	-0.3,	-0.2,	-0.1,	-0.05,	0.0,	0.05,	0.1,	0.2,	1.0},
 		{0.0,	0.04,	0.11,	0.16,	0.24,	0.34,	0.46,	0.64,	0.8,	1.0,	1.16,	1.23,	1.28,	1.4}
 	};
-	btScalar ratio2activation(btScalar ratio);
+	btScalar ratio2excitation(btScalar ratio);
 	
 
 

@@ -5,7 +5,7 @@
 #include "Instrumentor.h"
 #include "Utility.h"
 #include "MystacialPad.h"
-#include "Fiber.h"
+#include "IntrinsicMuscle.h"
 #include "Tissue.h"
 #include "Follicle.h"
 #include "myGeneric6DofMuscleConstraint.h"
@@ -28,18 +28,12 @@ void Simulation::stepSimulation(float deltaTime) {
 
 	if (m_mystacialPad && (param->m_time_stop == 0 || m_time < param->m_time_stop)) {
 
-		// set up output options
-		if (param->OUTPUT) {
-			m_mystacialPad->bufferFolPos(output_fol_pos);
-			S_dumpster::Get().hamiltonian.push_back(m_mystacialPad->getHamiltonian());
-		}
-
 		// contraction/retraction
 		int numStepToChangeState = param->getFPS() / param->contract_frequency / 2.0f;
-		muscleContractionStateChanged = (m_step - 1) % numStepToChangeState == 0;
+		flagMuscleContractionStateChange = (m_step - 1) % numStepToChangeState == 0;
 
 		static btScalar contractTo = 1 - param->contract_range;
-		if (muscleContractionStateChanged) {
+		if (flagMuscleContractionStateChange && param->contract_count > 0) {
 			m_mystacialPad->contractMuscle(MUSCLE::ISM, contractTo);
 			m_mystacialPad->contractMuscle(MUSCLE::N, contractTo);
 			m_mystacialPad->contractMuscle(MUSCLE::M, contractTo);
@@ -49,6 +43,7 @@ void Simulation::stepSimulation(float deltaTime) {
 			m_mystacialPad->contractMuscle(MUSCLE::PIP, contractTo);
 			m_mystacialPad->contractMuscle(MUSCLE::PM, contractTo);
 			contractTo = 2 - param->contract_range - contractTo;
+			param->contract_count -= 0.5;
 		}
 
 		// last step: step simulation
@@ -64,6 +59,13 @@ void Simulation::stepSimulation(float deltaTime) {
 
 		//// collision listener
 		updateCollisionListener();
+
+		// set up output options
+		if (param->OUTPUT) {
+			m_mystacialPad->bufferFolPos(output_fol_pos);
+			S_dumpster::Get().Update();
+			//S_dumpster::Get().hamiltonian.push_back(m_mystacialPad->getHamiltonian());
+		}
 
 		// debug draw
 		if (param->DEBUG) {
@@ -413,20 +415,20 @@ void Simulation::postInitPhysics() {
 	// initialize Singleton data member for output
 	{
 		std::vector<btScalar> vec;
-		int n = 7;
-		S_dumpster::Get().fiber_info.reserve(n);
-		for (int i = 0; i < n; i++) {
-			S_dumpster::Get().fiber_info.push_back(vec);
-			S_dumpster::Get().fiber_info[i].reserve(total_frame);
-		}
 
 		int m = 1;
-		S_dumpster::Get().fiber_info.reserve(m);
+		S_dumpster::Get().test_info.reserve(m);
 		for (int i = 0; i < m; i++) {
 			S_dumpster::Get().test_info.push_back(vec);
 			S_dumpster::Get().test_info[i].reserve(total_frame);
 		}
-		S_dumpster::Get().hamiltonian.reserve(total_frame);
+
+		// to monitor these variables: pass in its address, number of elements following that address, specify the filename
+		// examples:
+		S_dumpster::Get().Monitor(&(m_mystacialPad->getHamiltonian()), 1, "Hamiltonian.csv", total_frame);
+		S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(0)->getLength()), 1, "ISM_0.csv", total_frame);
+		S_dumpster::Get().Monitor(&(m_mystacialPad->getFollicleByIndex(0)->getTopLocation()), 3, "Fol00_top.csv", total_frame);
+		
 	}
 
 	if (m_mystacialPad) {
@@ -529,6 +531,17 @@ void Simulation::initParameter(Parameter* parameter) {
 
 void Simulation::internalWriteOutput() {
 	if (m_mystacialPad && param->getArrayModel() != MODEL::TEST) {
+		// clear the directory
+		for (const auto& entry : std::filesystem::directory_iterator(param->output_path)) {
+			try {
+				std::filesystem::remove_all(entry.path());
+			}
+			catch (...) {
+				// mp4 will throw an exception because it is open
+				// do nothing for mp4 file
+			}
+		}
+
 		std::cout << "Generating output csv file...\n";
 
 		int nFol = m_mystacialPad->getNumFollicles();
@@ -541,8 +554,7 @@ void Simulation::internalWriteOutput() {
 		}
 		write_txt(param->output_path, "parameter.txt", parameter_string);
 
-		write_csv_float(param->output_path, "Hamiltonian.csv", S_dumpster::Get().hamiltonian);
-		write_csv_float(param->output_path, "fiber_info.csv", S_dumpster::Get().fiber_info);
+		S_dumpster::Get().Output(param->output_path);
 
 		std::cout << "Files saved.\n";
 	}

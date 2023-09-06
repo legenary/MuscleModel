@@ -12,6 +12,7 @@ Fiber::Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 	, m_f0(f0)
 	, m_idx(idx)
 	, m_velocity(0)
+	, m_excitation(0)
 	, m_activation(0)
 	, m_Hamiltonian(0) {
 	m_constraint = new myGeneric6DofMuscleConstraint(*rbA, *rbB, frameInA, frameInB, true);
@@ -52,10 +53,15 @@ void Fiber::init() {
 	m_prev_force = btVector3(0., 0., 0.);
 
 	m_constraint->enableFeedback(true);
+
+	m_activation_tau = m_sim->getParameter()->muslce_activation_tau;
 }
 
 //*This is run per fiber query (60Hz)
 void Fiber::update() {
+	// update activation based on neural excitation
+	btScalar da = (m_excitation - m_activation) / m_activation_tau;
+	m_activation += da * m_sim->getParameter()->m_time_step;
 
 	// for Fiber: eq points are used to calculate the force direction
 	// but no longer used to update forces using Hooke's Law
@@ -103,29 +109,29 @@ void Fiber::update() {
 			* dir;
 	m_constraint->updateForce(m_force);
 
-	// debug, output the 12th intrinsic muscle info (full array)
-	//					 2nd  intrinsic muscle info (reduced array)
-	if (m_idx == 2) {
-		S_dumpster::Get().fiber_info[0].push_back(m_restLength);
-		S_dumpster::Get().fiber_info[1].push_back(m_length);
-		S_dumpster::Get().fiber_info[2].push_back(m_force.length());		// instructed force
-		S_dumpster::Get().fiber_info[3].push_back(this_fPE);
-		S_dumpster::Get().fiber_info[4].push_back(this_fL);
-		S_dumpster::Get().fiber_info[5].push_back(this_fV);
+	//// debug, output the 12th intrinsic muscle info (full array)
+	////					 2nd  intrinsic muscle info (reduced array)
+	//if (m_idx == 2) {
+	//	S_dumpster::Get().fiber_info[0].push_back(m_restLength);
+	//	S_dumpster::Get().fiber_info[1].push_back(m_length);
+	//	S_dumpster::Get().fiber_info[2].push_back(m_force.length());		// instructed force
+	//	S_dumpster::Get().fiber_info[3].push_back(this_fPE);
+	//	S_dumpster::Get().fiber_info[4].push_back(this_fL);
+	//	S_dumpster::Get().fiber_info[5].push_back(this_fV);
 
-		btScalar internalImpusle = m_constraint->getAppliedImpulse();	// actual impulse applied for each internal step
-		btScalar fixedTimeStep = getWorld()->getSolverInfo().m_timeStep;
-		S_dumpster::Get().fiber_info[6].push_back(internalImpusle / fixedTimeStep);	// actual force
+	//	btScalar internalImpusle = m_constraint->getAppliedImpulse();	// actual impulse applied for each internal step
+	//	btScalar fixedTimeStep = getWorld()->getSolverInfo().m_timeStep;
+	//	S_dumpster::Get().fiber_info[6].push_back(internalImpusle / fixedTimeStep);	// actual force
 
-		//btScalar b = getWorld()->getDispatchInfo().m_stepCount;
-		//btJointFeedback* jfb = m_constraint->getJointFeedback();
-		//btVector3 forceA = jfb->m_appliedForceBodyA;
-		//S_dumpster::Get()->fiber_info[6].push_back(forceA.length());
-	}
+	//	//btScalar b = getWorld()->getDispatchInfo().m_stepCount;
+	//	//btJointFeedback* jfb = m_constraint->getJointFeedback();
+	//	//btVector3 forceA = jfb->m_appliedForceBodyA;
+	//	//S_dumpster::Get()->fiber_info[6].push_back(forceA.length());
+	//}
 	
 	// update hamiltonian as the potential energy, the potential enery is calcualted as the work done by the force
 	// the potential enery is cleared every contraction and relaxation
-	if (m_sim->muscleContractionStateChanged) {
+	if (m_sim->flagMuscleContractionStateChange) {
 		m_Hamiltonian = 0;
 	}
 	m_Hamiltonian += (m_prev_force.length() + m_force.length()) * 0.5 * btFabs(m_length - m_prev_length);
@@ -142,7 +148,7 @@ void Fiber::debugDraw(btVector3 clr, bool dynamic) {
 		getWorld()->getDebugDrawer()->drawLine(TsP.getOrigin(), m_eq, clr);
 }
 
-btScalar Fiber::getRestLength() const {
+const btScalar& Fiber::getRestLength() const {
 	return m_restLength;
 }
 
@@ -150,8 +156,10 @@ void Fiber::contractTo(btScalar ratio) {
 	if (ratio < 0.5 || ratio > 1.0) {
 		std::cerr << "Invalid muscle contraction ratio. Should be between 0.6 and 1.0.\n";
 	}
-	m_activation = ratio2activation(ratio);
+	m_excitation = ratio2excitation(ratio); // old code
 	setRestLengthRatio(ratio);
+
+
 
 	// debug
 	/*static int cc = 0;
@@ -163,7 +171,10 @@ void Fiber::contractTo(btScalar ratio) {
 	}*/
 }
 
-btScalar Fiber::ratio2activation(btScalar ratio) {
+btScalar Fiber::ratio2excitation(btScalar ratio) {
+	// this is for old method where muscle activation is associated with ratio
+	// and because the (instructed) ratio usually changes suddenly
+	// the muscle activation will also change suddenly
 	if (ratio == 1) { return 0; }
 	return (1.0 - ratio) / 0.5;
 }
@@ -172,7 +183,7 @@ void Fiber::setRestLengthRatio(const btScalar ratio) {
 	m_restLength = ratio * m_restLengthNoAvtivation;
 }
 
-btScalar Fiber::getLength() const {
+const btScalar& Fiber::getLength() const {
 	return m_length;
 }
 

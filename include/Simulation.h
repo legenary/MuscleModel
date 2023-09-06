@@ -59,7 +59,7 @@ public:
 
 	inline Parameter* getParameter() const { return param; }
 
-	bool muscleContractionStateChanged = false;
+	bool flagMuscleContractionStateChange = false;
 
 // test
 private:

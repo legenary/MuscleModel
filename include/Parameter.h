@@ -49,6 +49,7 @@ public:
 	uint8_t FlagContractMuscle;
 	btScalar contract_range;
 	btScalar contract_frequency;
+	btScalar contract_count;
 
 	btScalar camPos[3];
 	btScalar camDist;
@@ -89,6 +90,7 @@ public:
 	// contraction
 	std::string dir_intrinsic_sling_muscle_contraction_trajectory;
 	std::vector<std::vector<float>> INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY;
+	btScalar muslce_activation_tau;
 
 	// M.nasolabialis
 	std::string dir_nasolabialis_node_pos;
