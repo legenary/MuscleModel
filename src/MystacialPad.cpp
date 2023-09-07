@@ -365,3 +365,11 @@ std::unique_ptr<IntrinsicSlingMuscle>& MystacialPad::getISMByIndex(int idx) {
 bool MystacialPad::checkCreateMuscleFlag(MUSCLE mus) const {
 	return (m_parameter->FlagCreateMuscles & mus) == mus;
 }
+
+void MystacialPad::applyAdditionalDamping() {
+	for (auto& fol : m_follicleArray) {
+		btVector3 linear_vel = fol->getBody()->getLinearVelocity();
+		//fol->getBody()->setLinearVelocity(linear_vel * btPow(btScalar(1) - m_parameter->fol_damping, m_parameter->m_time_step));
+		fol->getBody()->setLinearVelocity(linear_vel * (btScalar(1) - m_parameter->fol_damping));
+	}
+}

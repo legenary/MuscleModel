@@ -46,6 +46,9 @@ void Simulation::stepSimulation(float deltaTime) {
 			param->contract_count -= 0.5;
 		}
 
+		// update constraint physics options
+		m_mystacialPad->update(deltaTime);
+
 		// last step: step simulation
 		{
 			PROFILE_SCOPE("m_dynamicsWorld->StepSimulation()");
@@ -54,8 +57,10 @@ void Simulation::stepSimulation(float deltaTime) {
 				param->m_internal_time_step);			// fixed simulation sub time step
 		}
 
-		// update constraint physics options
-		m_mystacialPad->update(deltaTime);
+		// post step simulation: apply additional damping
+		{
+			applyAdditionalDamping();
+		}
 
 		//// collision listener
 		updateCollisionListener();
@@ -426,8 +431,14 @@ void Simulation::postInitPhysics() {
 		// to monitor these variables: pass in its address, number of elements following that address, specify the filename
 		// examples:
 		S_dumpster::Get().Monitor(&(m_mystacialPad->getHamiltonian()), 1, "Hamiltonian.csv", total_frame);
-		S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(0)->getLength()), 1, "ISM_0.csv", total_frame);
 		S_dumpster::Get().Monitor(&(m_mystacialPad->getFollicleByIndex(0)->getTopLocation()), 3, "Fol00_top.csv", total_frame);
+
+		S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getLength()), 1, "ISM_3_length.csv", total_frame);
+		S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getRestLength()), 1, "ISM_3_rest_length.csv", total_frame);
+		S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getForce()), 1, "ISM_3_force.csv", total_frame);
+		S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getForceHillModelComps()), 3, "ISM_3_hill_model_comps.csv", total_frame);
+		S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getExcitation()), 1, "ISM_3_excitation.csv", total_frame);
+		S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getActivation()), 1, "ISM_3_activation.csv", total_frame);
 		
 	}
 
@@ -558,4 +569,8 @@ void Simulation::internalWriteOutput() {
 
 		std::cout << "Files saved.\n";
 	}
+}
+
+void Simulation::applyAdditionalDamping() {
+	m_mystacialPad->applyAdditionalDamping();
 }

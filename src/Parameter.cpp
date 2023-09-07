@@ -8,7 +8,7 @@ Parameter::Parameter() {
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / (btScalar) m_num_internal_step;
-	m_time_stop = 0.1f;
+	m_time_stop = 2.5f;
 
 	inverse_fiber_query_rate = 1.0f / 60.0f;
 
@@ -43,8 +43,8 @@ Parameter::Parameter() {
 
 	contract_range = 0.25;
 	contract_frequency = 1; // Hz
-	contract_count = 1;
-	muslce_activation_tau = 0.1; // activation time constant
+	contract_count = 0.5;
+	muslce_activation_tau = 0.02; // activation time constant
 
 	switch (m_model) {
 	case MODEL::FULL: {
@@ -63,7 +63,7 @@ Parameter::Parameter() {
 								// zeta = 1: critically damped
 								// zeta < 1: underdamped
 								// reference value: 0.01
-		fol_damping = 1;		// damping for rigid body is clamped between 0 and 1
+		fol_damping = 0;		// damping for rigid body is clamped between 0 and 1
 								// default: 0, no damping
 								// dampnig is implemented in tissue
 		// muscle parameter
@@ -85,18 +85,18 @@ Parameter::Parameter() {
 		k_layer2 = 50;
 		k_anchor = 5;
 		zeta_tissue = 1.0;		// 1 = critically damped
-		fol_damping = 0.;
+		fol_damping = 0.4;
 
 		// muscle parameter reduced
-		btScalar f0 = 0.1;		// Bullet unit: 1e-6 (N), uN
+		btScalar f0 = 0.4;		// Bullet unit: 1e-6 (N), uN
 		f0_ISM = 20 * f0;
 		f0_nasolabialis = 25 * f0;
 		f0_maxillolabialis = 25 * f0;
 		f0_NS = 1 * f0;
 		f0_PMS = 1 * f0;
-		f0_PIP = 4 * f0;
+		f0_PIP = 4 * f0; // red lower 
 		f0_PMI = 1 * f0;
-		f0_PM = 4 * f0;
+		f0_PM = 4 * f0; // yellow lower
 
 		//// layer tissue parameter
 		//k_layer1 = 25;			// Bullet unit: 1e-3 (N/m)

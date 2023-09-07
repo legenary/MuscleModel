@@ -14,7 +14,8 @@ Fiber::Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 	, m_velocity(0)
 	, m_excitation(0)
 	, m_activation(0)
-	, m_Hamiltonian(0) {
+	, m_Hamiltonian(0) 
+	, m_force_magnitude(0) {
 	m_constraint = new myGeneric6DofMuscleConstraint(*rbA, *rbB, frameInA, frameInB, true);
 	init();
 };
@@ -51,6 +52,7 @@ void Fiber::init() {
 	m_prev_length = m_length;
 	m_restLengthNoAvtivation = m_length;
 	m_prev_force = btVector3(0., 0., 0.);
+	m_hill_model_components = btVector3(0., 0., 0.);
 
 	m_constraint->enableFeedback(true);
 
@@ -104,9 +106,11 @@ void Fiber::update() {
 	btScalar this_fL = interp1(fL[0], fL[1], mid_length / m_restLength);
 	btScalar this_fV = interp1(fV[0], fV[1], vLength);
 
+	m_hill_model_components = { this_fPE, this_fL, this_fV };
 	m_force = m_f0
 			* (this_fPE + m_activation * this_fL * this_fV)
 			* dir;
+	m_force_magnitude = m_force.length();
 	m_constraint->updateForce(m_force);
 
 	//// debug, output the 12th intrinsic muscle info (full array)
@@ -148,10 +152,6 @@ void Fiber::debugDraw(btVector3 clr, bool dynamic) {
 		getWorld()->getDebugDrawer()->drawLine(TsP.getOrigin(), m_eq, clr);
 }
 
-const btScalar& Fiber::getRestLength() const {
-	return m_restLength;
-}
-
 void Fiber::contractTo(btScalar ratio) {
 	if (ratio < 0.5 || ratio > 1.0) {
 		std::cerr << "Invalid muscle contraction ratio. Should be between 0.6 and 1.0.\n";
@@ -183,8 +183,24 @@ void Fiber::setRestLengthRatio(const btScalar ratio) {
 	m_restLength = ratio * m_restLengthNoAvtivation;
 }
 
+
+const btScalar& Fiber::getRestLength() const {
+	return m_restLength;
+}
 const btScalar& Fiber::getLength() const {
 	return m_length;
+}
+const btScalar& Fiber::getForce() const {
+	return m_force_magnitude;
+}
+const btVector3& Fiber::getForceHillModelComps() const {
+	return m_hill_model_components;
+}
+const btScalar& Fiber::getExcitation() const {
+	return m_excitation;
+}
+const btScalar& Fiber::getActivation() const {
+	return m_activation;
 }
 
 myGeneric6DofMuscleConstraint* Fiber::getConstraint() const {

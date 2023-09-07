@@ -75,7 +75,7 @@ public:
 		return &(m_sim->m_collisionShapes);
 	}
 	
-	
+	void applyAdditionalDamping();
 
 };
 

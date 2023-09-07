@@ -31,6 +31,8 @@ protected:
 	btScalar m_activation_tau;
 
 	btVector3 m_force, m_prev_force;
+	btVector3 m_hill_model_components;
+	btScalar m_force_magnitude;
 
 	btScalar m_Hamiltonian;
 
@@ -55,6 +57,10 @@ public:
 	myGeneric6DofMuscleConstraint* getConstraint() const;
 	const btScalar& getRestLength() const;
 	const btScalar& getLength() const;
+	const btScalar& getForce() const;
+	const btVector3& getForceHillModelComps() const;
+	const btScalar& getExcitation() const;
+	const btScalar& getActivation() const;
 	btDynamicsWorld* getWorld();
 
 	void contractTo(btScalar ratio);
@@ -68,8 +74,8 @@ private:
 		{0.0,	0.01,	0.04,	0.11,	0.26,	0.45,	0.7,	1.0,	1.3,	1.6,	2.0}
 	};
 	std::vector<std::vector<btScalar>> fL{
-		{0.5,	0.95,	1.05,	1.1,	1.8},
-		{0.0,	1.0,	1.0,	0.96,	0.0}
+		{0.5,	0.7, 0.95,	1.05,	1.1,	1.8},
+		{0.0,	0.75, 1.0,	1.0,	0.96,	0.0}
 	};
 	std::vector<std::vector<btScalar>> fV{
 		{-1.0,	-0.8,	-0.6,	-0.5,	-0.4,	-0.3,	-0.2,	-0.1,	-0.05,	0.0,	0.05,	0.1,	0.2,	1.0},

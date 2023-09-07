@@ -30,6 +30,7 @@ private:
 	void postInitPhysics();
 
 	void updateCollisionListener();
+	void applyAdditionalDamping();
 
 public:
 	Simulation(struct GUIHelperInterface* helper)

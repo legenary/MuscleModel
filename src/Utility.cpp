@@ -24,6 +24,8 @@ btRigidBody* createDynamicBody(const float mass, const btTransform& startTransfo
 	}
 	
 	btRigidBody* body = new btRigidBody(cInfo);
+
+	//body->applyDamping()
 	
 	return body;
 }
