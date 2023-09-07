@@ -57,10 +57,10 @@ void Simulation::stepSimulation(float deltaTime) {
 				param->m_internal_time_step);			// fixed simulation sub time step
 		}
 
-		// post step simulation: apply additional damping
-		{
-			applyAdditionalDamping();
-		}
+		//// post step simulation: apply additional damping
+		//{
+		//	applyAdditionalDamping();
+		//}
 
 		//// collision listener
 		updateCollisionListener();
@@ -520,8 +520,10 @@ void Simulation::initParameter(Parameter* parameter) {
 		"FPS: %dHz\nSimulation internal step: %d\n"
 		"Muscle query rate: %.1fHz\n"
 		"Contraction ratio: %.2f\n"
-		"Tissue damping ratio = %.3f\n"
-		"k_layer1=%.6fN/m\nk_layer2=%.6fN/m\nk_anchor=%.6fN/m\n\n"
+		"Tissue damping ratio zeta = %.3f\n"
+		"Anchor damping ratio zeta (translational) = %.3f\n"
+		"Anchor damping ratio zeta (torsional) = %.3f\n"
+		"k_layer1=%.6fN/m\nk_layer2=%.6fN/m\n\n"
 		"fo unit: %.6fN\nf0_intrinsic = %.6fN\n"
 		"f0_nasolabialis(N)=%.6fN\nf0_maxillolabialis(M)=%.6fN\n"
 		"f0_nasolabialis_superficialis(NS)=%.6fN\n"
@@ -530,8 +532,9 @@ void Simulation::initParameter(Parameter* parameter) {
 		param->getFPS(), param->m_num_internal_step,
 		1 / param->inverse_fiber_query_rate,
 		param->contract_range,
-		param->zeta_tissue,
-		param->k_layer1 * 0.001, param->k_layer2 * 0.001, param->k_anchor * 0.001,
+		param->zeta_layer,
+		param->zeta_anchor_translational, param->zeta_anchor_torsional,
+		param->k_layer1 * 0.001, param->k_layer2 * 0.001,
 		param->f0_ISM * 0.000001 / 20,
 		param->f0_ISM * 0.000001,
 		param->f0_nasolabialis * 0.000001, param->f0_maxillolabialis * 0.000001,

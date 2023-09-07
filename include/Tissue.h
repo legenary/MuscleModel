@@ -12,8 +12,10 @@ class Tissue {
 protected:
 	Simulation* m_sim;
 
-	btScalar m_k;
-	btScalar m_damping;
+	btScalar m_k_translational;
+	btScalar m_k_torsional;
+	btScalar m_damping_translational;
+	btScalar m_damping_torsional;
 	myTissueType m_type;
 
 	btGeneric6DofSpring2Constraint* m_constraint;
@@ -33,9 +35,9 @@ public:
 	//Tissue(btScalar k, btScalar damping);
 	Tissue(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 		btTransform& frameInA, btTransform& frameInB,
-		btScalar k, btScalar zeta);
+		btScalar k_trans, btScalar k_tor, btScalar zeta_trans, btScalar zeta_tor);
 	Tissue(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
-		btScalar k, btScalar zeta);
+		btScalar k_trans, btScalar k_tor, btScalar zeta_trans, btScalar zeta_tor);
 	// disable copy constructor (override if needed in the future)
 	Tissue(const Tissue&) = delete;
 	Tissue& operator=(Tissue const&) = delete;

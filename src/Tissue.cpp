@@ -5,20 +5,26 @@
 
 Tissue::Tissue(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,
 	btTransform& frameInA, btTransform& frameInB, 
-	btScalar k, btScalar zeta)
-	: m_sim(sim), m_k(k), m_type(myTissueType::between), m_rbA(rbA), m_rbB(rbB) {
+	btScalar k_trans, btScalar k_tor, btScalar zeta_trans, btScalar zeta_tor)
+	: m_sim(sim), m_k_translational(k_trans), m_k_torsional(k_tor)
+	, m_type(myTissueType::between), m_rbA(rbA), m_rbB(rbB) {
 
-	m_damping = 2.0f * btSqrt((m_rbB->getMass() + m_rbA->getMass())/2.0f * m_k) * zeta;
+	m_damping_translational = 2.0f * btSqrt((m_rbB->getMass() + m_rbA->getMass())/2.0f * m_k_translational) * zeta_trans;
+	m_damping_torsional = 0.0f; // not used
+
 	//m_constraint = new btGeneric6DofSpringConstraint(*rbA, *rbB, frameInA, frameInB, true);
 	m_constraint = new btGeneric6DofSpring2Constraint(*rbA, *rbB, frameInA, frameInB);	// btGeneric6DofSpring2Constraint is preferred for engineering solution
 	init();
 };
 
 Tissue::Tissue(Simulation* sim, btRigidBody* rbB, btTransform& frameInB,
-	btScalar k, btScalar zeta)
-	: m_sim(sim), m_k(k), m_type(myTissueType::anchor), m_rbB(rbB) {
+	btScalar k_trans, btScalar k_tor, btScalar zeta_trans, btScalar zeta_tor)
+	: m_sim(sim), m_k_translational(k_trans), m_k_torsional(k_tor)
+	, m_type(myTissueType::anchor), m_rbB(rbB) {
 
-	m_damping = 2.0f * btSqrt(m_rbB->getMass() * m_k) * zeta;
+	m_damping_translational = 2.0f * btSqrt(m_rbB->getMass() * m_k_translational) * zeta_trans;		// damping for anchor
+	m_damping_torsional = 2.0f * btSqrt(m_rbB->getMass() * m_k_torsional) * zeta_tor;			// damping for anchor
+
 	//m_constraint = new btGeneric6DofSpringConstraint(*rbB, frameInB, true);
 	m_constraint = new btGeneric6DofSpring2Constraint(*rbB, frameInB);	// btGeneric6DofSpring2Constraint is preferred for engineering solution
 	init();
@@ -39,9 +45,9 @@ void Tissue::init() {
 	// index 0, 1, 2: translational dimensions
 	for (int i = 0; i < 3; i++) {
 		m_constraint->enableSpring(i, true);
-		m_constraint->setStiffness(i, m_k);
+		m_constraint->setStiffness(i, m_k_translational);
 		// viscous damping: m_damping = zeta * 2 * sqrt(m * k)
-		m_constraint->setDamping(i, m_damping);
+		m_constraint->setDamping(i, m_damping_translational);
 		// set m_equilibriumPoint[index] = distance from A to B
 		m_constraint->setEquilibriumPoint(i);
 	}
@@ -64,13 +70,13 @@ void Tissue::init() {
 	m_length = m_restLength;
 	m_restLengthDefault = m_restLength;
 
+	// torsional stiffness and damping from anchors
 	if (m_type == myTissueType::anchor) {
 		// the effect torsional damping is to make the system more prune to stablility
-		// TODO: remove the damping effect from torsional anchor, to the follice body itself
 		for (int i = 3; i < 6; i++) {
 			m_constraint->enableSpring(i, true);
-			m_constraint->setStiffness(i, m_k / 10);
-			m_constraint->setDamping(i, m_damping);
+			m_constraint->setStiffness(i, m_k_torsional);
+			m_constraint->setDamping(i, m_damping_torsional);
 			m_constraint->setEquilibriumPoint(i);   // rest length in three dimension in body1 frame, needs update in stepSimulation
 		}
 	}
@@ -112,7 +118,7 @@ void Tissue::update() {
 
 	// calculate Hamiltonian as potential energy
 	btScalar dx = m_length - m_restLength;
-	m_Hamiltonian = 0.5 * m_k * dx * dx;
+	m_Hamiltonian = 0.5 * m_k_translational * dx * dx;
 
 }
 

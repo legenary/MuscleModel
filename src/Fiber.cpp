@@ -153,13 +153,11 @@ void Fiber::debugDraw(btVector3 clr, bool dynamic) {
 }
 
 void Fiber::contractTo(btScalar ratio) {
-	if (ratio < 0.5 || ratio > 1.0) {
-		std::cerr << "Invalid muscle contraction ratio. Should be between 0.6 and 1.0.\n";
-	}
+	// contract range should be between 0.7 and 1.0.
+	ensure(ratio >= 0.7 && ratio <= 1.0);
+	
 	m_excitation = ratio2excitation(ratio); // old code
 	setRestLengthRatio(ratio);
-
-
 
 	// debug
 	/*static int cc = 0;
@@ -176,7 +174,7 @@ btScalar Fiber::ratio2excitation(btScalar ratio) {
 	// and because the (instructed) ratio usually changes suddenly
 	// the muscle activation will also change suddenly
 	if (ratio == 1) { return 0; }
-	return (1.0 - ratio) / 0.5;
+	return (1.0 - ratio) / 0.3;
 }
 
 void Fiber::setRestLengthRatio(const btScalar ratio) {

@@ -21,8 +21,8 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 	nNodes = NODE_POS.size();
 	for (int i = 0; i < nNodes; i++) {
 		btTransform t = createTransform(btVector3(NODE_POS[i][0], NODE_POS[i][1], NODE_POS[i][2]));
-		btCollisionShape* s = new btSphereShape((anchorNodeIdx.count(i)) ? 0.1 : 0.01);
-		btScalar mass = (anchorNodeIdx.count(i)) ? 0. : 0.001 /*node mass*/;
+		btCollisionShape* s = new btSphereShape((anchorNodeIdx.count(i)) ? 0.1 : 0.01 /*radius*/);
+		btScalar mass = (anchorNodeIdx.count(i)) ? 0. : 0.01 /*node mass. Mass of follicle is ~0.001g*/;
 		btRigidBody* b = createDynamicBody(mass, t, s, 0 /*no damping*/);
 		m_nodes.push_back(b);
 		getWorld()->addRigidBody(b, COL_EXT_MUS, extMusCollideWith);
@@ -30,7 +30,8 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 		// add anchor tissue to the anchor nodes
 		// (attach end of muscle to skull/cartilage)
 		if (anchorNodeIdx.count(i)) {
-			Tissue* anchor = new Tissue(m_sim, m_nodes[i], createTransform(), m_parameter->k_anchor, m_parameter->zeta_tissue);	//this is a linear + torsional spring
+			Tissue* anchor = new Tissue(m_sim, m_nodes[i], createTransform(), 
+				m_parameter->k_anchor_translational, 0.0f /*no torsional*/, m_parameter->zeta_anchor_translational, 0.0f /*no torsional*/);	//this is a linear spring only
 			getWorld()->addConstraint(anchor->getConstraint(), true); // disable collision
 		}
 	}
@@ -62,7 +63,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 				btTransform trans = createTransform(btVector3(insertion_height, 0., 0.));
 				Tissue* tissue = new Tissue(m_sim, 
 					node, body, createTransform(), trans, 
-					m_parameter->k_layer1, m_parameter->zeta_tissue);
+					m_parameter->k_layer1, 0.0f /*no torsional*/, m_parameter->zeta_layer, 0.0f /*no torsional*/);
 				getWorld()->addConstraint(tissue->getConstraint(), true);
 				m_insertionPieces.push_back(tissue);
 			}

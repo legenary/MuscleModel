@@ -64,18 +64,22 @@ public:
 	btScalar fol_density;
 	btScalar fol_damping;
 
-	// layer/spring parameter
+	// layer/anchor spring parameter
 	std::string dir_spring_hex_mesh_idx;
 	std::string dir_spring_hex_mesh_idx_reduced;
 	std::vector<std::vector<int>> SPRING_HEX_MESH_IDX;
 	std::string dir_spring_bending_idx;
 	std::string dir_spring_bending_idx_reduced;
 	std::vector<std::vector<int>> SPRING_BENDING_IDX;
-	btScalar E_skin;
+
 	btScalar k_layer1;
 	btScalar k_layer2;
-	btScalar zeta_tissue;
-	btScalar k_anchor;
+	btScalar zeta_layer;
+
+	btScalar k_anchor_translational;
+	btScalar k_anchor_torsional;
+	btScalar zeta_anchor_translational;
+	btScalar zeta_anchor_torsional;
 
 	uint8_t FlagCreateMuscles;
 

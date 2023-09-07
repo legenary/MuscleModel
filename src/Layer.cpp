@@ -19,7 +19,8 @@ void Layer::initEdges(bool isTop) {
 
 		btScalar k_eq = m_param->k_layer1;
 		btScalar k_this = k_eq / 2;
-		std::unique_ptr<Tissue> edge = std::make_unique<Tissue>(m_sim, fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2, k_this, m_param->zeta_tissue);
+		std::unique_ptr<Tissue> edge = std::make_unique<Tissue>(m_sim, fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2, 
+			k_this, 0.0f /*no torsional*/, m_param->zeta_layer, 0.0f /*no torsional*/);
 
 		getWorld()->addConstraint(edge->getConstraint(), true); // disable collision
 		m_edges.push_back(std::move(edge));
@@ -34,7 +35,8 @@ void Layer::initAnchors(bool isTop) {
 	for (int f = 0; f < nAnchors; f++) {
 		auto& fol = m_pad->getFollicleByIndex(f);
 		btTransform frameAnchor = createTransform(btVector3((isTop ? 1 : -1) * m_param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6] / 2, 0., 0.));
-		std::unique_ptr<Tissue> anchor = std::make_unique <Tissue>(m_sim, fol->getBody(), frameAnchor, m_param->k_anchor, m_param->zeta_tissue);	// this is a linear + torsional spring
+		std::unique_ptr<Tissue> anchor = std::make_unique<Tissue>(m_sim, fol->getBody(), frameAnchor,
+			m_param->k_anchor_translational, m_param->k_anchor_torsional, m_param->zeta_anchor_translational, m_param->zeta_anchor_torsional);	// this is a linear + torsional spring
 
 		getWorld()->addConstraint(anchor->getConstraint(), true); // disable collision
 		m_anchors.push_back(std::move(anchor));
@@ -53,7 +55,8 @@ void Layer::initBendings(bool isTop) {
 
 		btScalar k_eq = m_param->k_layer1;
 		btScalar k_this = k_eq / 2;
-		std::unique_ptr<Tissue> bending = std::make_unique <Tissue>(m_sim, fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2, k_this, m_param->zeta_tissue);
+		std::unique_ptr<Tissue> bending = std::make_unique <Tissue>(m_sim, fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2, 
+			k_this, 0.0f /*no torsional*/, m_param->zeta_layer, 0.0f /*no torsional*/);
 
 		getWorld()->addConstraint(bending->getConstraint(), true); // disable collision
 		m_bendings.push_back(std::move(bending));
@@ -126,11 +129,11 @@ void Layer::debugDraw(const btVector3& clr, bool dynamic) {
 		m_edges[i]->debugDraw(clr, dynamic);
 	}
 	for (int i = 0; i < nAnchors; i++) {
-		m_anchors[i]->debugDraw(clr, !dynamic);
+		m_anchors[i]->debugDraw(clr, dynamic);
 	}
-	for (int i = 0; i < nBendings; i++) {
-		m_bendings[i]->debugDraw(clr, dynamic);
-	}
+	//for (int i = 0; i < nBendings; i++) {
+	//	m_bendings[i]->debugDraw(clr, dynamic);
+	//}
 }
 
 void DihedralPair::calculate(bool init) {
