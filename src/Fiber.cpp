@@ -92,7 +92,7 @@ void Fiber::update() {
 
 	// force along direction of equilibrium points
 	btVector3 dir = (m_constraint->getCalculatedLinearDiff() - eq_in_p);
-	dir = (dir.length() > 0.02) ? dir / dir.length() : btVector3(0, 0, 0);
+	dir = (dir.length() > 0.00001) ? dir / dir.length() : btVector3(0, 0, 0);
 	// force = (fPE + a*fL*fV)
 	// split it up for debugging
 		// Method 1: use current frame length
@@ -102,8 +102,8 @@ void Fiber::update() {
 		// Method 2: use midpoint of current frame length and future frame length (projected from prev)
 	btScalar future_length = 2 * m_length - m_prev_length;
 	btScalar mid_length = (m_length + future_length) / 2;
-	btScalar this_fPE = interp1(fPE[0], fPE[1], mid_length / m_restLength);
-	btScalar this_fL = interp1(fL[0], fL[1], mid_length / m_restLength);
+	btScalar this_fPE = interp1(fPE[0], fPE[1], mid_length / m_restLengthNoAvtivation);
+	btScalar this_fL = interp1(fL[0], fL[1], mid_length / m_restLengthNoAvtivation);
 	btScalar this_fV = interp1(fV[0], fV[1], vLength);
 
 	m_hill_model_components = { this_fPE, this_fL, this_fV };

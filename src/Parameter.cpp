@@ -43,7 +43,7 @@ Parameter::Parameter() {
 
 	contract_range = 0.25;
 	contract_frequency = 1; // Hz
-	contract_count = 0.5;
+	contract_count = 1;
 	muslce_activation_tau = 0.02; // activation time constant
 
 	switch (m_model) {
@@ -88,7 +88,7 @@ Parameter::Parameter() {
 		fol_damping = 0.4;
 
 		// muscle parameter reduced
-		btScalar f0 = 0.4;		// Bullet unit: 1e-6 (N), uN
+		btScalar f0 = 0.2;		// Bullet unit: 1e-6 (N), uN
 		f0_ISM = 20 * f0;
 		f0_nasolabialis = 25 * f0;
 		f0_maxillolabialis = 25 * f0;

@@ -41,7 +41,7 @@ plot((ISM_3_hill_model_comps(:,1) + ISM_3_activation .*...
     ISM_3_hill_model_comps(:,2) .* ISM_3_hill_model_comps(:,2)))
 ylabel('hill_model_comps');
 yyaxis right
-plot(ISM_3_length./ISM_3_rest_length);
+plot(ISM_3_length);
 ylabel('Length');
 legend({'fPE','fL','fV','all','Normalizd length'})
 
