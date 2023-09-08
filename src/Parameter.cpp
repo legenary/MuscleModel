@@ -3,14 +3,20 @@
 
 Parameter::Parameter() {
 	m_fps = 120;
-	m_time_step = 1.0f / m_fps;
-	m_num_internal_step = 60;	// for constraint solver
+	m_time_step = btScalar(1.0f) / m_fps;
+	m_num_internal_step = 40;	// for constraint solver
 								// Note: number of iterations grows linear with mass ratios
 								// iter = 3*ratio + 2
 	m_internal_time_step = m_time_step / (btScalar) m_num_internal_step;
 	m_time_stop = 5.0f;
 
-	inverse_fiber_query_rate = 1.0f / 120.0f;
+	// fiber query rate:
+	// Essentially, we need this rate so the muscle update frequency is fixed, and does not change with simulation FPS
+	// Because our muscle dynamics is interpolated, analogous to explicit forward Euler integration, different time step
+	// will cause inconsistent behavior. For more details, check out the modeling_log ppt
+	inverse_fiber_query_rate = btScalar(1.0f) / 120.0f;
+	// Under the current simulation architecture, the muscle should be queried less frequently than main loop update
+	ensure(inverse_fiber_query_rate >= m_time_step);
 
 	DEBUG = 0;	// 0: no debug draw
 				// 1: specified inline debug drawing only
@@ -38,7 +44,7 @@ Parameter::Parameter() {
 
 	// contract
 	//FlagContractMuscle = MUSCLE::ISM;
-	FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M;
+	FlagContractMuscle = MUSCLE::N | MUSCLE::M;
 	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
 
 	contract_range = 0.3;
@@ -114,15 +120,16 @@ Parameter::Parameter() {
 	}
 	case MODEL::TEST:
 	case MODEL::REDUCED: {
-		// layer tissue parameter (only translational)
-		k_layer1 = 25;			// Bullet unit: 1e-3 (N/m)
+		// In general, a zeta value = 1 means critically damped. But the system is a highly complex system, so damping should be higher to absorb coupled oscillation
+		// layer tissue parameter (only translational, no torsional implemented)
+		k_layer1 = 25;						// Bullet unit: 1e-3 (N/m)
 		k_layer2 = 50;
-		zeta_layer = 1.0;		// 1 = critically damped
+		zeta_layer = 20.0;					// chosen such that when pulled by M and N, oscillation is minimized
 		// anchor parameter (translational and torsional)
 		k_anchor_translational = 10;
-		zeta_anchor_translational = 10.0;
-		k_anchor_torsional = 20;
-		zeta_anchor_torsional = 5.0;
+		zeta_anchor_translational = 5.0;	// chosen such that a displaced pad (by M and N) is restored to the same location in the same relaxation duration as contraction. Reference 5.0
+		k_anchor_torsional = 20;			// chosen to be big enough to bring the pad back to original position in swift time. Reference 20
+		zeta_anchor_torsional = 7.0;		// chosen such that a contracted pad (by ISM) is restored to the same location in the same relaxation duration as contraction. Reference 7.0
 
 		fol_damping = 0.0;
 

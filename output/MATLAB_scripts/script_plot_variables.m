@@ -9,6 +9,7 @@ variable_names = {
     'ISM_3_hill_model_comps';
     'ISM_3_excitation';
     'ISM_3_activation';
+    'fol_04'
 };
 
 
@@ -21,18 +22,7 @@ for i = 1:length(variable_names)
 %         title(variable_names{i}, 'Interpreter', 'none');
     end
 end
-
 nFrame = size(ISM_3_length, 1);
-figure; hold on;
-yyaxis left
-plot(ISM_3_length);
-ylabel('Length');
-yyaxis right
-plot(ISM_3_force);
-ylabel('Force');
-grid on;
-xticks(0:60:nFrame)
-
 
 figure; hold on;
 yyaxis left
@@ -42,10 +32,15 @@ plot((ISM_3_hill_model_comps(:,1) + ISM_3_activation .*...
 ylabel('hill_model_comps');
 yyaxis right
 plot(ISM_3_length);
-ylabel('Length');
-legend({'fPE','fL','fV','all','Normalizd length'})
-
+ylabel('Length'); ylim([3.8, 5.3])
+title('intrinsic muslce force components (left) and muscle length (right)')
+legend({'fPE','fL','fV','all','Length'}, 'Location', 'southeast')
 grid on;
+xticks(0:60:nFrame)
+
+figure; hold on;
+plot(fol_04(:,1));
+title('fol04 (C2) displacement (X coordinate)')
 xticks(0:60:nFrame)
 
 
