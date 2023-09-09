@@ -34,15 +34,20 @@ void Simulation::stepSimulation(float deltaTime) {
 
 		static btScalar contractTo = 1 - param->contract_range;
 		if (flagMuscleContractionStateChange && param->contract_count > 0) {
+
+			// contarct synchronously with ISM (these muscles are protractors)
 			m_mystacialPad->contractMuscle(MUSCLE::ISM, contractTo);
-			m_mystacialPad->contractMuscle(MUSCLE::N, contractTo);
-			m_mystacialPad->contractMuscle(MUSCLE::M, contractTo);
 			m_mystacialPad->contractMuscle(MUSCLE::NS, contractTo);
 			m_mystacialPad->contractMuscle(MUSCLE::PMS, contractTo);
 			m_mystacialPad->contractMuscle(MUSCLE::PMI, contractTo);
+			contractTo = 2 - param->contract_range - contractTo;
+			// contract asynchronously with ISM (these muscles are retractors)
+			m_mystacialPad->contractMuscle(MUSCLE::N, contractTo);
+			m_mystacialPad->contractMuscle(MUSCLE::M, contractTo);
 			m_mystacialPad->contractMuscle(MUSCLE::PIP, contractTo);
 			m_mystacialPad->contractMuscle(MUSCLE::PM, contractTo);
-			contractTo = 2 - param->contract_range - contractTo;
+
+			// reduced contract count by half cycle
 			param->contract_count -= 0.5;
 		}
 
@@ -58,9 +63,9 @@ void Simulation::stepSimulation(float deltaTime) {
 		}
 
 		//// post step simulation: apply additional damping
-		//{
-		//	applyAdditionalDamping();
-		//}
+		{
+			applyAdditionalDamping();
+		}
 
 		//// collision listener
 		updateCollisionListener();
@@ -442,6 +447,12 @@ void Simulation::postInitPhysics() {
 		
 	}
 
+	// alter physics properties post-initialization
+	{
+		m_mystacialPad->postInitPhysics();
+	}
+
+	// set up follicle position output 
 	if (m_mystacialPad) {
 		int nFol = m_mystacialPad->getNumFollicles();
 		output_fol_pos.reserve(nFol);

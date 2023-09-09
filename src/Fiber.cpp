@@ -154,7 +154,8 @@ void Fiber::debugDraw(btVector3 clr, bool dynamic) {
 
 void Fiber::contractTo(btScalar ratio) {
 	// contract range should be between 0.7 and 1.0.
-	ensure(ratio >= 0.7 && ratio <= 1.0);
+	ensure(ratio <= 1.0);
+	ratio = (ratio < 0.7) ? 0.7 : ratio;
 	
 	m_excitation = ratio2excitation(ratio); // old code
 	setRestLengthRatio(ratio);

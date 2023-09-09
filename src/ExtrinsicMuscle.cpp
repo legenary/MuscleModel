@@ -22,7 +22,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 	for (int i = 0; i < nNodes; i++) {
 		btTransform t = createTransform(btVector3(NODE_POS[i][0], NODE_POS[i][1], NODE_POS[i][2]));
 		btCollisionShape* s = new btSphereShape((anchorNodeIdx.count(i)) ? 0.1 : 0.01 /*radius*/);
-		btScalar mass = (anchorNodeIdx.count(i)) ? 0. : 0.01 /*node mass. Mass of follicle is ~0.001g*/;
+		btScalar mass = (anchorNodeIdx.count(i)) ? 0. : f0*btScalar(0.006667) /*node mass. Mass of follicle is ~0.001g*/;
 		btRigidBody* b = createDynamicBody(mass, t, s, 0 /*no damping*/);
 		m_nodes.push_back(b);
 		getWorld()->addRigidBody(b, COL_EXT_MUS, extMusCollideWith);
@@ -124,4 +124,9 @@ int ExtrinsicMuscle::getNumberOfMusclePieces() const {
 }
 int ExtrinsicMuscle::getNumberOfInsertionPices() const {
 	return nInsertionPieces;
+}
+
+btRigidBody* ExtrinsicMuscle::getNodeByIndex(int idx) {
+	ensure(idx < nNodes);
+	return m_nodes[idx];
 }

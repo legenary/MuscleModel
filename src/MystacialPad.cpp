@@ -314,18 +314,29 @@ void MystacialPad::bufferFolPos(std::vector<std::vector<std::vector<btScalar>>>&
 	}
 }
 
+void MystacialPad::postInitPhysics() {
+	//for (int n = 0; n < m_nasolabialis->getNumberOfNodes(); n++) {
+	//	btVector3& inertia = m_nasolabialis->getNodeByIndex(n)->getLocalInertia();
+	//	m_nasolabialis->getNodeByIndex(n)->setMassProps(0.05, inertia);
+	//}
+	//for (int n = 0; n < m_maxillolabialis->getNumberOfNodes(); n++) {
+	//	btVector3& inertia = m_maxillolabialis->getNodeByIndex(n)->getLocalInertia();
+	//	m_maxillolabialis->getNodeByIndex(n)->setMassProps(0.05, inertia);
+	//}
+}
+
 
 void MystacialPad::debugDraw() {
-	if (m_layer1) {
-		m_layer1->debugDraw(btVector3(1., 0., 0.), true);
-	}
-	if (m_layer2) {
-		m_layer2->debugDraw(btVector3(1., 0., 0.), true);
-	}
+	//if (m_layer1) {
+	//	m_layer1->debugDraw(btVector3(1., 0., 0.), true);
+	//}
+	//if (m_layer2) {
+	//	m_layer2->debugDraw(btVector3(1., 0., 0.), true);
+	//}
 
-	for (int i = 0; i < nISM; i++) {
-		m_ISMArray[i]->debugDraw(RED, false);
-	}
+	//for (int i = 0; i < nISM; i++) {
+	//	m_ISMArray[i]->debugDraw(RED, false);
+	//}
 
 	if (m_nasolabialis) {
 		m_nasolabialis->debugDraw(GREEN);
@@ -333,17 +344,17 @@ void MystacialPad::debugDraw() {
 	if (m_maxillolabialis) {
 		m_maxillolabialis->debugDraw(BLUE);
 	}
-	if (m_NS) {
-		m_NS->debugDraw(BLUE);
-	}
-	if (m_PMS) {
-		m_PMS->debugDraw(ORANGE);
-	}
+	//if (m_NS) {
+	//	m_NS->debugDraw(BLUE);
+	//}
+	//if (m_PMS) {
+	//	m_PMS->debugDraw(ORANGE);
+	//}
+	//if (m_PMI) {
+	//	m_PMI->debugDraw(YELLOW);
+	//}
 	if (m_PIP) {
 		m_PIP->debugDraw(ORANGE);
-	}
-	if (m_PMI) {
-		m_PMI->debugDraw(YELLOW);
 	}
 	if (m_PM) {
 		m_PM->debugDraw(YELLOW);
@@ -367,9 +378,22 @@ bool MystacialPad::checkCreateMuscleFlag(MUSCLE mus) const {
 }
 
 void MystacialPad::applyAdditionalDamping() {
-	for (auto& fol : m_follicleArray) {
-		btVector3 linear_vel = fol->getBody()->getLinearVelocity();
-		//fol->getBody()->setLinearVelocity(linear_vel * btPow(btScalar(1) - m_parameter->fol_damping, m_parameter->m_time_step));
-		fol->getBody()->setLinearVelocity(linear_vel * (btScalar(1) - m_parameter->fol_damping));
-	}
+	// additional damping to follicle
+	//for (auto& fol : m_follicleArray) {
+	//	btVector3 linear_vel = fol->getBody()->getLinearVelocity();
+	//	//fol->getBody()->setLinearVelocity(linear_vel * btPow(btScalar(1) - m_parameter->fol_damping, m_parameter->m_time_step));
+	//	//fol->getBody()->setLinearVelocity(linear_vel * (btScalar(1) - m_parameter->fol_damping));
+	//}
+
+	// additional damping to extrinsic muscles nodes
+	// The point is to reduce jitter in extrinsic muscle nodes, but it didn't seem to work very well.
+	//btScalar damping = 0.1;
+	//for (int n = 0; n < m_nasolabialis->getNumberOfNodes(); n++) {
+	//	btVector3 linear_vel = m_nasolabialis->getNodeByIndex(n)->getLinearVelocity();
+	//	m_nasolabialis->getNodeByIndex(n)->setLinearVelocity(linear_vel * (btScalar(1.f) - damping));
+	//}
+	//for (int n = 0; n < m_maxillolabialis->getNumberOfNodes(); n++) {
+	//	btVector3 linear_vel = m_maxillolabialis->getNodeByIndex(n)->getLinearVelocity();
+	//	m_maxillolabialis->getNodeByIndex(n)->setLinearVelocity(linear_vel * (btScalar(1.f) - damping));
+	//}
 }

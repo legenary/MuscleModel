@@ -18,7 +18,7 @@ Parameter::Parameter() {
 	// Under the current simulation architecture, the muscle should be queried less frequently than main loop update
 	ensure(inverse_fiber_query_rate >= m_time_step);
 
-	DEBUG = 0;	// 0: no debug draw
+	DEBUG = 1;	// 0: no debug draw
 				// 1: specified inline debug drawing only
 				// 2: wire frame added
 				// 3: axis aligned bound box added
@@ -44,8 +44,11 @@ Parameter::Parameter() {
 
 	// contract
 	//FlagContractMuscle = MUSCLE::ISM;
-	FlagContractMuscle = MUSCLE::N | MUSCLE::M;
-	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
+	//FlagContractMuscle = MUSCLE::N | MUSCLE::M;
+	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M;
+	//FlagContractMuscle = MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
+	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
+	FlagContractMuscle = MUSCLE::PMS | MUSCLE::PMI;
 
 	contract_range = 0.3;
 	contract_frequency = 1; // Hz
@@ -124,17 +127,17 @@ Parameter::Parameter() {
 		// layer tissue parameter (only translational, no torsional implemented)
 		k_layer1 = 25;						// Bullet unit: 1e-3 (N/m)
 		k_layer2 = 50;
-		zeta_layer = 20.0;					// chosen such that when pulled by M and N, oscillation is minimized
+		zeta_layer = 1.0;					// chosen such that when pulled by M and N, oscillation is minimized
 		// anchor parameter (translational and torsional)
 		k_anchor_translational = 10;
-		zeta_anchor_translational = 5.0;	// chosen such that a displaced pad (by M and N) is restored to the same location in the same relaxation duration as contraction. Reference 5.0
+		zeta_anchor_translational = 5.5;	// chosen such that a displaced pad (by M and N) is restored to the same location in the same relaxation duration as contraction. Reference 5.5
 		k_anchor_torsional = 20;			// chosen to be big enough to bring the pad back to original position in swift time. Reference 20
 		zeta_anchor_torsional = 7.0;		// chosen such that a contracted pad (by ISM) is restored to the same location in the same relaxation duration as contraction. Reference 7.0
 
 		fol_damping = 0.0;
 
 		// muscle parameter reduced
-		btScalar f0 = 0.3;		// Bullet unit: 1e-6 (N), uN
+		btScalar f0 = 0.6;		// Bullet unit: 1e-6 (N), uN // 0.3 will have ~30 degrees protraction, ISM shortened to 85%
 		f0_ISM = 20 * f0;
 		f0_nasolabialis = 25 * f0;
 		f0_maxillolabialis = 25 * f0;

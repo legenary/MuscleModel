@@ -41,10 +41,15 @@ xticks(0:60:nFrame)
 figure; hold on;
 plot(fol_04(:,1));
 title('fol04 (C2) displacement (X coordinate)')
+ylim([3.4, 4.8])
 xticks(0:60:nFrame)
 
-
-% 
+[top, bot] = readFollicleTopBot(path);
+[az, el] = readFollicleAzEl(path, 'eyenose');
+figure; hold on;
+% plot azimuthal angle of follicle #4 (0-indexing)
+plot(az(:, 4+1));
+title('C2 follicle azimuthal angle change');
 
 % close all;
 % fPEx =		[1.0,	1.1,	1.2,	1.3,	1.4,	1.5,	1.6,	1.7,	1.8,	1.9,	2.0];

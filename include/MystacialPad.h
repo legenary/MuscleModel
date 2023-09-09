@@ -56,6 +56,7 @@ public:
 
 	void update(btScalar dt);
 	void bufferFolPos(std::vector<std::vector<std::vector<btScalar>>>& output);
+	void postInitPhysics();
 	
 	int getNumFollicles() const;
 	std::unique_ptr<Follicle>& getFollicleByIndex(int idx);

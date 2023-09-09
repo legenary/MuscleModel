@@ -46,6 +46,8 @@ public:
 	int getNumberOfMusclePieces() const;
 	int getNumberOfInsertionPices() const;
 
+	btRigidBody* getNodeByIndex(int idx);
+
 	inline btDynamicsWorld* getWorld() {
 		return m_sim->getDynamicsWorld();
 	}
