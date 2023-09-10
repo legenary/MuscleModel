@@ -45,10 +45,11 @@ Parameter::Parameter() {
 	// contract
 	//FlagContractMuscle = MUSCLE::ISM;
 	//FlagContractMuscle = MUSCLE::N | MUSCLE::M;
+	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
 	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M;
 	//FlagContractMuscle = MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
-	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
-	FlagContractMuscle = MUSCLE::PMS | MUSCLE::PMI;
+	FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
+	//FlagContractMuscle = MUSCLE::PMS | MUSCLE::PMI;
 
 	contract_range = 0.3;
 	contract_frequency = 1; // Hz
@@ -125,11 +126,11 @@ Parameter::Parameter() {
 	case MODEL::REDUCED: {
 		// In general, a zeta value = 1 means critically damped. But the system is a highly complex system, so damping should be higher to absorb coupled oscillation
 		// layer tissue parameter (only translational, no torsional implemented)
-		k_layer1 = 25;						// Bullet unit: 1e-3 (N/m)
+		k_layer1 = 25;						// Bullet unit: 1e-3 (N/m) === uN/mm
 		k_layer2 = 50;
 		zeta_layer = 1.0;					// chosen such that when pulled by M and N, oscillation is minimized
 		// anchor parameter (translational and torsional)
-		k_anchor_translational = 10;
+		k_anchor_translational = 10;		
 		zeta_anchor_translational = 5.5;	// chosen such that a displaced pad (by M and N) is restored to the same location in the same relaxation duration as contraction. Reference 5.5
 		k_anchor_torsional = 20;			// chosen to be big enough to bring the pad back to original position in swift time. Reference 20
 		zeta_anchor_torsional = 7.0;		// chosen such that a contracted pad (by ISM) is restored to the same location in the same relaxation duration as contraction. Reference 7.0
@@ -138,6 +139,7 @@ Parameter::Parameter() {
 
 		// muscle parameter reduced
 		btScalar f0 = 0.6;		// Bullet unit: 1e-6 (N), uN // 0.3 will have ~30 degrees protraction, ISM shortened to 85%
+								// chosen such that 
 		f0_ISM = 20 * f0;
 		f0_nasolabialis = 25 * f0;
 		f0_maxillolabialis = 25 * f0;

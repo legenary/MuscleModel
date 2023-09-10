@@ -9,7 +9,7 @@ variable_names = {
     'ISM_3_hill_model_comps';
     'ISM_3_excitation';
     'ISM_3_activation';
-    'fol_04'
+%     'fol_04'
 };
 
 
@@ -38,17 +38,22 @@ legend({'fPE','fL','fV','all','Length'}, 'Location', 'southeast')
 grid on;
 xticks(0:60:nFrame)
 
-figure; hold on;
-plot(fol_04(:,1));
-title('fol04 (C2) displacement (X coordinate)')
-ylim([3.4, 4.8])
-xticks(0:60:nFrame)
-
 [top, bot] = readFollicleTopBot(path);
-[az, el] = readFollicleAzEl(path, 'eyenose');
+[az, el, top_bot_eyenose] = readFollicleAzEl(path, 'eyenose');
+
+figure; hold on;
+clr = lines(3);
+plot(top_bot_eyenose{5}(:, 1)-top_bot_eyenose{5}(1, 1), '-', 'Color', clr(1, :));
+plot(top_bot_eyenose{5}(:, 2)-top_bot_eyenose{5}(1, 2), '-', 'Color', clr(2, :));
+plot(top_bot_eyenose{5}(:, 3)-top_bot_eyenose{5}(1, 3), '-', 'Color', clr(3, :));
+legend({'x', 'y', 'z'});
+% title('fol04 (C2) displacement (y coordinate)')
+
+
 figure; hold on;
 % plot azimuthal angle of follicle #4 (0-indexing)
 plot(az(:, 4+1));
+plot(el(:, 4+1));
 title('C2 follicle azimuthal angle change');
 
 % close all;

@@ -1,4 +1,4 @@
-function [az, el] = readFollicleAzEl(path, horizontal)
+function [az, el, top_bot] = readFollicleAzEl(path, horizontal)
 
     [top, bot] = readFollicleTopBot(path);
     
