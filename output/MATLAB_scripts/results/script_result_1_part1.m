@@ -176,6 +176,8 @@ delta = rmoutliers(delta);
 fprintf('1 cycle, 120 frames, elevation per degree of azimuth: %.2f +/- %.2f\n',...
     mean(delta), std(delta));
 fprintf('using MALTAB smooth and rmoutliers functions\n')
+
+save('deldaz_ISMonly.mat', 'delta');
 % 
 % daz = az(1:120, 4+1) - az(1, 4+1);
 % del = el(1:120, 4+1) - el(1, 4+1);

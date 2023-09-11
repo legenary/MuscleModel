@@ -1,0 +1,18 @@
+FPS: 120Hz
+Simulation internal step: 40
+Muscle query rate: 120.0Hz
+Contraction ratio: 0.30
+Tissue damping ratio zeta = 1.000
+Anchor damping ratio zeta (translational) = 5.500
+Anchor damping ratio zeta (torsional) = 7.000
+k_layer1=0.025000N/m
+k_layer2=0.050000N/m
+
+fo unit: 0.000001N
+f0_intrinsic = 0.000012N
+f0_nasolabialis(N)=0.000015N
+f0_maxillolabialis(M)=0.000015N
+f0_nasolabialis_superficialis(NS)=0.000001N
+f0_pars_media_superior=0.000001N
+f0_pars_media_inferior=0.000001N
+f0_pars_interna_profunda=0.000002

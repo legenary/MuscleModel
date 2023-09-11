@@ -60,6 +60,8 @@ public:
 	
 	int getNumFollicles() const;
 	std::unique_ptr<Follicle>& getFollicleByIndex(int idx);
+
+	int getNumISMs() const;
 	std::unique_ptr<IntrinsicSlingMuscle>& getISMByIndex(int idx);
 
 	btScalar getHamiltonian() const { return m_Hamiltonian; }

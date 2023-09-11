@@ -49,6 +49,7 @@ plot(times, top_bot_eyenose{5}(:, 2)-top_bot_eyenose{5}(1, 2), '-', 'Color', ora
 plot(times, top_bot_eyenose{5}(:, 3)-top_bot_eyenose{5}(1, 3), '-', 'Color', green);
 legend({'x', 'y', 'z'}, 'location', 'southeast');
 ylabel('C2 follice top displacements')
+ylim([-2.5, 0.5])
 xlabel('simulation time (s)')
 xticks(0:0.5:times(end));
 grid on
@@ -125,3 +126,19 @@ xticks(0:0.5:times(end));
 xlabel('simulation time (s)')
 legend('Location', 'northeast', 'Box', 'off')
 print('FigResult1R', '-dtiff', '-r300');
+
+% for 3 seconds, 360 frames
+daz = az(2:360, 4+1) - az(1:359, 4+1);
+del = el(2:360, 4+1) - el(1:359, 4+1);
+delta = smooth(del)./smooth(daz);
+delta = rmoutliers(delta);
+fprintf('1 cycle, 120 frames, elevation per degree of azimuth: %.2f +/- %.2f\n',...
+    mean(delta), std(delta));
+fprintf('using MALTAB smooth and rmoutliers functions\n')
+
+delta_ISMonly = load('deldaz_ISMonly').delta;
+[h, p] = ttest2(delta,  delta_ISMonly, ...
+    'alpha', 0.05, 'Vartype', 'equal');  
+
+
+

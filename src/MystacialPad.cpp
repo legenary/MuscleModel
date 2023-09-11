@@ -334,9 +334,9 @@ void MystacialPad::debugDraw() {
 	//	m_layer2->debugDraw(btVector3(1., 0., 0.), true);
 	//}
 
-	//for (int i = 0; i < nISM; i++) {
-	//	m_ISMArray[i]->debugDraw(RED, false);
-	//}
+	for (int i = 0; i < nISM; i++) {
+		m_ISMArray[i]->debugDraw(RED, false);
+	}
 
 	if (m_nasolabialis) {
 		m_nasolabialis->debugDraw(GREEN);
@@ -353,12 +353,12 @@ void MystacialPad::debugDraw() {
 	//if (m_PMI) {
 	//	m_PMI->debugDraw(YELLOW);
 	//}
-	if (m_PIP) {
-		m_PIP->debugDraw(ORANGE);
-	}
-	if (m_PM) {
-		m_PM->debugDraw(YELLOW);
-	}
+	//if (m_PIP) {
+	//	m_PIP->debugDraw(ORANGE);
+	//}
+	//if (m_PM) {
+	//	m_PM->debugDraw(YELLOW);
+	//}
 }
 
 int MystacialPad::getNumFollicles() const {
@@ -367,6 +367,10 @@ int MystacialPad::getNumFollicles() const {
 
 std::unique_ptr<Follicle>& MystacialPad::getFollicleByIndex(int idx) {
 	return m_follicleArray[idx];
+}
+
+int MystacialPad::getNumISMs() const {
+	return nISM;
 }
 
 std::unique_ptr<IntrinsicSlingMuscle>& MystacialPad::getISMByIndex(int idx) {

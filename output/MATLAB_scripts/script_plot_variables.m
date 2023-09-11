@@ -1,14 +1,16 @@
 clear; close all;
 
-path = GetFullPath('../bundle_reduced');
+path = GetFullPath('../bundle_full');
 
 variable_names = {
-    'ISM_3_length';
-    'ISM_3_rest_length';
-    'ISM_3_force';
-    'ISM_3_hill_model_comps';
-    'ISM_3_excitation';
-    'ISM_3_activation';
+    % ISM_3 for reduced size
+    'ISM_12_length';
+    'ISM_12_rest_length';
+    'ISM_12_force';
+    'ISM_12_hill_model_comps';
+    'ISM_12_excitation';
+    'ISM_12_activation';
+    
 %     'fol_04'
 };
 
@@ -22,17 +24,19 @@ for i = 1:length(variable_names)
 %         title(variable_names{i}, 'Interpreter', 'none');
     end
 end
-nFrame = size(ISM_3_length, 1);
+nFrame = size(ISM_12_length, 1);
 
 figure; hold on;
 yyaxis left
-plot(ISM_3_hill_model_comps);
-plot((ISM_3_hill_model_comps(:,1) + ISM_3_activation .*...
-    ISM_3_hill_model_comps(:,2) .* ISM_3_hill_model_comps(:,2)))
+plot(ISM_12_hill_model_comps);
+plot((ISM_12_hill_model_comps(:,1) + ISM_12_activation .*...
+    ISM_12_hill_model_comps(:,2) .* ISM_12_hill_model_comps(:,2)))
 ylabel('hill_model_comps');
+ylim([-0.1, 1.1])
 yyaxis right
-plot(ISM_3_length);
-ylabel('Length'); ylim([3.8, 5.3])
+plot(ISM_12_length);
+ylabel('Length'); 
+ylim([3.3, 5.7])
 title('intrinsic muslce force components (left) and muscle length (right)')
 legend({'fPE','fL','fV','all','Length'}, 'Location', 'southeast')
 grid on;
@@ -52,8 +56,8 @@ legend({'x', 'y', 'z'});
 
 figure; hold on;
 % plot azimuthal angle of follicle #4 (0-indexing)
-plot(az(:, 4+1));
-plot(el(:, 4+1));
+plot(az(:, 12+1));
+plot(el(:, 12+1));
 title('C2 follicle azimuthal angle change');
 
 % close all;

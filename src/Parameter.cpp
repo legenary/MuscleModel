@@ -4,10 +4,6 @@
 Parameter::Parameter() {
 	m_fps = 120;
 	m_time_step = btScalar(1.0f) / m_fps;
-	m_num_internal_step = 40;	// for constraint solver
-								// Note: number of iterations grows linear with mass ratios
-								// iter = 3*ratio + 2
-	m_internal_time_step = m_time_step / (btScalar) m_num_internal_step;
 	m_time_stop = 5.0f;
 
 	// fiber query rate:
@@ -38,17 +34,16 @@ Parameter::Parameter() {
 	fol_density = 0.001;	// Bullet unit: g/mm^3
 
 	// mode
-	m_model = MODEL::REDUCED;
-	m_bending_model = BENDING_MODEL::DIHEDRAL_ANGLE;
-	FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS;
+	m_model = MODEL::FULL;
+	FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS | MUSCLE::NS;
 
 	// contract
-	//FlagContractMuscle = MUSCLE::ISM;
+	FlagContractMuscle = MUSCLE::ISM;
 	//FlagContractMuscle = MUSCLE::N | MUSCLE::M;
 	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
 	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M;
 	//FlagContractMuscle = MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
-	FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
+	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
 	//FlagContractMuscle = MUSCLE::PMS | MUSCLE::PMI;
 
 	contract_range = 0.3;
@@ -58,17 +53,12 @@ Parameter::Parameter() {
 
 	switch (m_model) {
 	case MODEL::FULL: {
-
-		// layer tissue parameter (only translational)
-		k_layer1 = 25;			// Bullet unit: 1e-3 (N/m)
-		k_layer2 = 50;
-		zeta_layer = 1.0;		// 1 = critically damped
-		// anchor parameter (translational and torsional)
-		k_anchor_translational = 25;
-		k_anchor_torsional = 25;
-		zeta_anchor_translational = 1.0;
-		zeta_anchor_torsional = 1.0;
-
+		m_num_internal_step = 60;	// for constraint solver
+		// Note: number of iterations grows linear with mass ratios
+		// iter = 3*ratio + 2
+		// reference value: 40 for reduced-size array, 100 for full-size array
+		m_internal_time_step = m_time_step / (btScalar)m_num_internal_step;
+		m_bending_model = BENDING_MODEL::SPRING;
 		// layer tissue parameter (only translational)
 		k_layer1 = 25;			// Bullet unit: 1e-3 (N/m)
 		k_layer2 = 50;
@@ -81,13 +71,13 @@ Parameter::Parameter() {
 								// zeta = 1: critically damped
 								// zeta < 1: underdamped
 
-		k_anchor_translational = 25;
-		k_anchor_torsional = 25;
+		k_anchor_translational = 10;
+		k_anchor_torsional = 20;
 								// k > 0 : soft anchor, springy linear and angular movement
 								// k = 0 : hard anchor, no linear displacement, free angular movement
 
-		zeta_anchor_translational = 1.0;
-		zeta_anchor_torsional = 1.0;		
+		zeta_anchor_translational = 5.5;
+		zeta_anchor_torsional = 7.0;		
 								// This sets the damping ratio for: 
 								// (1) top layer anchor
 								// (2) extrinsic muscle originate anchor
@@ -96,7 +86,7 @@ Parameter::Parameter() {
 								// default: 0, no damping
 								// dampnig is implemented in tissue
 		// muscle parameter
-		btScalar f0 = 0.1;		// Bullet unit: 1e-6 (N), uN
+		btScalar f0 = 1.2;		// Bullet unit: 1e-6 (N), uN
 		f0_ISM = 20*f0; 
 		f0_nasolabialis = 25*f0;
 		f0_maxillolabialis = 25*f0;
@@ -106,6 +96,7 @@ Parameter::Parameter() {
 		f0_PMI = 1*f0;
 		f0_PM = 4*f0;
 
+		// old parameters
 		//k_layer1 = 250;			
 		//k_layer2 = 500;
 		//k_anchor = 250;			
@@ -124,6 +115,9 @@ Parameter::Parameter() {
 	}
 	case MODEL::TEST:
 	case MODEL::REDUCED: {
+		m_num_internal_step = 40;
+		m_internal_time_step = m_time_step / (btScalar)m_num_internal_step;
+		m_bending_model = BENDING_MODEL::DIHEDRAL_ANGLE;
 		// In general, a zeta value = 1 means critically damped. But the system is a highly complex system, so damping should be higher to absorb coupled oscillation
 		// layer tissue parameter (only translational, no torsional implemented)
 		k_layer1 = 25;						// Bullet unit: 1e-3 (N/m) === uN/mm
@@ -148,24 +142,6 @@ Parameter::Parameter() {
 		f0_PIP = 4 * f0; // red lower 
 		f0_PMI = 1 * f0;
 		f0_PM = 4 * f0; // yellow lower
-
-		//// layer tissue parameter
-		//k_layer1 = 25;			// Bullet unit: 1e-3 (N/m)
-		//k_layer2 = 50;
-		//k_anchor = 5;
-		//zeta_tissue = 1.0;		// 1 = critically damped
-		//fol_damping = 0.;
-
-		//// muscle parameter reduced
-		//btScalar f0 = 0.08;		// Bullet unit: 1e-6 (N), uN
-		//f0_ISM = 20 * f0;
-		//f0_nasolabialis = 25 * f0;
-		//f0_maxillolabialis = 25 * f0;
-		//f0_NS = 1 * f0;
-		//f0_PMS = 1 * f0;
-		//f0_PIP = 4 * f0;
-		//f0_PMI = 1 * f0;
-		//f0_PM = 4 * f0;
 		break;
 	}
 	}
