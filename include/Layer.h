@@ -44,7 +44,7 @@ protected:
 	std::vector<std::unique_ptr<Tissue>> m_edges;
 	std::vector<std::unique_ptr<Tissue>> m_bendings;
 	std::vector<std::unique_ptr<Tissue>> m_anchors;
-	std::vector<DihedralPair> m_dihedral_pairs;
+	std::vector< std::unique_ptr<DihedralPair>> m_dihedral_pairs;
 	int nDihedralPairs;
 
 	int nEdges, nBendings, nAnchors;

@@ -436,28 +436,33 @@ void Simulation::postInitPhysics() {
 		// to monitor these variables: pass in its address, number of elements following that address, specify the filename
 		// examples:
 		S_dumpster::Get().Monitor(&(m_mystacialPad->getHamiltonian()), 1, "Hamiltonian.csv", total_frame);
-		//S_dumpster::Get().Monitor(&(m_mystacialPad->getFollicleByIndex(0)->getTopLocation()), 3, "Fol00_top.csv", total_frame);
 		for (int n = 0; n < m_mystacialPad->getNumISMs(); n++) {
-			char filename[50];
-			sprintf(filename, "ISM_%02d_length.csv", n);
-			S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(n)->getLength()), 1, filename, total_frame);
+			if (const auto& ism = m_mystacialPad->getISMByIndex(n)) {
+				char filename[50];
+				sprintf(filename, "ISM_%02d_length.csv", n);
+				S_dumpster::Get().Monitor(&(ism->getLength()), 1, filename, total_frame);
+			}
 		}
 		switch (param->m_model) {
 		case MODEL::REDUCED:
-			// 3 for C2 in reduced-size array
-			S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getRestLength()), 1, "ISM_03_rest_length.csv", total_frame);
-			S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getForce()), 1, "ISM_03_force.csv", total_frame);
-			S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getForceHillModelComps()), 3, "ISM_03_hill_model_comps.csv", total_frame);
-			S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getExcitation()), 1, "ISM_03_excitation.csv", total_frame);
-			S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getActivation()), 1, "ISM_03_activation.csv", total_frame);
+			if (m_mystacialPad->getNumISMs() >= 3) {
+				// 3 for C2 in reduced-size array
+				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getRestLength()), 1, "ISM_03_rest_length.csv", total_frame);
+				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getForce()), 1, "ISM_03_force.csv", total_frame);
+				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getForceHillModelComps()), 3, "ISM_03_hill_model_comps.csv", total_frame);
+				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getExcitation()), 1, "ISM_03_excitation.csv", total_frame);
+				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getActivation()), 1, "ISM_03_activation.csv", total_frame);
+			}
 			break;
 		case MODEL::FULL:
-			// 12 for C2 in full-size array
-			S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getRestLength()), 1, "ISM_12_rest_length.csv", total_frame);
-			S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getForce()), 1, "ISM_12_force.csv", total_frame);
-			S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getForceHillModelComps()), 3, "ISM_12_hill_model_comps.csv", total_frame);
-			S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getExcitation()), 1, "ISM_12_excitation.csv", total_frame);
-			S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getActivation()), 1, "ISM_12_activation.csv", total_frame);
+			if (m_mystacialPad->getNumISMs() >= 12) {
+				// 12 for C2 in full-size array
+				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getRestLength()), 1, "ISM_12_rest_length.csv", total_frame);
+				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getForce()), 1, "ISM_12_force.csv", total_frame);
+				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getForceHillModelComps()), 3, "ISM_12_hill_model_comps.csv", total_frame);
+				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getExcitation()), 1, "ISM_12_excitation.csv", total_frame);
+				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getActivation()), 1, "ISM_12_activation.csv", total_frame);
+			}
 			break;
 		}
 
@@ -499,7 +504,9 @@ void Simulation::zeroFrameSetup() {
 	if (m_mystacialPad) {
 		int numFollicles = m_mystacialPad->getNumFollicles();
 		for (int i = 0; i < numFollicles; i++) {
-			m_guiHelper->changeRGBAColor(m_mystacialPad->getFollicleByIndex(i)->getBody()->getUserIndex(), color);
+			if (const auto& fol = m_mystacialPad->getFollicleByIndex(i)) {
+				m_guiHelper->changeRGBAColor(fol->getBody()->getUserIndex(), color);
+			}
 		}
 	}
 }

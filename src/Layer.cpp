@@ -14,16 +14,22 @@ void Layer::initEdges(bool isTop) {
 		auto& fol1 = m_pad->getFollicleByIndex(m_param->SPRING_HEX_MESH_IDX[s][0]);
 		auto& fol2 = m_pad->getFollicleByIndex(m_param->SPRING_HEX_MESH_IDX[s][1]);
 
-		btTransform frameLayer1fol1 = createTransform(btVector3((isTop ? 1 : -1) * m_param->FOLLICLE_POS_ORIENT_LEN_VOL[m_param->SPRING_HEX_MESH_IDX[s][0]][6] / 2, 0., 0.));
-		btTransform frameLayer1fol2 = createTransform(btVector3((isTop ? 1 : -1) * m_param->FOLLICLE_POS_ORIENT_LEN_VOL[m_param->SPRING_HEX_MESH_IDX[s][1]][6] / 2, 0., 0.));
+		if (fol1 && fol2) {
+			btTransform frameLayer1fol1 = createTransform(btVector3((isTop ? 1 : -1) * m_param->FOLLICLE_POS_ORIENT_LEN_VOL[m_param->SPRING_HEX_MESH_IDX[s][0]][6] / 2, 0., 0.));
+			btTransform frameLayer1fol2 = createTransform(btVector3((isTop ? 1 : -1) * m_param->FOLLICLE_POS_ORIENT_LEN_VOL[m_param->SPRING_HEX_MESH_IDX[s][1]][6] / 2, 0., 0.));
 
-		btScalar k_eq = m_param->k_layer1;
-		btScalar k_this = k_eq / 2;
-		std::unique_ptr<Tissue> edge = std::make_unique<Tissue>(m_sim, fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2, 
-			k_this, 0.0f /*no torsional*/, m_param->zeta_layer, 0.0f /*no torsional*/);
+			btScalar k_eq = m_param->k_layer1;
+			btScalar k_this = k_eq / 2;
+			std::unique_ptr<Tissue> edge = std::make_unique<Tissue>(m_sim, fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2, 
+				k_this, 0.0f /*no torsional*/, m_param->zeta_layer, 0.0f /*no torsional*/);
+			getWorld()->addConstraint(edge->getConstraint(), true); // disable collision
+			m_edges.push_back(std::move(edge));
+		}
+		else {
+			// follicles are skipped during initialization, do not initialize edge spring
+			m_edges.push_back(nullptr);
+		}
 
-		getWorld()->addConstraint(edge->getConstraint(), true); // disable collision
-		m_edges.push_back(std::move(edge));
 	}
 
 	nTissues += nEdges;
@@ -34,12 +40,18 @@ void Layer::initAnchors(bool isTop) {
 	m_anchors.reserve(nAnchors);
 	for (int f = 0; f < nAnchors; f++) {
 		auto& fol = m_pad->getFollicleByIndex(f);
-		btTransform frameAnchor = createTransform(btVector3((isTop ? 1 : -1) * m_param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6] / 2, 0., 0.));
-		std::unique_ptr<Tissue> anchor = std::make_unique<Tissue>(m_sim, fol->getBody(), frameAnchor,
-			m_param->k_anchor_translational, m_param->k_anchor_torsional, m_param->zeta_anchor_translational, m_param->zeta_anchor_torsional);	// this is a linear + torsional spring
+		if (fol) {
+			btTransform frameAnchor = createTransform(btVector3((isTop ? 1 : -1) * m_param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6] / 2, 0., 0.));
+			std::unique_ptr<Tissue> anchor = std::make_unique<Tissue>(m_sim, fol->getBody(), frameAnchor,
+				m_param->k_anchor_translational, m_param->k_anchor_torsional, m_param->zeta_anchor_translational, m_param->zeta_anchor_torsional);	// this is a linear + torsional spring
 
-		getWorld()->addConstraint(anchor->getConstraint(), true); // disable collision
-		m_anchors.push_back(std::move(anchor));
+			getWorld()->addConstraint(anchor->getConstraint(), true); // disable collision
+			m_anchors.push_back(std::move(anchor));
+		}
+		else {
+			// follicles are skipped during initialization, do not initialize edge spring
+			m_anchors.push_back(nullptr);
+		}
 	}
 }
 
@@ -50,16 +62,22 @@ void Layer::initBendings(bool isTop) {
 	for (int s = 0; s < nBendings; s++) {
 		auto& fol1 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[s][0]);
 		auto& fol2 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[s][1]);
-		btTransform frameLayer1fol1 = createTransform(btVector3((isTop ? 1 : -1) * m_param->FOLLICLE_POS_ORIENT_LEN_VOL[m_param->SPRING_BENDING_IDX[s][0]][6] / 2, 0., 0.));
-		btTransform frameLayer1fol2 = createTransform(btVector3((isTop ? 1 : -1) * m_param->FOLLICLE_POS_ORIENT_LEN_VOL[m_param->SPRING_BENDING_IDX[s][1]][6] / 2, 0., 0.));
+		if (fol1 && fol2) {
+			btTransform frameLayer1fol1 = createTransform(btVector3((isTop ? 1 : -1) * m_param->FOLLICLE_POS_ORIENT_LEN_VOL[m_param->SPRING_BENDING_IDX[s][0]][6] / 2, 0., 0.));
+			btTransform frameLayer1fol2 = createTransform(btVector3((isTop ? 1 : -1) * m_param->FOLLICLE_POS_ORIENT_LEN_VOL[m_param->SPRING_BENDING_IDX[s][1]][6] / 2, 0., 0.));
 
-		btScalar k_eq = m_param->k_layer1;
-		btScalar k_this = k_eq / 2;
-		std::unique_ptr<Tissue> bending = std::make_unique <Tissue>(m_sim, fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2, 
-			k_this, 0.0f /*no torsional*/, m_param->zeta_layer, 0.0f /*no torsional*/);
+			btScalar k_eq = m_param->k_layer1;
+			btScalar k_this = k_eq / 2;
+			std::unique_ptr<Tissue> bending = std::make_unique <Tissue>(m_sim, fol1->getBody(), fol2->getBody(), frameLayer1fol1, frameLayer1fol2, 
+				k_this, 0.0f /*no torsional*/, m_param->zeta_layer, 0.0f /*no torsional*/);
 
-		getWorld()->addConstraint(bending->getConstraint(), true); // disable collision
-		m_bendings.push_back(std::move(bending));
+			getWorld()->addConstraint(bending->getConstraint(), true); // disable collision
+			m_bendings.push_back(std::move(bending));
+		}
+		else {
+			// follicles are skipped during initialization, do not initialize edge spring
+			m_bendings.push_back(nullptr);
+		}
 	}
 
 	nTissues += nBendings;
@@ -78,7 +96,7 @@ void Layer::initDihedralPairs(bool isTop) {
 			btVector3& v2 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][1])->getTopVelocity();
 			btVector3& v3 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][2])->getTopVelocity();
 			btVector3& v4 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][3])->getTopVelocity();
-			m_dihedral_pairs.emplace_back(&p1, &p2, &p3, &p4, &v1, &v2, &v3, &v4, isTop);
+			m_dihedral_pairs.emplace_back(std::make_unique<DihedralPair>(& p1, &p2, &p3, &p4, &v1, &v2, &v3, &v4, isTop));
 		}
 		else {
 			btVector3& p1 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][0])->getBotLocation();
@@ -89,7 +107,7 @@ void Layer::initDihedralPairs(bool isTop) {
 			btVector3& v2 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][1])->getBotVelocity();
 			btVector3& v3 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][2])->getBotVelocity();
 			btVector3& v4 = m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][3])->getBotVelocity();
-			m_dihedral_pairs.emplace_back(&p1, &p2, &p3, &p4, &v1, &v2, &v3, &v4, isTop);
+			m_dihedral_pairs.emplace_back(std::make_unique<DihedralPair>(&p1, &p2, &p3, &p4, &v1, &v2, &v3, &v4, isTop));
 		}
 	}
 }
@@ -97,26 +115,34 @@ void Layer::initDihedralPairs(bool isTop) {
 void Layer::update() {
 	m_Hamiltonian = 0;
 	for (int i = 0; i < nEdges; i++) {
-		m_edges[i]->update();
-		m_Hamiltonian += m_edges[i]->getHamiltonian();
+		if (m_edges[i]) {
+			m_edges[i]->update();
+			m_Hamiltonian += m_edges[i]->getHamiltonian();
+		}
 	}
 	for (int i = 0; i < nAnchors; i++) {
-		m_anchors[i]->update();
-		m_Hamiltonian += m_anchors[i]->getHamiltonian();
+		if (m_anchors[i]) {
+			m_anchors[i]->update();
+			m_Hamiltonian += m_anchors[i]->getHamiltonian();
+		}
 	}
 	for (int i = 0; i < nBendings; i++) {
-		m_bendings[i]->update();
-		m_Hamiltonian += m_bendings[i]->getHamiltonian();
+		if (m_bendings[i]) {
+			m_bendings[i]->update();
+			m_Hamiltonian += m_bendings[i]->getHamiltonian();
+		}
 	}
 	for (int i = 0; i < nDihedralPairs; i++) {
-		m_dihedral_pairs[i].calculate();
-		m_dihedral_pairs[i].applyForce({
-			m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][0])->getBody(),
-			m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][1])->getBody(),
-			m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][2])->getBody(),
-			m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][3])->getBody()
-		});
-		m_Hamiltonian += m_dihedral_pairs[i].work_acc;
+		if (m_dihedral_pairs[i]) {
+			m_dihedral_pairs[i]->calculate();
+			m_dihedral_pairs[i]->applyForce({
+				m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][0])->getBody(),
+				m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][1])->getBody(),
+				m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][2])->getBody(),
+				m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][3])->getBody()
+			});
+			m_Hamiltonian += m_dihedral_pairs[i]->work_acc;
+		}
 	}
 }
 
@@ -126,13 +152,19 @@ btDynamicsWorld* Layer::getWorld() {
 
 void Layer::debugDraw(const btVector3& clr, bool dynamic) {
 	for (int i = 0; i < nEdges; i++) {
-		m_edges[i]->debugDraw(clr, dynamic);
+		if (m_edges[i]) {
+			m_edges[i]->debugDraw(clr, dynamic);
+		}
 	}
 	for (int i = 0; i < nAnchors; i++) {
-		m_anchors[i]->debugDraw(clr, dynamic);
+		if (m_anchors[i]) {
+			m_anchors[i]->debugDraw(clr, dynamic);
+		}
 	}
 	//for (int i = 0; i < nBendings; i++) {
-	//	m_bendings[i]->debugDraw(clr, dynamic);
+	//	if (m_bendings[i]) {
+	//		m_bendings[i]->debugDraw(clr, dynamic);
+	//	}
 	//}
 }
 

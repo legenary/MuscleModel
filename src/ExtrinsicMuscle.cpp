@@ -56,17 +56,23 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 		// Insertion height: the height of point where the follicle is inserted by the muscle, range [-1, 1]*fol_half_height
 		for (int f : {1, 2}) {
 			if (INSERTION_IDX[i][f] >= 0) {
-				btRigidBody* body = m_pad->getFollicleByIndex(INSERTION_IDX[i][f])->getBody();
-				// Default insertion height: 1, otherwise check INSERTION HEIGHT
-				btScalar insertion_height = 
-					(INSERTION_HEIGHT.size() ? INSERTION_HEIGHT[i][1] : 1) * 
-					param->FOLLICLE_POS_ORIENT_LEN_VOL[INSERTION_IDX[i][f]][6] / 2;
-				btTransform trans = createTransform(btVector3(insertion_height, 0., 0.));
-				Tissue* tissue = new Tissue(m_sim, 
-					node, body, createTransform(), trans, 
-					m_parameter->k_layer1, 0.0f /*no torsional*/, m_parameter->zeta_layer, 0.0f /*no torsional*/);
-				getWorld()->addConstraint(tissue->getConstraint(), true);
-				m_insertionPieces.push_back(tissue);
+				if (const auto& fol = m_pad->getFollicleByIndex(INSERTION_IDX[i][f])) {
+					btRigidBody* body = fol->getBody();
+					// Default insertion height: 1, otherwise check INSERTION HEIGHT
+					btScalar insertion_height = 
+						(INSERTION_HEIGHT.size() ? INSERTION_HEIGHT[i][1] : 1) * 
+						param->FOLLICLE_POS_ORIENT_LEN_VOL[INSERTION_IDX[i][f]][6] / 2;
+					btTransform trans = createTransform(btVector3(insertion_height, 0., 0.));
+					Tissue* tissue = new Tissue(m_sim, 
+						node, body, createTransform(), trans, 
+						m_parameter->k_layer1, 0.0f /*no torsional*/, m_parameter->zeta_layer, 0.0f /*no torsional*/);
+					getWorld()->addConstraint(tissue->getConstraint(), true);
+					m_insertionPieces.push_back(tissue);
+				}
+				else {
+					// follicle is skipped during initialization
+					m_insertionPieces.push_back(nullptr);
+				}
 			}
 		}
 	}
@@ -91,8 +97,10 @@ void ExtrinsicMuscle::contractTo(btScalar ratio) {
 void ExtrinsicMuscle::update(bool updateFiber) {
 	m_Hamiltonian = 0;
 	for (int i = 0; i < nInsertionPieces; i++) {
-		m_insertionPieces[i]->update();
-		m_Hamiltonian += m_insertionPieces[i]->getHamiltonian();
+		if (m_insertionPieces[i]) {
+			m_insertionPieces[i]->update();
+			m_Hamiltonian += m_insertionPieces[i]->getHamiltonian();
+		}
 	}
 	if (updateFiber) {
 		for (int i = 0; i < nMusclePieces; i++) {
@@ -110,10 +118,14 @@ void ExtrinsicMuscle::update(bool updateFiber) {
 
 void ExtrinsicMuscle::debugDraw(btVector3 clr) {
 	for (int i = 0; i < nMusclePieces; i++) {
-		m_musclePieces[i]->debugDraw(clr);
+		if (m_musclePieces[i]) {
+			m_musclePieces[i]->debugDraw(clr);
+		}
 	}
 	for (int i = 0; i < nInsertionPieces; i++) {
-		m_insertionPieces[i]->debugDraw(clr);
+		if (m_insertionPieces[i]) {
+			m_insertionPieces[i]->debugDraw(clr);
+		}
 	}
 }
 

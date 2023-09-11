@@ -24,18 +24,24 @@ MystacialPad::MystacialPad(Simulation* sim, Parameter* param)
 	nFollicle = param->FOLLICLE_POS_ORIENT_LEN_VOL.size();
 	std::cout << "Total Number " << nFollicle << "... ";
 	for (int f = 0; f < nFollicle; f++) {
-		btVector3 this_pos = btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[f][0],
-									   param->FOLLICLE_POS_ORIENT_LEN_VOL[f][1],
-									   param->FOLLICLE_POS_ORIENT_LEN_VOL[f][2]);
-		btVector3 this_ypr = btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[f][3],
-									   -param->FOLLICLE_POS_ORIENT_LEN_VOL[f][4],
-									   param->FOLLICLE_POS_ORIENT_LEN_VOL[f][5]);
-		btScalar this_len = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6]; /*length already in mm*/
-		btScalar this_mass = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][7] /*volume already in mm^3*/ * param->fol_density;
-		btTransform this_trans = createTransform(this_pos, this_ypr);
-		std::unique_ptr<Follicle> follicle = std::make_unique<Follicle>(this, this_trans, param->fol_radius, this_len/2, this_mass, param->fol_damping, f);
-		follicle->setUserPointer(follicle->getInfo());
-		m_follicleArray.push_back(std::move(follicle));
+		if (param->m_model == MODEL::FULL && (f == 23 || f == 30)) {
+			// skip these follicles
+			m_follicleArray.push_back(nullptr);
+		}
+		else {
+			btVector3 this_pos = btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[f][0],
+										   param->FOLLICLE_POS_ORIENT_LEN_VOL[f][1],
+										   param->FOLLICLE_POS_ORIENT_LEN_VOL[f][2]);
+			btVector3 this_ypr = btVector3(param->FOLLICLE_POS_ORIENT_LEN_VOL[f][3],
+										   -param->FOLLICLE_POS_ORIENT_LEN_VOL[f][4],
+										   param->FOLLICLE_POS_ORIENT_LEN_VOL[f][5]);
+			btScalar this_len = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][6]; /*length already in mm*/
+			btScalar this_mass = param->FOLLICLE_POS_ORIENT_LEN_VOL[f][7] /*volume already in mm^3*/ * param->fol_density;
+			btTransform this_trans = createTransform(this_pos, this_ypr);
+			std::unique_ptr<Follicle> follicle = std::make_unique<Follicle>(this, this_trans, param->fol_radius, this_len/2, this_mass, param->fol_damping, f);
+			follicle->setUserPointer(follicle->getInfo());
+			m_follicleArray.push_back(std::move(follicle));
+		}
 	}
 	std::cout << "Done.\n";
 }
@@ -97,15 +103,21 @@ void MystacialPad::createIntrinsicSlingMuscle() {
 	for (int s = 0; s < nISM; s++) {
 		auto& folC = m_follicleArray[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][0]];
 		auto& folR = m_follicleArray[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][1]];
-		btTransform frameC = createTransform(btVector3(m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][0]][6] / 2, 0., 0.));
-		btTransform frameR = createTransform(btVector3(-m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][1]][6] / 2 * 0.4, 0., 0.)); // 70% of rostral member
-		std::unique_ptr<IntrinsicSlingMuscle> muscle = std::make_unique<IntrinsicSlingMuscle>(m_sim, folC->getBody(), folR->getBody(), frameC, frameR, m_parameter->f0_ISM, s /*userIndex*/);
-		getWorld()->addConstraint(muscle->getConstraint(), true); // disable collision
-		m_ISMArray.push_back(std::move(muscle));
+		if (folC && folR) {
+			btTransform frameC = createTransform(btVector3(m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][0]][6] / 2, 0., 0.));
+			btTransform frameR = createTransform(btVector3(-m_parameter->FOLLICLE_POS_ORIENT_LEN_VOL[m_parameter->INTRINSIC_SLING_MUSCLE_IDX[s][1]][6] / 2 * 0.4, 0., 0.)); // 70% of rostral member
+			std::unique_ptr<IntrinsicSlingMuscle> muscle = std::make_unique<IntrinsicSlingMuscle>(m_sim, folC->getBody(), folR->getBody(), frameC, frameR, m_parameter->f0_ISM, s /*userIndex*/);
+			getWorld()->addConstraint(muscle->getConstraint(), true); // disable collision
+			m_ISMArray.push_back(std::move(muscle));
+		}
+		else {
+			// follicles are skipped in the initialization 
+			m_ISMArray.push_back(nullptr);
+		}
 	}
 	// greek muscles
 	for (int g = 0; g < m_parameter->INTRINSIC_SLING_MUSCLE_GREEK.size(); g++) {
-		// constract nodes
+		// construct nodes
 		btTransform t = createTransform(btVector3(m_parameter->INTRINSIC_SLING_MUSCLE_GREEK[g][1],
 			m_parameter->INTRINSIC_SLING_MUSCLE_GREEK[g][2], m_parameter->INTRINSIC_SLING_MUSCLE_GREEK[g][3]));
 		btCollisionShape* s = new btSphereShape(0.1);
@@ -151,7 +163,9 @@ void MystacialPad::contractMuscle(MUSCLE mus, btScalar ratio) {
 	case MUSCLE::ISM:
 		std::cout << "Contracting intrinsic muscle...\n";
 		for (int s = 0; s < nISM; s++) {
-			m_ISMArray[s]->contractTo(ratio);
+			if (m_ISMArray[s]) {
+				m_ISMArray[s]->contractTo(ratio);
+			}
 		}
 		break;
 	case MUSCLE::N:
@@ -248,8 +262,10 @@ void MystacialPad::update(btScalar dt) {
 
 	m_Hamiltonian = 0;
 	for (int i = 0; i < nFollicle; i++) {
-		m_follicleArray[i]->update();
-		m_Hamiltonian += m_follicleArray[i]->getHamiltonian();
+		if (m_follicleArray[i]) {
+			m_follicleArray[i]->update();
+			m_Hamiltonian += m_follicleArray[i]->getHamiltonian();
+		}
 	}
 	// only linear springs need update
 	// torsional springs don't
@@ -264,10 +280,12 @@ void MystacialPad::update(btScalar dt) {
 
 	
 	for (int i = 0; i < nISM; i++) {
-		if (fiberQueryFlag) {
-			m_ISMArray[i]->update();
+		if (m_ISMArray[i]) {
+			if (fiberQueryFlag) {
+				m_ISMArray[i]->update();
+			}
+			m_Hamiltonian += m_ISMArray[i]->getHamiltonian();
 		}
-		m_Hamiltonian += m_ISMArray[i]->getHamiltonian();
 	}
 		
 	if (m_nasolabialis) { 
@@ -305,10 +323,16 @@ void MystacialPad::update(btScalar dt) {
 void MystacialPad::bufferFolPos(std::vector<std::vector<std::vector<btScalar>>>& output) {
 	// output all follicle top/bottom pos
 	for (int i = 0; i < nFollicle; i++) {
-		btVector3 pos_top = m_follicleArray[i]->getTopLocation();
-		btVector3 pos_bot = m_follicleArray[i]->getBotLocation();
-		std::vector<btScalar> posVec{ pos_top[0], pos_top[1], pos_top[2],
-									  pos_bot[0], pos_bot[1], pos_bot[2] };
+		std::vector<btScalar> posVec;
+		if (m_follicleArray[i]) {
+			btVector3 pos_top = m_follicleArray[i]->getTopLocation();
+			btVector3 pos_bot = m_follicleArray[i]->getBotLocation();
+			posVec = { pos_top[0], pos_top[1], pos_top[2],
+					   pos_bot[0], pos_bot[1], pos_bot[2] };
+		}
+		else {
+			posVec = { 0.f, 0.f, 0.f, 0.f, 0.f, 0.f };
+		}
 
 		output[i].push_back(posVec);
 	}
@@ -328,15 +352,17 @@ void MystacialPad::postInitPhysics() {
 
 void MystacialPad::debugDraw() {
 	//if (m_layer1) {
-	//	m_layer1->debugDraw(btVector3(1., 0., 0.), true);
+	//	m_layer1->debugDraw(btVector3(1., 0., 0.), false);
 	//}
 	//if (m_layer2) {
-	//	m_layer2->debugDraw(btVector3(1., 0., 0.), true);
+	//	m_layer2->debugDraw(btVector3(1., 0., 0.), false);
 	//}
 
-	for (int i = 0; i < nISM; i++) {
-		m_ISMArray[i]->debugDraw(RED, false);
-	}
+	//for (int i = 0; i < nISM; i++) {
+	//	if (m_ISMArray[i]) {
+	//		m_ISMArray[i]->debugDraw(RED, false);
+	//	}
+	//}
 
 	if (m_nasolabialis) {
 		m_nasolabialis->debugDraw(GREEN);

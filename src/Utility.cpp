@@ -192,7 +192,9 @@ void S_dumpster::Update() {
 		std::vector<btScalar> data;
 		data.reserve(content_element_count[i]);
 		for (int n = 0; n < content_element_count[i]; n++) {
-			data.push_back(*(static_cast<const btScalar*>(content_address[i]) + n));
+			if (content_address[i]) {
+				data.push_back(*(static_cast<const btScalar*>(content_address[i]) + n));
+			}
 		}
 		content_data[i].push_back(data);
 	}

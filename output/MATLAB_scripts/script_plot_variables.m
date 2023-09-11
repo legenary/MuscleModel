@@ -1,7 +1,6 @@
 clear; close all;
 
 path = GetFullPath('../bundle_full');
-
 variable_names = {
     % ISM_3 for reduced size
     'ISM_12_length';
@@ -10,7 +9,6 @@ variable_names = {
     'ISM_12_hill_model_comps';
     'ISM_12_excitation';
     'ISM_12_activation';
-    
 %     'fol_04'
 };
 
@@ -59,12 +57,3 @@ figure; hold on;
 plot(az(:, 12+1));
 plot(el(:, 12+1));
 title('C2 follicle azimuthal angle change');
-
-% close all;
-% fPEx =		[1.0,	1.1,	1.2,	1.3,	1.4,	1.5,	1.6,	1.7,	1.8,	1.9,	2.0];
-% fPEy =		[0.0,	0.01,	0.04,	0.11,	0.26,	0.45,	0.7,	1.0,	1.3,	1.6,	2.0];
-% plot(fPEx, fPEy); hold on
-% 
-% fLx = [0.5,	0.95,	1.05,	1.1,	1.8];
-% fLy = [0.0,	1.0,	1.0,	0.96,	0.0];
-% plot(fLx, fLy);

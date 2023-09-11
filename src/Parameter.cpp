@@ -35,9 +35,11 @@ Parameter::Parameter() {
 
 	// mode
 	m_model = MODEL::FULL;
+	//FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M;
 	FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS | MUSCLE::NS;
 
 	// contract
+	//FlagContractMuscle = MUSCLE::NONE;
 	FlagContractMuscle = MUSCLE::ISM;
 	//FlagContractMuscle = MUSCLE::N | MUSCLE::M;
 	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
@@ -86,7 +88,7 @@ Parameter::Parameter() {
 								// default: 0, no damping
 								// dampnig is implemented in tissue
 		// muscle parameter
-		btScalar f0 = 1.2;		// Bullet unit: 1e-6 (N), uN
+		btScalar f0 = 1.5;		// Bullet unit: 1e-6 (N), uN
 		f0_ISM = 20*f0; 
 		f0_nasolabialis = 25*f0;
 		f0_maxillolabialis = 25*f0;
