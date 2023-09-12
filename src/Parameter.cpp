@@ -34,24 +34,33 @@ Parameter::Parameter() {
 	fol_density = 0.001;	// Bullet unit: g/mm^3
 
 	// mode
-	m_model = MODEL::FULL;
+	m_model = MODEL::REDUCED;
 	//FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M;
 	FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS | MUSCLE::NS;
 
 	// contract
 	//FlagContractMuscle = MUSCLE::NONE;
-	FlagContractMuscle = MUSCLE::ISM;
+	//FlagContractMuscle = MUSCLE::ISM;
 	//FlagContractMuscle = MUSCLE::N | MUSCLE::M;
 	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
 	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M;
 	//FlagContractMuscle = MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
-	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
+	FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
 	//FlagContractMuscle = MUSCLE::PMS | MUSCLE::PMI;
 
-	contract_range = 0.3;
-	contract_frequency = 1; // Hz
-	contract_count = 3;
-	muslce_activation_tau = 0.02; // activation time constant
+	contract_to = 0.7;
+	whisking_frequency = 1; // Hz
+
+	phase1_count = 3;
+	phase1_offset = 0;
+	phase1_peak = 0.7;
+
+	phase2_count = 3;
+	phase2_offset = 0.7;
+	phase2_peak = 0.3;
+
+	muslce_activation_tau_a = 0.08; // activation time constant
+	muslce_activation_tau_d = 0.08; // dactivation time constant
 
 	switch (m_model) {
 	case MODEL::FULL: {

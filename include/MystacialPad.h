@@ -31,6 +31,7 @@ private:
 	std::unique_ptr<ExtrinsicMuscle> m_PM;
 	std::vector<std::vector<float>> heightPlaceHolder;
 
+	std::unordered_map<MUSCLE, uint8_t> muscleProtractRetractStatus; // 0: nonexist or nonaxtivating, 1: contract, 2: relax
 	btScalar m_Hamiltonian;
 
 	bool checkCreateMuscleFlag(MUSCLE mus) const;

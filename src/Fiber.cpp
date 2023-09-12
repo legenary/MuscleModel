@@ -56,13 +56,14 @@ void Fiber::init() {
 
 	m_constraint->enableFeedback(true);
 
-	m_activation_tau = m_sim->getParameter()->muslce_activation_tau;
+	m_activation_tau_a = m_sim->getParameter()->muslce_activation_tau_a;
+	m_activation_tau_d = m_sim->getParameter()->muslce_activation_tau_d;
 }
 
 //*This is run per fiber query (60Hz)
 void Fiber::update() {
 	// update activation based on neural excitation
-	btScalar da = (m_excitation - m_activation) / m_activation_tau;
+	btScalar da = (m_excitation - m_activation) / calculateTau();
 	m_activation += da * m_sim->getParameter()->m_time_step;
 
 	// for Fiber: eq points are used to calculate the force direction
@@ -142,6 +143,16 @@ void Fiber::update() {
 
 	m_prev_length = m_length;
 	m_prev_force = m_force;
+}
+
+btScalar Fiber::calculateTau() {
+	// Millard et al 2013
+	if (m_excitation > m_activation) {
+		return m_activation_tau_a * (0.5 + 1.5 * m_activation);
+	}
+	else {
+		return m_activation_tau_d / (0.5 + 1.5 * m_activation);
+	}
 }
 
 

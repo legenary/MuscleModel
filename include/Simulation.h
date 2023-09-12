@@ -19,6 +19,8 @@ private:
 	btScalar m_time;
 	int m_step;
 
+	btScalar phase1_ratio, phase2_ratio;
+
 	Parameter* param; 
 	MystacialPad* m_mystacialPad;
 	std::vector<std::vector<std::vector<btScalar>>> output_fol_pos;
@@ -28,6 +30,8 @@ private:
 
 	void preInitPhysics();
 	void postInitPhysics();
+
+	void calculateContractionPhase();
 
 	void updateCollisionListener();
 	void applyAdditionalDamping();
@@ -59,6 +63,7 @@ public:
 	bool exitSim = false;
 
 	inline Parameter* getParameter() const { return param; }
+	inline int getSimulationStep() const { return m_step; }
 
 	bool flagMuscleContractionStateChange = false;
 

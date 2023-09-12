@@ -1,7 +1,7 @@
 FPS: 120Hz
 Simulation internal step: 40
 Muscle query rate: 120.0Hz
-Contraction ratio: 0.30
+Contraction ratio: 0.70
 Tissue damping ratio zeta = 1.000
 Anchor damping ratio zeta (translational) = 5.500
 Anchor damping ratio zeta (torsional) = 7.000

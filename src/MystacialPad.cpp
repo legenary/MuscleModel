@@ -161,41 +161,43 @@ void MystacialPad::createMaxillolabialis() {
 void MystacialPad::contractMuscle(MUSCLE mus, btScalar ratio) {
 	switch (m_parameter->FlagContractMuscle & mus) {
 	case MUSCLE::ISM:
-		std::cout << "Contracting intrinsic muscle...\n";
 		for (int s = 0; s < nISM; s++) {
 			if (m_ISMArray[s]) {
 				m_ISMArray[s]->contractTo(ratio);
 			}
 		}
+		muscleProtractRetractStatus[mus] = (ratio == btScalar(1.f)) ? 2 : 1;
 		break;
 	case MUSCLE::N:
-		std::cout << "Contracting nasolabialis (N)...\n";
 		m_nasolabialis->contractTo(ratio);
+		muscleProtractRetractStatus[mus] = (ratio == btScalar(1.f)) ? 2 : 1;
 		break;
 	case MUSCLE::M:
-		std::cout << "Contracting maxillolabialis (M)...\n";
 		m_maxillolabialis->contractTo(ratio);
+		muscleProtractRetractStatus[mus] = (ratio == btScalar(1.f)) ? 2 : 1;
 		break;
 	case MUSCLE::NS:
-		std::cout << "Contracting nasolabialis superficialis (NS)...\n";
 		m_NS->contractTo(ratio);
+		muscleProtractRetractStatus[mus] = (ratio == btScalar(1.f)) ? 2 : 1;
 		break;
 	case MUSCLE::PMS:
-		std::cout << "Contracting pars media superior (PMS)...\n";
 		m_PMS->contractTo(ratio);
+		muscleProtractRetractStatus[mus] = (ratio == btScalar(1.f)) ? 2 : 1;
 		break;
 	case MUSCLE::PMI:
-		std::cout << "Contracting pars media inferior (PMI)...\n";
 		m_PMI->contractTo(ratio);
+		muscleProtractRetractStatus[mus] = (ratio == btScalar(1.f)) ? 2 : 1;
 		break;
 	case MUSCLE::PIP:
-		std::cout << "Contracting pars interna produnda (PIP)...\n";
 		m_PIP->contractTo(ratio);
+		muscleProtractRetractStatus[mus] = (ratio == btScalar(1.f)) ? 2 : 1;
 		break;
 	case MUSCLE::PM:
-		std::cout << "Contracting pars maxilloris (PM)...\n";
 		m_PM->contractTo(ratio);
+		muscleProtractRetractStatus[mus] = (ratio == btScalar(1.f)) ? 2 : 1;
 		break;
+	default:
+		muscleProtractRetractStatus[mus] = 0;
 	}
 }
 
@@ -317,7 +319,15 @@ void MystacialPad::update(btScalar dt) {
 		m_Hamiltonian += m_PM->getHamiltonian(); 
 	}
 
-	
+	char step[4];
+	sprintf(step, "%03d", m_sim->getSimulationStep());
+	std::string s = "Step: " + std::string(step) + ", Contracting: ";
+	for (const auto& status : muscleProtractRetractStatus) {
+		if (status.second == 1) {
+			s += MSUCLEstrings[status.first] + ", ";
+		}
+	}
+	std::cout << s << std::endl;
 }
 
 void MystacialPad::bufferFolPos(std::vector<std::vector<std::vector<btScalar>>>& output) {
@@ -364,21 +374,21 @@ void MystacialPad::debugDraw() {
 	//	}
 	//}
 
-	if (m_nasolabialis) {
-		m_nasolabialis->debugDraw(GREEN);
-	}
-	if (m_maxillolabialis) {
-		m_maxillolabialis->debugDraw(BLUE);
-	}
+	//if (m_nasolabialis) {
+	//	m_nasolabialis->debugDraw(GREEN);
+	//}
+	//if (m_maxillolabialis) {
+	//	m_maxillolabialis->debugDraw(BLUE);
+	//}
 	//if (m_NS) {
 	//	m_NS->debugDraw(BLUE);
 	//}
-	//if (m_PMS) {
-	//	m_PMS->debugDraw(ORANGE);
-	//}
-	//if (m_PMI) {
-	//	m_PMI->debugDraw(YELLOW);
-	//}
+	if (m_PMS) {
+		m_PMS->debugDraw(ORANGE);
+	}
+	if (m_PMI) {
+		m_PMI->debugDraw(YELLOW);
+	}
 	//if (m_PIP) {
 	//	m_PIP->debugDraw(ORANGE);
 	//}

@@ -27,28 +27,19 @@ void Simulation::stepSimulation(float deltaTime) {
 	m_step += 1;										// increase step
 
 	if (m_mystacialPad && (param->m_time_stop == 0 || m_time < param->m_time_stop)) {
-
-		// contraction/retraction
-		int numStepToChangeState = param->getFPS() / param->contract_frequency / 2.0f;
-		flagMuscleContractionStateChange = (m_step - 1) % numStepToChangeState == 0;
-
-		static btScalar contractTo = 1 - param->contract_range;
-		if (flagMuscleContractionStateChange && param->contract_count > 0) {
-
-			// contarct synchronously with ISM (these muscles are protractors)
-			m_mystacialPad->contractMuscle(MUSCLE::ISM, contractTo);
-			m_mystacialPad->contractMuscle(MUSCLE::NS, contractTo);
-			m_mystacialPad->contractMuscle(MUSCLE::PMS, contractTo);
-			m_mystacialPad->contractMuscle(MUSCLE::PMI, contractTo);
-			m_mystacialPad->contractMuscle(MUSCLE::N, contractTo);
-			m_mystacialPad->contractMuscle(MUSCLE::M, contractTo);
-			m_mystacialPad->contractMuscle(MUSCLE::PIP, contractTo);
-			m_mystacialPad->contractMuscle(MUSCLE::PM, contractTo);
-			contractTo = 2 - param->contract_range - contractTo;
-			// contract asynchronously with ISM (these muscles are retractors)
-
-			// reduced contract count by half cycle
-			param->contract_count -= 0.5;
+		// protraction/retraction (can overlap)
+		{
+			calculateContractionPhase();
+			// phase 1: ISM protractors
+			m_mystacialPad->contractMuscle(MUSCLE::ISM, phase1_ratio);
+			m_mystacialPad->contractMuscle(MUSCLE::NS,  phase1_ratio);
+			m_mystacialPad->contractMuscle(MUSCLE::PMS, phase1_ratio);
+			m_mystacialPad->contractMuscle(MUSCLE::PMI, phase1_ratio);
+			// phase 2: extrinsic retractors, including N, M, PIP, PM
+			m_mystacialPad->contractMuscle(MUSCLE::N,   phase2_ratio);
+			m_mystacialPad->contractMuscle(MUSCLE::M,   phase2_ratio);
+			m_mystacialPad->contractMuscle(MUSCLE::PIP, phase2_ratio);
+			m_mystacialPad->contractMuscle(MUSCLE::PM,  phase2_ratio);
 		}
 
 		// update constraint physics options
@@ -422,6 +413,8 @@ void Simulation::preInitPhysics() {
 
 void Simulation::postInitPhysics() {
 	int total_frame = (int)param->m_fps * param->m_time_stop;
+	phase1_ratio = 1.f; 
+	phase2_ratio = 1.f;
 	// initialize Singleton data member for output
 	{
 		std::vector<btScalar> vec;
@@ -511,6 +504,50 @@ void Simulation::zeroFrameSetup() {
 	}
 }
 
+void Simulation::calculateContractionPhase() {
+	btScalar t_cycle = (btScalar)(m_step - 1) / param->getFPS();
+	btScalar t_phase1 = t_cycle - param->phase1_offset;
+	btScalar t_phase2 = t_cycle - param->phase2_offset;
+	btScalar full_cycle = 1.0;
+
+
+	bool phase1_contracting = false;
+	bool phase2_contracting = false;
+	if (t_phase1 >= 0) {
+		btScalar t_phase1_loc = modf(t_phase1, &full_cycle);
+		// reduce the phase count by 0.5 at the start (contraction) and the peak (relaxation)
+		if (btFuzzyZero(t_phase1_loc) || btFuzzyZero(t_phase1_loc - param->phase1_peak)) {
+			param->phase1_count -= 0.5;
+		}
+		if (t_phase1_loc < param->phase1_peak) {
+			phase1_contracting = true;
+		}
+	}
+	if (t_phase2 >= 0) {
+		btScalar t_phase2_loc = modf(t_phase2, &full_cycle);
+		if (btFuzzyZero(t_phase2_loc) || btFuzzyZero(t_phase2_loc - param->phase2_peak)) {
+			param->phase2_count -= 0.5;
+		}
+		if (t_phase2_loc < param->phase2_peak) {
+			phase2_contracting = true;
+		}
+	}
+
+	// don't update protract/retract ratios after the count is exhausted
+	if (param->phase1_count >= 0) {
+		phase1_ratio = 1.0f;
+		if (phase1_contracting) {
+			phase1_ratio = param->contract_to;
+		}
+	}
+	if (param->phase2_count >= 0) {
+		phase2_ratio = 1.0f;
+		if (phase2_contracting) {
+			phase2_ratio = param->contract_to;
+		}
+	}
+}
+
 void Simulation::updateCollisionListener() {
 	std::map<const btCollisionObject*, std::vector<btManifoldPoint*>> objectsCollisions;
 	int numManifolds = m_dynamicsWorld->getDispatcher()->getNumManifolds();
@@ -565,7 +602,7 @@ void Simulation::initParameter(Parameter* parameter) {
 		"f0_pars_interna_profunda=%.6fN\nf0_pars_maxillaris=%.6fN\n",
 		param->getFPS(), param->m_num_internal_step,
 		1 / param->inverse_fiber_query_rate,
-		param->contract_range,
+		param->contract_to,
 		param->zeta_layer,
 		param->zeta_anchor_translational, param->zeta_anchor_torsional,
 		param->k_layer1 * 0.001, param->k_layer2 * 0.001,

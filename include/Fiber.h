@@ -28,13 +28,16 @@ protected:
 	btScalar m_velocity;					// fiber lengthening/shortening velocity
 	btScalar m_excitation;					// neural excitation, between 0 and 1
 	btScalar m_activation;					// muscle activation level
-	btScalar m_activation_tau;
+	btScalar m_activation_tau_a;			// activation time constant
+	btScalar m_activation_tau_d;			// deactivation time constant
 
 	btVector3 m_force, m_prev_force;
 	btVector3 m_hill_model_components;
 	btScalar m_force_magnitude;
 
 	btScalar m_Hamiltonian;
+
+	btScalar calculateTau();
 
 public:
 	Fiber(Simulation* sim, btRigidBody* rbA, btRigidBody* rbB,

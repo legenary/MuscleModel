@@ -25,6 +25,17 @@ enum MUSCLE {
 	PMI = BIT(6),
 	PM = BIT(7)
 };
+static std::unordered_map<MUSCLE, std::string> MSUCLEstrings = {
+	{MUSCLE::NONE, "NONE"},
+	{MUSCLE::ISM, "ISM"},
+	{MUSCLE::N, "N"},
+	{MUSCLE::M, "M"},
+	{MUSCLE::NS, "NS"},
+	{MUSCLE::PMS, "PMS"},
+	{MUSCLE::PMI, "PMI"},
+	{MUSCLE::PIP, "PIP"},
+	{MUSCLE::PM, "PM"},
+};
 
 class Parameter {
 
@@ -47,9 +58,14 @@ public:
 	int DEBUG;
 
 	uint8_t FlagContractMuscle;
-	btScalar contract_range;
-	btScalar contract_frequency;
-	btScalar contract_count;
+	btScalar contract_to;
+	btScalar whisking_frequency;
+	btScalar phase1_count;
+	btScalar phase2_count;
+	btScalar phase1_offset;
+	btScalar phase1_peak;
+	btScalar phase2_offset;
+	btScalar phase2_peak;
 
 	btScalar camPos[3];
 	btScalar camDist;
@@ -94,7 +110,8 @@ public:
 	// contraction
 	std::string dir_intrinsic_sling_muscle_contraction_trajectory;
 	std::vector<std::vector<float>> INTRINSIC_SLING_MUSCLE_CONTRACTION_TRAJECTORY;
-	btScalar muslce_activation_tau;
+	btScalar muslce_activation_tau_a;
+	btScalar muslce_activation_tau_d;
 
 	// M.nasolabialis
 	std::string dir_nasolabialis_node_pos;
