@@ -24,7 +24,8 @@ private:
 	Parameter* param; 
 	MystacialPad* m_mystacialPad;
 	std::vector<std::vector<std::vector<btScalar>>> output_fol_pos;
-	char parameter_string[512];
+	std::string draw_text;
+	char parameter_string[2048];
 
 	void zeroFrameSetup();
 
@@ -64,6 +65,7 @@ public:
 
 	inline Parameter* getParameter() const { return param; }
 	inline int getSimulationStep() const { return m_step; }
+	const std::string& getDrawText() const;
 
 	bool flagMuscleContractionStateChange = false;
 

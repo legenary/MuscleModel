@@ -33,6 +33,7 @@ private:
 
 	std::unordered_map<MUSCLE, uint8_t> muscleProtractRetractStatus; // 0: nonexist or nonaxtivating, 1: contract, 2: relax
 	btScalar m_Hamiltonian;
+	std::string draw_text;
 
 	bool checkCreateMuscleFlag(MUSCLE mus) const;
 
@@ -72,6 +73,7 @@ public:
 	//int getLayer2Tissue() const;
 
 	void debugDraw();
+	std::string getDrawText() const;
 	inline btDynamicsWorld* getWorld() {
 		return m_sim->getDynamicsWorld();
 	}

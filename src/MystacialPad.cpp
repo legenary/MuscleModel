@@ -321,13 +321,13 @@ void MystacialPad::update(btScalar dt) {
 
 	char step[4];
 	sprintf(step, "%03d", m_sim->getSimulationStep());
-	std::string s = "Step: " + std::string(step) + ", Contracting: ";
+	draw_text = "Frame: " + std::string(step) + ", Contracting: ";
 	for (const auto& status : muscleProtractRetractStatus) {
 		if (status.second == 1) {
-			s += MSUCLEstrings[status.first] + ", ";
+			draw_text += MSUCLEstrings[status.first] + ", ";
 		}
 	}
-	std::cout << s << std::endl;
+	std::cout << draw_text << std::endl;
 }
 
 void MystacialPad::bufferFolPos(std::vector<std::vector<std::vector<btScalar>>>& output) {
@@ -361,25 +361,25 @@ void MystacialPad::postInitPhysics() {
 
 
 void MystacialPad::debugDraw() {
-	//if (m_layer1) {
-	//	m_layer1->debugDraw(btVector3(1., 0., 0.), false);
-	//}
-	//if (m_layer2) {
-	//	m_layer2->debugDraw(btVector3(1., 0., 0.), false);
-	//}
+	if (m_layer1) {
+		m_layer1->debugDraw(btVector3(1., 0., 0.), false);
+	}
+	if (m_layer2) {
+		m_layer2->debugDraw(btVector3(1., 0., 0.), false);
+	}
 
-	//for (int i = 0; i < nISM; i++) {
-	//	if (m_ISMArray[i]) {
-	//		m_ISMArray[i]->debugDraw(RED, false);
-	//	}
-	//}
+	for (int i = 0; i < nISM; i++) {
+		if (m_ISMArray[i]) {
+			m_ISMArray[i]->debugDraw(RED, false);
+		}
+	}
 
-	//if (m_nasolabialis) {
-	//	m_nasolabialis->debugDraw(GREEN);
-	//}
-	//if (m_maxillolabialis) {
-	//	m_maxillolabialis->debugDraw(BLUE);
-	//}
+	if (m_nasolabialis) {
+		m_nasolabialis->debugDraw(GREEN);
+	}
+	if (m_maxillolabialis) {
+		m_maxillolabialis->debugDraw(BLUE);
+	}
 	//if (m_NS) {
 	//	m_NS->debugDraw(BLUE);
 	//}
@@ -389,12 +389,16 @@ void MystacialPad::debugDraw() {
 	if (m_PMI) {
 		m_PMI->debugDraw(YELLOW);
 	}
-	//if (m_PIP) {
-	//	m_PIP->debugDraw(ORANGE);
-	//}
-	//if (m_PM) {
-	//	m_PM->debugDraw(YELLOW);
-	//}
+	if (m_PIP) {
+		m_PIP->debugDraw(ORANGE);
+	}
+	if (m_PM) {
+		m_PM->debugDraw(YELLOW);
+	}
+}
+
+std::string MystacialPad::getDrawText() const {
+	return draw_text;
 }
 
 int MystacialPad::getNumFollicles() const {

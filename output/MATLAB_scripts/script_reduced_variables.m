@@ -43,22 +43,32 @@ xticks(0:60:nFrame)
 [top, bot] = readFollicleTopBot(path);
 [az, el, top_bot_eyenose] = readFollicleAzEl(path, 'eyenose');
 
-% figure; hold on;
-% clr = lines(3);
-% plot(top_bot_eyenose{5}(:, 1)-top_bot_eyenose{5}(1, 1), '-', 'Color', clr(1, :));
-% plot(top_bot_eyenose{5}(:, 2)-top_bot_eyenose{5}(1, 2), '-', 'Color', clr(2, :));
-% plot(top_bot_eyenose{5}(:, 3)-top_bot_eyenose{5}(1, 3), '-', 'Color', clr(3, :));
-% legend({'x', 'y', 'z'});
-% % title('fol04 (C2) displacement (y coordinate)')
+figure('Position', [400, 800, 400, 400]); hold on;
+clr = lines(3);
+plot(top_bot_eyenose{5}(:, 1)-top_bot_eyenose{5}(1, 1), '-', 'Color', clr(1, :));
+plot(top_bot_eyenose{5}(:, 2)-top_bot_eyenose{5}(1, 2), '-', 'Color', clr(2, :));
+plot(top_bot_eyenose{5}(:, 3)-top_bot_eyenose{5}(1, 3), '-', 'Color', clr(3, :));
+legend({'x', 'y', 'z'});
+% title('fol04 (C2) displacement (y coordinate)')
 
 
-figure; hold on;
+figure('Position', [400, 400, 1000, 250]); hold on;
 % plot azimuthal angle of follicle #4 (0-indexing)
 plot(az(:, 03+1));
-plot(el(:, 03+1));
+plot(az(1, 03+1)*ones(size(az(:,1))), 'k:');
+ylim([10, 120]);
+xticks([0:60:nFrame]);
+% plot(el(:, 03+1));
 title('C2 follicle azimuthal angle change');
 
-% neural excitation vs activation
+daz = az(2:360, 4+1) - az(1:359, 4+1);
+del = el(2:360, 4+1) - el(1:359, 4+1);
+delta = smooth(del)./smooth(daz);
+delta = rmoutliers(delta);
+mean(delta)
+std(delta)
+
+% % neural excitation vs activation
 % figure; hold on;
 % plot(ISM_03_excitation);
 % plot(ISM_03_activation);

@@ -99,6 +99,8 @@ public:
 
 	uint8_t FlagCreateMuscles;
 
+	btScalar f0;
+
 	// instrinsic sling muscle parameter
 	std::string dir_intrinsic_sling_muscle_idx;
 	std::string dir_intrinsic_sling_muscle_idx_reduced;

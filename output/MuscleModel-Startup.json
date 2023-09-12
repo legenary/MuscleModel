@@ -1,1 +1,1 @@
-{"otherData": {},"traceEvents":[{"cat":"function","dur":272304,"name":"Simulation::initPhysics_reduced","ph":"X","pid":0,"tid":3370644348,"ts":26226231632}]}
+{"otherData": {},"traceEvents":[{"cat":"function","dur":282946,"name":"Simulation::initPhysics_reduced","ph":"X","pid":0,"tid":781195302,"ts":43904080438}]}

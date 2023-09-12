@@ -73,6 +73,9 @@ void Simulation::stepSimulation(float deltaTime) {
 			PROFILE_SCOPE("DebugDraw()");
 			m_mystacialPad->debugDraw();
 			m_dynamicsWorld->debugDrawWorld();
+
+			draw_text.clear();
+			draw_text += m_mystacialPad->getDrawText() + "\n";
 		}
 
 	}
@@ -513,11 +516,14 @@ void Simulation::calculateContractionPhase() {
 
 	bool phase1_contracting = false;
 	bool phase2_contracting = false;
+	static int a = 0;
 	if (t_phase1 >= 0) {
 		btScalar t_phase1_loc = modf(t_phase1, &full_cycle);
 		// reduce the phase count by 0.5 at the start (contraction) and the peak (relaxation)
-		if (btFuzzyZero(t_phase1_loc) || btFuzzyZero(t_phase1_loc - param->phase1_peak)) {
+		if (btEqual(t_phase1_loc, 1e-9) || btEqual(t_phase1_loc - param->phase1_peak, 1e-9)) {
 			param->phase1_count -= 0.5;
+			a++;
+			int b = 1;
 		}
 		if (t_phase1_loc < param->phase1_peak) {
 			phase1_contracting = true;
@@ -525,7 +531,7 @@ void Simulation::calculateContractionPhase() {
 	}
 	if (t_phase2 >= 0) {
 		btScalar t_phase2_loc = modf(t_phase2, &full_cycle);
-		if (btFuzzyZero(t_phase2_loc) || btFuzzyZero(t_phase2_loc - param->phase2_peak)) {
+		if (btEqual(t_phase2_loc, 1e-9) || btEqual(t_phase2_loc - param->phase1_peak, 1e-9)) {
 			param->phase2_count -= 0.5;
 		}
 		if (t_phase2_loc < param->phase2_peak) {
@@ -561,8 +567,8 @@ void Simulation::updateCollisionListener() {
 		int numContacts = contactManifold->getNumContacts();
 		if (numContacts) {
 			double color[4] = { 0, 0, 0, 1 };
-			m_guiHelper->changeRGBAColor(objA->getUserIndex(), color);
-			m_guiHelper->changeRGBAColor(objB->getUserIndex(), color);
+			//m_guiHelper->changeRGBAColor(objA->getUserIndex(), color);
+			//m_guiHelper->changeRGBAColor(objB->getUserIndex(), color);
 			Follicle_info* infoA = static_cast<Follicle_info*>(objA->getUserPointer());
 			Follicle_info* infoB = static_cast<Follicle_info*>(objB->getUserPointer());
 			std::cout << "Follicle "
@@ -587,31 +593,58 @@ void Simulation::initParameter(Parameter* parameter) {
 		std::cout << "Creating output folder..." << std::endl;
 	}
 
+	std::string createdMuscleStrings;
+	for (int i = 0; i < 8; i++) {
+		MUSCLE mus = static_cast<MUSCLE>(BIT(i));
+		if ((param->FlagCreateMuscles & mus) == mus) {
+			createdMuscleStrings += MSUCLEstrings[mus] + ", ";
+		}
+	}
+	std::string contractedMuscleStrings;
+	for (int i = 0; i < 8; i++) {
+		MUSCLE mus = static_cast<MUSCLE>(BIT(i));
+		if ((param->FlagContractMuscle & mus) == mus) {
+			contractedMuscleStrings += MSUCLEstrings[mus] + ", ";
+		}
+	}
+
 	sprintf(parameter_string,
 		"FPS: %dHz\nSimulation internal step: %d\n"
-		"Muscle query rate: %.1fHz\n"
-		"Contraction ratio: %.2f\n"
-		"Tissue damping ratio zeta = %.3f\n"
-		"Anchor damping ratio zeta (translational) = %.3f\n"
-		"Anchor damping ratio zeta (torsional) = %.3f\n"
-		"k_layer1=%.6fN/m\nk_layer2=%.6fN/m\n\n"
-		"fo unit: %.6fN\nf0_intrinsic = %.6fN\n"
-		"f0_nasolabialis(N)=%.6fN\nf0_maxillolabialis(M)=%.6fN\n"
-		"f0_nasolabialis_superficialis(NS)=%.6fN\n"
-		"f0_pars_media_superior=%.6fN\nf0_pars_media_inferior=%.6fN\n"
-		"f0_pars_interna_profunda=%.6fN\nf0_pars_maxillaris=%.6fN\n",
+		"Muscle query rate: %dHz\n"
+		"Whisking freq = %d Contract to: %.2f\n"
+		"Has muscles: %s\nContracting muscles:%s\n"
+		"Phase 1 count = %.1f offset = %.1f peak = %.1f\n"
+		"Phase 2 count = %.1f offset = %.1f peak = %.1f\n\n"
+		"k_layer1 = %.1f\nk_layer2 = %.1f\nzeta_layer=%.1f\n"
+		"k_anchor_translational = %.1f\nk_anchor_torsional = %.1f\n"
+		"zeta_anchor_translational = %.1f\nzeta_anchor_torsional = %.1f\n\n"
+		"fol_damping = %.1f\n\n"
+		"muscle activation constant tau = %.2f\n"
+		"muscle dactivation constant tau = %.2f\n"
+		"f0 = %.2f\n"
+		"ISM scaling = % d\nN scaling = %d\nM scaling = %d\n"
+		"NS scaling = % d\nPMS scaling = %d\nPMI scaling = %d\n"
+		"PIP scaling = % d\nPM scaling = %d\n",
 		param->getFPS(), param->m_num_internal_step,
-		1 / param->inverse_fiber_query_rate,
-		param->contract_to,
-		param->zeta_layer,
+		(int)(1./param->inverse_fiber_query_rate),
+		param->whisking_frequency, param->contract_to,
+		createdMuscleStrings.c_str(), contractedMuscleStrings.c_str(),
+		param->phase1_count, param->phase1_offset, param->phase1_peak,
+		param->phase2_count, param->phase2_offset, param->phase2_peak,
+		param->k_layer1, param->k_layer2, param->zeta_layer,
+		param->k_anchor_translational, param->k_anchor_torsional,
 		param->zeta_anchor_translational, param->zeta_anchor_torsional,
-		param->k_layer1 * 0.001, param->k_layer2 * 0.001,
-		param->f0_ISM * 0.000001 / 20,
-		param->f0_ISM * 0.000001,
-		param->f0_nasolabialis * 0.000001, param->f0_maxillolabialis * 0.000001,
-		param->f0_NS * 0.000001, param->f0_PMS * 0.000001,
-		param->f0_PMI * 0.000001, param->f0_PIP * 0.000001, param->f0_PM * 0.000001
+		param->fol_damping,
+		param->muslce_activation_tau_a, param->muslce_activation_tau_d,
+		param->f0,
+		(int)(param->f0_ISM / param->f0), (int)( param->f0_nasolabialis / param->f0), (int)(param->f0_maxillolabialis / param->f0),
+		(int)(param->f0_NS / param->f0), (int)(param->f0_PMS / param->f0), (int)(param->f0_PMI / param->f0),
+		(int)(param->f0_PIP / param->f0), (int)( param->f0_PM / param->f0)
 	);
+}
+
+const std::string& Simulation::getDrawText() const {
+	return draw_text;
 }
 
 void Simulation::internalWriteOutput() {

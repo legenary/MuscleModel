@@ -43,24 +43,29 @@ Parameter::Parameter() {
 	//FlagContractMuscle = MUSCLE::ISM;
 	//FlagContractMuscle = MUSCLE::N | MUSCLE::M;
 	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
-	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M;
-	//FlagContractMuscle = MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
 	FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
-	//FlagContractMuscle = MUSCLE::PMS | MUSCLE::PMI;
 
 	contract_to = 0.7;
 	whisking_frequency = 1; // Hz
 
 	phase1_count = 3;
 	phase1_offset = 0;
-	phase1_peak = 0.7;
+	phase1_peak = 0.5;
 
 	phase2_count = 3;
-	phase2_offset = 0.7;
-	phase2_peak = 0.3;
+	phase2_offset = 0.5;
+	phase2_peak = 0.5;
 
-	muslce_activation_tau_a = 0.08; // activation time constant
-	muslce_activation_tau_d = 0.08; // dactivation time constant
+	//phase1_count = 3;
+	//phase1_offset = 0;
+	//phase1_peak = 0.7;
+
+	//phase2_count = 3;
+	//phase2_offset = 0.5;
+	//phase2_peak = 0.5;
+
+	muslce_activation_tau_a = 0.1; // activation time constant
+	muslce_activation_tau_d = 0.4; // dactivation time constant
 
 	switch (m_model) {
 	case MODEL::FULL: {
@@ -97,7 +102,7 @@ Parameter::Parameter() {
 								// default: 0, no damping
 								// dampnig is implemented in tissue
 		// muscle parameter
-		btScalar f0 = 1.5;		// Bullet unit: 1e-6 (N), uN
+		f0 = 1.5;		// Bullet unit: 1e-6 (N), uN
 		f0_ISM = 20*f0; 
 		f0_nasolabialis = 25*f0;
 		f0_maxillolabialis = 25*f0;
@@ -107,7 +112,7 @@ Parameter::Parameter() {
 		f0_PMI = 1*f0;
 		f0_PM = 4*f0;
 
-		// old parameters
+		// old parameters for results 6.3.1 ver1
 		//k_layer1 = 250;			
 		//k_layer2 = 500;
 		//k_anchor = 250;			
@@ -122,6 +127,8 @@ Parameter::Parameter() {
 		//f0_PIP = 4 * f0;
 		//f0_PMI = 1 * f0;
 		//f0_PM = 4 * f0;
+
+
 		break;
 	}
 	case MODEL::TEST:
@@ -137,13 +144,13 @@ Parameter::Parameter() {
 		// anchor parameter (translational and torsional)
 		k_anchor_translational = 10;		
 		zeta_anchor_translational = 5.5;	// chosen such that a displaced pad (by M and N) is restored to the same location in the same relaxation duration as contraction. Reference 5.5
-		k_anchor_torsional = 20;			// chosen to be big enough to bring the pad back to original position in swift time. Reference 20
-		zeta_anchor_torsional = 7.0;		// chosen such that a contracted pad (by ISM) is restored to the same location in the same relaxation duration as contraction. Reference 7.0
+		k_anchor_torsional = 30;			// chosen to be big enough to bring the pad back to original position in swift time. Reference 20
+		zeta_anchor_torsional = 10.0;		// chosen such that a contracted pad (by ISM) is restored to the same location in the same relaxation duration as contraction. Reference 7.0
 
 		fol_damping = 0.0;
 
 		// muscle parameter reduced
-		btScalar f0 = 0.6;		// Bullet unit: 1e-6 (N), uN // 0.3 will have ~30 degrees protraction, ISM shortened to 85%
+		f0 = 0.7;		// Bullet unit: 1e-6 (N), uN // 0.3 will have ~30 degrees protraction, ISM shortened to 85%
 								// chosen such that 
 		f0_ISM = 20 * f0;
 		f0_nasolabialis = 25 * f0;
@@ -154,6 +161,45 @@ Parameter::Parameter() {
 		f0_PMI = 1 * f0;
 		f0_PM = 4 * f0; // yellow lower
 		break;
+
+		//  old parameters for results 6.3.1 ver1
+		//k_layer1 = 25;			
+		//k_layer2 = 50;
+		//zeta_layer = 1;			
+		//k_anchor_translational = 10;
+		//k_anchor_torsional = 20;
+		//zeta_anchor_translational = 5.5;
+		//zeta_anchor_torsional = 7.0;
+		//btScalar f0 = 0.6;
+
+		// temp parameters that work! for 6.3.1 kinematic profile
+		//m_num_internal_step = 40;
+		//m_internal_time_step = m_time_step / (btScalar)m_num_internal_step;
+		//m_bending_model = BENDING_MODEL::DIHEDRAL_ANGLE;
+		//// In general, a zeta value = 1 means critically damped. But the system is a highly complex system, so damping should be higher to absorb coupled oscillation
+		//// layer tissue parameter (only translational, no torsional implemented)
+		//k_layer1 = 25;						// Bullet unit: 1e-3 (N/m) === uN/mm
+		//k_layer2 = 50;
+		//zeta_layer = 1.0;					// chosen such that when pulled by M and N, oscillation is minimized
+		//// anchor parameter (translational and torsional)
+		//k_anchor_translational = 10;
+		//zeta_anchor_translational = 5.5;	// chosen such that a displaced pad (by M and N) is restored to the same location in the same relaxation duration as contraction. Reference 5.5
+		//k_anchor_torsional = 30;			// chosen to be big enough to bring the pad back to original position in swift time. Reference 20
+		//zeta_anchor_torsional = 10.0;		// chosen such that a contracted pad (by ISM) is restored to the same location in the same relaxation duration as contraction. Reference 7.0
+
+		//fol_damping = 0.0;
+
+		//// muscle parameter reduced
+		//btScalar f0 = 0.7;		// Bullet unit: 1e-6 (N), uN // 0.3 will have ~30 degrees protraction, ISM shortened to 85%
+		//// chosen such that 
+		//f0_ISM = 20 * f0;
+		//f0_nasolabialis = 25 * f0;
+		//f0_maxillolabialis = 25 * f0;
+		//f0_NS = 1 * f0;
+		//f0_PMS = 1 * f0;
+		//f0_PIP = 4 * f0; // red lower 
+		//f0_PMI = 1 * f0;
+		//f0_PM = 4 * f0; // yellow lower
 	}
 	}
 
