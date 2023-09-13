@@ -34,7 +34,7 @@ public:
 	Follicle& operator=(Follicle const&) = delete;
 	virtual ~Follicle();
 
-	void update();
+	void postUpdate();
 
 	btRigidBody* getBody() const;
 	btRigidBody* getBody();
@@ -62,6 +62,8 @@ public:
 	btVector3& getBotVelocity();
 
 	btScalar getHamiltonian();
+
+	void debugDrawWhisker(btVector3& clr, btScalar lengthScale = 1.f) const;
 
 };
 

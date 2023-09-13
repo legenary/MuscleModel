@@ -5,7 +5,7 @@
 % this script generates follicle information based on data of 2019-17L
 % resliced mystacial pad.
 
-clear;
+clear; close all
 
 follicle_pos_ypr_len_vol = zeros(31, 8);
 
@@ -69,6 +69,22 @@ writematrix(follicle_pos_ypr_len_vol_reduced, '../../follicle_pos_ypr_len_vol_re
 
 save('follicle_pos.mat', 'vec_top2D', 'vec_bot2D');
 
+
+%% generate whisker data
+% whisker_x_y_z_10nodes = zeros(length(idx_reduced_follicle), 3*10);
+% avgRat = load('NewRatMapModelOutput.mat'); %it's called 'model' but it's average
+% row_reduced_follicle = [2, 2, 2, 3, 3, 3, 4, 4, 4];
+% col_reduced_follicle = [2, 3, 4, 2, 3, 4, 2, 3, 4];
+% R = [0.9092,0.3570,0.2142;
+%     -0.3598,0.9326,-0.0270;
+%     -0.2094,-0.0525,0.9764];
+% for i = 1:9
+%     row = row_reduced_follicle(i);
+%     col = col_reduced_follicle(i);
+%     idx_avg_rat = find(avgRat.modelRowW==row & avgRat.modelColW==col);
+%     whisker = avgRat.modelPointsBP(idx_avg_rat, :) + avgRat.modelPointsW{idx_avg_rat};
+%     plot3d(whisker*R, 'k-');
+% end
 
 
 

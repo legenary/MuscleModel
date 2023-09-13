@@ -90,7 +90,13 @@ for nFig = 1:5
     legend('Location', 'northeast', 'Box', 'off')
     
     print(figName_list{nFig}, '-dtiff', '-r300');
-
+    
+    
+    daz = az(61:360, 4+1) - az(60:359, 4+1);
+    del = el(61:360, 4+1) - el(60:359, 4+1);
+    delta = smooth(del)./smooth(daz);
+    delta = rmoutliers(delta);
+    fprintf('del/daz = %.2f +/- %.2f\n', mean(delta), std(delta));
 end
 
 

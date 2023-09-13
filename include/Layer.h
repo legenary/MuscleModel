@@ -69,7 +69,8 @@ public:
 	/* Initialize the dihedral pairs. (Only used in dihedral angle model). See setting in Parameter.cpp */
 	void initDihedralPairs(bool isTop);
 
-	void update();
+	void preUpdate();
+	void postUpdate();
 
 	int getNumTissue() const { return nTissues; }
 

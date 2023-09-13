@@ -54,7 +54,8 @@ public:
 
 	
 	void init();
-	void update();
+	void preUpdate();
+	void postUpdate();
 	void debugDraw(btVector3 clr = btVector3(0., 0., 0.), bool dynamic = false);
 
 	myGeneric6DofMuscleConstraint* getConstraint() const;

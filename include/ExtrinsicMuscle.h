@@ -40,7 +40,8 @@ public:
 	virtual ~ExtrinsicMuscle();
 
 	void contractTo(btScalar ratio);
-	void update(bool updateFiber);
+	void preUpdate(bool updateFiber);
+	void postUpdate();
 	void debugDraw(btVector3 clr = btVector3(0., 0., 0.));
 
 	int getNumberOfNodes() const;

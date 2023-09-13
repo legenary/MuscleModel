@@ -43,8 +43,8 @@ void Simulation::stepSimulation(float deltaTime) {
 			m_mystacialPad->contractMuscle(MUSCLE::PM,  phase2_ratio);
 		}
 
-		// update constraint physics options
-		m_mystacialPad->update(deltaTime);
+		// update physics constraint such as spring equilibirum point or fiber forces
+		m_mystacialPad->preUpdate(deltaTime);
 
 		// last step: step simulation
 		{
@@ -53,6 +53,9 @@ void Simulation::stepSimulation(float deltaTime) {
 				param->m_num_internal_step * 100,		// max sub step
 				param->m_internal_time_step);			// fixed simulation sub time step
 		}
+
+		// update other attributes after step simulation, such as follicle top/bot location
+		m_mystacialPad->postUpdate();
 
 		//// post step simulation: apply additional damping
 		{
@@ -623,7 +626,7 @@ void Simulation::initParameter(Parameter* parameter) {
 	sprintf(parameter_string,
 		"FPS: %dHz\nSimulation internal step: %d\n"
 		"Muscle query rate: %dHz\n"
-		"Whisking freq = %d Contract to: %.2f\n"
+		"Whisking freq = %.1fHz Contract to: %.2f\n"
 		"Has muscles: %s\nContracting muscles:%s\n"
 		"Phase 1 count = %.1f offset = %.1f peak = %.1f\n"
 		"Phase 2 count = %.1f offset = %.1f peak = %.1f\n\n"

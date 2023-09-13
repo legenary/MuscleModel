@@ -129,19 +129,30 @@ void ExtrinsicMuscle::contractTo(btScalar ratio) {
 	}
 }
 
-void ExtrinsicMuscle::update(bool updateFiber) {
-	m_Hamiltonian = 0;
+void ExtrinsicMuscle::preUpdate(bool updateFiber) {
 	for (int i = 0; i < nInsertionPieces; i++) {
 		if (m_insertionPieces[i]) {
-			m_insertionPieces[i]->update();
-			m_Hamiltonian += m_insertionPieces[i]->getHamiltonian();
+			m_insertionPieces[i]->preUpdate();
 		}
 	}
 	if (updateFiber) {
 		for (int i = 0; i < nMusclePieces; i++) {
-			m_musclePieces[i]->update();
-			m_Hamiltonian += m_musclePieces[i]->getHamiltonian();
+			m_musclePieces[i]->preUpdate();
 		}
+	}
+}
+
+void ExtrinsicMuscle::postUpdate() {
+	m_Hamiltonian = 0;
+	for (int i = 0; i < nInsertionPieces; i++) {
+		if (m_insertionPieces[i]) {
+			m_insertionPieces[i]->postUpdate();
+			m_Hamiltonian += m_insertionPieces[i]->getHamiltonian();
+		}
+	}
+	for (int i = 0; i < nMusclePieces; i++) {
+		m_musclePieces[i]->postUpdate();
+		m_Hamiltonian += m_musclePieces[i]->getHamiltonian();
 	}
 	for (int i = 0; i < nNodes; i++) {
 		btScalar mass = m_nodes[i]->getMass();

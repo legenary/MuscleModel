@@ -14,7 +14,7 @@ Follicle::Follicle(MystacialPad* pad, btTransform trans, btScalar radius, btScal
 	m_body->setActivationState(DISABLE_DEACTIVATION);
 	m_info = new Follicle_info(f);
 
-	update();
+	postUpdate();
 }
 
 Follicle::~Follicle() {
@@ -23,7 +23,7 @@ Follicle::~Follicle() {
 	delete m_info;
 }
 
-void Follicle::update() {
+void Follicle::postUpdate() {
 	topLoc = m_body->getCenterOfMassTransform() * btVector3(m_length * 0.5, 0, 0);
 	botLoc = m_body->getCenterOfMassTransform() * btVector3(-m_length * 0.5, 0, 0);
 	//calculate velocity: V + Omega x R
@@ -104,4 +104,14 @@ btScalar Follicle::getHamiltonian() {
 
 	m_Hamiltonian = RotKineticEnergy + LinearKineticEnergy;
 	return m_Hamiltonian;
+}
+
+void Follicle::debugDrawWhisker(btVector3& clr, btScalar lengthScale) const {
+	btVector3 whiskerBase = topLoc;
+	btVector3 whiskerDir = (topLoc - botLoc).normalized();
+
+	btScalar halHeight = m_length * lengthScale * 0.5;
+	btTransform whiskerTrans = createTransform(whiskerBase + halHeight * whiskerDir);
+	whiskerTrans.setBasis(m_body->getCenterOfMassTransform().getBasis());
+	m_pad->getWorld()->getDebugDrawer()->drawCylinder(0.05f, halHeight, 0, whiskerTrans, BLUE);
 }

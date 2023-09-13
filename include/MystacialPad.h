@@ -57,7 +57,8 @@ public:
 
 	void contractMuscle(MUSCLE mus, btScalar ratio);
 
-	void update(btScalar dt);
+	void preUpdate(btScalar dt);
+	void postUpdate();
 	void bufferFolPos(std::vector<std::vector<std::vector<btScalar>>>& output);
 	void postInitPhysics();
 	

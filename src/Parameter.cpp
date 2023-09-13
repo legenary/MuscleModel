@@ -20,12 +20,19 @@ Parameter::Parameter() {
 				// 3: axis aligned bound box added
 	
 	//camera position
-	camPos[0] = 0;
-	camPos[1] = 0;
+	camPos[0] = 7;
+	camPos[1] = -5;
 	camPos[2] = 0;
-	camDist = 8;
-	camPitch = -89;
+	camDist = 5;
+	camPitch = 0;
 	camYaw = 0;
+
+	//camPos[0] = 0;
+	//camPos[1] = 0;
+	//camPos[2] = 0;
+	//camDist = 8;
+	//camPitch = -89;
+	//camYaw = 0;
 
 	// foillicle parameter
 	dir_follicle_pos_orient_len_vol = "../resources/follicle_pos_ypr_len_vol.csv";
@@ -40,11 +47,12 @@ Parameter::Parameter() {
 
 	// contract
 	//FlagContractMuscle = MUSCLE::NONE;
-	//FlagContractMuscle = MUSCLE::ISM;
+	FlagContractMuscle = MUSCLE::ISM;
 	//FlagContractMuscle = MUSCLE::N | MUSCLE::M;
 	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
+	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
 	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
-	FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS;
+	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS;
 
 	contract_to = 0.7;
 	whisking_frequency = 1; // Hz
@@ -54,10 +62,10 @@ Parameter::Parameter() {
 	phase1_peak = 0.7;
 
 	phase2_count = 5;
-	phase2_offset = 0.5;
+	phase2_offset = 0.4;
 	phase2_peak = 0.5;
 
-	muslce_activation_tau_a = 0.1; // activation time constant
+	muslce_activation_tau_a = 0.12; // activation time constant
 	muslce_activation_tau_d = 0.4; // dactivation time constant
 
 	switch (m_model) {

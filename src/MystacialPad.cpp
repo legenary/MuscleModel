@@ -41,6 +41,8 @@ MystacialPad::MystacialPad(Simulation* sim, Parameter* param)
 			std::unique_ptr<Follicle> follicle = std::make_unique<Follicle>(this, this_trans, param->fol_radius, this_len/2, this_mass, param->fol_damping, f);
 			follicle->setUserPointer(follicle->getInfo());
 			m_follicleArray.push_back(std::move(follicle));
+
+
 		}
 	}
 	std::cout << "Done.\n";
@@ -252,7 +254,7 @@ void MystacialPad::createParsMaxillaris() {
 	std::cout << "Done.\n";
 }
 
-void MystacialPad::update(btScalar dt) {
+void MystacialPad::preUpdate(btScalar dt) {
 	PROFILE_FUNCTION();
 	static btScalar timeElapsed = 0.0f;
 	timeElapsed += dt;
@@ -262,61 +264,43 @@ void MystacialPad::update(btScalar dt) {
 		timeElapsed -= m_parameter->inverse_fiber_query_rate;
 	}
 
-	m_Hamiltonian = 0;
-	for (int i = 0; i < nFollicle; i++) {
-		if (m_follicleArray[i]) {
-			m_follicleArray[i]->update();
-			m_Hamiltonian += m_follicleArray[i]->getHamiltonian();
-		}
-	}
 	// only linear springs need update
 	// torsional springs don't
 	if (m_layer1) {
-		m_layer1->update();
-		m_Hamiltonian += m_layer1->getHamiltonian();
+		m_layer1->preUpdate();
 	}
 	if (m_layer2) {
-		m_layer2->update();
-		m_Hamiltonian += m_layer2->getHamiltonian();
+		m_layer2->preUpdate();
 	}
 
-	
 	for (int i = 0; i < nISM; i++) {
 		if (m_ISMArray[i]) {
 			if (fiberQueryFlag) {
-				m_ISMArray[i]->update();
+				m_ISMArray[i]->preUpdate();
 			}
-			m_Hamiltonian += m_ISMArray[i]->getHamiltonian();
 		}
 	}
 		
 	if (m_nasolabialis) { 
-		m_nasolabialis->update(fiberQueryFlag);		
-		m_Hamiltonian += m_nasolabialis->getHamiltonian(); 
+		m_nasolabialis->preUpdate(fiberQueryFlag);
 	}
 	if (m_maxillolabialis) { 
-		m_maxillolabialis->update(fiberQueryFlag);	
-		m_Hamiltonian += m_maxillolabialis->getHamiltonian(); 
+		m_maxillolabialis->preUpdate(fiberQueryFlag);
 	}
 	if (m_NS) { 
-		m_NS->update(fiberQueryFlag);					
-		m_Hamiltonian += m_NS->getHamiltonian(); 
+		m_NS->preUpdate(fiberQueryFlag);
 	}
 	if (m_PMS) { 
-		m_PMS->update(fiberQueryFlag);				
-		m_Hamiltonian += m_PMS->getHamiltonian(); 
+		m_PMS->preUpdate(fiberQueryFlag);
 	}
 	if (m_PMI) { 
-		m_PMI->update(fiberQueryFlag);				
-		m_Hamiltonian += m_PMI->getHamiltonian(); 
+		m_PMI->preUpdate(fiberQueryFlag);
 	}
 	if (m_PIP) { 
-		m_PIP->update(fiberQueryFlag);				
-		m_Hamiltonian += m_PIP->getHamiltonian(); 
+		m_PIP->preUpdate(fiberQueryFlag);
 	}
 	if (m_PM) { 
-		m_PM->update(fiberQueryFlag);					
-		m_Hamiltonian += m_PM->getHamiltonian(); 
+		m_PM->preUpdate(fiberQueryFlag);
 	}
 
 	char step[4];
@@ -328,6 +312,61 @@ void MystacialPad::update(btScalar dt) {
 		}
 	}
 	std::cout << draw_text << std::endl;
+}
+
+void MystacialPad::postUpdate() {
+	m_Hamiltonian = 0;
+	for (int i = 0; i < nFollicle; i++) {
+		if (m_follicleArray[i]) {
+		if (m_follicleArray[i]) 
+			m_follicleArray[i]->postUpdate();
+			m_Hamiltonian += m_follicleArray[i]->getHamiltonian();
+		}
+	}
+	if (m_layer1) {
+		m_layer1->postUpdate();
+		m_Hamiltonian += m_layer1->getHamiltonian();
+	}
+	if (m_layer2) {
+		m_layer2->postUpdate();
+		m_Hamiltonian += m_layer2->getHamiltonian();
+	}
+
+	for (int i = 0; i < nISM; i++) {
+		if (m_ISMArray[i]) {
+			m_ISMArray[i]->postUpdate();
+			m_Hamiltonian += m_ISMArray[i]->getHamiltonian();
+		}
+	}
+
+	if (m_nasolabialis) {
+		m_nasolabialis->postUpdate();
+		m_Hamiltonian += m_nasolabialis->getHamiltonian();
+	}
+	if (m_maxillolabialis) {
+		m_maxillolabialis->postUpdate();
+		m_Hamiltonian += m_maxillolabialis->getHamiltonian();
+	}
+	if (m_NS) {
+		m_NS->postUpdate();
+		m_Hamiltonian += m_NS->getHamiltonian();
+	}
+	if (m_PMS) {
+		m_PMS->postUpdate();
+		m_Hamiltonian += m_PMS->getHamiltonian();
+	}
+	if (m_PMI) {
+		m_PMI->postUpdate();
+		m_Hamiltonian += m_PMI->getHamiltonian();
+	}
+	if (m_PIP) {
+		m_PIP->postUpdate();
+		m_Hamiltonian += m_PIP->getHamiltonian();
+	}
+	if (m_PM) {
+		m_PM->postUpdate();
+		m_Hamiltonian += m_PM->getHamiltonian();
+	}
 }
 
 void MystacialPad::bufferFolPos(std::vector<std::vector<std::vector<btScalar>>>& output) {
@@ -394,6 +433,11 @@ void MystacialPad::debugDraw() {
 	}
 	if (m_PM) {
 		m_PM->debugDraw(YELLOW);
+	}
+	for (int i = 0; i < nFollicle; i++) {
+		if (m_follicleArray[i]) {
+			m_follicleArray[i]->debugDrawWhisker(BLUE, 2);
+		}
 	}
 }
 

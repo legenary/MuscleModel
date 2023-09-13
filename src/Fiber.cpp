@@ -61,7 +61,7 @@ void Fiber::init() {
 }
 
 //*This is run per fiber query (60Hz)
-void Fiber::update() {
+void Fiber::preUpdate() {
 	// update activation based on neural excitation
 	btScalar da = (m_excitation - m_activation) / calculateTau();
 	m_activation += da * m_sim->getParameter()->m_time_step;
@@ -133,16 +133,19 @@ void Fiber::update() {
 	//	//btVector3 forceA = jfb->m_appliedForceBodyA;
 	//	//S_dumpster::Get()->fiber_info[6].push_back(forceA.length());
 	//}
-	
+
+
+	m_prev_length = m_length;
+	m_prev_force = m_force;
+}
+
+void Fiber::postUpdate() {
 	// update hamiltonian as the potential energy, the potential enery is calcualted as the work done by the force
 	// the potential enery is cleared every contraction and relaxation
 	if (m_sim->flagMuscleContractionStateChange) {
 		m_Hamiltonian = 0;
 	}
 	m_Hamiltonian += (m_prev_force.length() + m_force.length()) * 0.5 * btFabs(m_length - m_prev_length);
-
-	m_prev_length = m_length;
-	m_prev_force = m_force;
 }
 
 btScalar Fiber::calculateTau() {

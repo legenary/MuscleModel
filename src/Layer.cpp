@@ -112,24 +112,20 @@ void Layer::initDihedralPairs(bool isTop) {
 	}
 }
 
-void Layer::update() {
-	m_Hamiltonian = 0;
+void Layer::preUpdate() {
 	for (int i = 0; i < nEdges; i++) {
 		if (m_edges[i]) {
-			m_edges[i]->update();
-			m_Hamiltonian += m_edges[i]->getHamiltonian();
+			m_edges[i]->preUpdate();
 		}
 	}
 	for (int i = 0; i < nAnchors; i++) {
 		if (m_anchors[i]) {
-			m_anchors[i]->update();
-			m_Hamiltonian += m_anchors[i]->getHamiltonian();
+			m_anchors[i]->preUpdate();
 		}
 	}
 	for (int i = 0; i < nBendings; i++) {
 		if (m_bendings[i]) {
-			m_bendings[i]->update();
-			m_Hamiltonian += m_bendings[i]->getHamiltonian();
+			m_bendings[i]->preUpdate();
 		}
 	}
 	for (int i = 0; i < nDihedralPairs; i++) {
@@ -141,6 +137,32 @@ void Layer::update() {
 				m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][2])->getBody(),
 				m_pad->getFollicleByIndex(m_param->SPRING_BENDING_IDX[i][3])->getBody()
 			});
+		}
+	}
+}
+
+void Layer::postUpdate() {
+	m_Hamiltonian = 0;
+	for (int i = 0; i < nEdges; i++) {
+		if (m_edges[i]) {
+			m_edges[i]->postUpdate();
+			m_Hamiltonian += m_edges[i]->getHamiltonian();
+		}
+	}
+	for (int i = 0; i < nAnchors; i++) {
+		if (m_anchors[i]) {
+			m_anchors[i]->postUpdate();
+			m_Hamiltonian += m_anchors[i]->getHamiltonian();
+		}
+	}
+	for (int i = 0; i < nBendings; i++) {
+		if (m_bendings[i]) {
+			m_bendings[i]->postUpdate();
+			m_Hamiltonian += m_bendings[i]->getHamiltonian();
+		}
+	}
+	for (int i = 0; i < nDihedralPairs; i++) {
+		if (m_dihedral_pairs[i]) {
 			m_Hamiltonian += m_dihedral_pairs[i]->work_acc;
 		}
 	}

@@ -84,7 +84,7 @@ void Tissue::init() {
 }
 
 // NEED DEBUG
-void Tissue::update() {
+void Tissue::preUpdate() {
 	// for Tissue: eq points are used to calculate the force direction
 	// as well as to update forces using Hooke's Law
 
@@ -116,10 +116,13 @@ void Tissue::update() {
 		m_eq = TsP.getOrigin();
 	}
 
+
+}
+
+void Tissue::postUpdate() {
 	// calculate Hamiltonian as potential energy
 	btScalar dx = m_length - m_restLength;
 	m_Hamiltonian = 0.5 * m_k_translational * dx * dx;
-
 }
 
 

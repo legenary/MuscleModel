@@ -47,7 +47,8 @@ public:
 	void* operator new(size_t i) { return _mm_malloc(i, 16); }
 	void operator delete(void* p) { _mm_free(p); }
 
-	void update();
+	void preUpdate();
+	void postUpdate();
 	void init();
 
 	btGeneric6DofSpring2Constraint* getConstraint() const;
