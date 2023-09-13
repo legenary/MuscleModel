@@ -4,7 +4,7 @@
 Parameter::Parameter() {
 	m_fps = 120;
 	m_time_step = btScalar(1.0f) / m_fps;
-	m_time_stop = 5.0f;
+	m_time_stop = 6.0f;
 
 	// fiber query rate:
 	// Essentially, we need this rate so the muscle update frequency is fixed, and does not change with simulation FPS
@@ -43,26 +43,19 @@ Parameter::Parameter() {
 	//FlagContractMuscle = MUSCLE::ISM;
 	//FlagContractMuscle = MUSCLE::N | MUSCLE::M;
 	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
-	FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
+	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
+	FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS;
 
 	contract_to = 0.7;
 	whisking_frequency = 1; // Hz
 
-	phase1_count = 3;
+	phase1_count = 5;
 	phase1_offset = 0;
-	phase1_peak = 0.5;
+	phase1_peak = 0.7;
 
-	phase2_count = 3;
+	phase2_count = 5;
 	phase2_offset = 0.5;
 	phase2_peak = 0.5;
-
-	//phase1_count = 3;
-	//phase1_offset = 0;
-	//phase1_peak = 0.7;
-
-	//phase2_count = 3;
-	//phase2_offset = 0.5;
-	//phase2_peak = 0.5;
 
 	muslce_activation_tau_a = 0.1; // activation time constant
 	muslce_activation_tau_d = 0.4; // dactivation time constant
@@ -150,7 +143,7 @@ Parameter::Parameter() {
 		fol_damping = 0.0;
 
 		// muscle parameter reduced
-		f0 = 0.7;		// Bullet unit: 1e-6 (N), uN // 0.3 will have ~30 degrees protraction, ISM shortened to 85%
+		f0 = 1;		// Bullet unit: 1e-6 (N), uN // 0.3 will have ~30 degrees protraction, ISM shortened to 85%
 								// chosen such that 
 		f0_ISM = 20 * f0;
 		f0_nasolabialis = 25 * f0;

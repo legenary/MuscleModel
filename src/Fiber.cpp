@@ -193,6 +193,17 @@ void Fiber::setRestLengthRatio(const btScalar ratio) {
 	m_restLength = ratio * m_restLengthNoAvtivation;
 }
 
+void Fiber::setTorsionalSpring(btVector3 stiffnesses, btVector3 dampings) {
+	// this function is deprecated. Force is calculated in the Update function, so setting spring parameters will not have any effect.
+	ensure(false);
+	for (int i = 3; i < 6; i++) {
+		m_constraint->enableSpring(i, true);
+		m_constraint->setStiffness(i, stiffnesses[i - 3]);
+		m_constraint->setDamping(i, dampings[i - 3]);
+		m_constraint->setEquilibriumPoint(i);
+	}
+}
+
 
 const btScalar& Fiber::getRestLength() const {
 	return m_restLength;

@@ -22,6 +22,7 @@ private:
 	btAlignedObjectArray<btRigidBody*> m_nodes;
 	btAlignedObjectArray<Fiber*> m_musclePieces;
 	btAlignedObjectArray<Tissue*> m_insertionPieces;
+	btAlignedObjectArray<btGeneric6DofSpring2Constraint*> m_node_prismatic_contraints;
 	
 	btScalar m_Hamiltonian;
 
@@ -46,7 +47,8 @@ public:
 	int getNumberOfMusclePieces() const;
 	int getNumberOfInsertionPices() const;
 
-	btRigidBody* getNodeByIndex(int idx);
+	btRigidBody* getNodeByIndex(int idx) const;
+	Fiber* getFiberByIndex(int idx) const;
 
 	inline btDynamicsWorld* getWorld() {
 		return m_sim->getDynamicsWorld();

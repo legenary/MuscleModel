@@ -417,6 +417,10 @@ std::unique_ptr<IntrinsicSlingMuscle>& MystacialPad::getISMByIndex(int idx) {
 	return m_ISMArray[idx];
 }
 
+std::unique_ptr<ExtrinsicMuscle>& MystacialPad::getNasolabialis() {
+	return m_nasolabialis;
+}
+
 bool MystacialPad::checkCreateMuscleFlag(MUSCLE mus) const {
 	return (m_parameter->FlagCreateMuscles & mus) == mus;
 }

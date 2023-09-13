@@ -27,6 +27,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 		m_nodes.push_back(b);
 		getWorld()->addRigidBody(b, COL_EXT_MUS, extMusCollideWith);
 		b->setActivationState(DISABLE_DEACTIVATION);
+
 		// add anchor tissue to the anchor nodes
 		// (attach end of muscle to skull/cartilage)
 		if (anchorNodeIdx.count(i)) {
@@ -41,13 +42,47 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 	for (int i = 0; i < nMusclePieces; i++) {
 		btRigidBody* node1 = m_nodes[CONSTRUCTION_IDX[i][0]];
 		btRigidBody* node2 = m_nodes[CONSTRUCTION_IDX[i][1]];
+		// reorient node2 in the direction of node1
+		btVector3 xaxis = (node1->getCenterOfMassTransform().getOrigin() - node2->getCenterOfMassTransform().getOrigin()).normalized();
+		btVector3 yaxis = xaxis.cross(btVector3(0.f, 0.f, 1.f));
+		btVector3 zaxis = xaxis.cross(yaxis);
+		btTransform new_trans = btTransform(btMatrix3x3({
+				xaxis.x(), yaxis.x(), zaxis.x(),
+				xaxis.y(), yaxis.y(), zaxis.y(),
+				xaxis.z(), yaxis.z(), zaxis.z(),
+			}), node2->getCenterOfMassTransform().getOrigin());
+		node2->setWorldTransform(new_trans);
+
+		// add muscle fiber
 		btScalar eq_factor = CONSTRUCTION_IDX[i][2];
-		//node2->setMassProps(node2->getMass() * eq_factor/5, node2->getLocalInertia());
 		Fiber* fiber = new Fiber(m_sim, node1, node2, 
 			createTransform(), createTransform(),
 			f0 * eq_factor);
 		getWorld()->addConstraint(fiber->getConstraint(), true);
 		m_musclePieces.push_back(fiber);
+
+		/////////////////////////////////////////////
+		// experimental: addtional stiffness to help each strain of extrinsic muscle maintain its shape. Otherwise between nodes and nodes they can bend freely
+		btGeneric6DofSpring2Constraint* node_constraint = new btGeneric6DofSpring2Constraint(*node2, *node1, createTransform(), createTransform());
+		node_constraint->setLinearLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
+		node_constraint->setLinearUpperLimit(btVector3(0, 0, 0));
+		node_constraint->setAngularLowerLimit(btVector3(1, 1, 1));
+		node_constraint->setAngularUpperLimit(btVector3(0, 0, 0));
+		btScalar stiffness = 3.f;
+		btScalar damping = 2.0f * btSqrt((node1->getMass() + node2->getMass()) / 2.0f * stiffness) * 1.0f;
+		// allow free node movement in the x direction (in node2's frame), but add spring to limit movement in the y and z direction
+		node_constraint->enableSpring(0, true);
+		node_constraint->setStiffness(0, 0);
+		node_constraint->setDamping(0, 2);
+		node_constraint->setEquilibriumPoint(0);
+		for (int i = 1; i < 3; i++) {
+			node_constraint->enableSpring(i, true);
+			node_constraint->setStiffness(i, stiffness);
+			node_constraint->setDamping(i, damping);
+			node_constraint->setEquilibriumPoint(i);
+		}
+		getWorld()->addConstraint(node_constraint, true);
+		///////////////////////////////////////////
 	}
 	// construct muscle insertion tissue to follicle
 	int nInsertionGroups = INSERTION_IDX.size();
@@ -139,7 +174,12 @@ int ExtrinsicMuscle::getNumberOfInsertionPices() const {
 	return nInsertionPieces;
 }
 
-btRigidBody* ExtrinsicMuscle::getNodeByIndex(int idx) {
+btRigidBody* ExtrinsicMuscle::getNodeByIndex(int idx) const {
 	ensure(idx < nNodes);
 	return m_nodes[idx];
+}
+
+Fiber* ExtrinsicMuscle::getFiberByIndex(int idx) const {
+	ensure(idx < nMusclePieces);
+	return m_musclePieces[idx];
 }

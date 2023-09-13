@@ -6,6 +6,7 @@
 #include "Utility.h"
 #include "MystacialPad.h"
 #include "IntrinsicMuscle.h"
+#include "ExtrinsicMuscle.h"
 #include "Tissue.h"
 #include "Follicle.h"
 #include "myGeneric6DofMuscleConstraint.h"
@@ -252,7 +253,7 @@ void Simulation::initPhysics_test() {
 	btCollisionShape* boxShape = new btBoxShape(btVector3(1, 1, 1));
 	m_collisionShapes.push_back(boxShape);
 
-	box1 = createDynamicBody(1, createTransform(btVector3(5, 0, 0)), boxShape);
+	box1 = createDynamicBody(1, createTransform(btVector3(5, 0, 0), btVector3(PI / 6, 0, 0)), boxShape);
 	m_dynamicsWorld->addRigidBody(box1, COL_FOLLICLE, follicleCollideWith);
 	box1->setActivationState(DISABLE_DEACTIVATION);
 
@@ -260,24 +261,30 @@ void Simulation::initPhysics_test() {
 	m_dynamicsWorld->addRigidBody(box2, COL_FOLLICLE, follicleCollideWith);
 	box2->setActivationState(DISABLE_DEACTIVATION);
 
-	box1->setAngularVelocity(btVector3(0, 0, 2));
+	
 
 	//// add constraints
-	//btScalar k = 1;
-	//btScalar f0 = 10;
-	//btScalar zeta = 2;
-	//t1 = new Tissue(this, box1, 
-	//	createTransform(btVector3(0, 0, 0)), k, zeta); // critical damping ratio is 1 for 1 mass
-	//m_dynamicsWorld->addConstraint(t1->getConstraint(), true);
+	btGeneric6DofSpring2Constraint* torsional_constraint = new btGeneric6DofSpring2Constraint(*box1, *box2, createTransform(), createTransform());
+	torsional_constraint->setLinearLowerLimit(btVector3(-10, 1, 1));	// need to set lower > higher to free the dofs
+	torsional_constraint->setLinearUpperLimit(btVector3(-10, 0, 0));
+	torsional_constraint->setAngularLowerLimit(btVector3(1, 1, 1));
+	torsional_constraint->setAngularUpperLimit(btVector3(0, 0, 0));
+	torsional_constraint->setEquilibriumPoint(1);
+	for (int i = 1; i < 3; i++) {
+		torsional_constraint->enableSpring(i, true);
+		torsional_constraint->setStiffness(i, 1000000);
+		torsional_constraint->setDamping(i, 100);
+		torsional_constraint->setEquilibriumPoint(i);
+	}
+	//for (int i = 3; i < 6; i++) {
+	//	torsional_constraint->enableSpring(i, true);
+	//	torsional_constraint->setStiffness(i, 1000.f);
+	//	torsional_constraint->setDamping(i, 0.f);
+	//	torsional_constraint->setEquilibriumPoint(i);
+	//}
+	m_dynamicsWorld->addConstraint(torsional_constraint, true);
 
-	//t2 = new Tissue(this, box2, 
-	//	createTransform(btVector3(-5, 0, 0)), k, zeta); // critical damping ratio is 1 for 1 mass
-	//m_dynamicsWorld->addConstraint(t2->getConstraint(), true);
-
-	//f = new Fiber(this, box1, box2, createTransform(), createTransform(), f0);
-	//m_dynamicsWorld->addConstraint(f->getConstraint(), true);
-	//
-	////box1->setCenterOfMassTransform(createTransform(btVector3(-5, 0, 0)));
+	//box1->setAngularVelocity(btVector3(0, 0, 2));
 
 	postInitPhysics();
 }
@@ -431,35 +438,40 @@ void Simulation::postInitPhysics() {
 
 		// to monitor these variables: pass in its address, number of elements following that address, specify the filename
 		// examples:
-		S_dumpster::Get().Monitor(&(m_mystacialPad->getHamiltonian()), 1, "Hamiltonian.csv", total_frame);
-		for (int n = 0; n < m_mystacialPad->getNumISMs(); n++) {
-			if (const auto& ism = m_mystacialPad->getISMByIndex(n)) {
-				char filename[50];
-				sprintf(filename, "ISM_%02d_length.csv", n);
-				S_dumpster::Get().Monitor(&(ism->getLength()), 1, filename, total_frame);
+		if (param->m_model != MODEL::TEST) {
+			S_dumpster::Get().Monitor(&(m_mystacialPad->getHamiltonian()), 1, "Hamiltonian.csv", total_frame);
+			S_dumpster::Get().Monitor(&(m_mystacialPad->getNasolabialis()->getFiberByIndex(0)->getExcitation()), 1, "N_excitation.csv", total_frame);
+			S_dumpster::Get().Monitor(&(m_mystacialPad->getNasolabialis()->getFiberByIndex(0)->getActivation()), 1, "N_activation.csv", total_frame);
+
+			for (int n = 0; n < m_mystacialPad->getNumISMs(); n++) {
+				if (const auto& ism = m_mystacialPad->getISMByIndex(n)) {
+					char filename[50];
+					sprintf(filename, "ISM_%02d_length.csv", n);
+					S_dumpster::Get().Monitor(&(ism->getLength()), 1, filename, total_frame);
+				}
 			}
-		}
-		switch (param->m_model) {
-		case MODEL::REDUCED:
-			if (m_mystacialPad->getNumISMs() >= 3) {
-				// 3 for C2 in reduced-size array
-				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getRestLength()), 1, "ISM_03_rest_length.csv", total_frame);
-				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getForce()), 1, "ISM_03_force.csv", total_frame);
-				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getForceHillModelComps()), 3, "ISM_03_hill_model_comps.csv", total_frame);
-				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getExcitation()), 1, "ISM_03_excitation.csv", total_frame);
-				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getActivation()), 1, "ISM_03_activation.csv", total_frame);
+			switch (param->m_model) {
+			case MODEL::REDUCED:
+				if (m_mystacialPad->getNumISMs() >= 3) {
+					// 3 for C2 in reduced-size array
+					S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getRestLength()), 1, "ISM_03_rest_length.csv", total_frame);
+					S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getForce()), 1, "ISM_03_force.csv", total_frame);
+					S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getForceHillModelComps()), 3, "ISM_03_hill_model_comps.csv", total_frame);
+					S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getExcitation()), 1, "ISM_03_excitation.csv", total_frame);
+					S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(3)->getActivation()), 1, "ISM_03_activation.csv", total_frame);
+				}
+				break;
+			case MODEL::FULL:
+				if (m_mystacialPad->getNumISMs() >= 12) {
+					// 12 for C2 in full-size array
+					S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getRestLength()), 1, "ISM_12_rest_length.csv", total_frame);
+					S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getForce()), 1, "ISM_12_force.csv", total_frame);
+					S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getForceHillModelComps()), 3, "ISM_12_hill_model_comps.csv", total_frame);
+					S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getExcitation()), 1, "ISM_12_excitation.csv", total_frame);
+					S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getActivation()), 1, "ISM_12_activation.csv", total_frame);
+				}
+				break;
 			}
-			break;
-		case MODEL::FULL:
-			if (m_mystacialPad->getNumISMs() >= 12) {
-				// 12 for C2 in full-size array
-				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getRestLength()), 1, "ISM_12_rest_length.csv", total_frame);
-				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getForce()), 1, "ISM_12_force.csv", total_frame);
-				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getForceHillModelComps()), 3, "ISM_12_hill_model_comps.csv", total_frame);
-				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getExcitation()), 1, "ISM_12_excitation.csv", total_frame);
-				S_dumpster::Get().Monitor(&(m_mystacialPad->getISMByIndex(12)->getActivation()), 1, "ISM_12_activation.csv", total_frame);
-			}
-			break;
 		}
 
 	}

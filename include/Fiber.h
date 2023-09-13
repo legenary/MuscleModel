@@ -69,6 +69,8 @@ public:
 	void contractTo(btScalar ratio);
 	btScalar getHamiltonian() const { return m_Hamiltonian; }
 
+	void setTorsionalSpring(btVector3 stiffnesses, btVector3 dampings);
+
 	
 private:
 	void setRestLengthRatio(const btScalar ratio);

@@ -53,6 +53,7 @@ public:
 	void createParsMediaInferior();
 	void createParsInternaProfunda();
 	void createParsMaxillaris();
+	std::unique_ptr<ExtrinsicMuscle>& getNasolabialis();
 
 	void contractMuscle(MUSCLE mus, btScalar ratio);
 
