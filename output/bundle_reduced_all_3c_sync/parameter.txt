@@ -1,26 +1,26 @@
 FPS: 120Hz
 Simulation internal step: 40
 Muscle query rate: 120Hz
-Whisking freq = 0 Contract to: 0.70
+Whisking freq = 1.0Hz Contract to: 0.70
 Has muscles: ISM, N, M, NS, PMS, PIP, PMI, PM, 
 Contracting muscles:ISM, N, M, PIP, PM, 
 Phase 1 count = 3.0 offset = 0.0 peak = 0.5
 Phase 2 count = 3.0 offset = 0.0 peak = 0.5
 
-k_layer1 = 25.0
+k_layer1 = 40.0
 k_layer2 = 50.0
 zeta_layer=1.0
 k_anchor_translational = 10.0
-k_anchor_torsional = 30.0
-zeta_anchor_translational = 5.5
+k_anchor_torsional = 25.0
+zeta_anchor_translational = 6.0
 zeta_anchor_torsional = 10.0
 
 fol_damping = 0.0
 
 muscle activation constant tau = 0.10
 muscle dactivation constant tau = 0.40
-f0 = 0.70
-ISM scaling =  20
+f0 = 0.60
+ISM scaling =  25
 N scaling = 25
 M scaling = 25
 NS scaling =  1

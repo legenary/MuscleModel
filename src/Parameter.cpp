@@ -20,14 +20,14 @@ Parameter::Parameter() {
 				// 3: axis aligned bound box added
 	
 	//camera position
-	camPos[0] = 7;
+	camPos[0] = 2;
 	camPos[1] = -5;
-	camPos[2] = 0;
-	camDist = 5;
+	camPos[2] = -2;
+	camDist = 3;
 	camPitch = 0;
 	camYaw = 0;
 
-	//camPos[0] = 0;
+	//camPos[0] = 5;
 	//camPos[1] = 0;
 	//camPos[2] = 0;
 	//camDist = 8;
@@ -47,25 +47,24 @@ Parameter::Parameter() {
 
 	// contract
 	//FlagContractMuscle = MUSCLE::NONE;
-	FlagContractMuscle = MUSCLE::ISM;
+	//FlagContractMuscle = MUSCLE::ISM;
 	//FlagContractMuscle = MUSCLE::N | MUSCLE::M;
 	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
-	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
-	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
+	FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
 	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS;
 
 	contract_to = 0.7;
 	whisking_frequency = 1; // Hz
 
-	phase1_count = 5;
+	phase1_count = 6;
 	phase1_offset = 0;
-	phase1_peak = 0.7;
+	phase1_peak = 0.7;		// 0.7
 
-	phase2_count = 5;
-	phase2_offset = 0.4;
-	phase2_peak = 0.5;
+	phase2_count = 6;
+	phase2_offset = 0.41;	//0.41
+	phase2_peak = 0.6;		// 0.6
 
-	muslce_activation_tau_a = 0.12; // activation time constant
+	muslce_activation_tau_a = 0.1; // activation time constant
 	muslce_activation_tau_d = 0.4; // dactivation time constant
 
 	switch (m_model) {
@@ -139,21 +138,21 @@ Parameter::Parameter() {
 		m_bending_model = BENDING_MODEL::DIHEDRAL_ANGLE;
 		// In general, a zeta value = 1 means critically damped. But the system is a highly complex system, so damping should be higher to absorb coupled oscillation
 		// layer tissue parameter (only translational, no torsional implemented)
-		k_layer1 = 25;						// Bullet unit: 1e-3 (N/m) === uN/mm
+		k_layer1 = 40;						// Bullet unit: 1e-3 (N/m) === uN/mm
 		k_layer2 = 50;
 		zeta_layer = 1.0;					// chosen such that when pulled by M and N, oscillation is minimized
 		// anchor parameter (translational and torsional)
 		k_anchor_translational = 10;		
-		zeta_anchor_translational = 5.5;	// chosen such that a displaced pad (by M and N) is restored to the same location in the same relaxation duration as contraction. Reference 5.5
-		k_anchor_torsional = 30;			// chosen to be big enough to bring the pad back to original position in swift time. Reference 20
-		zeta_anchor_torsional = 10.0;		// chosen such that a contracted pad (by ISM) is restored to the same location in the same relaxation duration as contraction. Reference 7.0
+		zeta_anchor_translational = 6;	// chosen such that a displaced pad (by M and N) is restored to the same location in the same relaxation duration as contraction. Reference 5.5
+		k_anchor_torsional = 25;			// chosen to be big enough to bring the pad back to original position in swift time. Reference 20
+		zeta_anchor_torsional = 10;		// chosen such that a contracted pad (by ISM) is restored to the same location in the same relaxation duration as contraction. Reference 7.0
 
 		fol_damping = 0.0;
 
 		// muscle parameter reduced
-		f0 = 1;		// Bullet unit: 1e-6 (N), uN // 0.3 will have ~30 degrees protraction, ISM shortened to 85%
+		f0 = 0.6;		// Bullet unit: 1e-6 (N), uN // 0.3 will have ~30 degrees protraction, ISM shortened to 85%
 								// chosen such that 
-		f0_ISM = 20 * f0;
+		f0_ISM = 25 * f0;
 		f0_nasolabialis = 25 * f0;
 		f0_maxillolabialis = 25 * f0;
 		f0_NS = 1 * f0;

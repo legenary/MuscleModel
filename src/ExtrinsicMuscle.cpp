@@ -61,28 +61,28 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 		getWorld()->addConstraint(fiber->getConstraint(), true);
 		m_musclePieces.push_back(fiber);
 
+		///////////////////////////////////////////////
+		//// experimental: addtional stiffness to help each strain of extrinsic muscle maintain its shape. Otherwise between nodes and nodes they can bend freely
+		//btGeneric6DofSpring2Constraint* node_constraint = new btGeneric6DofSpring2Constraint(*node2, *node1, createTransform(), createTransform());
+		//node_constraint->setLinearLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
+		//node_constraint->setLinearUpperLimit(btVector3(0, 0, 0));
+		//node_constraint->setAngularLowerLimit(btVector3(1, 1, 1));
+		//node_constraint->setAngularUpperLimit(btVector3(0, 0, 0));
+		//btScalar stiffness = 3.f;
+		//btScalar damping = 2.0f * btSqrt((node1->getMass() + node2->getMass()) / 2.0f * stiffness) * 1.0f;
+		//// allow free node movement in the x direction (in node2's frame), but add spring to limit movement in the y and z direction
+		//node_constraint->enableSpring(0, true);
+		//node_constraint->setStiffness(0, 0);
+		//node_constraint->setDamping(0, 2);
+		//node_constraint->setEquilibriumPoint(0);
+		//for (int i = 1; i < 3; i++) {
+		//	node_constraint->enableSpring(i, true);
+		//	node_constraint->setStiffness(i, stiffness);
+		//	node_constraint->setDamping(i, damping);
+		//	node_constraint->setEquilibriumPoint(i);
+		//}
+		//getWorld()->addConstraint(node_constraint, true);
 		/////////////////////////////////////////////
-		// experimental: addtional stiffness to help each strain of extrinsic muscle maintain its shape. Otherwise between nodes and nodes they can bend freely
-		btGeneric6DofSpring2Constraint* node_constraint = new btGeneric6DofSpring2Constraint(*node2, *node1, createTransform(), createTransform());
-		node_constraint->setLinearLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
-		node_constraint->setLinearUpperLimit(btVector3(0, 0, 0));
-		node_constraint->setAngularLowerLimit(btVector3(1, 1, 1));
-		node_constraint->setAngularUpperLimit(btVector3(0, 0, 0));
-		btScalar stiffness = 3.f;
-		btScalar damping = 2.0f * btSqrt((node1->getMass() + node2->getMass()) / 2.0f * stiffness) * 1.0f;
-		// allow free node movement in the x direction (in node2's frame), but add spring to limit movement in the y and z direction
-		node_constraint->enableSpring(0, true);
-		node_constraint->setStiffness(0, 0);
-		node_constraint->setDamping(0, 2);
-		node_constraint->setEquilibriumPoint(0);
-		for (int i = 1; i < 3; i++) {
-			node_constraint->enableSpring(i, true);
-			node_constraint->setStiffness(i, stiffness);
-			node_constraint->setDamping(i, damping);
-			node_constraint->setEquilibriumPoint(i);
-		}
-		getWorld()->addConstraint(node_constraint, true);
-		///////////////////////////////////////////
 	}
 	// construct muscle insertion tissue to follicle
 	int nInsertionGroups = INSERTION_IDX.size();

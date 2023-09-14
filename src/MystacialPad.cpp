@@ -434,11 +434,11 @@ void MystacialPad::debugDraw() {
 	if (m_PM) {
 		m_PM->debugDraw(YELLOW);
 	}
-	for (int i = 0; i < nFollicle; i++) {
-		if (m_follicleArray[i]) {
-			m_follicleArray[i]->debugDrawWhisker(BLUE, 2);
-		}
-	}
+	//for (int i = 0; i < nFollicle; i++) {
+	//	if (m_follicleArray[i]) {
+	//		m_follicleArray[i]->debugDrawWhisker(BLUE, 2);
+	//	}
+	//}
 }
 
 std::string MystacialPad::getDrawText() const {

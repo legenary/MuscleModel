@@ -20,7 +20,7 @@ variable_names = {
     'N_activation'
 };
 
-path = GetFullPath('../../bundle_reduced');
+path = GetFullPath('../../bundle_reduced_all_6c_phasing');
 for i = 1:length(variable_names)
     filepath = path + "/" + variable_names{i} + ".csv";
     if exist(filepath, 'file') == 2
@@ -56,9 +56,9 @@ grid on
 box on
 % third
 subplot(413); hold on;
-plot(times, az(:, 4+1)-az(1, 4+1), 'DisplayName', 'az', 'LineWidth', 1.4);
+plot(times, smooth(az(:, 4+1)-az(1, 4+1)), 'DisplayName', 'az', 'LineWidth', 1.4);
 ylabel('C2 azimuth angle \theta')
-plot(times, el(:, 4+1)-el(1, 4+1), 'DisplayName', 'el');
+plot(times, smooth(el(:, 4+1)-el(1, 4+1)), 'DisplayName', 'el');
 xlim([0,6]);
 ylim([-50, 50])
 ylabel('C2 elevation angle \phi')
@@ -74,9 +74,15 @@ plot((N_activation-0.5) - 1);
 xlim([0,720]);
 xticks(0:60:600)
 xticklabels(0:0.5:5)
-ylabel('Different phases')
+ylabel('Activation per phase')
 legend({'ISM protractors', 'Extrinsic retractors'})
 grid on
 
 print('FigResult2B', '-dtiff', '-r300');
 
+
+daz = az(61:360, 4+1) - az(60:359, 4+1);
+del = el(61:360, 4+1) - el(60:359, 4+1);
+delta = smooth(del)./smooth(daz);
+delta = rmoutliers(delta);
+fprintf('del/daz = %.2f +/- %.2f\n', mean(delta), std(delta));

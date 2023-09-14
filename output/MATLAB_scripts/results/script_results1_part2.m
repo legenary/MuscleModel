@@ -6,6 +6,8 @@ orange = lines_clr(2,:);
 purple = [175, 89, 186]/255;
 dark = [2, 49, 71]/255;
 green = [33, 139, 59]/255;
+yellow = [255, 190, 13]/255;
+
 
 variable_names = {
     'ISM_03_length';
@@ -21,15 +23,15 @@ path_list = {
     '../../bundle_reduced_ISM_3c',...
     '../../bundle_reduced_NM_3c',...
     '../../bundle_reduced_PIPPM_3c',...
-    '../../bundle_reduced_all_3c_sync',...
-    '../../bundle_reduced_all_3c_async'
+    '../../bundle_reduced_all_3c_async',...
+    '../../bundle_reduced_all_3c_sync'
 };
 title_list = {
     'ISM only',...
     'N/M only',...
     'PIP/PM only',...
-    'All, in sync',...
-    'All, out of sync'
+    'All, out of sync',...
+    'All, in sync'
 };
 figName_list = {
     'FigResult1D',...
@@ -54,20 +56,21 @@ for nFig = 1:5
 
     figure('Color', 'w', 'Position', [200, 200, 300, 500]); hold on;
     sgtitle(title_list{nFig});
-    % first
+    % ISM length
     subplot(311); hold on;
-    plot(times, ISM_03_length, '-', 'Color', orange);
+    plot(times, ISM_03_length, '-', 'Color', dark);
     ylabel('C2 ISM length')
     ylim([3.5, 5.5])
     xlim([0,4]);
     grid on
     box on
     xticks(0:0.5:times(end));
-    % second
+    
+    % displacements
     subplot(312); hold on;
     [az, el, top_bot_eyenose] = readFollicleAzEl(path, 'eyenose');
-    plot(times, top_bot_eyenose{5}(:, 1)-top_bot_eyenose{5}(1, 1), '-', 'Color', purple);
-    plot(times, top_bot_eyenose{5}(:, 2)-top_bot_eyenose{5}(1, 2), '-', 'Color', orange);
+    plot(times, top_bot_eyenose{5}(:, 1)-top_bot_eyenose{5}(1, 1), '-', 'Color', yellow);
+    plot(times, top_bot_eyenose{5}(:, 2)-top_bot_eyenose{5}(1, 2), '-', 'Color', purple);
     plot(times, top_bot_eyenose{5}(:, 3)-top_bot_eyenose{5}(1, 3), '-', 'Color', green);
     legend({'x', 'y', 'z'}, 'location', 'southeast', 'Box', 'off');
     xlim([0,4]);
@@ -76,7 +79,7 @@ for nFig = 1:5
     xticks(0:0.5:times(end));
     grid on
     box on
-    % third
+    % angles 
     subplot(313); hold on;
     plot(times, az(:, 4+1)-az(1, 4+1), 'DisplayName', 'az');
     ylabel('C2 azimuth angle \theta')

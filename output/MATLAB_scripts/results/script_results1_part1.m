@@ -58,17 +58,19 @@ fAll = fPE + ISM_03_activation .* (fL .* fV);
 plot(times, fPE, '--', 'Color', dark, 'DisplayName', 'fPE');
 plot(times, fL, '--', 'Color', green, 'DisplayName', 'fL');
 plot(times, fV, '--', 'Color', purple, 'DisplayName', 'fV');
-plot(times, fAll, '-', 'Color', blue, 'DisplayName', 'fAll');
+plot(times, fAll, '-', 'Color', orange, 'DisplayName', 'fAll');
 ylim([-0.1, 1.1])
 yticks([0:0.25:1])
 ylabel('force components')
+set(gca,{'YColor'},{orange});
 
 yyaxis right
-plot(times, ISM_03_length, '-', 'Color', orange, 'DisplayName', 'length');
+plot(times, ISM_03_length, '-', 'Color', dark, 'DisplayName', 'length');
 ylabel('ISM Length'); ylim([3.3, 5.7])
 title('ISM force components (left) and length (right)')
 xticks(0:0.5:times(end));
 xlabel('simulation time (s)')
+set(gca,{'YColor'},{dark});
 
 grid on;
 legend('Location', 'southeast', 'Box', 'off')
