@@ -61,7 +61,7 @@ writematrix(node_pos_output, '../../nasolabialis_superficialis_node_pos.csv')
 % start using c++ indexing
 %% muscle construction (indices between muscle nodes)
 constrcution_index = [
-    0 1; 12 2; 2 7; 13 3; 3 8; 14 4; 4 9; 15 5; 5 10; 16 6; 6 11;
+    0 1 1; 12 2 2; 2 7 2; 13 3 2; 3 8 2; 14 4 2; 4 9 2; 15 5 2; 5 10 2; 16 6 2; 6 11 2;
 ];
 writematrix(constrcution_index, '../../nasolabialis_superficialis_construction_idx.csv')
 

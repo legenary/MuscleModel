@@ -34,6 +34,7 @@ void Simulation::stepSimulation(float deltaTime) {
 			// phase 1: ISM protractors
 			m_mystacialPad->contractMuscle(MUSCLE::ISM, phase1_ratio);
 			m_mystacialPad->contractMuscle(MUSCLE::NS,  phase1_ratio);
+			m_mystacialPad->contractMuscle(MUSCLE::POO,  phase1_ratio);
 			m_mystacialPad->contractMuscle(MUSCLE::PMS, phase1_ratio);
 			m_mystacialPad->contractMuscle(MUSCLE::PMI, phase1_ratio);
 			// phase 2: extrinsic retractors, including N, M, PIP, PM
@@ -137,6 +138,12 @@ void Simulation::initPhysics() {
 	read_csv_int(param->dir_nasolabialis_superficialis_construction_idx, param->NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX);
 	read_csv_int(param->dir_nasolabialis_superficialis_insertion_idx, param->NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX);
 	m_mystacialPad->createNasolabialisSuperficialis();
+
+	//// extrinsic: pars orbicularis oris
+	read_csv_float(param->dir_pars_orbicularis_oris_node_pos, param->PARS_ORBICULARIS_ORIS_NODE_POS);
+	read_csv_int(param->dir_pars_orbicularis_oris_construction_idx, param->PARS_ORBICULARIS_ORIS_CONSTRUCTION_IDX);
+	read_csv_int(param->dir_pars_orbicularis_oris_insertion_idx, param->PARS_ORBICULARIS_ORIS_INSERTION_IDX);
+	m_mystacialPad->createParsOrbicularisOris();
 
 
 	//// extrinsic: pars media superior of M. Nasolabialis profundus

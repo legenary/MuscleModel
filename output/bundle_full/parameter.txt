@@ -1,18 +1,30 @@
 FPS: 120Hz
 Simulation internal step: 60
-Muscle query rate: 120.0Hz
-Contraction ratio: 0.30
-Tissue damping ratio zeta = 1.000
-Anchor damping ratio zeta (translational) = 5.500
-Anchor damping ratio zeta (torsional) = 7.000
-k_layer1=0.025000N/m
-k_layer2=0.050000N/m
+Muscle query rate: 120Hz
+Whisking freq = 1.0Hz Contract to: 0.70
+Has muscles: ISM, N, M, NS, PMS, PIP, PMI, PM, 
+Contracting muscles:ISM, NS, 
+Phase 1 count = 6.0 offset = 0.0 peak = 0.6
+Phase 2 count = 6.0 offset = 0.4 peak = 0.6
 
-fo unit: 0.000001N
-f0_intrinsic = 0.000030N
-f0_nasolabialis(N)=0.000037N
-f0_maxillolabialis(M)=0.000037N
-f0_nasolabialis_superficialis(NS)=0.000002N
-f0_pars_media_superior=0.000002N
-f0_pars_media_inferior=0.000002N
-f0_pars_interna_profunda=0.000006
+k_layer1 = 40.0
+k_layer2 = 50.0
+zeta_layer=1.0
+k_anchor_translational = 10.0
+k_anchor_torsional = 25.0
+zeta_anchor_translational = 6.0
+zeta_anchor_torsional = 10.0
+
+fol_damping = 0.0
+
+muscle activation constant tau = 0.10
+muscle dactivation constant tau = 0.40
+f0 = 0.60
+ISM scaling =  25
+N scaling = 25
+M scaling = 25
+NS scaling =  20
+PMS scaling = 1
+PMI scaling = 1
+PIP scaling =  4
+PM scaling = 4

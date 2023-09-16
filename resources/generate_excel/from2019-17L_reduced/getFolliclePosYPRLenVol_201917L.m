@@ -64,7 +64,7 @@ axis equal
 
 idx_reduced_follicle = [6 7 8 11 12 13 17 18 19] + 1;
 follicle_pos_ypr_len_vol_reduced = follicle_pos_ypr_len_vol(idx_reduced_follicle, :);
-writematrix(follicle_pos_ypr_len_vol_reduced, '../../follicle_pos_ypr_len_vol_reduced.csv')
+writematrix(follicle_pos_ypr_len_vol_reduced, '../../follicle_pos_ypr_len_vol_reduced_fromARP.csv')
 
 
 save('follicle_pos.mat', 'vec_top2D', 'vec_bot2D');

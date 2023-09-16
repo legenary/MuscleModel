@@ -1,4 +1,5 @@
 
+
 % at the end of this script, vec_top2D means the basepoint location, which is the top end of the follicle,
 % and vec_bot2D means the deeper end of the follicle.
 
@@ -63,7 +64,7 @@ end
 axis equal
 
 
-writematrix(follicle_pos_ypr_len_vol, '../../follicle_pos_ypr_len_vol.csv')
+writematrix(follicle_pos_ypr_len_vol, '../../follicle_pos_ypr_len_vol_fromARP.csv')
 save('follicle_pos.mat', 'vec_top2D', 'vec_bot2D');
 
 

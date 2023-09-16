@@ -1,24 +1,18 @@
 clear; close all;
 
-muslce_activation_tau_a = 0.08;
-muslce_activation_tau_d = 0.08;
+path = GetFullPath('../bundle_full_ISM_6c_60peak');
 
-phase = 120;
-ratio = 0.6;
-
-excitation = [ones(phase*ratio, 1); zeros(phase*(1-ratio), 1); 
-    ones(phase*ratio, 1); zeros(phase*(1-ratio), 1)];
-a = zeros(phase*4, 1);
-for t = 2:(phase*2)
-    if (excitation(t)>a(t-1))
-        tau = muslce_activation_tau_a * (0.5 + 1.5*a(t-1));
-    else
-        tau = muslce_activation_tau_d / (0.5 + 1.5*a(t-1));
-    end
-    da = (excitation(t)-a(t-1))/tau;
-    a(t) = a(t-1) + da * (1/phase);
-end
+[az, el, top_bot] = readFollicleAzEl(path, 'averagerowplane');
 
 figure; hold on;
-plot(excitation);
-plot(a);
+
+for i = 1:31
+    plot3d(top_bot{i, 1}(1, :), 'ko');
+    plot3d(top_bot{i, 2}(1, :), 'r*');
+end
+axis equal
+
+
+load('resources/NewRatMapCleanedData.mat');
+figure; hold on;
+plot(Row, PhiEuler, 'ko');

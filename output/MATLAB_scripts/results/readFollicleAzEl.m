@@ -14,6 +14,7 @@ function [az, el, top_bot] = readFollicleAzEl(path, horizontal)
         if strcmp(horizontal, 'eyenose')
             % Then, adjust to eye-nose plane (Knutsen et al 2008) from avg row plane
             % calculate eye-nose plane
+            % eye/nose data from NewRatMapCleanedData.mat -> FacialFeatures.AvgRat
             eyes = [-9.721020847417353,-19.067448129825216,3.891614295391962;
                 -6.268610691514697,-13.559304383739748,5.840277177970524;
                 10.292905691029162,-19.444559678246000,3.425704247361483;

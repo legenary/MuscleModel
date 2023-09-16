@@ -43,6 +43,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 		btRigidBody* node1 = m_nodes[CONSTRUCTION_IDX[i][0]];
 		btRigidBody* node2 = m_nodes[CONSTRUCTION_IDX[i][1]];
 		// reorient node2 in the direction of node1
+		// (not necessary, but experimental code needs this)
 		btVector3 xaxis = (node1->getCenterOfMassTransform().getOrigin() - node2->getCenterOfMassTransform().getOrigin()).normalized();
 		btVector3 yaxis = xaxis.cross(btVector3(0.f, 0.f, 1.f));
 		btVector3 zaxis = xaxis.cross(yaxis);
@@ -62,7 +63,7 @@ ExtrinsicMuscle::ExtrinsicMuscle(btScalar _f0, Simulation* sim, Parameter* param
 		m_musclePieces.push_back(fiber);
 
 		///////////////////////////////////////////////
-		//// experimental: addtional stiffness to help each strain of extrinsic muscle maintain its shape. Otherwise between nodes and nodes they can bend freely
+		//// experimental: addtional stiffness to help each string of extrinsic muscle maintain its shape. Otherwise between nodes they can bend freely
 		//btGeneric6DofSpring2Constraint* node_constraint = new btGeneric6DofSpring2Constraint(*node2, *node1, createTransform(), createTransform());
 		//node_constraint->setLinearLowerLimit(btVector3(1, 1, 1));	// need to set lower > higher to free the dofs
 		//node_constraint->setLinearUpperLimit(btVector3(0, 0, 0));

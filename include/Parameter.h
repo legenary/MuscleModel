@@ -23,7 +23,8 @@ enum MUSCLE {
 	PMS = BIT(4),
 	PIP = BIT(5),
 	PMI = BIT(6),
-	PM = BIT(7)
+	PM = BIT(7),
+	POO = BIT(9)
 };
 static std::unordered_map<MUSCLE, std::string> MSUCLEstrings = {
 	{MUSCLE::NONE, "NONE"},
@@ -35,6 +36,7 @@ static std::unordered_map<MUSCLE, std::string> MSUCLEstrings = {
 	{MUSCLE::PMI, "PMI"},
 	{MUSCLE::PIP, "PIP"},
 	{MUSCLE::PM, "PM"},
+	{MUSCLE::POO, "POO"},
 };
 
 class Parameter {
@@ -57,7 +59,7 @@ public:
 	btScalar inverse_fiber_query_rate;
 	int DEBUG;
 
-	uint8_t FlagContractMuscle;
+	uint16_t FlagContractMuscle;
 	btScalar contract_to;
 	btScalar whisking_frequency;
 	btScalar phase1_count;
@@ -97,7 +99,7 @@ public:
 	btScalar zeta_anchor_translational;
 	btScalar zeta_anchor_torsional;
 
-	uint8_t FlagCreateMuscles;
+	uint16_t FlagCreateMuscles;
 
 	btScalar f0;
 
@@ -148,6 +150,15 @@ public:
 	std::string dir_nasolabialis_superficialis_insertion_idx;
 	std::vector<std::vector<int>> NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX;
 	btScalar f0_NS;
+
+	// M. Nasolabialis superficialis
+	std::string dir_pars_orbicularis_oris_node_pos;
+	std::vector<std::vector<float>> PARS_ORBICULARIS_ORIS_NODE_POS;
+	std::string dir_pars_orbicularis_oris_construction_idx;
+	std::vector<std::vector<int>> PARS_ORBICULARIS_ORIS_CONSTRUCTION_IDX;
+	std::string dir_pars_orbicularis_oris_insertion_idx;
+	std::vector<std::vector<int>> PARS_ORBICULARIS_ORIS_INSERTION_IDX;
+	btScalar f0_POO;
 
 	// Pars media superior of M. Nasolabialis profundus
 	std::string dir_pars_media_superior_node_pos;

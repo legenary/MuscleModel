@@ -20,45 +20,46 @@ Parameter::Parameter() {
 				// 3: axis aligned bound box added
 	
 	//camera position
-	camPos[0] = 2;
+/*	camPos[0] = 2;
 	camPos[1] = -5;
 	camPos[2] = -2;
 	camDist = 3;
 	camPitch = 0;
+	camYaw = 0*/;
+
+	camPos[0] = 5;
+	camPos[1] = 0;
+	camPos[2] = 0;
+	camDist = 8;
+	camPitch = -89;
 	camYaw = 0;
 
-	//camPos[0] = 5;
-	//camPos[1] = 0;
-	//camPos[2] = 0;
-	//camDist = 8;
-	//camPitch = -89;
-	//camYaw = 0;
-
 	// foillicle parameter
-	dir_follicle_pos_orient_len_vol = "../resources/follicle_pos_ypr_len_vol.csv";
-	dir_follicle_pos_orient_len_vol_reduced = "../resources/follicle_pos_ypr_len_vol_reduced.csv";
+	dir_follicle_pos_orient_len_vol = "../resources/follicle_pos_ypr_len_vol_fromARP.csv";
+	dir_follicle_pos_orient_len_vol_reduced = "../resources/follicle_pos_ypr_len_vol_reduced_fromARP.csv";
 	fol_radius = 0.32;		// Bullet unit: mm, value estimated from ARP
 	fol_density = 0.001;	// Bullet unit: g/mm^3
 
 	// mode
-	m_model = MODEL::REDUCED;
+	m_model = MODEL::FULL;
 	//FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M;
-	FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS | MUSCLE::NS;
+	FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS | MUSCLE::NS | MUSCLE::POO;
 
 	// contract
 	//FlagContractMuscle = MUSCLE::NONE;
 	//FlagContractMuscle = MUSCLE::ISM;
 	//FlagContractMuscle = MUSCLE::N | MUSCLE::M;
 	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
-	FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
+	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
 	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS;
+	FlagContractMuscle = MUSCLE::ISM | MUSCLE::NS | MUSCLE::POO;
 
 	contract_to = 0.7;
 	whisking_frequency = 1; // Hz
-
+	d
 	phase1_count = 6;
 	phase1_offset = 0;
-	phase1_peak = 0.7;		// 0.7
+	phase1_peak = 0.6;		// 0.7
 
 	phase2_count = 6;
 	phase2_offset = 0.41;	//0.41
@@ -76,7 +77,7 @@ Parameter::Parameter() {
 		m_internal_time_step = m_time_step / (btScalar)m_num_internal_step;
 		m_bending_model = BENDING_MODEL::SPRING;
 		// layer tissue parameter (only translational)
-		k_layer1 = 25;			// Bullet unit: 1e-3 (N/m)
+		k_layer1 = 40;			// Bullet unit: 1e-3 (N/m)
 		k_layer2 = 50;
 		zeta_layer = 1.0;		// This sets the damping ratio for: 
 								// (1) two layers
@@ -88,12 +89,12 @@ Parameter::Parameter() {
 								// zeta < 1: underdamped
 
 		k_anchor_translational = 10;
-		k_anchor_torsional = 20;
+		k_anchor_torsional = 25;
 								// k > 0 : soft anchor, springy linear and angular movement
 								// k = 0 : hard anchor, no linear displacement, free angular movement
 
-		zeta_anchor_translational = 5.5;
-		zeta_anchor_torsional = 7.0;		
+		zeta_anchor_translational = 6;
+		zeta_anchor_torsional = 10;		
 								// This sets the damping ratio for: 
 								// (1) top layer anchor
 								// (2) extrinsic muscle originate anchor
@@ -102,11 +103,12 @@ Parameter::Parameter() {
 								// default: 0, no damping
 								// dampnig is implemented in tissue
 		// muscle parameter
-		f0 = 1.5;		// Bullet unit: 1e-6 (N), uN
-		f0_ISM = 20*f0; 
+		f0 = 0.6;		// Bullet unit: 1e-6 (N), uN
+		f0_ISM = 25*f0; 
 		f0_nasolabialis = 25*f0;
 		f0_maxillolabialis = 25*f0;
-		f0_NS = 1*f0;
+		f0_NS = 20*f0;
+		f0_POO = 20*f0;
 		f0_PMS = 1*f0;
 		f0_PIP = 4*f0;
 		f0_PMI = 1*f0;
@@ -156,6 +158,7 @@ Parameter::Parameter() {
 		f0_nasolabialis = 25 * f0;
 		f0_maxillolabialis = 25 * f0;
 		f0_NS = 1 * f0;
+		f0_POO = 1 * f0;
 		f0_PMS = 1 * f0;
 		f0_PIP = 4 * f0; // red lower 
 		f0_PMI = 1 * f0;
@@ -236,6 +239,11 @@ Parameter::Parameter() {
 	dir_nasolabialis_superficialis_node_pos = "../resources/nasolabialis_superficialis_node_pos.csv";
 	dir_nasolabialis_superficialis_construction_idx = "../resources/nasolabialis_superficialis_construction_idx.csv";
 	dir_nasolabialis_superficialis_insertion_idx = "../resources/nasolabialis_superficialis_insertion_idx.csv";
+
+	// Pars orbicularis oris
+	dir_pars_orbicularis_oris_node_pos = "../resources/pars_orbicularis_oris_node_pos.csv";
+	dir_pars_orbicularis_oris_construction_idx = "../resources/pars_orbicularis_oris_construction_idx.csv";
+	dir_pars_orbicularis_oris_insertion_idx = "../resources/pars_orbicularis_oris_insertion_idx.csv";
 
 	// Pars media superior of M. Nasolabialis profundus
 	dir_pars_media_superior_node_pos = "../resources/pars_media_superior_node_pos.csv";

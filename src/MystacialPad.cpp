@@ -182,6 +182,10 @@ void MystacialPad::contractMuscle(MUSCLE mus, btScalar ratio) {
 		m_NS->contractTo(ratio);
 		muscleProtractRetractStatus[mus] = (ratio == btScalar(1.f)) ? 2 : 1;
 		break;
+	case MUSCLE::POO:
+		m_POO->contractTo(ratio);
+		muscleProtractRetractStatus[mus] = (ratio == btScalar(1.f)) ? 2 : 1;
+		break;
 	case MUSCLE::PMS:
 		m_PMS->contractTo(ratio);
 		muscleProtractRetractStatus[mus] = (ratio == btScalar(1.f)) ? 2 : 1;
@@ -211,6 +215,17 @@ void MystacialPad::createNasolabialisSuperficialis() {
 	m_NS = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_NS, m_sim, m_parameter, this,
 		m_parameter->NASOLABIALIS_SUPERFICIALIS_NODE_POS, m_parameter->NASOLABIALIS_SUPERFICIALIS_CONSTRUCTION_IDX, m_parameter->NASOLABIALIS_SUPERFICIALIS_INSERTION_IDX, heightPlaceHolder,
 		std::set<int>{ 0, 12, 13, 14, 15, 16 });
+	std::cout << "Done.\n";
+}
+
+void MystacialPad::createParsOrbicularisOris() {
+	if (!checkCreateMuscleFlag(MUSCLE::POO)) {
+		return;
+	}
+	std::cout << "Creating extrinsic muscles: Pars orbicularis oris ...";
+	m_POO = std::make_unique<ExtrinsicMuscle>(m_parameter->f0_POO, m_sim, m_parameter, this,
+		m_parameter->PARS_ORBICULARIS_ORIS_NODE_POS, m_parameter->PARS_ORBICULARIS_ORIS_CONSTRUCTION_IDX, m_parameter->PARS_ORBICULARIS_ORIS_INSERTION_IDX, heightPlaceHolder,
+		std::set<int>{ 0, 21, 22, 23, 24, 25, 26 });
 	std::cout << "Done.\n";
 }
 
@@ -290,6 +305,9 @@ void MystacialPad::preUpdate(btScalar dt) {
 	if (m_NS) { 
 		m_NS->preUpdate(fiberQueryFlag);
 	}
+	if (m_POO) {
+		m_POO->preUpdate(fiberQueryFlag);
+	}
 	if (m_PMS) { 
 		m_PMS->preUpdate(fiberQueryFlag);
 	}
@@ -351,6 +369,10 @@ void MystacialPad::postUpdate() {
 		m_NS->postUpdate();
 		m_Hamiltonian += m_NS->getHamiltonian();
 	}
+	if (m_POO) {
+		m_POO->postUpdate();
+		m_Hamiltonian += m_POO->getHamiltonian();
+	}
 	if (m_PMS) {
 		m_PMS->postUpdate();
 		m_Hamiltonian += m_PMS->getHamiltonian();
@@ -400,40 +422,43 @@ void MystacialPad::postInitPhysics() {
 
 
 void MystacialPad::debugDraw() {
-	if (m_layer1) {
-		m_layer1->debugDraw(btVector3(1., 0., 0.), false);
-	}
-	if (m_layer2) {
-		m_layer2->debugDraw(btVector3(1., 0., 0.), false);
-	}
-
-	for (int i = 0; i < nISM; i++) {
-		if (m_ISMArray[i]) {
-			m_ISMArray[i]->debugDraw(RED, false);
-		}
-	}
-
-	if (m_nasolabialis) {
-		m_nasolabialis->debugDraw(GREEN);
-	}
-	if (m_maxillolabialis) {
-		m_maxillolabialis->debugDraw(BLUE);
-	}
-	//if (m_NS) {
-	//	m_NS->debugDraw(BLUE);
+	//if (m_layer1) {
+	//	m_layer1->debugDraw(btVector3(1., 0., 0.), false);
 	//}
-	if (m_PMS) {
-		m_PMS->debugDraw(ORANGE);
+	//if (m_layer2) {
+	//	m_layer2->debugDraw(btVector3(1., 0., 0.), false);
+	//}
+
+	//for (int i = 0; i < nISM; i++) {
+	//	if (m_ISMArray[i]) {
+	//		m_ISMArray[i]->debugDraw(RED, false);
+	//	}
+	//}
+
+	//if (m_nasolabialis) {
+	//	m_nasolabialis->debugDraw(GREEN);
+	//}
+	//if (m_maxillolabialis) {
+	//	m_maxillolabialis->debugDraw(BLUE);
+	//}
+	if (m_NS) {
+		m_NS->debugDraw(BLUE);
 	}
-	if (m_PMI) {
-		m_PMI->debugDraw(YELLOW);
+	if (m_POO) {
+		m_POO->debugDraw(BLUE);
 	}
-	if (m_PIP) {
-		m_PIP->debugDraw(ORANGE);
-	}
-	if (m_PM) {
-		m_PM->debugDraw(YELLOW);
-	}
+	//if (m_PMS) {
+	//	m_PMS->debugDraw(ORANGE);
+	//}
+	//if (m_PMI) {
+	//	m_PMI->debugDraw(YELLOW);
+	//}
+	//if (m_PIP) {
+	//	m_PIP->debugDraw(ORANGE);
+	//}
+	//if (m_PM) {
+	//	m_PM->debugDraw(YELLOW);
+	//}
 	//for (int i = 0; i < nFollicle; i++) {
 	//	if (m_follicleArray[i]) {
 	//		m_follicleArray[i]->debugDrawWhisker(BLUE, 2);

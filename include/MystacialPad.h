@@ -25,6 +25,7 @@ private:
 	std::unique_ptr<ExtrinsicMuscle> m_nasolabialis;
 	std::unique_ptr<ExtrinsicMuscle> m_maxillolabialis;
 	std::unique_ptr<ExtrinsicMuscle> m_NS;
+	std::unique_ptr<ExtrinsicMuscle> m_POO;
 	std::unique_ptr<ExtrinsicMuscle> m_PMS;
 	std::unique_ptr<ExtrinsicMuscle> m_PMI;
 	std::unique_ptr<ExtrinsicMuscle> m_PIP;
@@ -49,6 +50,7 @@ public:
 	void createNasolabialis();
 	void createMaxillolabialis();
 	void createNasolabialisSuperficialis();
+	void createParsOrbicularisOris();
 	void createParsMediaSuperior();
 	void createParsMediaInferior();
 	void createParsInternaProfunda();

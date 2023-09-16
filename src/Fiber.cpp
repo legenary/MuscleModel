@@ -160,10 +160,13 @@ btScalar Fiber::calculateTau() {
 
 
 void Fiber::debugDraw(btVector3 clr, bool dynamic) {
-	if (dynamic)
+	btVector3 TsQorigin = TsQ.getOrigin();
+	if (dynamic) {
 		getWorld()->getDebugDrawer()->drawLine(TsQ.getOrigin(), m_eq, clr);
-	else
+	}
+	else {
 		getWorld()->getDebugDrawer()->drawLine(TsP.getOrigin(), m_eq, clr);
+	}
 }
 
 void Fiber::contractTo(btScalar ratio) {
