@@ -4,7 +4,7 @@
 Parameter::Parameter() {
 	m_fps = 120;
 	m_time_step = btScalar(1.0f) / m_fps;
-	m_time_stop = 6.0f;
+	m_time_stop = 21.0f;
 
 	// fiber query rate:
 	// Essentially, we need this rate so the muscle update frequency is fixed, and does not change with simulation FPS
@@ -41,7 +41,7 @@ Parameter::Parameter() {
 	fol_density = 0.001;	// Bullet unit: g/mm^3
 
 	// mode
-	m_model = MODEL::FULL;
+	m_model = MODEL::REDUCED;
 	//FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M;
 	FlagCreateMuscles = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS | MUSCLE::NS | MUSCLE::POO;
 
@@ -50,23 +50,22 @@ Parameter::Parameter() {
 	//FlagContractMuscle = MUSCLE::ISM;
 	//FlagContractMuscle = MUSCLE::N | MUSCLE::M;
 	//FlagContractMuscle = MUSCLE::PIP | MUSCLE::PM;
-	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
-	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM | MUSCLE::PMI | MUSCLE::PMS;
-	FlagContractMuscle = MUSCLE::ISM | MUSCLE::NS | MUSCLE::POO;
+	FlagContractMuscle = MUSCLE::ISM | MUSCLE::N | MUSCLE::M | MUSCLE::PIP | MUSCLE::PM;
+	//FlagContractMuscle = MUSCLE::ISM | MUSCLE::NS | MUSCLE::POO;
 
 	contract_to = 0.7;
 	whisking_frequency = 1; // Hz
-	d
-	phase1_count = 6;
-	phase1_offset = 0;
-	phase1_peak = 0.6;		// 0.7
 
-	phase2_count = 6;
+	phase1_count = 20;
+	phase1_offset = 0;
+	phase1_peak = 0.7;		// 0.7
+
+	phase2_count = 20;
 	phase2_offset = 0.41;	//0.41
 	phase2_peak = 0.6;		// 0.6
 
-	muslce_activation_tau_a = 0.1; // activation time constant
-	muslce_activation_tau_d = 0.4; // dactivation time constant
+	muslce_activation_tau_a = 0.1; // 0.1, activation time constant
+	muslce_activation_tau_d = 0.4; // 0.4, dactivation time constant
 
 	switch (m_model) {
 	case MODEL::FULL: {
@@ -145,9 +144,9 @@ Parameter::Parameter() {
 		zeta_layer = 1.0;					// chosen such that when pulled by M and N, oscillation is minimized
 		// anchor parameter (translational and torsional)
 		k_anchor_translational = 10;		
-		zeta_anchor_translational = 6;	// chosen such that a displaced pad (by M and N) is restored to the same location in the same relaxation duration as contraction. Reference 5.5
-		k_anchor_torsional = 25;			// chosen to be big enough to bring the pad back to original position in swift time. Reference 20
-		zeta_anchor_torsional = 10;		// chosen such that a contracted pad (by ISM) is restored to the same location in the same relaxation duration as contraction. Reference 7.0
+		zeta_anchor_translational = 6;	// chosen such that a displaced pad (by M and N) is restored to the same location in the same relaxation duration as contraction. Reference 6
+		k_anchor_torsional = 25;			// chosen to be big enough to bring the pad back to original position in swift time. Reference 25
+		zeta_anchor_torsional = 10;		// chosen such that a contracted pad (by ISM) is restored to the same location in the same relaxation duration as contraction. Reference 10
 
 		fol_damping = 0.0;
 
@@ -157,8 +156,8 @@ Parameter::Parameter() {
 		f0_ISM = 25 * f0;
 		f0_nasolabialis = 25 * f0;
 		f0_maxillolabialis = 25 * f0;
-		f0_NS = 1 * f0;
-		f0_POO = 1 * f0;
+		f0_NS = 20 * f0;
+		f0_POO = 20 * f0;
 		f0_PMS = 1 * f0;
 		f0_PIP = 4 * f0; // red lower 
 		f0_PMI = 1 * f0;

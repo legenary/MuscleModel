@@ -453,11 +453,64 @@ void Simulation::postInitPhysics() {
 			S_dumpster::Get().Monitor(&(m_mystacialPad->getNasolabialis()->getFiberByIndex(0)->getExcitation()), 1, "N_excitation.csv", total_frame);
 			S_dumpster::Get().Monitor(&(m_mystacialPad->getNasolabialis()->getFiberByIndex(0)->getActivation()), 1, "N_activation.csv", total_frame);
 
+			// get ISM lengths
 			for (int n = 0; n < m_mystacialPad->getNumISMs(); n++) {
 				if (const auto& ism = m_mystacialPad->getISMByIndex(n)) {
 					char filename[50];
 					sprintf(filename, "ISM_%02d_length.csv", n);
 					S_dumpster::Get().Monitor(&(ism->getLength()), 1, filename, total_frame);
+				}
+			}
+			// get N lengths
+			for (int n = 0; n < m_mystacialPad->getNasolabialis()->getNumberOfMusclePieces(); n++) {
+				if (const auto& fiber = m_mystacialPad->getNasolabialis()->getFiberByIndex(n)) {
+					char filename[50];
+					sprintf(filename, "N_%02d_length.csv", n);
+					S_dumpster::Get().Monitor(&(fiber->getLength()), 1, filename, total_frame);
+				}
+			}
+			// get M lengths
+			for (int n = 0; n < m_mystacialPad->getMaxillolabialis()->getNumberOfMusclePieces(); n++) {
+				if (const auto& fiber = m_mystacialPad->getMaxillolabialis()->getFiberByIndex(n)) {
+					char filename[50];
+					sprintf(filename, "M_%02d_length.csv", n);
+					S_dumpster::Get().Monitor(&(fiber->getLength()), 1, filename, total_frame);
+				}
+			}
+			// get PIP lengths
+			for (int n = 0; n < m_mystacialPad->getParsInternaProfunda()->getNumberOfMusclePieces(); n++) {
+				if (const auto& fiber = m_mystacialPad->getParsInternaProfunda()->getFiberByIndex(n)) {
+					char filename[50];
+					sprintf(filename, "PIP_%02d_length.csv", n);
+					S_dumpster::Get().Monitor(&(fiber->getLength()), 1, filename, total_frame);
+				}
+			}
+			// get PM lengths
+			for (int n = 0; n < m_mystacialPad->getParsMaxillaris()->getNumberOfMusclePieces(); n++) {
+				if (const auto& fiber = m_mystacialPad->getParsMaxillaris()->getFiberByIndex(n)) {
+					char filename[50];
+					sprintf(filename, "PM_%02d_length.csv", n);
+					S_dumpster::Get().Monitor(&(fiber->getLength()), 1, filename, total_frame);
+				}
+			}
+			// get NS lengths
+			if (auto& ns = m_mystacialPad->getNasolabialisSuperficialis()) {
+				for (int n = 0; n < ns->getNumberOfMusclePieces(); n++) {
+					if (const auto& fiber = ns->getFiberByIndex(n)) {
+						char filename[50];
+						sprintf(filename, "NS_%02d_length.csv", n);
+						S_dumpster::Get().Monitor(&(fiber->getLength()), 1, filename, total_frame);
+					}
+				}
+			}
+			// get POO lengths
+			if (auto& poo = m_mystacialPad->getParsOrbicularisOris()) {
+				for (int n = 0; n < poo->getNumberOfMusclePieces(); n++) {
+					if (const auto& fiber = poo->getFiberByIndex(n)) {
+						char filename[50];
+						sprintf(filename, "POO_%02d_length.csv", n);
+						S_dumpster::Get().Monitor(&(fiber->getLength()), 1, filename, total_frame);
+					}
 				}
 			}
 			switch (param->m_model) {

@@ -321,7 +321,7 @@ void MystacialPad::preUpdate(btScalar dt) {
 		m_PM->preUpdate(fiberQueryFlag);
 	}
 
-	char step[4];
+	char step[8];
 	sprintf(step, "%03d", m_sim->getSimulationStep());
 	draw_text = "Frame: " + std::string(step) + ", Contracting: ";
 	for (const auto& status : muscleProtractRetractStatus) {
@@ -429,11 +429,11 @@ void MystacialPad::debugDraw() {
 	//	m_layer2->debugDraw(btVector3(1., 0., 0.), false);
 	//}
 
-	//for (int i = 0; i < nISM; i++) {
-	//	if (m_ISMArray[i]) {
-	//		m_ISMArray[i]->debugDraw(RED, false);
-	//	}
-	//}
+	for (int i = 0; i < nISM; i++) {
+		if (m_ISMArray[i]) {
+			m_ISMArray[i]->debugDraw(RED, false);
+		}
+	}
 
 	//if (m_nasolabialis) {
 	//	m_nasolabialis->debugDraw(GREEN);
@@ -488,6 +488,21 @@ std::unique_ptr<IntrinsicSlingMuscle>& MystacialPad::getISMByIndex(int idx) {
 
 std::unique_ptr<ExtrinsicMuscle>& MystacialPad::getNasolabialis() {
 	return m_nasolabialis;
+}
+std::unique_ptr<ExtrinsicMuscle>& MystacialPad::getMaxillolabialis() {
+	return m_maxillolabialis;
+}
+std::unique_ptr<ExtrinsicMuscle>& MystacialPad::getParsInternaProfunda() {
+	return m_PIP;
+}
+std::unique_ptr<ExtrinsicMuscle>& MystacialPad::getParsMaxillaris() {
+	return m_PM;
+}
+std::unique_ptr<ExtrinsicMuscle>& MystacialPad::getNasolabialisSuperficialis() {
+	return m_NS;
+}
+std::unique_ptr<ExtrinsicMuscle>& MystacialPad::getParsOrbicularisOris() {
+	return m_POO;
 }
 
 bool MystacialPad::checkCreateMuscleFlag(MUSCLE mus) const {

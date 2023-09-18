@@ -8,81 +8,67 @@ dark = [2, 49, 71]/255;
 green = [33, 139, 59]/255;
 yellow = [255, 190, 13]/255;
 
-variable_names = {
-    'ISM_03_length';
-    'ISM_03_rest_length';
-    'ISM_03_force';
-    'ISM_03_hill_model_comps';
-    'ISM_03_excitation';
-    'ISM_03_activation';
-    'fol_04';
-    'N_excitation';
-    'N_activation'
-};
-
-path = GetFullPath('../../bundle_reduced_all_6c_phasing');
-for i = 1:length(variable_names)
-    filepath = path + "/" + variable_names{i} + ".csv";
-    if exist(filepath, 'file') == 2
-        eval([variable_names{i}, ' = load(filepath);']);
-    end
-end
-nFrame = size(ISM_03_length, 1);
+path = GetFullPath('../../bundle_reduced_all_20c_phasing_baseline');
+load([path, '/bundle.mat']);
+nFrame = size(ISM_03.length, 1);
 times = (1:nFrame)/120;
 
-figure('Color', 'w', 'Position', [200, 200, 900, 500]); hold on;
+endTime = 20;
+
+figure('Color', 'w', 'Position', [200, 200, 400, 500]); hold on;
 sgtitle('all muscles with phasing');
 % first
 subplot(411); hold on;
-plot(times, ISM_03_length/ISM_03_length(1), '-', 'Color', dark, 'LineWidth', 2);
+plot(times, ISM_03.length/ISM_03.length(1), '-', 'Color', dark, 'LineWidth', 2);
 ylabel('C2 ISM length')
 ylim([0.7, 1.1])
-xlim([0,6]);
+xlim([1,endTime]);
 grid on
 box on
-xticks(0:0.5:times(end));
+xticks(0:0.5:4);
 % second
 subplot(412); hold on;
-[az, el, top_bot_eyenose] = readFollicleAzEl(path, 'eyenose');
-plot(times, top_bot_eyenose{5}(:, 1)-top_bot_eyenose{5}(1, 1), '-', 'Color', yellow);
-plot(times, top_bot_eyenose{5}(:, 2)-top_bot_eyenose{5}(1, 2), '-', 'Color', purple, 'LineWidth', 1.4);
-plot(times, top_bot_eyenose{5}(:, 3)-top_bot_eyenose{5}(1, 3), '-', 'Color', green);
+
+plot(times, fols_top_bot_eyenose{5,1}(:, 1)-fols_top_bot_eyenose{5,1}(1, 1), '-', 'Color', yellow);
+plot(times, fols_top_bot_eyenose{5,1}(:, 2)-fols_top_bot_eyenose{5,1}(1, 2), '-', 'Color', purple, 'LineWidth', 1.4);
+plot(times, fols_top_bot_eyenose{5,1}(:, 3)-fols_top_bot_eyenose{5,1}(1, 3), '-', 'Color', green);
 legend({'x', 'y', 'z'}, 'location', 'southeast', 'Box', 'off');
-xlim([0,6]);
+xlim([1,endTime]);
 ylim([-2.8, 0.9])
 ylabel('C2 follice top XYZ')
-xticks(0:0.5:times(end));
+xticks(0:0.5:4);
 grid on
 box on
 % third
 subplot(413); hold on;
-plot(times, smooth(az(:, 4+1)-az(1, 4+1)), 'DisplayName', 'az', 'LineWidth', 1.4);
+plot(times, smooth(fols_az_eyenose(:, 4+1)-fols_az_eyenose(1, 4+1)), 'DisplayName', 'az', 'LineWidth', 1.4);
 ylabel('C2 azimuth angle \theta')
-plot(times, smooth(el(:, 4+1)-el(1, 4+1)), 'DisplayName', 'el');
-xlim([0,6]);
+plot(times, smooth(fols_el_eyenose(:, 4+1)-fols_el_eyenose(1, 4+1)), 'DisplayName', 'el');
+xlim([1,endTime]);
 ylim([-50, 50])
 ylabel('C2 elevation angle \phi')
-xticks(0:0.5:times(end));
+xticks(0:0.5:4);
 grid on
 box on
-legend('Location', 'northeast', 'Box', 'off')
+legend('Location', 'northeast', 'Box', 'off', 'location', 'southeast')
 % fourth: activation
 subplot(414); hold on;
-plot((ISM_03_activation-0.5) + 1);
-plot((N_activation-0.5) - 1);
+plot(times, (ISM_03.activation-0.5) + 1);
+plot(times, (N_activation-0.5) - 1);
 % ylim([-0.2, 1.2])
-xlim([0,720]);
+xlim([1,endTime])
 xticks(0:60:600)
 xticklabels(0:0.5:5)
+xticks(0:0.5:4);
 ylabel('Activation per phase')
 legend({'ISM protractors', 'Extrinsic retractors'})
 grid on
 
 print('FigResult2B', '-dtiff', '-r300');
 
+% 
 
-daz = az(61:360, 4+1) - az(60:359, 4+1);
-del = el(61:360, 4+1) - el(60:359, 4+1);
-delta = smooth(del)./smooth(daz);
-delta = rmoutliers(delta);
-fprintf('del/daz = %.2f +/- %.2f\n', mean(delta), std(delta));
+fitRes = fitlm(fols_az_eyenose(121:479, 4+1), fols_el_eyenose(121:479, 4+1));
+slope = fitRes.Coefficients.('Estimate')('x1');
+slopeStd = fitRes.Coefficients.('SE')('x1');
+fprintf('del/daz = %.2f +/- %.2f\n', slope, slopeStd)

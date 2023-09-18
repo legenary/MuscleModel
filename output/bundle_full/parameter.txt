@@ -3,9 +3,9 @@ Simulation internal step: 60
 Muscle query rate: 120Hz
 Whisking freq = 1.0Hz Contract to: 0.70
 Has muscles: ISM, N, M, NS, PMS, PIP, PMI, PM, 
-Contracting muscles:ISM, NS, 
-Phase 1 count = 6.0 offset = 0.0 peak = 0.6
-Phase 2 count = 6.0 offset = 0.4 peak = 0.6
+Contracting muscles:ISM, 
+Phase 1 count = 3.0 offset = 0.0 peak = 0.5
+Phase 2 count = 3.0 offset = 0.5 peak = 0.5
 
 k_layer1 = 40.0
 k_layer2 = 50.0
